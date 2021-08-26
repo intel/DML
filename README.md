@@ -112,4 +112,4 @@ The library is licensed under the MIT license. Refer to the
 "[LICENSE](LICENSE)" file for the full license text.
 
 This distribution includes third party software governed by separate license
-terms (see "[THIRD-PARTY-PROGRAMS](THIRD-PARTY-PROGRAMS)").
+terms (see "[THIRD-PARTY-PROGRAMS](third-party-programs.txt)").
