@@ -8,6 +8,7 @@ Intel® Data Mover Library (Intel® DML) is an open-source library to provide hi
 
 ### Prerequisites
 - Minimal CPU vector instruction set supported for not optimized code is Intel® Streaming SIMD Extensions 2 (Pentium® 4 processor or higher)
+- 64-bit x86 CPU
 - Compiler:
     - Linux* OS: gcc 8.2 or higher
     - Windows* OS: MSVC 19 or higher
