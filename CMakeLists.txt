@@ -18,6 +18,9 @@ project(dml VERSION 0.1.3 LANGUAGES C CXX)
 
 set(CMAKE_EXPORT_PACKAGE_REGISTRY ON)
 
+set(LIBRARY_SONAME 0)
+set(LIBRARY_NAME dml)
+
 option(DML_HW "Build hardware path or not" OFF)
 # TODO: See todo below
 option(DML_RECORD_SWITCHES "Enables -frecord-gcc-switches flag" OFF)
@@ -134,6 +137,12 @@ write_basic_package_version_file(
     VERSION ${PROJECT_VERSION}
     COMPATIBILITY AnyNewerVersion
 )
+
+set_target_properties(${LIBRARY_NAME} PROPERTIES
+  VERSION ${PROJECT_VERSION}
+  SOVERSION ${LIBRARY_SONAME}
+)
+
 
 install(FILES "${PROJECT_BINARY_DIR}/DmlConfigVersion.cmake"
         DESTINATION ${CMAKE_INSTALL_PREFIX}/dml/cmake)
