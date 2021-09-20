@@ -121,7 +121,7 @@ generate_export_header(dml)
 # Install rules
 install(TARGETS dml dml_ml dml_common dmlhl
     EXPORT DmlConfig
-    ARCHIVE DESTINATION lib
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     INCLUDES DESTINATION include)
 
 export(TARGETS dml dml_ml dml_common dmlhl
