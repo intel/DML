@@ -49,7 +49,6 @@ else()
     add_compile_options(
         # Security
         -fPIC
-        -Werror
         -fstack-protector
         --param=ssp-buffer-size=8
         -Wl,-z,relro,-z,now
