@@ -13,36 +13,31 @@
 # stated in the License.
 #
 
-cmake_minimum_required(VERSION 3.12.0 FATAL_ERROR)
-project(dml_core C)
+add_library(dml_core OBJECT
+    src/dmlc_fill_8u.c
+    src/dmlc_delta_record_8u.c
+    src/dmlc_crc_16u_32u.c
+    src/dmlc_copy_8u.c
+    src/dmlc_compare_8u.c
+    src/dmlc_cache_8u.c
+    )
 
-file(GLOB DML_CORE_SRC src/*.c)
+target_include_directories(dml_core
+    PUBLIC include
+    PRIVATE ../../include
+    PRIVATE src/include
+    )
 
-foreach(arch px avx512)
-    add_library(dml_core_${arch} OBJECT ${DML_CORE_SRC})
+target_compile_features(dml_core PRIVATE c_std_11)
 
-    target_include_directories(dml_core_${arch}
-                               PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-                               PUBLIC $<TARGET_PROPERTY:dml,INTERFACE_INCLUDE_DIRECTORIES>
-                               PRIVATE src/include)
+# TODO: target_compile_options(dml_core PRIVATE ${DML_QUALITY_OPTIONS})
 
-    target_compile_features(dml_core_${arch} PRIVATE c_std_11)
+target_compile_definitions(dml_core PRIVATE DML_CORES_BADARG_CHECK)
 
-    target_compile_definitions(dml_core_${arch} PRIVATE DML_CORES_BADARG_CHECK)
-endforeach()
-
-target_compile_options(dml_core_px
-    PRIVATE $<$<C_COMPILER_ID:GNU>:-mavx2>
-    PRIVATE $<$<C_COMPILER_ID:MSVC>:/arch:AVX2>)
-target_compile_definitions(dml_core_px PRIVATE PX)
-
-target_compile_options(dml_core_avx512
-    PRIVATE $<$<C_COMPILER_ID:GNU>:-march=skylake-avx512 -mavx512dq -mavx512vl -mavx512bw -mclflushopt -mclwb>
-    PRIVATE $<$<C_COMPILER_ID:MSVC>:/arch:AVX512>)
-target_compile_definitions(dml_core_avx512 PRIVATE AVX512)
-
+# TODO: Remove
 if ("${DML_ARCH}" STREQUAL "avx512")
-    add_library(dml_core ALIAS dml_core_avx512)
+    target_compile_options(dml_core PRIVATE ${DML_AVX512_OPTIONS})
+    target_compile_definitions(dml_core PRIVATE AVX512)
 else()
-    add_library(dml_core ALIAS dml_core_px)
+    target_compile_definitions(dml_core PRIVATE PX)
 endif()

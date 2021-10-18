@@ -1,10 +1,6 @@
 Intel® Data Mover Library (Intel® DML) Reference Manual
 ===============================================================================
-Revision 0.0
 
-| Changes |                                                                                                  |
-|---------|--------------------------------------------------------------------------------------------------|
-| 0.1     | Initial document version.                                                                        |
 
 Notices and Disclaimers
 -----------------------
@@ -96,24 +92,50 @@ Information about how to build Intel® Data Mover Library (Intel® DML) is avail
 
 Library Presetting
 ------------------
-Library requires presetting of hardware configuration before usage. Library doesn't perform hardware setup independently.
-System administrator is responsible for correctness of accelerator configuration. If configuration is invalid or doesn't exist,
-library returns an appropriate status code in case if hardware execution path used.
 
-**Note: Intel® DML doesn't support all hardware possibilities. Library limitations are described in the [Library Limitations](#library-limitations) section.**
+Library implements several executon paths. See [Execution Paths](#execution-paths) for more details.
 
-### Linux
-#### System Requirements
-- OS kernel version supports Intel® DSA devices.
-- libaccel-config.so is placed in /usr/lib64/. The library can be found on `https://github.com/intel/idxd-config`
-- Virtualization technology for directed I/O (VT-d) is enabled through the BIOS menu.
-- The user has system administrator privileges for HW-path, which is required to work with MMIO regions.
+Hardware path is required to set up environment to utilize Intel DSA accelerator:
 
-#### Accelerator Configuration
+  - Library requires presetting of hardware configuration before usage. 
+  - Library doesn't perform hardware setup independently.
+  - System administrator is responsible for correctness of accelerator configuration. If configuration is invalid or doesn't exist,
+    library returns an appropriate status code in case if hardware execution path used.
+
+**Note**: Intel® DML doesn't support all hardware possibilities. Library limitations are described in the [Library Limitations](#library-limitations) section.
+
+
+### System Requirements
+- Software path requirements:
+    - Minimal: x86-64 CPU with Intel® Advanced Vector Extensions 2 support (Intel® microarchitecture code name Broadwell) not optimized code.
+    - Optimal: x86-64 CPU with Intel® Advanced Vector Extensions 512 (Intel® AVX-512) support (Intel® microarchitecture code name Skylake (Server) processor or higher).
+
+- Hardware path requirements:
+    - Minimal: CPU with Intel® DSA (Sapphire Rapids and higher).
+    - Virtualization technology for directed I/O (VT-d) is enabled through the BIOS menu.
+    - Linux OS:
+        - kernel version 5.10 or higher (https://www.kernel.org/doc/Documentation/ABI/stable/sysfs-driver-dma-idxd) **Validated 5.10 - 5.12**.
+        - accel-config version 3.2 or higher placed in /usr/lib64/ (https://github.com/intel/idxd-config) **Validated 3.2 - 3.4.1**.
+
+### Build Prerequisites
+- Compiler:
+    - Linux* OS: gcc 8.2 or higher
+    - Windows* OS: MSVC 19 or higher
+ - Libraries:    
+    - Linux: Universally Unique ID library: `uuid-dev` version 2.35.2 or higher.
+- Cross-platform build tool: CMake* version 3.12 or higher
+- Make: GNU 'make' (Linux* OS) or 'nmake' (Windows*)
+- Documentation generator: 
+    - Doxygen 1.8.17 or higher
+
+
+
+### Accelerator Configuration
 Accelerator configuration can be performed with libaccel-config application.
 Such application can be founded here: `https://github.com/intel/idxd-config`
 
 How to work with it correctly is not a goal of this Manual. Follow instructions that are placed here: `https://github.com/intel/idxd-config`
+
 
 Library Possibilities
 ---------------------
@@ -162,7 +184,7 @@ Issues Reporting
 Intel® DML has several execution paths and large number of different operations and modes, 
 thus correct issue description is important. Well filled description helps to detect and solve problems faster. 
 
-### Issues classification
+### Issue classification
 Issues can be classified depending on the step where they occur:
 - Configuration step.
 - Intel® DML Hardware path initialization step
@@ -170,14 +192,14 @@ Issues can be classified depending on the step where they occur:
 
 All these classes are described below:
 
-#### Configuration step issues
+#### Configuration step issue
 Intel® DML library works with accelerator configuration created by system administrator. 
 There can be a lot of different problems. They can affect library work correctness. To avoid these problems follow
 instructions in the [Library presetting](#library-presetting) section.
 These classes of issue are placed out of scope Intel® DML library and can be addressed to `idxd-driver` team or `idxd-config` team.
 
 
-#### Initialization step issues
+#### Initialization step issue
 Intel® DML library has 2 different status code groups. The first group helps to detect initialization issues. 
 This issue can be caused by:
 - Incorrect configuration, that library doesn't support by reason listed in [Library Limitation](#library-limitations) section

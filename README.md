@@ -7,14 +7,10 @@ Intel® Data Mover Library (Intel® DML) is an open-source library to provide hi
 ## Get Started
 
 ### Prerequisites
-- Minimal CPU vector instruction set supported for not optimized code is Intel® Streaming SIMD Extensions 2 (Pentium® 4 processor or higher)
-- Compiler:
-    - Linux* OS: gcc 8.2 or higher
-    - Windows* OS: MSVC 19 or higher
-- Cross-platform build tool: CMake* version 3.12 or higher
-- Make: GNU 'make' (Linux* OS) or 'nmake' (Windows*)
-- Documentation generator: Doxygen 1.8.17 or higher
-- Universally Unique ID library: `uuid-dev` version 2.35.2 or higher.
+
+To build the library, make sure all system and build requirements are set up.
+See [Library Presetting](./doc/DML_REFERENCE_MANUAL.md#library-presetting) section for the list of all requirements.
+
 ### Build
 
 To build the library, complete the following steps:
@@ -112,4 +108,4 @@ The library is licensed under the MIT license. Refer to the
 "[LICENSE](LICENSE)" file for the full license text.
 
 This distribution includes third party software governed by separate license
-terms (see "[THIRD-PARTY-PROGRAMS](third-party-programs.txt)").
+terms (see "[THIRD-PARTY-PROGRAMS](THIRD-PARTY-PROGRAMS)").

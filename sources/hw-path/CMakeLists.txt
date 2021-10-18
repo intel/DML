@@ -13,24 +13,52 @@
 # stated in the License.
 #
 
-cmake_minimum_required(VERSION 3.12.0 FATAL_ERROR)
-project(hw_path C)
+add_library(hw_path OBJECT
+    src/own_submit_hardware_path.c
+    src/hw_completion_records/own_hardware_get_update_dif_result.c
+    src/hw_completion_records/own_hardware_get_strip_dif_result.c
+    src/hw_completion_records/own_hardware_get_nop_result.c
+    src/hw_completion_records/own_hardware_get_mem_move_result.c
+    src/hw_completion_records/own_hardware_get_insert_dif_result.c
+    src/hw_completion_records/own_hardware_get_fill_result.c
+    src/hw_completion_records/own_hardware_get_dualcast_result.c
+    src/hw_completion_records/own_hardware_get_drain_result.c
+    src/hw_completion_records/own_hardware_get_delta_create_result.c
+    src/hw_completion_records/own_hardware_get_delta_apply_result.c
+    src/hw_completion_records/own_hardware_get_crc_result.c
+    src/hw_completion_records/own_hardware_get_crc_copy_result.c
+    src/hw_completion_records/own_hardware_get_compare_result.c
+    src/hw_completion_records/own_hardware_get_check_dif_result.c
+    src/hw_completion_records/own_hardware_get_cache_flush_result.c
+    src/hw_completion_records/own_hardware_get_batch_result.c
+    src/hw_config/hw_configuration_driver.c
+    src/hw_config/own_hardware_configure.c
+    src/hw_descriptors/own_hardware_init_batch_descriptor.c
+    src/hw_descriptors/own_hardware_init_cache_flush_descriptor.c
+    src/hw_descriptors/own_hardware_init_update_dif_descriptor.c
+    src/hw_descriptors/own_hardware_init_strip_dif_descriptor.c
+    src/hw_descriptors/own_hardware_init_nop_descriptor.c
+    src/hw_descriptors/own_hardware_init_mem_move_descriptor.c
+    src/hw_descriptors/own_hardware_init_insert_dif_descriptor.c
+    src/hw_descriptors/own_hardware_init_fill_descriptor.c
+    src/hw_descriptors/own_hardware_init_dualcast_descriptor.c
+    src/hw_descriptors/own_hardware_init_drain_descriptor.c
+    src/hw_descriptors/own_hardware_init_delta_create_descriptor.c
+    src/hw_descriptors/own_hardware_init_delta_apply_descriptor.c
+    src/hw_descriptors/own_hardware_init_crc_descriptor.c
+    src/hw_descriptors/own_hardware_init_compare_pattern_descriptor.c
+    src/hw_descriptors/own_hardware_init_crc_copy_descriptor.c
+    src/hw_descriptors/own_hardware_init_compare_descriptor.c
+    src/hw_descriptors/own_hardware_init_check_dif_descriptor.c
+    )
 
-# Find Kernels Sources
-file(GLOB_RECURSE HW_PATH_SRC ./src/*.c)
-
-# Create library
-add_library(hw_path OBJECT ${HW_PATH_SRC})
-
-# Setting external and internal interfaces for DML reference library
-get_target_property(DML_SOURCE_DIR dml SOURCE_DIR)
 target_include_directories(hw_path
-        PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/hw_descriptors/include
-        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/hw_completion_records/include
-        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/hw_config/include
-        PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src/include
-        PUBLIC $<TARGET_PROPERTY:dml,INTERFACE_INCLUDE_DIRECTORIES>)
+        PUBLIC include
+        PRIVATE src/hw_descriptors/include
+        PRIVATE src/hw_completion_records/include
+        PRIVATE src/hw_config/include
+        PRIVATE src/include
+        PRIVATE ../../include)
 
 target_compile_features(hw_path PRIVATE c_std_11)
 

@@ -13,11 +13,14 @@
 # stated in the License.
 #
 
-cmake_minimum_required(VERSION 3.12.0 FATAL_ERROR)
-
+# TODO: Move to middle_layer
 add_subdirectory(cores)
-add_subdirectory(sw-path)
 
+# TODO: Remove
 if(DML_HW)
     add_subdirectory(hw-path)
 endif()
+
+add_subdirectory(middle_layer)
+add_subdirectory(c_api)
+add_subdirectory(cpp_api)

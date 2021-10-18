@@ -23,7 +23,7 @@
  *
  */
 
-#include "dmldefs.h"
+#include "dml/dmldefs.h"
 
 #ifndef DML_SAMPLES_H__
 #define DML_SAMPLES_H__

@@ -24,7 +24,7 @@
 #include <sys/mman.h>
 #include <dlfcn.h>
 
-const static char *accelerator_configuration_driver_name = "libaccel-config.so";
+const static char *accelerator_configuration_driver_name = "/usr/lib64/libaccel-config.so";
 
 typedef int                     (*accfg_new_ptr)(struct accfg_ctx **ctx);
 
@@ -333,15 +333,18 @@ int DML_HW_API(work_queue_get_device_path)(struct accfg_wq *wq, char *buf, size_
 bool own_load_configuration_functions(void *driver_instance_ptr) {
     uint32_t i = 0u;
 
+    // Clear error log
+    (void)dlerror();
     while (functions_table[i].function_name) {
         functions_table[i].function = (library_function) dlsym(driver_instance_ptr, functions_table[i].function_name);
-        i++;
 
         char *err_message = dlerror();
 
-        if (err_message) {
+        if (err_message || !functions_table[i].function) {
             return false;
         }
+            
+        i++;
     }
 
     return true;

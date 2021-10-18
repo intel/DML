@@ -22,7 +22,7 @@
 
 #include "malloc.h"
 
-#include "dml.h"
+#include "dml/dml.h"
 #include "dml_examples.h"
 
 /**

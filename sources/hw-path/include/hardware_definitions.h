@@ -20,8 +20,8 @@
  *
  */
 
-#include "dml.h"
-#include "dmldefs.h"
+#include "dml/dml.h"
+#include "dml/dmldefs.h"
 
 #if defined(linux)
 #include "libaccel_config.h"

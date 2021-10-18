@@ -1,6 +1,23 @@
 Intel® Data Mover Library (Intel® DML) Release Notes
 ===============================================================================
 
+### Intel® DML v0.1.4-beta
+
+**Date: October 2021**
+
+**Note**: Release introduces several fixes for code and infrastructure
+
+**Bug fix**:
+* Fixed crashes when C++ API was used without root permissions.
+* Fixed crashes when HW initialization failed.
+* Fixed documentation section about system requirements.
+* Fixed project install-paths. They are now follow GNU guidelines.
+* Fixed wrong path for loading `libaccel-config.so` to `/usr/lib64/libaccel-config.so`.
+
+**Warnings**:
+* Correct inclusion path for C API is `<dml/dml.h>` now.
+
+
 ### Intel® DML Library v0.1.3-beta
 
 **Date: August, 2021**

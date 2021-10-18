@@ -14,143 +14,105 @@
 #
 
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
-project(dml VERSION 0.1.3 LANGUAGES C CXX)
+project(Dml VERSION 0.1.4 LANGUAGES C CXX)
 
-set(CMAKE_EXPORT_PACKAGE_REGISTRY ON)
+set(PROJECT_SOVERSION 0)
 
 option(DML_HW "Build hardware path or not" OFF)
-# TODO: See todo below
-option(DML_RECORD_SWITCHES "Enables -frecord-gcc-switches flag" OFF)
+option(DML_SUPPRESS_WARNINGS "Suppress all compiler warnings" OFF)
+
+if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
+    option(DML_RECORD_SWITCHES "Enables -frecord-gcc-switches flag" OFF)
+else()
+    set(DML_RECORD_SWITCHES OFF CACHE BOOL "Disable recording of switches for non-gnu compiler" FORCE)
+endif()
+
+# TODO: Remove all options below
 option(LIB_ACCEL_3_2 "Use libaccel-3.2" OFF)
+option(SANITIZE_MEMORY "Enables memory sanitizing" OFF)
+option(SANITIZE_THREADS "Enables threads sanitizing" OFF)
 option(LOG_HW_INIT "Enables HW initialization log" OFF)
 option(EFFICIENT_WAIT "Enables usage of umonitor/umwait" OFF)
 
-include(cmake/CompileOptions.cmake)
-include(cmake/git_revision.cmake)
-include(GenerateExportHeader)
-include(CMakePackageConfigHelpers)
+if (SANITIZE_MEMORY)
+    message(STATUS "Memory sanitizing build is enabled")
 
-if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
-    message(STATUS "CMAKE_BUILD_TYPE is unset, defaulting to Release")
-    set(CMAKE_BUILD_TYPE "Release")
+    if (WIN32)
+        message(FATAL_ERROR "Memory sanitizing is not supported in Windows")
+    else ()
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -fsanitize=leak -g")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fsanitize=leak -g")
+    endif ()
 endif ()
 
-if (MSVC)
-    add_compile_options(
-        # Security
-        /GS
+if (SANITIZE_THREADS)
+    message(STATUS "Threads sanitizing build is enabled")
 
-        # Quality
-#        /WX
-        # TODO: There are several warning to consider, also MSVC warning level can be set only via CMAKE_CXX_FLAGS
-#        /Wall
-    )
-else()
-    add_compile_options(
-        # Security
-        -fPIC
-        -Werror
-        -fstack-protector
-        --param=ssp-buffer-size=8
-        -Wl,-z,relro,-z,now
-        -Wl,-z,noexecstack
-        -fstack-clash-protection
-#        -frecord-gcc-switches TODO: seems unnecessary
-
-        # Quality
-        # TODO: I can't fix all of them in one go (>100)
-#        -Werror -Wall -Wextra -pedantic
-        )
-
-    if ("${CMAKE_BUILD_TYPE}" STREQUAL "Release")
-        add_compile_definitions(_FORTIFY_SOURCE=2)
+    if (WIN32)
+        message(FATAL_ERROR "Threads sanitizing is not supported in Windows")
+    else ()
+        set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
+        set(THREADS_PREFER_PTHREAD_FLAG TRUE)
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -g")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -g")
     endif ()
+endif ()
 
-    # TODO: They were already included into SDL options, why do we have the choice?
-    if (DML_RECORD_SWITCHES)
-        add_compile_options(-frecord-gcc-switches)
-    endif ()
-endif()
+include(cmake/CompileOptions.cmake)
+include(cmake/utils.cmake)
+include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
+
+if (NOT CMAKE_BUILD_TYPE)
+    message(STATUS "CMAKE_BUILD_TYPE is unset, defaulting to Release")
+    set(CMAKE_BUILD_TYPE Release)
+endif ()
+
+if (CMAKE_C_COMPILER_ID STREQUAL "MSVC")
+    include(cmake/msvc.cmake)
+elseif (CMAKE_C_COMPILER_ID STREQUAL "GNU")
+    include(cmake/gnu.cmake)
+else ()
+    message(FATAL_ERROR "Unknown compiler ID: ${CMAKE_C_COMPILER_ID}")
+endif ()
+
+# Project-wide settings
+add_compile_options(
+    ${DML_SECURITY_OPTIONS}
+    $<$<BOOL:${DML_RECORD_SWITCHES}>:-frecord-gcc-switches>)
+add_compile_definitions(${DML_SECURITY_DEFINITIONS})
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
-# Finding Intel DML library sources
-file(GLOB DML_C_SRC sources/*.c)
-
-# Adding Intel DML reference library target
-add_library(dml ${DML_C_SRC} $<TARGET_OBJECTS:dml_core>
-            $<TARGET_OBJECTS:sw_path>
-            $<$<BOOL:$<TARGET_PROPERTY:ENABLE_HW_PATH>>:$<TARGET_OBJECTS:hw_path>>)
-
-target_link_libraries(dml ${CMAKE_DL_LIBS})
-
-# Setting external and internal interfaces for DML reference library
-target_include_directories(dml
-                           PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include/dml>
-                           PRIVATE $<TARGET_PROPERTY:dml_core,INTERFACE_INCLUDE_DIRECTORIES>
-                           PRIVATE $<$<BOOL:$<TARGET_PROPERTY:ENABLE_HW_PATH>>:$<TARGET_PROPERTY:hw_path,INTERFACE_INCLUDE_DIRECTORIES>>
-                           PRIVATE sources/include)
-
+# TODO: Remove when option is removed
 if (DML_HW)
     message(STATUS "HW path: ON")
 endif()
 
-target_compile_features(dml PRIVATE c_std_11)
-
-set_target_properties(dml PROPERTIES ENABLE_HW_PATH ${DML_HW})
-
-target_compile_definitions(dml PUBLIC DML
-                           PRIVATE DML_BADARG_CHECK
-                           PRIVATE $<$<BOOL:$<TARGET_PROPERTY:ENABLE_HW_PATH>>: DML_HW>)
-
+# TODO: Remove
 get_git_revision()
 
-# Internal libraries
 add_subdirectory(sources)
-add_subdirectory(middle-layer)
-add_subdirectory(high-level-api)
-
-# Testing
 add_subdirectory(examples)
 
-# Configuration files
-generate_export_header(dml)
-
 # Install rules
-install(TARGETS dml dml_ml dml_common dmlhl
-    EXPORT DmlConfig
-    ARCHIVE DESTINATION lib
-    INCLUDES DESTINATION include)
-
-export(TARGETS dml dml_ml dml_common dmlhl
-       NAMESPACE Dml::
-       FILE "${CMAKE_CURRENT_BINARY_DIR}/DmlConfig.cmake")
-
-install(EXPORT DmlConfig
+install(EXPORT ${PROJECT_NAME}Targets
         NAMESPACE Dml::
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/dml/cmake)
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake
+    "include(\${CMAKE_CURRENT_LIST_DIR}/${PROJECT_NAME}Targets.cmake)\n")
 
 write_basic_package_version_file(
-    "${PROJECT_BINARY_DIR}/DmlConfigVersion.cmake"
+    "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
     VERSION ${PROJECT_VERSION}
     COMPATIBILITY AnyNewerVersion
 )
 
-install(FILES "${PROJECT_BINARY_DIR}/DmlConfigVersion.cmake"
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/dml/cmake)
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+              "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
-install(DIRECTORY include
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/include/dml
-        FILES_MATCHING PATTERN *.h)
-
-install(DIRECTORY high-level-api/include/dml
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/include/
-        FILES_MATCHING PATTERN *.hpp)
-
-install(DIRECTORY middle-layer/common/include/dml_common
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/include/
-        FILES_MATCHING PATTERN *.hpp)
-
-install(DIRECTORY middle-layer/include/dml_ml
-        DESTINATION ${CMAKE_INSTALL_PREFIX}/include/
-        FILES_MATCHING PATTERN *.hpp)
+install(DIRECTORY include/
+        DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+        FILES_MATCHING PATTERN *.h PATTERN *.hpp)

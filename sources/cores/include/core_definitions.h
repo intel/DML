@@ -36,7 +36,7 @@
  */
 
 #include <stdint.h>
-#include "dmldefs.h"
+#include "dml/dmldefs.h"
 
 #ifndef KERNEL_DEFINITIONS_H__
 #define KERNEL_DEFINITIONS_H__

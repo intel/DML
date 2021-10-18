@@ -48,7 +48,7 @@ int main()
         return -1;
     }
 
-    if (result.result != 0u)
+    if (result.result != dml::comparison_result::equal)
     {
         std::cout << "But operation was done wrongly.\n";
         return -1;

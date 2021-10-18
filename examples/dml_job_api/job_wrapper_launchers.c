@@ -22,7 +22,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "dml.h"
+#include "dml/dml.h"
 #include "dml_examples.h"
 
 #define SAMPLE_ARRAY_SIZE 128u /**< Array to directly allocation on the stack*/
