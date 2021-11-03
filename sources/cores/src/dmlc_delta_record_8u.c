@@ -50,7 +50,7 @@ typedef uint16_t  offset_t;            /**< Redefinition to make more abstract o
 #define OWN_DELTA_CHECK_PTR_ALIGNMENT(ptr) \
     DML_CORE_BAD_ARGUMENT_RETURN((((uint64_t)ptr) % 8u), DML_STATUS_DELTA_ALIGN_ERROR)
 
-#define MAX_AVAILABLE_INPUT_SIZE 0x7FFF8u                 /**< Input vector size limit*/
+#define MAX_AVAILABLE_INPUT_SIZE  0x80000u                 /**< Input vector size limit*/
 
 #if defined(__GNUC__)
     typedef struct __attribute__ ((__packed__))
@@ -92,12 +92,12 @@ DML_CORE_API(dmlc_status_t, create_delta_record_8u, (const uint8_t *reference_ve
 
     // Delta Record
     const uint32_t delta_note_count           = delta_record_max_size / DELTA_NOTE_SIZE;
-    const offset_t regions_count              = (offset_t)(compared_bytes / DELTA_NOTE_REGION_FIELD_SIZE);
+    const uint32_t regions_count              = (uint32_t)(compared_bytes / DELTA_NOTE_REGION_FIELD_SIZE);
     own_delta_note_t* current_delta_notes_ptr = (own_delta_note_t*) delta_record_ptr;
     own_delta_note_t* end_delta_notes_ptr     = current_delta_notes_ptr + delta_note_count;
 
     // Create delta
-    for (offset_t i = 0u; i < regions_count; i++)
+    for (uint32_t i = 0u; i < regions_count; i++)
     {
         const uint64_t base_region   = *(uint64_t *) reference_vector_ptr;
         const uint64_t vector_region = *(uint64_t *) second_vector_ptr;

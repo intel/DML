@@ -25,7 +25,7 @@
 #include "hardware_descriptors_api.h"
 
 
-#define OWN_MAX_AVAILABLE_INPUT_SIZE 0x7FFF8u /**< Input vector size limit*/
+#define OWN_MAX_AVAILABLE_INPUT_SIZE 0x80000u /**< Input vector size limit*/
 #define OWN_DELTA_NOTE_SIZE          0xAu     /**< Delta note size*/
 
 
