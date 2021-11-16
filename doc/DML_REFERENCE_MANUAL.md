@@ -107,8 +107,8 @@ Hardware path is required to set up environment to utilize Intel DSA accelerator
 
 ### System Requirements
 - Software path requirements:
-    - Minimal: x86-64 CPU with Intel® Advanced Vector Extensions 2 support (Intel® microarchitecture code name Broadwell) not optimized code.
-    - Optimal: x86-64 CPU with Intel® Advanced Vector Extensions 512 (Intel® AVX-512) support (Intel® microarchitecture code name Skylake (Server) processor or higher).
+    - Minimal: x86-64 CPU with Intel® Advanced Vector Extensions 2 support (Intel® microarchitecture code name Broadwell) for not optimized code.
+    - Optimal: x86-64 CPU with Intel® Advanced Vector Extensions 512 support (Intel® microarchitecture code name Skylake (Server) processor or higher).
 
 - Hardware path requirements:
     - Minimal: CPU with Intel® DSA (Sapphire Rapids and higher).
