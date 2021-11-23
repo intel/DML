@@ -22,7 +22,7 @@
 #ifndef DML_DETAIL_BUFFER_HPP
 #define DML_DETAIL_BUFFER_HPP
 
-#include <dml/cpp/common/types.hpp>
+#include <dml/cpp/types.hpp>
 
 #include <memory>
 

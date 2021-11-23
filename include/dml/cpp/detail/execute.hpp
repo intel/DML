@@ -22,10 +22,12 @@
 #ifndef DML_DETAIL_EXECUTE_HPP
 #define DML_DETAIL_EXECUTE_HPP
 
-#include <dml/cpp/common/status_code.hpp>
+#include <dml/cpp/detail/utils.hpp>
 #include <dml/cpp/execution_path.hpp>
 #include <dml/cpp/middle_layer/completion_record.hpp>
 #include <dml/cpp/middle_layer/make_descriptor.hpp>
+#include <dml/cpp/middle_layer/validation.hpp>
+#include <dml/cpp/status_code.hpp>
 
 #include "make_result.hpp"
 
@@ -36,28 +38,30 @@ namespace dml::detail
      *
      * @tparam execution_path   Type of execution path
      * @tparam operation        Type of operation
-     * @tparam range_check_t    Type of callable range check
      * @tparam make_operation_t Type of callable make functor
-     * @param range_check       Instance of callable range check
+     * @tparam range_check_t    Type of callable range check
+     *
      * @param make_operation    Instance of callable make functor
+     * @param range_check       Instance of callable range check
      *
      * @return Result of operation
      */
-    template <typename execution_path, typename operation, typename range_check_t, typename make_operation_t>
-    inline auto execute(range_check_t &&range_check, make_operation_t &&make_operation) noexcept
+    template <typename execution_path, typename operation, typename make_operation_t, typename range_check_t = detail::always_success>
+    inline auto execute(make_operation_t &&make_operation, range_check_t range_check = range_check_t()) noexcept
     {
+        if (auto status = range_check(); status != status_code::ok)
         {
-            auto status = range_check();
-
-            if (status != status_code::ok)
-            {
-                return typename operation::result_type{ status };
-            }
+            return typename operation::result_type{ status };
         }
 
-        auto record     = ml::completion_record();
         auto descriptor = make_operation();
 
+        if (auto status = ml::validate(descriptor); status != ml::validation_status::success)
+        {
+            return typename operation::result_type{ detail::to_own(status) };
+        }
+
+        auto record = ml::completion_record();
         // If execution_path::run returns status code
         auto status = execution_path()(descriptor, record);
         if (status != ml::submission_status::success)

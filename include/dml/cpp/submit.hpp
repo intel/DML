@@ -22,7 +22,6 @@
 #ifndef DML_SUBMIT_HPP
 #define DML_SUBMIT_HPP
 
-#include <dml/cpp/common/range_check.hpp>
 #include <dml/cpp/detail/handler.hpp>
 #include <dml/cpp/detail/submit.hpp>
 #include <dml/cpp/detail/utils.hpp>
@@ -75,15 +74,11 @@ namespace dml
               typename execution_interface_t = default_execution_interface<execution_path>>
     inline auto submit(batch_operation                       operation,
                        const sequence<sequence_allocator_t> &seq,
-                       const execution_interface_t &         executor = execution_interface_t())
+                       const execution_interface_t          &executor = execution_interface_t())
         -> handler<batch_operation, typename execution_interface_t::allocator_type>
     {
         return detail::submit<execution_path, batch_operation>(
             executor,
-            [&]
-            {
-                return range_check::batch(seq.data(), seq.length());
-            },
             [&]()
             {
                 return ml::make_batch_descriptor(seq.data(), seq.length(), operation.get_options());
@@ -131,17 +126,14 @@ namespace dml
     {
         return detail::submit<execution_path, mem_move_operation>(
             executor,
-            [&]
+            [&]()
             {
-                DML_VALIDATE_SIZE_CONSISTENCY(src_view.size(), dst_view.size());
-                return range_check::mem_move(src_view.data(), dst_view.data(), src_view.size());
+                return ml::make_mem_move_descriptor(src_view.data(), dst_view.data(), src_view.size(), operation.get_options());
             },
             [&]()
             {
-                return ml::make_mem_move_descriptor(src_view.data(),
-                                                    dst_view.data(),
-                                                    src_view.size(),
-                                                    operation.get_options());
+                DML_VALIDATE_SIZE_CONSISTENCY(src_view.size(), dst_view.size());
+                return status_code::ok;
             });
     }
 
@@ -186,17 +178,14 @@ namespace dml
     {
         return detail::submit<execution_path, mem_copy_operation>(
             executor,
-            [&]
+            [&]()
             {
-                DML_VALIDATE_SIZE_CONSISTENCY(src_view.size(), dst_view.size());
-                return range_check::mem_copy(src_view.data(), dst_view.data(), src_view.size());
+                return ml::make_mem_move_descriptor(src_view.data(), dst_view.data(), src_view.size(), operation.get_options());
             },
             [&]()
             {
-                return ml::make_mem_move_descriptor(src_view.data(),
-                                                    dst_view.data(),
-                                                    src_view.size(),
-                                                    operation.get_options());
+                DML_VALIDATE_SIZE_CONSISTENCY(src_view.size(), dst_view.size());
+                return status_code::ok;
             });
     }
 
@@ -241,10 +230,6 @@ namespace dml
     {
         return detail::submit<execution_path, fill_operation>(
             executor,
-            [&]
-            {
-                return range_check::fill(dst_view.data(), dst_view.size());
-            },
             [&]()
             {
                 return ml::make_fill_descriptor(pattern, dst_view.data(), dst_view.size(), operation.get_options());
@@ -294,12 +279,6 @@ namespace dml
     {
         return detail::submit<execution_path, dualcast_operation>(
             executor,
-            [&]
-            {
-                DML_VALIDATE_SIZE_CONSISTENCY(src_view.size(), dst1_view.size());
-                DML_VALIDATE_SIZE_CONSISTENCY(src_view.size(), dst2_view.size());
-                return range_check::dualcast(src_view.data(), dst1_view.data(), dst2_view.data(), src_view.size());
-            },
             [&]()
             {
                 return ml::make_dualcast_descriptor(src_view.data(),
@@ -308,6 +287,12 @@ namespace dml
                                                     src_view.size(),
                                                     operation.get_options(),
                                                     operation.get_additional_options());
+            },
+            [&]()
+            {
+                DML_VALIDATE_SIZE_CONSISTENCY(src_view.size(), dst1_view.size());
+                DML_VALIDATE_SIZE_CONSISTENCY(src_view.size(), dst2_view.size());
+                return status_code::ok;
             });
     }
 
@@ -352,11 +337,6 @@ namespace dml
     {
         return detail::submit<execution_path, compare_operation>(
             executor,
-            [&]
-            {
-                DML_VALIDATE_SIZE_CONSISTENCY(src1_view.size(), src2_view.size());
-                return range_check::compare(src1_view.data(), src2_view.data(), src1_view.size());
-            },
             [&]()
             {
                 return ml::make_compare_descriptor(src1_view.data(),
@@ -364,6 +344,11 @@ namespace dml
                                                    src1_view.size(),
                                                    operation.get_options(),
                                                    operation.get_expected_result());
+            },
+            [&]()
+            {
+                DML_VALIDATE_SIZE_CONSISTENCY(src1_view.size(), src2_view.size());
+                return status_code::ok;
             });
     }
 
@@ -406,20 +391,16 @@ namespace dml
                        const execution_interface_t &executor = execution_interface_t())
         -> handler<compare_pattern_operation, typename execution_interface_t::allocator_type>
     {
-        return detail::submit<execution_path, compare_pattern_operation>(
-            executor,
-            [&]
-            {
-                return range_check::compare_pattern(src_view.data(), src_view.size());
-            },
-            [&]()
-            {
-                return ml::make_compare_pattern_descriptor(pattern,
-                                                           src_view.data(),
-                                                           src_view.size(),
-                                                           operation.get_options(),
-                                                           operation.get_expected_result());
-            });
+        return detail::submit<execution_path, compare_pattern_operation>(executor,
+                                                                         [&]()
+                                                                         {
+                                                                             return ml::make_compare_pattern_descriptor(
+                                                                                 pattern,
+                                                                                 src_view.data(),
+                                                                                 src_view.size(),
+                                                                                 operation.get_options(),
+                                                                                 operation.get_expected_result());
+                                                                         });
     }
 
     /**
@@ -465,12 +446,6 @@ namespace dml
     {
         return detail::submit<execution_path, create_delta_operation>(
             executor,
-            [&]
-            {
-                DML_VALIDATE_SIZE_CONSISTENCY(src1_view.size(), src2_view.size());
-                return range_check::create_delta(
-                    src1_view.data(), src2_view.data(), src1_view.size(), delta_view.data(), delta_view.size());
-            },
             [&]()
             {
                 return ml::make_create_delta_descriptor(src1_view.data(),
@@ -480,6 +455,11 @@ namespace dml
                                                         delta_view.size(),
                                                         operation.get_options(),
                                                         operation.get_expected_result());
+            },
+            [&]()
+            {
+                DML_VALIDATE_SIZE_CONSISTENCY(src1_view.size(), src2_view.size());
+                return status_code::ok;
             });
     }
 
@@ -526,18 +506,6 @@ namespace dml
     {
         return detail::submit<execution_path, apply_delta_operation>(
             executor,
-            [&]
-            {
-                if (delta_result.result != comparison_result::not_equal)
-                {
-                    return status_code::delta_delta_empty;
-                }
-
-                return range_check::apply_delta(delta_view.data(),
-                                                delta_result.delta_record_size,
-                                                dst_view.data(),
-                                                dst_view.size());
-            },
             [&]()
             {
                 return ml::make_apply_delta_descriptor(delta_view.data(),
@@ -545,6 +513,14 @@ namespace dml
                                                        dst_view.data(),
                                                        dst_view.size(),
                                                        operation.get_options());
+            },
+            [&]()
+            {
+                if (delta_result.result != comparison_result::not_equal)
+                {
+                    return status_code::delta_delta_empty;
+                }
+                return status_code::ok;
             });
     }
 
@@ -587,20 +563,15 @@ namespace dml
                        const execution_interface_t &executor = execution_interface_t())
         -> handler<crc_operation, typename execution_interface_t::allocator_type>
     {
-        return detail::submit<execution_path, crc_operation>(
-            executor,
-            [&]
-            {
-                return range_check::crc(src_view.data(), src_view.size());
-            },
-            [&]()
-            {
-                return ml::make_crc_descriptor(src_view.data(),
-                                               src_view.size(),
-                                               crc_seed,
-                                               operation.get_options(),
-                                               operation.get_additional_options());
-            });
+        return detail::submit<execution_path, crc_operation>(executor,
+                                                             [&]()
+                                                             {
+                                                                 return ml::make_crc_descriptor(src_view.data(),
+                                                                                                src_view.size(),
+                                                                                                crc_seed,
+                                                                                                operation.get_options(),
+                                                                                                operation.get_additional_options());
+                                                             });
     }
 
     /**
@@ -646,11 +617,6 @@ namespace dml
     {
         return detail::submit<execution_path, copy_crc_operation>(
             executor,
-            [&]
-            {
-                DML_VALIDATE_SIZE_CONSISTENCY(src_view.size(), dst_view.size());
-                return range_check::copy_crc(src_view.data(), dst_view.data(), src_view.size());
-            },
             [&]()
             {
                 return ml::make_copy_crc_descriptor(src_view.data(),
@@ -659,6 +625,11 @@ namespace dml
                                                     crc_seed,
                                                     operation.get_options(),
                                                     operation.get_additional_options());
+            },
+            [&]()
+            {
+                DML_VALIDATE_SIZE_CONSISTENCY(src_view.size(), dst_view.size());
+                return status_code::ok;
             });
     }
 
@@ -694,17 +665,11 @@ namespace dml
      * @return @ref handler for @ref cache_flush_operation
      */
     template <typename execution_path, typename execution_interface_t = default_execution_interface<execution_path>>
-    inline auto submit(cache_flush_operation        operation,
-                       data_view                    dst_view,
-                       const execution_interface_t &executor = execution_interface_t())
+    inline auto submit(cache_flush_operation operation, data_view dst_view, const execution_interface_t &executor = execution_interface_t())
         -> handler<cache_flush_operation, typename execution_interface_t::allocator_type>
     {
         return detail::submit<execution_path, cache_flush_operation>(
             executor,
-            [&]
-            {
-                return range_check::cache_flush(dst_view.data(), dst_view.size());
-            },
             [&]()
             {
                 return ml::make_cache_flush_descriptor(dst_view.data(), dst_view.size(), operation.get_options());

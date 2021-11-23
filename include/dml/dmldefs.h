@@ -45,18 +45,6 @@ extern "C" {
 
 /* ====== DML Defines ====== */
 
-#if defined( _WIN32 ) || defined ( _WIN64 )
-#define DML_STDCALL  __stdcall    /**< The standard calling convention for the Microsoft Win32 API (not actual for Linux) */
-#define DML_CDECL    __cdecl      /**< Standard calling convention for x86 architectures (not actual for Linux) */
-#else
-#define DML_STDCALL                      /**< The standard calling convention for the Microsoft Win32 API (not actual for Linux) */
-#define DML_CDECL                        /**< Standard calling convention for x86 architectures (not actual for Linux) */
-#endif
-
-#if !defined( DMLAPI )
-#define DML_API(type, name, arg) type DML_STDCALL name arg; /**< Macro to manipulate function name. */
-#endif
-
 #define DML_MAX_8U     ( 0xFFu )                    /**< Maximal value presented by unsigned 8-bit integer */
 #define DML_MIN_8U     ( 0u )                       /**< Unsigned 0 presented by 8-bit */
 #define DML_MAX_16U    ( 0xFFFFu )                  /**< Maximal value presented by unsigned 16-bit integer */

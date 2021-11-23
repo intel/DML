@@ -430,7 +430,7 @@ dml_status_t dml_copy_batch_8u(uint8_t *source_first_ptr,
                                dml_job_t *const dml_job_ptr)
 {
     dml_status_t status = DML_STATUS_OK;
-    uint32_t operations_count    = 2u;
+    uint32_t operations_count    = 4u;
     uint32_t batch_buffer_length = 0u;
 
     status = dml_get_batch_size(dml_job_ptr, operations_count, &batch_buffer_length);
@@ -460,6 +460,30 @@ dml_status_t dml_copy_batch_8u(uint8_t *source_first_ptr,
 
     status = dml_batch_set_mem_move_by_index(dml_job_ptr,
                                              1u,
+                                             source_second_ptr,
+                                             destination_second_ptr,
+                                             second_length,
+                                             0u);
+    if (DML_STATUS_OK != status)
+    {
+        free(batch_buffer_ptr);
+        return status;
+    }
+
+    status = dml_batch_set_mem_move_by_index(dml_job_ptr,
+                                             2u,
+                                             source_second_ptr,
+                                             destination_second_ptr,
+                                             second_length,
+                                             0u);
+    if (DML_STATUS_OK != status)
+    {
+        free(batch_buffer_ptr);
+        return status;
+    }
+
+    status = dml_batch_set_mem_move_by_index(dml_job_ptr,
+                                             3u,
                                              source_second_ptr,
                                              destination_second_ptr,
                                              second_length,

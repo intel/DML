@@ -55,10 +55,6 @@ DML_CORE_OWN_INLINE(void, move_8u, (const uint8_t *const source_ptr,
     uint8_t *const destination_ptr,
     uint32_t       bytes_to_process))
 {
-    if (source_ptr > destination_ptr || source_ptr + bytes_to_process <= destination_ptr) {
-        dmlc_own_copy_8u(source_ptr, destination_ptr, bytes_to_process);
-        return;
-    }
     // Current position in source vector
     const uint8_t *source_current_ptr = (const uint8_t *)(source_ptr + bytes_to_process);
 

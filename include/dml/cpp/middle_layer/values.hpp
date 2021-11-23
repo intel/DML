@@ -91,33 +91,33 @@ namespace dml::ml
         invert_crc_result = 0b1000,
     };
 
-    enum class dif_source_flag : operation_specific_flags_t
+    enum class dif_src_flag : operation_specific_flags_t
     {
-        enable_all_f_detect_error              = 0b00000001,
-        all_f_detect                           = 0b00000010,
-        application_tag_f_detect               = 0b00000100,
-        application_and_reference_tag_f_detect = 0b00001000,
-        incrementing_application_tag_type      = 0b00010000,
-        guard_check_disable                    = 0b00100000,
-        reference_tag_check_disable            = 0b01000000,
-        fixed_reference_tag_type               = 0b10000000
+        enable_all_f_detect_error = 0b00000001,
+        all_f_detect              = 0b00000010,
+        app_tag_f_detect          = 0b00000100,
+        app_and_ref_tag_f_detect  = 0b00001000,
+        incrementing_app_tag_type = 0b00010000,
+        guard_check_disable       = 0b00100000,
+        ref_tag_check_disable     = 0b01000000,
+        fixed_ref_tag_type        = 0b10000000
     };
 
-    enum class dif_destination_flag : operation_specific_flags_t
+    enum class dif_dst_flag : operation_specific_flags_t
     {
-        application_tag_pass_through      = 0b00001000,
-        incrementing_application_tag_type = 0b00010000,
-        guard_field_pass_through          = 0b00100000,
-        reference_tag_pass_through        = 0b01000000,
-        fixed_reference_tag_type          = 0b10000000
+        app_tag_pass_through      = 0b00001000,
+        incrementing_app_tag_type = 0b00010000,
+        guard_field_pass_through  = 0b00100000,
+        ref_tag_pass_through      = 0b01000000,
+        fixed_ref_tag_type        = 0b10000000
     };
 
-    enum dif_status : dif_status_t
+    enum class dif_status : dif_status_t
     {
-        guard_mismatch            = 0x01,
-        applicaation_tag_mismatch = 0x02,
-        reference_tag_mismatch    = 0x04,
-        all_f_detect_error        = 0x08
+        guard_mismatch     = 0x01,
+        app_tag_mismatch   = 0x02,
+        ref_tag_mismatch   = 0x04,
+        all_f_detect_error = 0x08
     };
 }  // namespace dml::ml
 

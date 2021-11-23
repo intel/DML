@@ -515,7 +515,7 @@ DML_CORE_OWN_INLINE(void, copy_8u, (const uint8_t *src_ptr,
 
         return;
     }
-    
+
     uint32_t length512u = length / sizeof(__m512i);
     uint32_t tail = length % sizeof(__m512i);
 
@@ -526,7 +526,7 @@ DML_CORE_OWN_INLINE(void, copy_8u, (const uint8_t *src_ptr,
             return;
         }
         uint32_t shift = 64 - align_src;
-        
+
         if (0u == (shift & 3u)) {
             src_ptr -= shift;
             __mmask64 skip_mask = ~((1llu << shift) - 1u);
@@ -719,11 +719,6 @@ DML_CORE_OWN_INLINE(void, move_8u, (const uint8_t *const source_ptr,
     uint8_t *const destination_ptr,
     uint32_t       bytes_to_process))
 {
-    if (source_ptr > destination_ptr || source_ptr + bytes_to_process <= destination_ptr) {
-        dmlc_own_px_copy_8u_not_unrolled(source_ptr, destination_ptr, bytes_to_process);
-        return;
-    }
-
     // Current position in source vector
     const uint8_t *source_current_ptr = (const uint8_t *)(source_ptr + bytes_to_process);
 

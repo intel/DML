@@ -18,7 +18,10 @@ project(dml_middle_layer CXX)
 add_library(dml_middle_layer OBJECT
     # Sources
     awaiter.cpp
+    validation.cpp
     core.cpp
+
+    sw_path_legacy/dif.c
     )
 
 target_include_directories(dml_middle_layer
@@ -32,12 +35,12 @@ target_compile_definitions(dml_middle_layer PRIVATE $<$<BOOL:${EFFICIENT_WAIT}>:
 
 if (DML_HW)
     target_sources(dml_middle_layer PRIVATE
-        $<TARGET_OBJECTS:hw_path>
         dispatcher/hw_device.cpp
         dispatcher/hw_dispatcher.cpp
         dispatcher/hw_queue.cpp
         dispatcher/numa.cpp
         device.cpp
+        hw_configuration_driver.c
         )
     target_include_directories(dml_middle_layer PRIVATE ../hw-path/include)
     target_compile_definitions(dml_middle_layer

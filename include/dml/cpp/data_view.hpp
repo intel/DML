@@ -23,7 +23,7 @@
  */
 
 #include <cstdint>
-#include <dml/cpp/common/types.hpp>
+#include <dml/cpp/types.hpp>
 #include <iterator>
 #include <type_traits>
 

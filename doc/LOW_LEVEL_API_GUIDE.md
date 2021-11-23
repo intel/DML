@@ -148,8 +148,8 @@ You can read more about the flags in our docs
 
 
 A complete description of the job structure fields can be found in Section (N).
-| Field Name | Description                                                                              |
-| ------------------------- | ---------------------- | ------------------------------------------------------------------------------------ |
+| Field Name | Description |
+| ------------------------- |------------------------------------------------------------------------------------ |
 | `source_first_ptr` | The starting point of the input data.|
 | `source_length` | Length of the input data. On completion, the `source_length` field contains the number of bytes remained unprocessed in case of any library/HW issue, or it contains zero if everything is successful.|
 | `source_second_ptr` | The starting point of the input data in case if the second buffer is required (length is described with `source_length`).|

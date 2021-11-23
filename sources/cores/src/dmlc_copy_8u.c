@@ -56,7 +56,17 @@ DML_CORE_API(dmlc_status_t, move_8u, ( const uint8_t  *const source_ptr,
                                                       uint8_t  *const destination_ptr,
                                                       uint32_t        bytes_to_process ) )
 {
-    // Main action
+    const uint8_t * const src_begin = source_ptr;
+    const uint8_t * const src_end   = source_ptr + bytes_to_process;
+    const uint8_t * const dst_begin = destination_ptr;
+    const uint8_t * const dst_end   = destination_ptr + bytes_to_process;
+
+    // If memory regions do not overlap:
+    if (src_end <= dst_begin || src_begin >= dst_end)
+    {
+        return dmlc_copy_8u(source_ptr, destination_ptr, bytes_to_process);
+    }
+
     dmlc_own_move_8u(source_ptr, destination_ptr, bytes_to_process);
 
     // Success

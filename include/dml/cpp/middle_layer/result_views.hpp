@@ -39,32 +39,32 @@ namespace dml::ml::views
         };
 
     public:
-        explicit any_result(completion_record &record): record_(record)
+        explicit any_result(completion_record& record): record_(record)
         {
         }
 
         [[nodiscard]] status_t& status() const noexcept
         {
-            return reinterpret_cast<status_t &>(record_.bytes[offsets::status]);
+            return reinterpret_cast<status_t&>(record_.bytes[offsets::status]);
         }
 
         [[nodiscard]] result_t& result() const noexcept
         {
-            return reinterpret_cast<result_t &>(record_.bytes[offsets::result]);
+            return reinterpret_cast<result_t&>(record_.bytes[offsets::result]);
         }
 
         [[nodiscard]] transfer_size_t& bytes_completed() const noexcept
         {
-            return reinterpret_cast<transfer_size_t &>(record_.bytes[offsets::bytes_completed]);
+            return reinterpret_cast<transfer_size_t&>(record_.bytes[offsets::bytes_completed]);
         }
 
         [[nodiscard]] address_t& fault_address() const noexcept
         {
-            return reinterpret_cast<address_t &>(record_.bytes[offsets::fault_address]);
+            return reinterpret_cast<address_t&>(record_.bytes[offsets::fault_address]);
         }
 
     protected:
-        completion_record &record_;
+        completion_record& record_;
     };
 
     class nop_result: public any_result
@@ -143,7 +143,7 @@ namespace dml::ml::views
 
         [[nodiscard]] transfer_size_t& delta_record_size() const noexcept
         {
-            return reinterpret_cast<transfer_size_t &>(record_.bytes[offsets::delta_record_size]);
+            return reinterpret_cast<transfer_size_t&>(record_.bytes[offsets::delta_record_size]);
         }
     };
 
@@ -178,7 +178,7 @@ namespace dml::ml::views
 
         [[nodiscard]] crc_value_t& crc_value() const noexcept
         {
-            return reinterpret_cast<crc_value_t &>(record_.bytes[offsets::crc_value]);
+            return reinterpret_cast<crc_value_t&>(record_.bytes[offsets::crc_value]);
         }
 
     private:
@@ -190,9 +190,9 @@ namespace dml::ml::views
     private:
         struct offsets
         {
-            constexpr static auto reference_tag = 16u;
-            constexpr static auto application_tag_mask = 20u;
-            constexpr static auto application_tag = 22u;
+            constexpr static auto ref_tag      = 16u;
+            constexpr static auto app_tag_mask = 20u;
+            constexpr static auto app_tag      = 22u;
         };
 
     public:
@@ -203,19 +203,19 @@ namespace dml::ml::views
             return this->result();
         }
 
-        [[nodiscard]] dif_reference_tag_t& source_reference_tag() const noexcept
+        [[nodiscard]] dif_ref_tag_t& source_ref_tag() const noexcept
         {
-            return reinterpret_cast<dif_reference_tag_t &>(record_.bytes[offsets::reference_tag]);
+            return reinterpret_cast<dif_ref_tag_t&>(record_.bytes[offsets::ref_tag]);
         }
 
-        [[nodiscard]] dif_application_tag_t& source_application_tag() const noexcept
+        [[nodiscard]] dif_app_tag_t& source_app_tag() const noexcept
         {
-            return reinterpret_cast<dif_application_tag_t &>(record_.bytes[offsets::application_tag]);
+            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::app_tag]);
         }
 
-        [[nodiscard]] dif_application_tag_t& source_application_tag_mask() const noexcept
+        [[nodiscard]] dif_app_tag_t& source_app_tag_mask() const noexcept
         {
-            return reinterpret_cast<dif_application_tag_t &>(record_.bytes[offsets::application_tag_mask]);
+            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::app_tag_mask]);
         }
 
     private:
@@ -227,27 +227,27 @@ namespace dml::ml::views
     private:
         struct offsets
         {
-            constexpr static auto reference_tag = 24u;
-            constexpr static auto application_tag_mask = 28u;
-            constexpr static auto application_tag = 30u;
+            constexpr static auto ref_tag      = 24u;
+            constexpr static auto app_tag_mask = 28u;
+            constexpr static auto app_tag      = 30u;
         };
 
     public:
         using any_result::any_result;
 
-        [[nodiscard]] dif_reference_tag_t& destination_reference_tag() const noexcept
+        [[nodiscard]] dif_ref_tag_t& destination_ref_tag() const noexcept
         {
-            return reinterpret_cast<dif_reference_tag_t &>(record_.bytes[offsets::reference_tag]);
+            return reinterpret_cast<dif_ref_tag_t&>(record_.bytes[offsets::ref_tag]);
         }
 
-        [[nodiscard]] dif_application_tag_t& destination_application_tag() const noexcept
+        [[nodiscard]] dif_app_tag_t& destination_app_tag() const noexcept
         {
-            return reinterpret_cast<dif_application_tag_t &>(record_.bytes[offsets::application_tag]);
+            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::app_tag]);
         }
 
-        [[nodiscard]] dif_application_tag_t& destination_application_tag_mask() const noexcept
+        [[nodiscard]] dif_app_tag_t& destination_app_tag_mask() const noexcept
         {
-            return reinterpret_cast<dif_application_tag_t &>(record_.bytes[offsets::application_tag_mask]);
+            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::app_tag_mask]);
         }
 
     private:
@@ -259,9 +259,9 @@ namespace dml::ml::views
     private:
         struct offsets
         {
-            constexpr static auto reference_tag = 16u;
-            constexpr static auto application_tag_mask = 20u;
-            constexpr static auto application_tag = 22u;
+            constexpr static auto ref_tag      = 16u;
+            constexpr static auto app_tag_mask = 20u;
+            constexpr static auto app_tag      = 22u;
         };
 
     public:
@@ -272,19 +272,19 @@ namespace dml::ml::views
             return this->result();
         }
 
-        [[nodiscard]] dif_reference_tag_t& source_reference_tag() const noexcept
+        [[nodiscard]] dif_ref_tag_t& source_ref_tag() const noexcept
         {
-            return reinterpret_cast<dif_reference_tag_t &>(record_.bytes[offsets::reference_tag]);
+            return reinterpret_cast<dif_ref_tag_t&>(record_.bytes[offsets::ref_tag]);
         }
 
-        [[nodiscard]] dif_application_tag_t& source_application_tag() const noexcept
+        [[nodiscard]] dif_app_tag_t& source_app_tag() const noexcept
         {
-            return reinterpret_cast<dif_application_tag_t &>(record_.bytes[offsets::application_tag]);
+            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::app_tag]);
         }
 
-        [[nodiscard]] dif_application_tag_t& source_application_tag_mask() const noexcept
+        [[nodiscard]] dif_app_tag_t& source_app_tag_mask() const noexcept
         {
-            return reinterpret_cast<dif_application_tag_t &>(record_.bytes[offsets::application_tag_mask]);
+            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::app_tag_mask]);
         }
 
     private:
@@ -296,12 +296,12 @@ namespace dml::ml::views
     private:
         struct offsets
         {
-            constexpr static auto source_reference_tag = 16u;
-            constexpr static auto source_application_tag_mask = 20u;
-            constexpr static auto source_application_tag = 22u;
-            constexpr static auto destination_reference_tag = 24u;
-            constexpr static auto destination_application_tag_mask = 28u;
-            constexpr static auto destination_application_tag = 30u;
+            constexpr static auto source_ref_tag           = 16u;
+            constexpr static auto source_app_tag_mask      = 20u;
+            constexpr static auto source_app_tag           = 22u;
+            constexpr static auto destination_ref_tag      = 24u;
+            constexpr static auto destination_app_tag_mask = 28u;
+            constexpr static auto destination_app_tag      = 30u;
         };
 
     public:
@@ -312,34 +312,34 @@ namespace dml::ml::views
             return this->result();
         }
 
-        [[nodiscard]] dif_reference_tag_t& source_reference_tag() const noexcept
+        [[nodiscard]] dif_ref_tag_t& source_ref_tag() const noexcept
         {
-            return reinterpret_cast<dif_reference_tag_t &>(record_.bytes[offsets::source_reference_tag]);
+            return reinterpret_cast<dif_ref_tag_t&>(record_.bytes[offsets::source_ref_tag]);
         }
 
-        [[nodiscard]] dif_application_tag_t& source_application_tag() const noexcept
+        [[nodiscard]] dif_app_tag_t& source_app_tag() const noexcept
         {
-            return reinterpret_cast<dif_application_tag_t &>(record_.bytes[offsets::source_application_tag]);
+            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::source_app_tag]);
         }
 
-        [[nodiscard]] dif_application_tag_t& source_application_tag_mask() const noexcept
+        [[nodiscard]] dif_app_tag_t& source_app_tag_mask() const noexcept
         {
-            return reinterpret_cast<dif_application_tag_t &>(record_.bytes[offsets::source_application_tag_mask]);
+            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::source_app_tag_mask]);
         }
 
-        [[nodiscard]] dif_reference_tag_t& destination_reference_tag() const noexcept
+        [[nodiscard]] dif_ref_tag_t& destination_ref_tag() const noexcept
         {
-            return reinterpret_cast<dif_reference_tag_t &>(record_.bytes[offsets::destination_reference_tag]);
+            return reinterpret_cast<dif_ref_tag_t&>(record_.bytes[offsets::destination_ref_tag]);
         }
 
-        [[nodiscard]] dif_application_tag_t& destination_application_tag() const noexcept
+        [[nodiscard]] dif_app_tag_t& destination_app_tag() const noexcept
         {
-            return reinterpret_cast<dif_application_tag_t &>(record_.bytes[offsets::destination_application_tag]);
+            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::destination_app_tag]);
         }
 
-        [[nodiscard]] dif_application_tag_t& destination_application_tag_mask() const noexcept
+        [[nodiscard]] dif_app_tag_t& destination_app_tag_mask() const noexcept
         {
-            return reinterpret_cast<dif_application_tag_t &>(record_.bytes[offsets::destination_application_tag_mask]);
+            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::destination_app_tag_mask]);
         }
 
     private:

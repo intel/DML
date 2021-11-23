@@ -39,15 +39,13 @@ extern "C" {
 
 #include "dmldefs.h"
 
-
 /**
  * @brief Returns state of the current build
  *
  * @return Pointer to @ref dml_library_version_t, which contains information about the current build
  *
  */
-DML_API(const dml_library_version_t *, dml_get_library_version, ())
-
+const dml_library_version_t *dml_get_library_version();
 
 /**
  * @brief Calculates the amount of memory, in bytes, required for the @ref dml_job_t structure.
@@ -66,9 +64,7 @@ DML_API(const dml_library_version_t *, dml_get_library_version, ())
  * - @ref DML_STATUS_NULL_POINTER_ERROR
  *
  */
-DML_API(dml_status_t, dml_get_job_size, (const dml_path_t dml_path,
-                                         uint32_t *const job_size_ptr ))
-
+dml_status_t dml_get_job_size(dml_path_t dml_path, uint32_t *job_size_ptr);
 
 /**
  * @brief Performs dml_job_t structure initialization.
@@ -102,9 +98,7 @@ DML_API(dml_status_t, dml_get_job_size, (const dml_path_t dml_path,
  * - @ref DML_STATUS_HARDWARE_CONNECTION_ERROR
  *
  */
-DML_API(dml_status_t, dml_init_job, (const dml_path_t path,
-                                     dml_job_t *const dml_job_ptr ))
-
+dml_status_t dml_init_job(dml_path_t path, dml_job_t *dml_job_ptr);
 
 /**
  * @brief Frees all necessary resources that are used by initialized @ref dml_job_t
@@ -118,8 +112,7 @@ DML_API(dml_status_t, dml_init_job, (const dml_path_t path,
  *      - @ref DML_STATUS_HARDWARE_DISCONNECTION_ERROR
  *
  */
-DML_API(dml_status_t, dml_finalize_job, (dml_job_t *const dml_job_ptr))
-
+dml_status_t dml_finalize_job(dml_job_t *dml_job_ptr);
 
 /**
  * @brief Performs dml_job_t structure parsing and forming the corresponding processing functions pipeline.
@@ -136,8 +129,7 @@ DML_API(dml_status_t, dml_finalize_job, (dml_job_t *const dml_job_ptr))
  * - or other status depending on the DML operation in the @ref dml_job_t.operation field.
  *
  */
-DML_API(dml_status_t, dml_execute_job, (dml_job_t *const dml_job_ptr))
-
+dml_status_t dml_execute_job(dml_job_t *dml_job_ptr);
 
 /**
  * @brief Performs @ref dml_job_t structure parsing and forming the corresponding processing functions pipeline.
@@ -155,8 +147,7 @@ DML_API(dml_status_t, dml_execute_job, (dml_job_t *const dml_job_ptr))
  * - or other status depending on the DML operation in the @ref dml_job_t.operation field.
  *
  */
-DML_API(dml_status_t, dml_submit_job, (dml_job_t *const dml_job_ptr))
-
+dml_status_t dml_submit_job(dml_job_t *dml_job_ptr);
 
 /**
  * @brief Waits for the end of @ref dml_job_t processing. (waits until the job is completed)
@@ -171,8 +162,7 @@ DML_API(dml_status_t, dml_submit_job, (dml_job_t *const dml_job_ptr))
  * - or other status depending on the DML operation in the @ref dml_job_t.operation field
  *
  */
-DML_API(dml_status_t, dml_wait_job, (dml_job_t *const dml_job_ptr))
-
+dml_status_t dml_wait_job(dml_job_t *dml_job_ptr);
 
 /**
  * @brief Checks the status of @ref dml_job_t processing.
@@ -187,8 +177,7 @@ DML_API(dml_status_t, dml_wait_job, (dml_job_t *const dml_job_ptr))
  * - @ref DML_STATUS_JOB_CORRUPTED
  *
  */
-DML_API(dml_status_t, dml_check_job, (dml_job_t *const dml_job_ptr))
-
+dml_status_t dml_check_job(dml_job_t *dml_job_ptr);
 
 /**
  * @brief The service function that returns the maximum number of jobs available in a batch mode.
@@ -203,9 +192,7 @@ DML_API(dml_status_t, dml_check_job, (dml_job_t *const dml_job_ptr))
  *      - @ref DML_STATUS_JOB_CORRUPTED
  *
  */
-DML_API(dml_status_t, dml_get_limits, (dml_job_t *const dml_job_ptr,
-                                       dml_limits_t *const dml_limits_ptr))
-
+dml_status_t dml_get_limits(dml_job_t *dml_job_ptr, dml_limits_t *dml_limits_ptr);
 
 /**
  * @brief The service function that returns the number of bytes to initialize a batch.
@@ -222,10 +209,7 @@ DML_API(dml_status_t, dml_get_limits, (dml_job_t *const dml_job_ptr,
  *      - @ref DML_STATUS_BATCH_SIZE_ERROR
  *
  */
-DML_API(dml_status_t, dml_get_batch_size, (const dml_job_t *dml_job_ptr,
-                                           uint32_t task_count,
-                                           uint32_t *byte_size_ptr))
-
+dml_status_t dml_get_batch_size(const dml_job_t *dml_job_ptr, uint32_t task_count, uint32_t *byte_size_ptr);
 
 /**
  * @brief The service function that sets the specific task for the @ref DML_OP_NOP operation.
@@ -241,10 +225,7 @@ DML_API(dml_status_t, dml_get_batch_size, (const dml_job_t *dml_job_ptr,
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_set_nop_by_index, (dml_job_t * dml_job_ptr,
-                                                   uint32_t task_index,
-                                                   dml_operation_flags_t flags))
-
+dml_status_t dml_batch_set_nop_by_index(dml_job_t *dml_job_ptr, uint32_t task_index, dml_operation_flags_t flags);
 
 /**
  * @brief The service function that sets the specific task for the @ref DML_OP_MEM_MOVE operation.
@@ -263,13 +244,12 @@ DML_API(dml_status_t, dml_batch_set_nop_by_index, (dml_job_t * dml_job_ptr,
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_set_mem_move_by_index, (dml_job_t * dml_job_ptr,
-                                                        uint32_t task_index,
-                                                        uint8_t *source_ptr,
-                                                        uint8_t *destination_ptr,
-                                                        uint32_t byte_length,
-                                                        dml_operation_flags_t flags))
-
+dml_status_t dml_batch_set_mem_move_by_index(dml_job_t            *dml_job_ptr,
+                                             uint32_t              task_index,
+                                             uint8_t              *source_ptr,
+                                             uint8_t              *destination_ptr,
+                                             uint32_t              byte_length,
+                                             dml_operation_flags_t flags);
 
 /**
  * @brief The service function that sets the specific task for the @ref DML_OP_DUALCAST operation.
@@ -289,14 +269,13 @@ DML_API(dml_status_t, dml_batch_set_mem_move_by_index, (dml_job_t * dml_job_ptr,
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_set_dualcast_by_index, (dml_job_t * dml_job_ptr,
-                                                        uint32_t task_index,
-                                                        uint8_t *source_ptr,
-                                                        uint8_t *destination_first_ptr,
-                                                        uint8_t *destination_second_ptr,
-                                                        uint32_t byte_length,
-                                                        dml_operation_flags_t flags))
-
+dml_status_t dml_batch_set_dualcast_by_index(dml_job_t            *dml_job_ptr,
+                                             uint32_t              task_index,
+                                             uint8_t              *source_ptr,
+                                             uint8_t              *destination_first_ptr,
+                                             uint8_t              *destination_second_ptr,
+                                             uint32_t              byte_length,
+                                             dml_operation_flags_t flags);
 
 /**
  * @brief The service function that sets the specific task for the @ref DML_OP_COMPARE operation.
@@ -316,14 +295,13 @@ DML_API(dml_status_t, dml_batch_set_dualcast_by_index, (dml_job_t * dml_job_ptr,
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_set_compare_by_index, (dml_job_t * dml_job_ptr,
-                                                       uint32_t task_index,
-                                                       uint8_t *source_first_ptr,
-                                                       uint8_t *source_second_ptr,
-                                                       uint32_t byte_length,
-                                                       dml_meta_result_t expected_result,
-                                                       dml_operation_flags_t flags))
-
+dml_status_t dml_batch_set_compare_by_index(dml_job_t            *dml_job_ptr,
+                                            uint32_t              task_index,
+                                            uint8_t              *source_first_ptr,
+                                            uint8_t              *source_second_ptr,
+                                            uint32_t              byte_length,
+                                            dml_meta_result_t     expected_result,
+                                            dml_operation_flags_t flags);
 
 /**
  * @brief The service function that sets the specific task for the @ref DML_OP_COMPARE_PATTERN operation.
@@ -343,14 +321,13 @@ DML_API(dml_status_t, dml_batch_set_compare_by_index, (dml_job_t * dml_job_ptr,
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_set_compare_pattern_by_index, (dml_job_t * dml_job_ptr,
-                                                               uint32_t task_index,
-                                                               uint8_t *source_ptr,
-                                                               uint8_t *pattern_ptr,
-                                                               uint32_t byte_length,
-                                                               dml_meta_result_t expected_result,
-                                                               dml_operation_flags_t flags))
-
+dml_status_t dml_batch_set_compare_pattern_by_index(dml_job_t            *dml_job_ptr,
+                                                    uint32_t              task_index,
+                                                    uint8_t              *source_ptr,
+                                                    uint8_t              *pattern_ptr,
+                                                    uint32_t              byte_length,
+                                                    dml_meta_result_t     expected_result,
+                                                    dml_operation_flags_t flags);
 
 /**
  * @brief The service function that sets the specific task for the @ref DML_OP_CRC operation.
@@ -369,13 +346,12 @@ DML_API(dml_status_t, dml_batch_set_compare_pattern_by_index, (dml_job_t * dml_j
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_set_crc_by_index, (dml_job_t * dml_job_ptr,
-                                                   uint32_t task_index,
-                                                   uint8_t *source_ptr,
-                                                   uint32_t byte_length,
-                                                   uint32_t *crc_seed_ptr,
-                                                   dml_operation_flags_t flags))
-
+dml_status_t dml_batch_set_crc_by_index(dml_job_t            *dml_job_ptr,
+                                        uint32_t              task_index,
+                                        uint8_t              *source_ptr,
+                                        uint32_t              byte_length,
+                                        uint32_t             *crc_seed_ptr,
+                                        dml_operation_flags_t flags);
 
 /**
  * @brief The service function that sets the specific task for the @ref DML_OP_COPY_CRC operation.
@@ -395,14 +371,13 @@ DML_API(dml_status_t, dml_batch_set_crc_by_index, (dml_job_t * dml_job_ptr,
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_set_copy_crc_by_index, (dml_job_t * dml_job_ptr,
-                                                        uint32_t task_index,
-                                                        uint8_t *source_ptr,
-                                                        uint32_t byte_length,
-                                                        uint32_t *crc_seed_ptr,
-                                                        uint8_t *destination_ptr,
-                                                        dml_operation_flags_t flags))
-
+dml_status_t dml_batch_set_copy_crc_by_index(dml_job_t            *dml_job_ptr,
+                                             uint32_t              task_index,
+                                             uint8_t              *source_ptr,
+                                             uint32_t              byte_length,
+                                             uint32_t             *crc_seed_ptr,
+                                             uint8_t              *destination_ptr,
+                                             dml_operation_flags_t flags);
 
 /**
  * @brief The service function that sets the specific task for the @ref DML_OP_FILL operation.
@@ -421,13 +396,12 @@ DML_API(dml_status_t, dml_batch_set_copy_crc_by_index, (dml_job_t * dml_job_ptr,
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_set_fill_by_index, (dml_job_t * dml_job_ptr,
-                                                    uint32_t task_index,
-                                                    const uint8_t *pattern_ptr,
-                                                    uint8_t *destination_ptr,
-                                                    uint32_t byte_length,
-                                                    dml_operation_flags_t flags))
-
+dml_status_t dml_batch_set_fill_by_index(dml_job_t            *dml_job_ptr,
+                                         uint32_t              task_index,
+                                         const uint8_t        *pattern_ptr,
+                                         uint8_t              *destination_ptr,
+                                         uint32_t              byte_length,
+                                         dml_operation_flags_t flags);
 
 /**
  * @brief The service function that sets the specific task for the @ref DML_OP_CACHE_FLUSH operation.
@@ -445,12 +419,11 @@ DML_API(dml_status_t, dml_batch_set_fill_by_index, (dml_job_t * dml_job_ptr,
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_set_cache_flush_by_index, (dml_job_t * dml_job_ptr,
-                                                           uint32_t task_index,
-                                                           uint8_t *destination_ptr,
-                                                           uint32_t byte_length,
-                                                           dml_operation_flags_t flags))
-
+dml_status_t dml_batch_set_cache_flush_by_index(dml_job_t            *dml_job_ptr,
+                                                uint32_t              task_index,
+                                                uint8_t              *destination_ptr,
+                                                uint32_t              byte_length,
+                                                dml_operation_flags_t flags);
 
 /**
  * @brief The service function that sets the specific task for the @ref DML_OP_DELTA_CREATE operation.
@@ -472,16 +445,15 @@ DML_API(dml_status_t, dml_batch_set_cache_flush_by_index, (dml_job_t * dml_job_p
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_set_delta_create_by_index, (dml_job_t * dml_job_ptr,
-                                                            uint32_t task_index,
-                                                            uint8_t *source_ptr,
-                                                            uint8_t *reference_ptr,
-                                                            uint32_t compare_length,
-                                                            uint8_t *delta_record_ptr,
-                                                            uint32_t delta_record_length,
-                                                            dml_meta_result_t expected_result,
-                                                            dml_operation_flags_t flags))
-
+dml_status_t dml_batch_set_delta_create_by_index(dml_job_t            *dml_job_ptr,
+                                                 uint32_t              task_index,
+                                                 uint8_t              *source_ptr,
+                                                 uint8_t              *reference_ptr,
+                                                 uint32_t              compare_length,
+                                                 uint8_t              *delta_record_ptr,
+                                                 uint32_t              delta_record_length,
+                                                 dml_meta_result_t     expected_result,
+                                                 dml_operation_flags_t flags);
 
 /**
  * @brief The service function that sets the specific task for the @ref DML_OP_DELTA_APPLY operation.
@@ -501,14 +473,13 @@ DML_API(dml_status_t, dml_batch_set_delta_create_by_index, (dml_job_t * dml_job_
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_set_delta_apply_by_index, (dml_job_t * dml_job_ptr,
-                                                           uint32_t task_index,
-                                                           uint8_t *delta_record_ptr,
-                                                           uint32_t delta_record_length,
-                                                           uint8_t *destination_ptr,
-                                                           uint32_t destination_length,
-                                                           dml_operation_flags_t flags))
-
+dml_status_t dml_batch_set_delta_apply_by_index(dml_job_t            *dml_job_ptr,
+                                                uint32_t              task_index,
+                                                uint8_t              *delta_record_ptr,
+                                                uint32_t              delta_record_length,
+                                                uint8_t              *destination_ptr,
+                                                uint32_t              destination_length,
+                                                dml_operation_flags_t flags);
 
 /**
  * @brief The service function that sets the specific task for the @ref DML_OP_DIF_CHECK operation.
@@ -527,13 +498,12 @@ DML_API(dml_status_t, dml_batch_set_delta_apply_by_index, (dml_job_t * dml_job_p
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_set_dif_check_by_index, (dml_job_t * dml_job_ptr,
-                                                         uint32_t task_index,
-                                                         uint8_t *source_ptr,
-                                                         uint32_t source_length,
-                                                         const dml_dif_config_t *dif_config_ptr,
-                                                         dml_operation_flags_t flags))
-
+dml_status_t dml_batch_set_dif_check_by_index(dml_job_t              *dml_job_ptr,
+                                              uint32_t                task_index,
+                                              uint8_t                *source_ptr,
+                                              uint32_t                source_length,
+                                              const dml_dif_config_t *dif_config_ptr,
+                                              dml_operation_flags_t   flags);
 
 /**
  * @brief The service function that sets the specific task for the @ref DML_OP_DIF_UPDATE operation.
@@ -554,15 +524,14 @@ DML_API(dml_status_t, dml_batch_set_dif_check_by_index, (dml_job_t * dml_job_ptr
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_set_dif_update_by_index, (dml_job_t * dml_job_ptr,
-                                                          uint32_t task_index,
-                                                          uint8_t *source_ptr,
-                                                          uint32_t source_length,
-                                                          const dml_dif_config_t *dif_config_ptr,
-                                                          uint8_t *destination_ptr,
-                                                          uint32_t destination_length,
-                                                          dml_operation_flags_t flags))
-
+dml_status_t dml_batch_set_dif_update_by_index(dml_job_t              *dml_job_ptr,
+                                               uint32_t                task_index,
+                                               uint8_t                *source_ptr,
+                                               uint32_t                source_length,
+                                               const dml_dif_config_t *dif_config_ptr,
+                                               uint8_t                *destination_ptr,
+                                               uint32_t                destination_length,
+                                               dml_operation_flags_t   flags);
 
 /**
  * @brief The service function that sets the specific task for the @ref DML_OP_DIF_INSERT operation.
@@ -583,15 +552,14 @@ DML_API(dml_status_t, dml_batch_set_dif_update_by_index, (dml_job_t * dml_job_pt
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_set_dif_insert_by_index, (dml_job_t * dml_job_ptr,
-                                                          uint32_t task_index,
-                                                          uint8_t *source_ptr,
-                                                          uint32_t source_length,
-                                                          const dml_dif_config_t *dif_config_ptr,
-                                                          uint8_t *destination_ptr,
-                                                          uint32_t destination_length,
-                                                          dml_operation_flags_t flags))
-
+dml_status_t dml_batch_set_dif_insert_by_index(dml_job_t              *dml_job_ptr,
+                                               uint32_t                task_index,
+                                               uint8_t                *source_ptr,
+                                               uint32_t                source_length,
+                                               const dml_dif_config_t *dif_config_ptr,
+                                               uint8_t                *destination_ptr,
+                                               uint32_t                destination_length,
+                                               dml_operation_flags_t   flags);
 
 /**
  * @brief The service function that sets the specific task for the @ref DML_OP_DIF_STRIP operation.
@@ -612,15 +580,14 @@ DML_API(dml_status_t, dml_batch_set_dif_insert_by_index, (dml_job_t * dml_job_pt
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_set_dif_strip_by_index, (dml_job_t * dml_job_ptr,
-                                                         uint32_t task_index,
-                                                         uint8_t *source_ptr,
-                                                         uint32_t source_length,
-                                                         const dml_dif_config_t *dif_config_ptr,
-                                                         uint8_t *destination_ptr,
-                                                         uint32_t destination_length,
-                                                         dml_operation_flags_t flags))
-
+dml_status_t dml_batch_set_dif_strip_by_index(dml_job_t              *dml_job_ptr,
+                                              uint32_t                task_index,
+                                              uint8_t                *source_ptr,
+                                              uint32_t                source_length,
+                                              const dml_dif_config_t *dif_config_ptr,
+                                              uint8_t                *destination_ptr,
+                                              uint32_t                destination_length,
+                                              dml_operation_flags_t   flags);
 
 /**
  * @brief The service function that gets an access to the result.
@@ -636,10 +603,7 @@ DML_API(dml_status_t, dml_batch_set_dif_strip_by_index, (dml_job_t * dml_job_ptr
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_get_result, (const dml_job_t *dml_job_ptr,
-                                             uint32_t task_index,
-                                             dml_meta_result_t *result_ptr))
-
+dml_status_t dml_batch_get_result(const dml_job_t *dml_job_ptr, uint32_t task_index, dml_meta_result_t *result_ptr);
 
 /**
  * @brief The service function that gets an access to the status.
@@ -655,10 +619,7 @@ DML_API(dml_status_t, dml_batch_get_result, (const dml_job_t *dml_job_ptr,
  *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
  *
  */
-DML_API(dml_status_t, dml_batch_get_status, (const dml_job_t *dml_job_ptr,
-                                             uint32_t task_index,
-                                             dml_status_t *status_ptr))
-
+dml_status_t dml_batch_get_status(const dml_job_t *dml_job_ptr, uint32_t task_index, dml_status_t *status_ptr);
 
 #ifdef __cplusplus
 }

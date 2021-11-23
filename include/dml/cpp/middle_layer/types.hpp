@@ -91,12 +91,19 @@ namespace dml::ml
     /**
      * @todo
      */
-    using dif_reference_tag_t = uint32_t;
+    using dif_ref_tag_t = uint32_t;
 
     /**
      * @todo
      */
-    using dif_application_tag_t = uint16_t;
+    using dif_app_tag_t = uint16_t;
+
+    struct dif_parameters
+    {
+        dif_ref_tag_t ref_tag_seed;
+        dif_app_tag_t app_tag_mask;
+        dif_app_tag_t app_tag_seed;
+    };
 
 }  // namespace dml::ml
 

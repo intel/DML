@@ -43,12 +43,13 @@ namespace dml::ml
                 }
 
                 auto view = views::any_descriptor(dsc);
-                view.flags() |= static_cast<flags_t>(flag::completion_record_address_valid) |
-                                static_cast<flags_t>(flag::request_completion_record);
+                view.flags() |=
+                    static_cast<flags_t>(flag::completion_record_address_valid) | static_cast<flags_t>(flag::request_completion_record);
 
                 // Use BlockOnFault on hardware, until page fault handling is implemented in software side
-                // Add BlockOnFault for non-batch only.
-                if (view.operation() != static_cast<operation_t>(operation::batch))
+                if (view.operation() != static_cast<operation_t>(operation::batch) &&
+                    view.operation() != static_cast<operation_t>(operation::drain) &&
+                    view.operation() != static_cast<operation_t>(operation::nop))
                 {
                     view.flags() |= static_cast<flags_t>(flag::block_on_fault);
                 }
@@ -75,12 +76,13 @@ namespace dml::ml
                 }
 
                 auto view = views::any_descriptor(dsc);
-                view.flags() |= static_cast<flags_t>(flag::completion_record_address_valid) |
-                                static_cast<flags_t>(flag::request_completion_record);
+                view.flags() |=
+                    static_cast<flags_t>(flag::completion_record_address_valid) | static_cast<flags_t>(flag::request_completion_record);
 
                 // Use BlockOnFault on hardware, until page fault handling is implemented in software side
-                // Add BlockOnFault for non-batch only.
-                if (view.operation() != static_cast<operation_t>(operation::batch))
+                if (view.operation() != static_cast<operation_t>(operation::batch) &&
+                    view.operation() != static_cast<operation_t>(operation::drain) &&
+                    view.operation() != static_cast<operation_t>(operation::nop))
                 {
                     view.flags() |= static_cast<flags_t>(flag::block_on_fault);
                 }

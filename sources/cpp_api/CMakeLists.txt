@@ -27,7 +27,6 @@ target_compile_features(dmlhl PUBLIC cxx_std_17)
 
 # TODO: Remove
 if (DML_HW)
-    target_sources(dmlhl PRIVATE $<TARGET_OBJECTS:hw_path>)
     target_link_libraries(dmlhl PRIVATE ${CMAKE_DL_LIBS})
     target_compile_definitions(dmlhl PUBLIC DML_HW)
 endif()

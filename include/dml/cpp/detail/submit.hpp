@@ -23,8 +23,9 @@
 #define DML_DETAIL_SUBMIT_HPP
 
 #include <dml/cpp/detail/handler.hpp>
-#include "dml/cpp/middle_layer/status.hpp"
-#include "dml/cpp/execution_path.hpp"
+#include <dml/cpp/detail/utils.hpp>
+#include <dml/cpp/execution_path.hpp>
+#include <dml/cpp/middle_layer/status.hpp>
 
 namespace dml::detail
 {
@@ -45,16 +46,21 @@ namespace dml::detail
     template <typename execution_path,
               typename operation_t,
               typename execution_interface_t,
-              typename range_check_t,
-              typename make_operation_t>
+              typename make_operation_t,
+              typename range_check_t = detail::always_success>
     inline auto submit(const execution_interface_t& executor,
-                       range_check_t&&              range_check,
-                       make_operation_t&&           make_operation)
+                       make_operation_t&&           make_operation,
+                       range_check_t                range_check = range_check_t())
     {
-        auto op_handler =
-            executor.template make_handler_with_range_check<operation_t>(std::forward<range_check_t>(range_check));
+        if (auto status = range_check(); status != status_code::ok)
+        {
+            return executor.template make_handler<operation_t>(status);
+        }
 
-        // If Range Check failed:
+        auto operation = make_operation();
+
+        auto op_handler = executor.template make_handler<operation_t>(detail::to_own(ml::validate(operation)));
+
         if (!op_handler.valid())
         {
             return op_handler;
@@ -64,9 +70,9 @@ namespace dml::detail
 #ifdef DML_HW
         if constexpr (std::is_same_v<execution_path, hardware>)
         {
-            auto&       result = detail::get_ml_result(op_handler);
-            auto status = executor.execute(
-                [operation = make_operation(), &result] () mutable
+            auto& result = detail::get_ml_result(op_handler);
+            auto  status = executor.execute(
+                [operation, &result]() mutable
                 {
                     return execution_path{}(operation, result);
                 });
@@ -81,12 +87,12 @@ namespace dml::detail
 #endif
             auto& result = detail::get_ml_result(op_handler);
             executor.execute(
-                [operation = make_operation(), &result] () mutable
+                [operation, &result]() mutable
                 {
-                    auto status =  execution_path{}(operation, result);
+                    auto status = execution_path{}(operation, result);
                     if (status != ml::submission_status::success)
                     {
-                        result.bytes[0] = 0xFF; // Temporary
+                        result.bytes[0] = 0xFF;  // Temporary
                     }
                 });
 #ifdef DML_HW

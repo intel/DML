@@ -22,9 +22,68 @@
 #ifndef DML_DETAIL_UTILS_HPP
 #define DML_DETAIL_UTILS_HPP
 
+#include <dml/cpp/middle_layer/values.hpp>
+#include <dml/cpp/status_code.hpp>
+
 /**
  * @brief Checks whether two sizes are the same
  */
-#define DML_VALIDATE_SIZE_CONSISTENCY(lhs, rhs) if (lhs != rhs) return dml::status_code::inconsistent_size;
+#define DML_VALIDATE_SIZE_CONSISTENCY(lhs, rhs) \
+    if (lhs != rhs)                             \
+        return dml::status_code::inconsistent_size;
+
+namespace dml::detail
+{
+    /**
+     * @todo
+     */
+    struct always_success
+    {
+        auto operator()() const noexcept
+        {
+            return status_code::ok;
+        }
+    };
+
+    /**
+     * @brief Converts Middle Layer's @ref dml::ml::validation_status to @ref dml::status_code
+     *
+     * @param status Status for conversion
+     *
+     * @return dml::status_code that represents dml::ml::validation_status
+     */
+    [[nodiscard]] static constexpr auto to_own(ml::validation_status status) noexcept
+    {
+        switch (status)
+        {
+            case ml::validation_status::success:
+                return status_code::ok;
+            case ml::validation_status::address_is_null:
+                return status_code::nullptr_error;
+            case ml::validation_status::size_is_null:
+                return status_code::bad_size;
+            case ml::validation_status::delta_size_is_wrong:
+                return status_code::bad_size;
+            case ml::validation_status::delta_input_size_is_wrong:
+                return status_code::bad_size;
+            case ml::validation_status::delta_input_size_overflow:
+                return status_code::bad_size;
+            case ml::validation_status::buffers_overlap:
+                return status_code::buffers_overlapping;
+            case ml::validation_status::address_is_misaligned:
+                return status_code::bad_alignment;
+            case ml::validation_status::delta_record_size_is_wrong:
+                return status_code::delta_bad_size;
+            case ml::validation_status::dualcast_address_is_wrong:
+                return status_code::dualcast_bad_padding;
+            case ml::validation_status::batch_size_is_wrong:
+                return status_code::bad_length;
+            case ml::validation_status::unsupported_operation:
+                return status_code::unsupported_operation;
+            default:
+                return status_code::error;
+        }
+    }
+}  // namespace dml::detail
 
 #endif  //DML_DETAIL_UTILS_HPP

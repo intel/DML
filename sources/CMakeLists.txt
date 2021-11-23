@@ -16,11 +16,6 @@
 # TODO: Move to middle_layer
 add_subdirectory(cores)
 
-# TODO: Remove
-if(DML_HW)
-    add_subdirectory(hw-path)
-endif()
-
 add_subdirectory(middle_layer)
 add_subdirectory(c_api)
 add_subdirectory(cpp_api)

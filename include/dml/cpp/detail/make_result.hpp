@@ -22,8 +22,8 @@
 #ifndef DML_DETAIL_MAKE_RESULT_HPP
 #define DML_DETAIL_MAKE_RESULT_HPP
 
-#include <dml/cpp/common/result.hpp>
-#include <dml/cpp/common/status_code.hpp>
+#include <dml/cpp/result.hpp>
+#include <dml/cpp/status_code.hpp>
 #include <dml/cpp/middle_layer/completion_record.hpp>
 #include <dml/cpp/middle_layer/result_views.hpp>
 

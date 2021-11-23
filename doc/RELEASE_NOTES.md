@@ -1,6 +1,22 @@
 Intel® Data Mover Library (Intel® DML) Release Notes
 ===============================================================================
 
+### Intel® DML v0.1.5-beta
+
+**Date: November 2021**
+
+**Note**: Release introduces unification of underlying implementation for both C and C++ APIs
+
+**Features**:
+* Added internal device selection logic to C API (the same as for C++ API)
+  * Selector considers submitting thread's NUMA node id
+  * Selector switches devices and work queues with each submission
+* Improved range checking for C and C++ APIs
+
+**Bug fix**:
+* Lowered memory size requirements for job structure by ~100x.
+
+
 ### Intel® DML v0.1.4-beta
 
 **Date: October 2021**
@@ -11,7 +27,7 @@ Intel® Data Mover Library (Intel® DML) Release Notes
 * Fixed crashes when C++ API was used without root permissions.
 * Fixed crashes when HW initialization failed.
 * Fixed documentation section about system requirements.
-* Fixed project install-paths. They are now follow GNU guidelines.
+* Fixed project install-paths. They are now following GNU guidelines.
 * Fixed wrong path for loading `libaccel-config.so` to `/usr/lib64/libaccel-config.so`.
 
 **Warnings**:

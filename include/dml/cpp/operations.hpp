@@ -22,7 +22,7 @@
 #ifndef DML_OPERATIONS_MEM_MOVE_HPP
 #define DML_OPERATIONS_MEM_MOVE_HPP
 
-#include <dml/cpp/common/result.hpp>
+#include <dml/cpp/result.hpp>
 
 namespace dml
 {
@@ -40,7 +40,9 @@ namespace dml
         /**
          * @brief Constructs the operation
          */
-        constexpr mem_move_operation() noexcept: options_(ml::mem_move_option::cache_control) {}
+        constexpr mem_move_operation() noexcept: options_(ml::mem_move_option::cache_control)
+        {
+        }
 
         /**
          * @brief Result type for this operation
@@ -52,7 +54,10 @@ namespace dml
         /**
          * @todo
          */
-        [[nodiscard]] constexpr auto get_options() const noexcept { return options_; }
+        [[nodiscard]] constexpr auto get_options() const noexcept
+        {
+            return options_;
+        }
 
     private:
         ml::mem_move_options options_; /**< @todo */
@@ -82,7 +87,9 @@ namespace dml
         /**
          * @brief Constructs the operation
          */
-        constexpr mem_copy_operation() noexcept: options_(ml::mem_move_option::cache_control) {}
+        constexpr mem_copy_operation() noexcept: options_(ml::mem_move_option::cache_control)
+        {
+        }
 
         /**
          * @brief Result type for this operation
@@ -94,7 +101,10 @@ namespace dml
         /**
          * @todo
          */
-        [[nodiscard]] constexpr auto get_options() const noexcept { return options_; }
+        [[nodiscard]] constexpr auto get_options() const noexcept
+        {
+            return options_;
+        }
 
     private:
         ml::mem_move_options options_; /**< @todo */
@@ -122,7 +132,9 @@ namespace dml
         /**
          * @brief Constructs the operation
          */
-        constexpr fill_operation() noexcept: options_(ml::fill_option::cache_control) {}
+        constexpr fill_operation() noexcept: options_(ml::fill_option::cache_control)
+        {
+        }
 
         /**
          * @brief Result type for this operation
@@ -134,7 +146,10 @@ namespace dml
         /**
          * @todo
          */
-        [[nodiscard]] constexpr auto get_options() const noexcept { return options_; }
+        [[nodiscard]] constexpr auto get_options() const noexcept
+        {
+            return options_;
+        }
 
     private:
         ml::fill_options options_; /**< @todo */
@@ -174,12 +189,18 @@ namespace dml
         /**
          * @todo
          */
-        [[nodiscard]] constexpr auto get_options() const noexcept { return options_; }
+        [[nodiscard]] constexpr auto get_options() const noexcept
+        {
+            return options_;
+        }
 
         /**
          * @todo
          */
-        [[nodiscard]] constexpr auto get_additional_options() const noexcept { return additional_options_; }
+        [[nodiscard]] constexpr auto get_additional_options() const noexcept
+        {
+            return additional_options_;
+        }
 
     private:
         ml::dualcast_options            options_;            /**< @todo */
@@ -237,7 +258,7 @@ namespace dml
          */
         [[nodiscard]] constexpr auto expect_equal() const noexcept
         {
-            return compare_operation(ml::compare_option::check_result, ml::expected_result_option::expect_equal);
+            return compare_operation(ml::compare_option::check_result, ml::compare_expected_result_option::expect_equal);
         }
 
         /**
@@ -247,33 +268,40 @@ namespace dml
          */
         [[nodiscard]] constexpr auto expect_not_equal() const noexcept
         {
-            return compare_operation(ml::compare_option::check_result, ml::expected_result_option::expect_not_equal);
+            return compare_operation(ml::compare_option::check_result, ml::compare_expected_result_option::expect_not_equal);
         }
 
         /**
          * @todo
          */
-        [[nodiscard]] constexpr auto get_options() const noexcept { return options_; }
+        [[nodiscard]] constexpr auto get_options() const noexcept
+        {
+            return options_;
+        }
 
         /**
          * @brief Returns expected result
          *
          * @return Expected result
          */
-        [[nodiscard]] ml::expected_result_options get_expected_result() const { return expected_; }
+        [[nodiscard]] ml::compare_expected_result_options get_expected_result() const
+        {
+            return expected_;
+        }
 
     private:
         /**
          * @brief Constructs the operation with specified options and expected result
          */
-        constexpr compare_operation(ml::compare_options options, ml::expected_result_options expected) noexcept:
-            options_(options), expected_(expected)
+        constexpr compare_operation(ml::compare_options options, ml::compare_expected_result_options expected) noexcept:
+            options_(options),
+            expected_(expected)
         {
         }
 
     private:
-        ml::compare_options options_{};    /**< @todo */
-        ml::expected_result_options  expected_{}; /**< @todo */
+        ml::compare_options                 options_{};  /**< @todo */
+        ml::compare_expected_result_options expected_{}; /**< @todo */
     };
 
     /**
@@ -327,7 +355,7 @@ namespace dml
          */
         [[nodiscard]] constexpr auto expect_equal() const noexcept
         {
-            return compare_pattern_operation(ml::compare_pattern_option::check_result, ml::expected_result_option::expect_equal);
+            return compare_pattern_operation(ml::compare_pattern_option::check_result, ml::compare_expected_result_option::expect_equal);
         }
 
         /**
@@ -337,33 +365,41 @@ namespace dml
          */
         [[nodiscard]] constexpr auto expect_not_equal() const noexcept
         {
-            return compare_pattern_operation(ml::compare_pattern_option::check_result, ml::expected_result_option::expect_not_equal);
+            return compare_pattern_operation(ml::compare_pattern_option::check_result,
+                                             ml::compare_expected_result_option::expect_not_equal);
         }
 
         /**
          * @todo
          */
-        [[nodiscard]] constexpr auto get_options() const noexcept { return options_; }
+        [[nodiscard]] constexpr auto get_options() const noexcept
+        {
+            return options_;
+        }
 
         /**
          * @brief Returns expected result
          *
          * @return Expected result
          */
-        [[nodiscard]] ml::expected_result_options get_expected_result() const { return expected_; }
+        [[nodiscard]] ml::compare_expected_result_options get_expected_result() const
+        {
+            return expected_;
+        }
 
     private:
         /**
          * @brief Constructs the operation with specified options and expected result
          */
-        constexpr compare_pattern_operation(ml::compare_pattern_options options, ml::expected_result_options expected) noexcept:
-            options_(options), expected_(expected)
+        constexpr compare_pattern_operation(ml::compare_pattern_options options, ml::compare_expected_result_options expected) noexcept:
+            options_(options),
+            expected_(expected)
         {
         }
 
     private:
-        ml::compare_pattern_options options_{};    /**< @todo */
-        ml::expected_result_options expected_{}; /**< @todo */
+        ml::compare_pattern_options         options_{};  /**< @todo */
+        ml::compare_expected_result_options expected_{}; /**< @todo */
     };
 
     /**
@@ -409,7 +445,7 @@ namespace dml
          */
         [[nodiscard]] constexpr auto expect_equal() const noexcept
         {
-            return create_delta_operation(ml::create_delta_option::check_result, ml::expected_result_option::expect_equal);
+            return create_delta_operation(ml::create_delta_option::check_result, ml::delta_expected_result_option::expect_equal);
         }
 
         /**
@@ -419,33 +455,40 @@ namespace dml
          */
         [[nodiscard]] constexpr auto expect_not_equal() const noexcept
         {
-            return create_delta_operation(ml::create_delta_option::check_result, ml::expected_result_option::expect_not_equal);
+            return create_delta_operation(ml::create_delta_option::check_result, ml::delta_expected_result_option::expect_not_equal);
         }
 
         /**
          * @todo
          */
-        [[nodiscard]] constexpr auto get_options() const noexcept { return options_; }
+        [[nodiscard]] constexpr auto get_options() const noexcept
+        {
+            return options_;
+        }
 
         /**
          * @brief Returns expected result
          *
          * @return Expected result
          */
-        [[nodiscard]] ml::expected_result_options get_expected_result() const { return expected_; }
+        [[nodiscard]] ml::delta_expected_result_options get_expected_result() const
+        {
+            return expected_;
+        }
 
     private:
         /**
          * @brief Constructs the operation with specified options and expected result
          */
-        constexpr create_delta_operation(ml::create_delta_options options, ml::expected_result_options expected) noexcept:
-            options_(options), expected_(expected)
+        constexpr create_delta_operation(ml::create_delta_options options, ml::delta_expected_result_options expected) noexcept:
+            options_(options),
+            expected_(expected)
         {
         }
 
     private:
-        ml::create_delta_options    options_;    /**< @todo */
-        ml::expected_result_options expected_{}; /**< @todo */
+        ml::create_delta_options          options_;    /**< @todo */
+        ml::delta_expected_result_options expected_{}; /**< @todo */
     };
 
     /**
@@ -484,7 +527,10 @@ namespace dml
         /**
          * @todo
          */
-        [[nodiscard]] constexpr auto get_options() const noexcept { return options_; }
+        [[nodiscard]] constexpr auto get_options() const noexcept
+        {
+            return options_;
+        }
 
     private:
         ml::apply_delta_options options_; /**< @todo */
@@ -551,19 +597,26 @@ namespace dml
         /**
          * @todo
          */
-        [[nodiscard]] constexpr auto get_options() const noexcept { return options_; }
+        [[nodiscard]] constexpr auto get_options() const noexcept
+        {
+            return options_;
+        }
 
         /**
          * @todo
          */
-        [[nodiscard]] constexpr auto get_additional_options() const noexcept { return additional_options_; }
+        [[nodiscard]] constexpr auto get_additional_options() const noexcept
+        {
+            return additional_options_;
+        }
 
     private:
         /**
          * @brief Constructs the operation with specified parameters
          */
         constexpr crc_operation(ml::crc_options options, ml::crc_additional_options additional_options) noexcept:
-            options_(options), additional_options_(additional_options)
+            options_(options),
+            additional_options_(additional_options)
         {
         }
 
@@ -634,20 +687,26 @@ namespace dml
         /**
          * @todo
          */
-        [[nodiscard]] constexpr auto get_options() const noexcept { return options_; }
+        [[nodiscard]] constexpr auto get_options() const noexcept
+        {
+            return options_;
+        }
 
         /**
          * @todo
          */
-        [[nodiscard]] constexpr auto get_additional_options() const noexcept { return additional_options_; }
+        [[nodiscard]] constexpr auto get_additional_options() const noexcept
+        {
+            return additional_options_;
+        }
 
     private:
         /**
          * @brief Constructs the operation with specified parameters
          */
-        constexpr copy_crc_operation(ml::copy_crc_options            options,
-                                     ml::copy_crc_additional_options additional_options) noexcept:
-            options_(options), additional_options_(additional_options)
+        constexpr copy_crc_operation(ml::copy_crc_options options, ml::copy_crc_additional_options additional_options) noexcept:
+            options_(options),
+            additional_options_(additional_options)
         {
         }
 
@@ -705,13 +764,18 @@ namespace dml
         /**
          * @todo
          */
-        [[nodiscard]] constexpr auto get_options() const noexcept { return options_; }
+        [[nodiscard]] constexpr auto get_options() const noexcept
+        {
+            return options_;
+        }
 
     private:
         /**
          * @brief Constructs the operation with specified parameter
          */
-        constexpr explicit cache_flush_operation(ml::cache_flush_options options) noexcept: options_(options) { }
+        constexpr explicit cache_flush_operation(ml::cache_flush_options options) noexcept: options_(options)
+        {
+        }
 
     private:
         ml::cache_flush_options options_; /**< @todo */
@@ -751,7 +815,10 @@ namespace dml
         /**
          * @todo
          */
-        [[nodiscard]] constexpr auto get_options() const noexcept { return options_; }
+        [[nodiscard]] constexpr auto get_options() const noexcept
+        {
+            return options_;
+        }
 
     private:
         ml::batch_options options_; /**< @todo */
