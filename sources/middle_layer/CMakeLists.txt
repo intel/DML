@@ -16,34 +16,32 @@
 project(dml_middle_layer CXX)
 
 add_library(dml_middle_layer OBJECT
-    # Sources
-    awaiter.cpp
-    validation.cpp
-    core.cpp
+        src/operation.cpp
+        src/result.cpp
+        src/execution_path.cpp
+        src/validation.cpp
 
-    sw_path_legacy/dif.c
-    )
-
-target_include_directories(dml_middle_layer
-    PRIVATE ../../include
-    PRIVATE ../cores/include
-    PRIVATE dispatcher)
-
-target_compile_features(dml_middle_layer PUBLIC cxx_std_17)
-
-target_compile_definitions(dml_middle_layer PRIVATE $<$<BOOL:${EFFICIENT_WAIT}>: DML_EFFICIENT_WAIT>)
-
-if (DML_HW)
-    target_sources(dml_middle_layer PRIVATE
-        dispatcher/hw_device.cpp
-        dispatcher/hw_dispatcher.cpp
-        dispatcher/hw_queue.cpp
-        dispatcher/numa.cpp
-        device.cpp
-        hw_configuration_driver.c
+        ../../include/dml/detail/ml/options.hpp
+        ../../include/dml/detail/ml/operation.hpp
+        ../../include/dml/detail/ml/result.hpp
+        ../../include/dml/detail/ml/execution_path.hpp
+        ../../include/dml/detail/ml/validation.hpp
         )
-    target_include_directories(dml_middle_layer PRIVATE ../hw-path/include)
-    target_compile_definitions(dml_middle_layer
-        PUBLIC DML_HW
-        PRIVATE $<$<BOOL:${LIB_ACCEL_3_2}>: LIB_ACCEL_VERSION_3_2>)
-endif ()
+
+target_link_libraries(dml_middle_layer
+        PRIVATE dml_core
+        )
+target_include_directories(dml_middle_layer
+        PUBLIC ../../include
+        )
+target_sources(dml_middle_layer
+        PUBLIC $<TARGET_OBJECTS:dml_core>
+        PUBLIC $<TARGET_PROPERTY:dml_core,INTERFACE_SOURCES>
+        )
+target_compile_features(dml_middle_layer
+        PUBLIC cxx_std_17
+        )
+target_compile_options(dml_middle_layer
+        PRIVATE ${DML_QUALITY_OPTIONS}
+        PRIVATE ${DML_CPP_PRIVATE_OPTIONS}
+        )

@@ -119,14 +119,14 @@ Hardware path is required to set up environment to utilize Intel DSA accelerator
 
 ### Build Prerequisites
 - Compiler:
-    - Linux* OS: gcc 8.2 or higher
-    - Windows* OS: MSVC 19 or higher
- - Libraries:    
-    - Linux: Universally Unique ID library: `uuid-dev` version 2.35.2 or higher.
+  - Linux* OS: gcc 8.2 or higher
+  - Windows* OS: MSVC 19 or higher
+- Libraries:
+  - Linux: Universally Unique ID library: `uuid-dev` version 2.35.2 or higher.
 - Cross-platform build tool: CMake* version 3.12 or higher
 - Make: GNU 'make' (Linux* OS) or 'nmake' (Windows*)
-- Documentation generator: 
-    - Doxygen 1.8.17 or higher
+- Documentation generator:
+  - Doxygen 1.8.17 or higher
 
 
 

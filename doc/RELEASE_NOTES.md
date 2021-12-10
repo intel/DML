@@ -1,6 +1,31 @@
 Intel® Data Mover Library (Intel® DML) Release Notes
 ===============================================================================
 
+### Intel® DML v0.1.6-beta
+
+**Date: December 2021**
+
+**Note**: Release introduces bug fixes and several minor improvements
+
+**Features**:
+* Improved incorrect input checking
+* Added check for adjacent buffers for the DIF Strip operation. Status: `DML_STATUS_DIF_STRIP_ADJACENT_ERROR`
+* Reworked hardware related statuses for C API
+* Added new status to indicate submission failure:
+  * `DML_STATUS_WORK_QUEUES_NOT_AVAILABLE` for C API
+  * `dml::status_code::queue_busy` for C++ API
+* Removed LIBACCEL_3_2 cmake option. The supported version of accel-config is now 3.2 and higher
+* NUMA node id is detected before each submission now, so threads are safe to change nodes at any time
+
+**Bug fix**:
+* Fixed the issue when batch operation doesn't work for buffer not aligned on 64 bytes boundary
+* Fixed the issue when current thread NUMA node id is deduced incorrectly
+* Fixed crashes when there are no available devices for the current thread NUMA node id
+* Removed dependencies on C++ runtime from C API
+
+**Warnings**:
+* As NUMA node id of the current thread is now deduced correctly, ensure that accelerators' configuration is compatible. The library does no cross-socket submissions. If there is no available device for the current NUMA node id, then an error status code is reported.
+
 ### Intel® DML v0.1.5-beta
 
 **Date: November 2021**

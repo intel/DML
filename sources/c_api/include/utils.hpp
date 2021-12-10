@@ -33,4 +33,4 @@ namespace dml
     }
 }  // namespace dml
 
-#endif // DML_UTILS_HPP
+#endif  // DML_UTILS_HPP

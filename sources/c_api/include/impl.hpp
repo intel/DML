@@ -17,8 +17,8 @@
 #ifndef DML_IMPL_HPP
 #define DML_IMPL_HPP
 
-#include <dml/cpp/middle_layer/device.hpp>
-#include <dml/cpp/middle_layer/validation.hpp>
+#include <dml/detail/ml/execution_path.hpp>
+#include <dml/detail/ml/validation.hpp>
 
 #include "job_view.hpp"
 #include "range_check.hpp"
@@ -29,7 +29,7 @@ namespace dml
 {
     inline dml_status_t wait(job_view job) noexcept
     {
-        ml::wait(job.state().record);
+        detail::ml::wait(job.state().record);
 
         // Extract result
         return write_result(job);
@@ -37,7 +37,7 @@ namespace dml
 
     inline dml_status_t check(job_view job) noexcept
     {
-        if (ml::is_finished(job.state().record))
+        if (detail::ml::is_finished(job.state().record))
         {
             // Extract result
             return write_result(job);
@@ -59,18 +59,18 @@ namespace dml
         write_descriptor(job);
 
         // Middle Layer checks
-        if (auto status = to_own_status(ml::validate(job.state().dsc)); status != DML_STATUS_OK)
+        if (auto status = to_own_status(detail::ml::validate(job.state().dsc)); status != DML_STATUS_OK)
         {
             return status;
         }
 
         if (job.state().path == DML_PATH_HW)
         {
-            return to_own_status(ml::hardware().submit(job.state().dsc, job.state().record));
+            return to_own_status(detail::ml::execution_path::hardware::submit(job.state().dsc, job.state().record));
         }
         else
         {
-            return to_own_status(ml::software().submit(job.state().dsc, job.state().record));
+            return to_own_status(detail::ml::execution_path::software::submit(job.state().dsc, job.state().record));
         }
     }
 

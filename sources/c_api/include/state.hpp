@@ -18,17 +18,16 @@
 #define DML_STATE_HPP
 
 #include <cstddef>
-#include <dml/cpp/middle_layer/descriptor.hpp>
-#include <dml/cpp/middle_layer/completion_record.hpp>
+#include <dml/detail/common/types.hpp>
 
 namespace dml
 {
     struct state
     {
-        ml::descriptor dsc;
-        ml::completion_record record;
-        dml_path_t path;
+        dml::detail::ml::operation dsc;
+        dml::detail::ml::result    record;
+        dml_path_t                 path;
     };
 }  // namespace dml
 
-#endif // DML_STATE_HPP
+#endif  // DML_STATE_HPP

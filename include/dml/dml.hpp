@@ -55,12 +55,12 @@ namespace dml
 {
 }
 
-#include <dml/cpp/data_view.hpp>
-#include <dml/cpp/execute.hpp>
-#include <dml/cpp/execution_interface.hpp>
-#include <dml/cpp/execution_path.hpp>
-#include <dml/cpp/operations.hpp>
-#include <dml/cpp/sequence.hpp>
-#include <dml/cpp/submit.hpp>
+#include <dml/hl/data_view.hpp>
+#include <dml/hl/execute.hpp>
+#include <dml/hl/execution_interface.hpp>
+#include <dml/hl/execution_path.hpp>
+#include <dml/hl/operations.hpp>
+#include <dml/hl/sequence.hpp>
+#include <dml/hl/submit.hpp>
 
 #endif  //DML_DML_HPP

@@ -68,11 +68,6 @@ Note:
 cmake -DCMAKE_BUILD_TYPE=Release -DDML_HW=ON <path_to_cmake_folder>
 ```
 
-```shell
-# Enable libaccel-config-3.2 support for hardware path
-cmake -DCMAKE_BUILD_TYPE=Release -DDML_HW=ON -DLIB_ACCEL_3_2=ON <path_to_cmake_folder> 
-```
-
 - To enable `-frecord-gcc-switches` flag, use the DML_RECORD_SWITCHES option as follows:
 
 ```shell
@@ -85,7 +80,7 @@ The resulting library is available in the `<install_dir>/lib` folder.
 ## Documentation
 
 - [Intel DML Reference Manual](./doc/DML_REFERENCE_MANUAL.md)
-- [Security Policy](doc/SECURITY.md) 
+- [Security Policy](./SECURITY.md) 
 
 To generate full documentation from sources with Doxygen, use the following commands:
 
@@ -100,12 +95,12 @@ To open the generated HTML Reference, open the `<dml_library>/doc/html/index.htm
 
 ## How to Contribute
 
-See [Contributing document](CONTRIBUTING.md) for details about contribution process.
+See [Contributing document](./CONTRIBUTING.md) for details about contribution process.
 
 ## License
 
 The library is licensed under the MIT license. Refer to the
-"[LICENSE](LICENSE)" file for the full license text.
+"[LICENSE](./LICENSE)" file for the full license text.
 
 This distribution includes third party software governed by separate license
-terms (see "[THIRD-PARTY-PROGRAMS](THIRD-PARTY-PROGRAMS)").
+terms (see "[THIRD-PARTY-PROGRAMS](./third-party-programs.txt)").

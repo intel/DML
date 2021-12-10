@@ -35,7 +35,7 @@
 #define DML_LIBRARY_MINOR_VERSION 1u
 
 /** Minor version of the library*/
-#define DML_LIBRARY_PATCH 5u
+#define DML_LIBRARY_PATCH 6u
 
 /** Supported CPU ISA */
 #define DML_LIBRARY_MINIMAL_CPU_ISA "N/A"
@@ -45,15 +45,9 @@
 
 extern "C" const dml_library_version_t* dml_get_library_version()
 {
-    static const dml_library_version_t library_version = { DML_LIBRARY_NAME,
-                                                           DML_LIBRARY_MINIMAL_CPU_ISA,
-                                                           __DATE__,
-                                                           DML_LIBRARY_VERSION,
-                                                           DML_LIBRARY_MIN_HW_VERSION,
-                                                           DML_GIT_REVISION,
-                                                           DML_LIBRARY_MAJOR_VERSION,
-                                                           DML_LIBRARY_MINOR_VERSION,
-                                                           DML_LIBRARY_PATCH };
+    static const dml_library_version_t library_version = { DML_LIBRARY_NAME,          DML_LIBRARY_MINIMAL_CPU_ISA, __DATE__,
+                                                           DML_LIBRARY_VERSION,       DML_LIBRARY_MIN_HW_VERSION,  DML_GIT_REVISION,
+                                                           DML_LIBRARY_MAJOR_VERSION, DML_LIBRARY_MINOR_VERSION,   DML_LIBRARY_PATCH };
 
     return &library_version;
 }

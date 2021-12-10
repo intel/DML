@@ -12,7 +12,3 @@
 # express or implied warranties, other than those that are expressly
 # stated in the License.
 #
-
-# Repository Control Files
-.gitignore      anton.rubtsov@intel.com
-CODEOWNERS      anton.rubtsov@intel.com

@@ -94,8 +94,8 @@ dml_status_t dml_get_job_size(dml_path_t dml_path, uint32_t *job_size_ptr);
  * - @ref DML_STATUS_OK
  * - @ref DML_STATUS_PATH_ERROR
  * - @ref DML_STATUS_NULL_POINTER_ERROR
- * - @ref DML_STATUS_DRIVER_NOT_FOUND
- * - @ref DML_STATUS_HARDWARE_CONNECTION_ERROR
+ * - @ref DML_STATUS_LIBACCEL_NOT_FOUND
+ * - @ref DML_STATUS_LIBACCEL_ERROR
  *
  */
 dml_status_t dml_init_job(dml_path_t path, dml_job_t *dml_job_ptr);
@@ -109,7 +109,6 @@ dml_status_t dml_init_job(dml_path_t path, dml_job_t *dml_job_ptr);
  *
  * @return The follow statuses;
  *      - @ref DML_STATUS_OK;
- *      - @ref DML_STATUS_HARDWARE_DISCONNECTION_ERROR
  *
  */
 dml_status_t dml_finalize_job(dml_job_t *dml_job_ptr);

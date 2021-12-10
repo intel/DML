@@ -19,16 +19,16 @@
 
 #include <dml/dml.h>
 
-#include "state.hpp"
-
 #include <memory>
+
+#include "state.hpp"
 
 namespace dml
 {
     constexpr auto get_job_size() noexcept
     {
-        constexpr auto alignment = 64u;
-        constexpr auto job_size = sizeof(dml_job_t);
+        constexpr auto alignment  = 64u;
+        constexpr auto job_size   = sizeof(dml_job_t);
         constexpr auto state_size = sizeof(dml::state);
 
         // Enough size for job, state, and to align state to default boundary
@@ -187,4 +187,4 @@ namespace dml
     };
 }  // namespace dml
 
-#endif // DML_JOB_VIEW_HPP
+#endif  // DML_JOB_VIEW_HPP

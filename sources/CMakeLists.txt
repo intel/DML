@@ -13,9 +13,7 @@
 # stated in the License.
 #
 
-# TODO: Move to middle_layer
-add_subdirectory(cores)
-
+add_subdirectory(core)
 add_subdirectory(middle_layer)
 add_subdirectory(c_api)
 add_subdirectory(cpp_api)

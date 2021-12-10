@@ -19,123 +19,123 @@
 
 #include <dml/dml.h>
 
-#include <dml/cpp/middle_layer/status.hpp>
+#include <dml/detail/common/status.hpp>
 
 namespace dml
 {
-    inline dml_status_t to_own_status(ml::execution_status status) noexcept
+    inline dml_status_t to_own_status(detail::execution_status status) noexcept
     {
         switch (status)
         {
-            case ml::execution_status::success:
+            case detail::execution_status::success:
                 {
                     return DML_STATUS_OK;
                 }
-            case ml::execution_status::false_predicate_success:
+            case detail::execution_status::false_predicate_success:
                 {
                     return DML_STATUS_FALSE_PREDICATE_OK;
                 }
-            case ml::execution_status::page_fault_during_processing:
+            case detail::execution_status::page_fault_during_processing:
                 {
                     return DML_STATUS_PAGE_FAULT_ERROR;
                 }
-            case ml::execution_status::page_response_error:
+            case detail::execution_status::page_response_error:
                 {
                     return DML_STATUS_INTERNAL_ERROR;
                 }
-            case ml::execution_status::batch_error:
+            case detail::execution_status::batch_error:
                 {
                     return DML_STATUS_BATCH_ERROR;
                 }
-            case ml::execution_status::batch_page_fault_error:
+            case detail::execution_status::batch_page_fault_error:
                 {
                     return DML_STATUS_PAGE_FAULT_ERROR;
                 }
-            case ml::execution_status::offset_order_error:
+            case detail::execution_status::offset_order_error:
                 {
                     return DML_STATUS_DELTA_ASCENDT_ERROR;
                 }
-            case ml::execution_status::offset_overflow:
+            case detail::execution_status::offset_overflow:
                 {
                     return DML_STATUS_DELTA_OFFSET_ERROR;
                 }
-            case ml::execution_status::dif_control_error:
+            case detail::execution_status::dif_control_error:
                 {
                     return DML_STATUS_DIF_CHECK_ERROR;
                 }
-            case ml::execution_status::operation_error:
+            case detail::execution_status::operation_error:
                 {
                     return DML_STATUS_JOB_OPERATION_ERROR;
                 }
-            case ml::execution_status::flag_error:
+            case detail::execution_status::flag_error:
                 {
                     return DML_STATUS_JOB_FLAGS_ERROR;
                 }
-            case ml::execution_status::non_zero_reserved_field_error:
+            case detail::execution_status::non_zero_reserved_field_error:
                 {
                     return DML_STATUS_INTERNAL_ERROR;
                 }
-            case ml::execution_status::invalid_transfer_size_error:
+            case detail::execution_status::invalid_transfer_size_error:
                 {
                     return DML_STATUS_JOB_LENGTH_ERROR;
                 }
-            case ml::execution_status::descriptor_count_error:
+            case detail::execution_status::descriptor_count_error:
                 {
                     return DML_STATUS_BATCH_SIZE_ERROR;
                 }
-            case ml::execution_status::delta_size_error:
+            case detail::execution_status::delta_size_error:
                 {
                     return DML_STATUS_DELTA_INPUT_SIZE_ERROR;
                 }
-            case ml::execution_status::buffers_overlap:
+            case detail::execution_status::buffers_overlap:
                 {
                     return DML_STATUS_OVERLAPPING_BUFFER_ERROR;
                 }
-            case ml::execution_status::dualcast_misalign_error:
+            case detail::execution_status::dualcast_misalign_error:
                 {
                     return DML_STATUS_DUALCAST_ALIGN_ERROR;
                 }
-            case ml::execution_status::descriptor_list_align_error:
+            case detail::execution_status::descriptor_list_align_error:
                 {
                     return DML_STATUS_INTERNAL_ERROR;
                 }
-            case ml::execution_status::invalid_interrupt_handle:
+            case detail::execution_status::invalid_interrupt_handle:
                 {
                     return DML_STATUS_INTERNAL_ERROR;
                 }
-            case ml::execution_status::page_fault_on_translation:
+            case detail::execution_status::page_fault_on_translation:
                 {
                     return DML_STATUS_INTERNAL_ERROR;
                 }
-            case ml::execution_status::completion_record_align_error:
+            case detail::execution_status::completion_record_align_error:
                 {
                     return DML_STATUS_INTERNAL_ERROR;
                 }
-            case ml::execution_status::misalign_address_error:
+            case detail::execution_status::misalign_address_error:
                 {
                     return DML_STATUS_INTERNAL_ERROR;
                 }
-            case ml::execution_status::privilege_error:
+            case detail::execution_status::privilege_error:
                 {
                     return DML_STATUS_INTERNAL_ERROR;
                 }
-            case ml::execution_status::traffic_class_error:
+            case detail::execution_status::traffic_class_error:
                 {
                     return DML_STATUS_INTERNAL_ERROR;
                 }
-            case ml::execution_status::readback_translation_error:
+            case detail::execution_status::readback_translation_error:
                 {
                     return DML_STATUS_INTERNAL_ERROR;
                 }
-            case ml::execution_status::operation_readback_timeout:
+            case detail::execution_status::operation_readback_timeout:
                 {
                     return DML_STATUS_INTERNAL_ERROR;
                 }
-            case ml::execution_status::hardware_timeout:
+            case detail::execution_status::hardware_timeout:
                 {
                     return DML_STATUS_INTERNAL_ERROR;
                 }
-            case ml::execution_status::address_translation_error:
+            case detail::execution_status::address_translation_error:
                 {
                     return DML_STATUS_INTERNAL_ERROR;
                 }
@@ -146,48 +146,50 @@ namespace dml
         }
     }
 
-    inline dml_status_t to_own_status(ml::submission_status status) noexcept
+    inline dml_status_t to_own_status(detail::submission_status status) noexcept
     {
         switch (status)
         {
-            case ml::submission_status::success:
+            case detail::submission_status::success:
                 return DML_STATUS_OK;
-            case ml::submission_status::failure:
-                return DML_STATUS_INSTANCE_NOT_FOUND;
+            case detail::submission_status::queue_busy:
+                return DML_STATUS_WORK_QUEUE_OVERFLOW_ERROR;
+            case detail::submission_status::failure:
+                return DML_STATUS_WORK_QUEUES_NOT_AVAILABLE;
             default:
                 return DML_STATUS_INTERNAL_ERROR;
         }
     }
 
-    inline dml_status_t to_own_status(ml::validation_status status) noexcept
+    inline dml_status_t to_own_status(detail::validation_status status) noexcept
     {
         switch (status)
         {
-            case ml::validation_status::success:
+            case detail::validation_status::success:
                 return DML_STATUS_OK;
-            case ml::validation_status::address_is_null:
+            case detail::validation_status::null_address:
                 return DML_STATUS_NULL_POINTER_ERROR;
-            case ml::validation_status::size_is_null:
+            case detail::validation_status::null_size:
                 return DML_STATUS_JOB_LENGTH_ERROR;
-            case ml::validation_status::delta_size_is_wrong:
+            case detail::validation_status::wrong_size:
                 return DML_STATUS_DELTA_INPUT_SIZE_ERROR;
-            case ml::validation_status::buffers_overlap:
+            case detail::validation_status::overlapping:
                 return DML_STATUS_OVERLAPPING_BUFFER_ERROR;
-            case ml::validation_status::address_is_misaligned:
+            case detail::validation_status::misalignment:
                 return DML_STATUS_DELTA_ALIGN_ERROR;
-            case ml::validation_status::delta_input_size_is_wrong:
-                return DML_STATUS_DELTA_ALIGN_ERROR;
-            case ml::validation_status::delta_input_size_overflow:
+            case detail::validation_status::large_size:
                 return DML_STATUS_DELTA_INPUT_SIZE_ERROR;
-            case ml::validation_status::delta_record_size_is_wrong:
+            case detail::validation_status::wrong_delta_size:
                 return DML_STATUS_DELTA_RECORD_SIZE_ERROR;
-            case ml::validation_status::dualcast_address_is_wrong:
+            case detail::validation_status::wrong_dualcast_address:
                 return DML_STATUS_DUALCAST_ALIGN_ERROR;
-            case ml::validation_status::batch_size_is_wrong:
+            case detail::validation_status::wrong_batch_size:
                 return DML_STATUS_BATCH_SIZE_ERROR;
-            case ml::validation_status::dif_size_is_wrong:
+            case detail::validation_status::wrong_dif_size:
                 return DML_STATUS_JOB_LENGTH_ERROR;
-            case ml::validation_status::unsupported_operation:
+            case detail::validation_status::dif_strip_adjacent:
+                return DML_STATUS_DIF_STRIP_ADJACENT_ERROR;
+            case detail::validation_status::unsupported_operation:
                 return DML_STATUS_JOB_OPERATION_ERROR;
             default:
                 return DML_STATUS_INTERNAL_ERROR;

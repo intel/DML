@@ -269,8 +269,6 @@ typedef enum
  * @brief All possible return values of the Intel DML Library functions.
  *
  * @note All general statuses are described here.
- * @note All driver errors described in the @ref DRIVER_STATUSES
- * @note All device errors described in the @ref hw_status_t enumeration
  */
 typedef enum
 {
@@ -307,20 +305,12 @@ typedef enum
     DML_STATUS_BATCH_SIZE_ERROR             = 29u,  /**< The desired batch size is bigger than the possible one */
     DML_STATUS_DRAIN_PAGE_FAULT_ERROR       = 30u,  /**< A page fault occured while translating a Readback Addres in a Drain descriptor */
     DML_STATUS_UNKNOWN_CACHE_SIZE_ERROR     = 31u,  /**< Max cache size can't be calculated */
+    DML_STATUS_DIF_STRIP_ADJACENT_ERROR     = 32u,  /**< SRC Address for DIF Strip operation should be greater than (DST Address + SRC Size) */
 
-    // Initialisation Errors
-    DML_STATUS_DRIVER_NOT_FOUND             = (DML_BASE_DRIVER_ERROR + 0u),  /**< Unable to initialize job because hardware driver was not found */
-    DML_STATUS_DRIVER_ERROR                 = (DML_BASE_DRIVER_ERROR + 1u),  /**< Unable to initialize job because hardware driver API is incompatible */
-    DML_STATUS_HARDWARE_CONNECTION_ERROR    = (DML_BASE_DRIVER_ERROR + 2u),  /**< Cannot connect to hardware to complete initialization */
-    DML_STATUS_HARDWARE_DISCONNECTION_ERROR = (DML_BASE_DRIVER_ERROR + 3u),  /**< Cannot disconnect hardware */
-    DML_STATUS_QUEUE_IS_BUSY                = (DML_BASE_DRIVER_ERROR + 4u),  /**< Descriptor can't be submitted into filled work queue*/
-    DML_STATUS_INSTANCE_NOT_FOUND           = (DML_BASE_DRIVER_ERROR + 5u),  /**< Accelerator instance can not be found */
-    DML_STATUS_VERSION_DETECTION_ERROR      = (DML_BASE_DRIVER_ERROR + 6u),  /**< Accelerator version can not be determined */
-    DML_STATUS_DEVICES_NOT_AVAILABLE        = (DML_BASE_DRIVER_ERROR + 7u),  /**< Enabled devices are not found */
-    DML_STATUS_WORK_QUEUES_NOT_AVAILABLE    = (DML_BASE_DRIVER_ERROR + 8u),  /**< Enabled work queues are not found */
-    DML_STATUS_INCORRECT_WORK_QUEUE_ID      = (DML_BASE_DRIVER_ERROR + 9u),  /**< Work Queue ID is wrong  */
-    DML_STATUS_WORK_QUEUE_CONNECTION_ERROR  = (DML_BASE_DRIVER_ERROR + 10u), /**< Work Queue can not be connected */
-    DML_STATUS_PORTAL_CREATION_ERROR        = (DML_BASE_DRIVER_ERROR + 11u), /**< Portal can not be created */
+    // Initialization Errors
+    DML_STATUS_LIBACCEL_NOT_FOUND           = (DML_BASE_DRIVER_ERROR + 0u),  /**< Unable to initialize job because hardware driver was not found */
+    DML_STATUS_LIBACCEL_ERROR               = (DML_BASE_DRIVER_ERROR + 1u),  /**< Unable to initialize job because hardware driver API is incompatible */
+    DML_STATUS_WORK_QUEUES_NOT_AVAILABLE    = (DML_BASE_DRIVER_ERROR + 2u),  /**< Enabled work queues are not found */
 } dml_status_t;
 
 

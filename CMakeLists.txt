@@ -14,7 +14,7 @@
 #
 
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
-project(Dml VERSION 0.1.5 LANGUAGES C CXX)
+project(Dml VERSION 0.1.6 LANGUAGES C CXX)
 
 set(PROJECT_SOVERSION 0)
 
@@ -28,7 +28,6 @@ else()
 endif()
 
 # TODO: Remove all options below
-option(LIB_ACCEL_3_2 "Use libaccel-3.2" OFF)
 option(LOG_HW_INIT "Enables HW initialization log" OFF)
 option(EFFICIENT_WAIT "Enables usage of umonitor/umwait" OFF)
 
@@ -61,14 +60,13 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 # TODO: Remove when option is removed
 if (DML_HW)
     message(STATUS "HW path: ON")
+    message(STATUS "Hardware initialization logging: ${LOG_HW_INIT}")
 endif()
 
 # TODO: Remove
 get_git_revision()
 
 add_subdirectory(sources)
-
-# Testing
 add_subdirectory(examples)
 
 # Install rules

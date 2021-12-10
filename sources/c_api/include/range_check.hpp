@@ -85,6 +85,8 @@ namespace dml
 
     inline dml_status_t range_check_crc(const uint8_t* src1, const uint32_t* crc_ptr, const uint32_t src_size) noexcept
     {
+        static_cast<void>(src1);
+        static_cast<void>(src_size);
         if (crc_ptr == nullptr)
         {
             return DML_STATUS_NULL_POINTER_ERROR;
@@ -100,6 +102,9 @@ namespace dml
                                              const uint32_t* crc_ptr,
                                              const uint32_t  src_size) noexcept
     {
+        static_cast<void>(src1);
+        static_cast<void>(dst1);
+        static_cast<void>(src_size);
         if (crc_ptr == nullptr)
         {
             return DML_STATUS_NULL_POINTER_ERROR;

@@ -414,7 +414,8 @@ dml_status_t dif_strip_sample_launcher(dml_job_t *const dml_job_ptr)
            DIF_SAMPLE_REFERENCE_ARRAY_SIZE,
            DIF_SAMPLE_BLOCK_SIZE);
 
-    uint8_t source_array[DIF_SAMPLE_REFERENCE_ARRAY_SIZE];
+    // The same size used because of DML_STATUS_DIF_STRIP_ADJACENT_ERROR
+    uint8_t source_array[DIF_SAMPLE_PROTECTED_ARRAY_SIZE];
     uint8_t destination_array[DIF_SAMPLE_PROTECTED_ARRAY_SIZE];
 
     dml_status_t status = dml_dif_insert_8u(source_array,

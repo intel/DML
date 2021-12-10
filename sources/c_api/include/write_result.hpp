@@ -17,8 +17,6 @@
 #ifndef DML_WRITE_RESULT_HPP
 #define DML_WRITE_RESULT_HPP
 
-#include <dml/cpp/middle_layer/make_descriptor.hpp>
-
 #include "status.hpp"
 
 namespace dml
@@ -98,130 +96,100 @@ namespace dml
 
     inline dml_status_t write_result_nop(job_view job) noexcept
     {
-        auto result_view = ml::views::nop_result(job.state().record);
-
-        return to_own_status(static_cast<ml::execution_status>(result_view.status()));
+        return to_own_status(dml::detail::ml::get_status(job.state().record));
     }
 
     inline dml_status_t write_result_batch(job_view job) noexcept
     {
-        auto result_view = ml::views::batch_result(job.state().record);
-
-        return to_own_status(static_cast<ml::execution_status>(result_view.status()));
+        return to_own_status(dml::detail::ml::get_status(job.state().record));
     }
 
     inline dml_status_t write_result_drain(job_view job) noexcept
     {
-        auto result_view = ml::views::drain_result(job.state().record);
-
-        return to_own_status(static_cast<ml::execution_status>(result_view.status()));
+        return to_own_status(dml::detail::ml::get_status(job.state().record));
     }
 
     inline dml_status_t write_result_mem_move(job_view job) noexcept
     {
-        auto result_view = ml::views::mem_move_result(job.state().record);
+        job.set_result(detail::ml::get_result(job.state().record));
 
-        job.set_result(result_view.result());
-
-        return to_own_status(static_cast<ml::execution_status>(result_view.status()));
+        return to_own_status(dml::detail::ml::get_status(job.state().record));
     }
 
     inline dml_status_t write_result_fill(job_view job) noexcept
     {
-        auto result_view = ml::views::fill_result(job.state().record);
-
-        return to_own_status(static_cast<ml::execution_status>(result_view.status()));
+        return to_own_status(dml::detail::ml::get_status(job.state().record));
     }
 
     inline dml_status_t write_result_dualcast(job_view job) noexcept
     {
-        auto result_view = ml::views::fill_result(job.state().record);
-
-        return to_own_status(static_cast<ml::execution_status>(result_view.status()));
+        return to_own_status(dml::detail::ml::get_status(job.state().record));
     }
 
     inline dml_status_t write_result_crc(job_view job) noexcept
     {
-        auto result_view = ml::views::crc_result(job.state().record);
+        job.set_crc(dml::detail::ml::get_crc_value(job.state().record));
 
-        job.set_crc(result_view.crc_value());
-
-        return to_own_status(static_cast<ml::execution_status>(result_view.status()));
+        return to_own_status(dml::detail::ml::get_status(job.state().record));
     }
 
     inline dml_status_t write_result_compare(job_view job) noexcept
     {
-        auto result_view = ml::views::compare_result(job.state().record);
+        job.set_offset(dml::detail::ml::get_bytes_completed(job.state().record));
+        job.set_result(dml::detail::ml::get_result(job.state().record));
 
-        job.set_offset(result_view.bytes_completed());
-        job.set_result(result_view.result());
-
-        return to_own_status(static_cast<ml::execution_status>(result_view.status()));
+        return to_own_status(dml::detail::ml::get_status(job.state().record));
     }
 
     inline dml_status_t write_result_create_delta(job_view job) noexcept
     {
-        auto result_view = ml::views::create_delta_result(job.state().record);
-
         //job.set_offset();
-        job.set_destination_length(result_view.delta_record_size());
-        job.set_result(result_view.result());
+        job.set_destination_length(dml::detail::ml::get_delta_record_size(job.state().record));
+        job.set_result(dml::detail::ml::get_result(job.state().record));
         job.set_offset(*reinterpret_cast<uint16_t *>(job.destination_first()));
 
-        return to_own_status(static_cast<ml::execution_status>(result_view.status()));
+        return to_own_status(dml::detail::ml::get_status(job.state().record));
     }
 
     inline dml_status_t write_result_apply_delta(job_view job) noexcept
     {
-        auto result_view = ml::views::apply_delta_result(job.state().record);
-
-        return to_own_status(static_cast<ml::execution_status>(result_view.status()));
+        return to_own_status(dml::detail::ml::get_status(job.state().record));
     }
 
     inline dml_status_t write_result_dif_check(job_view job) noexcept
     {
-        auto result_view = ml::views::dif_check_result(job.state().record);
+        job.set_offset(dml::detail::ml::get_bytes_completed(job.state().record));
+        job.set_result(dml::detail::ml::get_result(job.state().record));
 
-        job.set_offset(result_view.bytes_completed());
-        job.set_result(result_view.dif_status());
-
-        return to_own_status(static_cast<ml::execution_status>(result_view.status()));
+        return to_own_status(dml::detail::ml::get_status(job.state().record));
     }
 
     inline dml_status_t write_result_dif_insert(job_view job) noexcept
     {
-        auto result_view = ml::views::dif_insert_result(job.state().record);
+        job.set_offset(dml::detail::ml::get_bytes_completed(job.state().record));
 
-        job.set_offset(result_view.bytes_completed());
-
-        return to_own_status(static_cast<ml::execution_status>(result_view.status()));
+        return to_own_status(dml::detail::ml::get_status(job.state().record));
     }
 
     inline dml_status_t write_result_dif_strip(job_view job) noexcept
     {
-        auto result_view = ml::views::dif_strip_result(job.state().record);
+        job.set_offset(dml::detail::ml::get_bytes_completed(job.state().record));
+        job.set_result(dml::detail::ml::get_result(job.state().record));
 
-        job.set_offset(result_view.bytes_completed());
-        job.set_result(result_view.dif_status());
-
-        return to_own_status(static_cast<ml::execution_status>(result_view.status()));
+        return to_own_status(dml::detail::ml::get_status(job.state().record));
     }
 
     inline dml_status_t write_result_dif_update(job_view job) noexcept
     {
-        auto result_view = ml::views::dif_update_result(job.state().record);
+        job.set_offset(dml::detail::ml::get_bytes_completed(job.state().record));
+        job.set_result(dml::detail::ml::get_result(job.state().record));
 
-        job.set_offset(result_view.bytes_completed());
-        job.set_result(result_view.dif_status());
-
-        return to_own_status(static_cast<ml::execution_status>(result_view.status()));
+        return to_own_status(dml::detail::ml::get_status(job.state().record));
     }
 
     inline dml_status_t write_result_cache_flush(job_view job) noexcept
     {
-        auto result_view = ml::views::cache_flush_result(job.state().record);
-
-        return to_own_status(static_cast<ml::execution_status>(result_view.status()));
+        return to_own_status(dml::detail::ml::get_status(job.state().record));
     }
 }  // namespace dml
 

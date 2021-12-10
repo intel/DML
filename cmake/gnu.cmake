@@ -26,10 +26,13 @@ list(APPEND DML_SECURITY_DEFINITIONS
     $<$<CONFIG:RELEASE>:_FORTIFY_SOURCE=2>)
 
 list(APPEND DML_QUALITY_OPTIONS
-    $<$<BOOL:${DML_WERROR}>:-Werror>
     -Wall
     -Wextra
     -pedantic
     )
 
-list(APPEND DML_AVX512_OPTIONS -march=skylake-avx512) #  -mavx512dq -mavx512vl -mavx512bw -mclflushopt -mclwb
+list(APPEND DML_CPP_PRIVATE_OPTIONS
+        -fno-exceptions
+        -fno-rtti
+        -fno-threadsafe-statics
+        )
