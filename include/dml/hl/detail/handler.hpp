@@ -22,7 +22,7 @@
 #ifndef DML_DETAIL_HANDLER_HPP
 #define DML_DETAIL_HANDLER_HPP
 
-#include <dml/detail/ml/result.hpp>
+#include <dml/detail/ml/task.hpp>
 
 namespace dml
 {
@@ -32,18 +32,36 @@ namespace dml
     namespace detail
     {
         /**
-         * @brief Helper to retrieve Middle Layer result from a handler
+         * @brief Helper to retrieve descriptor from a handler
          *
          * @tparam operation   Type of operation
          * @tparam allocator_t Type of allocator
          * @param h            Instance of @ref handler
          *
-         * @return Middle Layer result object
+         * @return Descriptor
          */
         template <typename operation, typename allocator_t>
-        detail::ml::result &get_ml_result(handler<operation, allocator_t> &h) noexcept
+        dml::detail::ml::task_view get_task_view(handler<operation, allocator_t> &h) noexcept
         {
-            return h.record_.get();
+            return make_view(h.task_);
+        }
+
+        /**
+         * @todo
+         */
+        template <typename operation, typename allocator_t>
+        void set_hw_path(handler<operation, allocator_t> &h) noexcept
+        {
+            h.is_hw = true;
+        }
+
+        /**
+         * @todo
+         */
+        template <typename operation, typename allocator_t>
+        void set_status(handler<operation, allocator_t> &h, status_code status) noexcept
+        {
+            h.status_ = status;
         }
     }  // namespace detail
 }  // namespace dml

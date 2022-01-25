@@ -14,6 +14,7 @@
  *
  */
 
+#include <core/utils.hpp>
 #include <dml/detail/common/status.hpp>
 #include <dml/detail/common/utils/enum.hpp>
 #include <optimization_dispatcher.hpp>
@@ -23,8 +24,10 @@
 
 namespace dml::core::kernels
 {
-    void apply_delta(apply_delta_descriptor dsc, apply_delta_completion_record record) noexcept
+    void apply_delta(const_view<descriptor, operation::apply_delta> dsc) noexcept
     {
+        auto record = make_view<operation::apply_delta>(get_completion_record(dsc));
+
         const auto dst               = reinterpret_cast<byte_t *>(dsc.destination_address());
         const auto delta_record      = reinterpret_cast<byte_t *>(dsc.delta_record_address());
         const auto delta_record_size = dsc.delta_record_size();

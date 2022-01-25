@@ -23,9 +23,8 @@
 #define DML_SEQUENCE_HPP
 
 #include <dml/detail/common/status.hpp>
-#include <dml/detail/ml/operation.hpp>
+#include <dml/detail/ml/make_task.hpp>
 #include <dml/detail/ml/result.hpp>
-#include <dml/detail/ml/validation.hpp>
 #include <dml/hl/detail/buffer.hpp>
 #include <dml/hl/detail/utils.hpp>
 #include <dml/hl/handler.hpp>
@@ -48,12 +47,12 @@ namespace dml
         /**
          * @brief Type of buffer for Middle Layer operations
          */
-        using op_buffer_t = detail::buffer_array<detail::ml::operation, allocator_t>;
+        using op_buffer_t = detail::buffer_array<detail::descriptor, allocator_t>;
 
         /**
          * @brief Type of buffer for Middle Layer results
          */
-        using res_buffer_t = detail::buffer_array<detail::ml::result, allocator_t>;
+        using res_buffer_t = detail::buffer_array<detail::completion_record, allocator_t>;
 
     public:
         /**
@@ -333,20 +332,25 @@ namespace dml
         /**
          * @todo
          */
-        inline status_code add(detail::ml::operation operation) noexcept
+        template <typename make_task_t>
+        inline status_code add(make_task_t&& make_task) noexcept
         {
             if (current_length_ == operations_.get_count())
             {
                 return status_code::batch_overflow;
             }
 
-            if (auto status = detail::ml::validate(operation); status != detail::validation_status::success)
+            auto& descriptor = operations_.get(current_length_);
+            auto& record     = results_.get(current_length_);
+
+            detail::ml::make_view(descriptor, record) = make_task();
+
+            // Auto execution path validation is the strictest.
+            if (auto status = detail::ml::execution_path::automatic::validate(descriptor); status != detail::validation_status::success)
             {
                 return detail::to_own(status);
             }
 
-            operations_.get(current_length_) = operation;
-            detail::ml::bind(operations_.get(current_length_), results_.get(current_length_));
             current_length_++;
             return status_code::ok;
         }
@@ -362,7 +366,11 @@ namespace dml
     {
         DML_VALIDATE_SIZE_CONSISTENCY(src_view.size(), dst_view.size());
 
-        return add(detail::ml::make_mem_move_operation(src_view.data(), dst_view.data(), src_view.size(), operation.get_options()));
+        return add(
+            [&]
+            {
+                return detail::ml::make_mem_move_task(src_view.data(), dst_view.data(), src_view.size(), operation.get_options());
+            });
     }
 
     template <typename allocator_t>
@@ -370,13 +378,21 @@ namespace dml
     {
         DML_VALIDATE_SIZE_CONSISTENCY(src_view.size(), dst_view.size());
 
-        return add(detail::ml::make_mem_move_operation(src_view.data(), dst_view.data(), src_view.size(), operation.get_options()));
+        return add(
+            [&]
+            {
+                return detail::ml::make_mem_move_task(src_view.data(), dst_view.data(), src_view.size(), operation.get_options());
+            });
     }
 
     template <typename allocator_t>
     inline status_code sequence<allocator_t>::add(fill_operation operation, uint64_t pattern, data_view dst_view)
     {
-        return add(detail::ml::make_fill_operation(pattern, dst_view.data(), dst_view.size(), operation.get_options()));
+        return add(
+            [&]
+            {
+                return detail::ml::make_fill_task(pattern, dst_view.data(), dst_view.size(), operation.get_options());
+            });
     }
 
     template <typename allocator_t>
@@ -388,12 +404,16 @@ namespace dml
         DML_VALIDATE_SIZE_CONSISTENCY(src_view.size(), dst1_view.size());
         DML_VALIDATE_SIZE_CONSISTENCY(src_view.size(), dst2_view.size());
 
-        return add(detail::ml::make_dualcast_operation(src_view.data(),
-                                                       dst1_view.data(),
-                                                       dst2_view.data(),
-                                                       src_view.size(),
-                                                       operation.get_options(),
-                                                       operation.get_specific_options()));
+        return add(
+            [&]
+            {
+                return detail::ml::make_dualcast_task(src_view.data(),
+                                                      dst1_view.data(),
+                                                      dst2_view.data(),
+                                                      src_view.size(),
+                                                      operation.get_options(),
+                                                      operation.get_specific_options());
+            });
     }
 
     template <typename allocator_t>
@@ -401,21 +421,29 @@ namespace dml
     {
         DML_VALIDATE_SIZE_CONSISTENCY(src1_view.size(), src2_view.size());
 
-        return add(detail::ml::make_compare_operation(src1_view.data(),
-                                                      src2_view.data(),
-                                                      src1_view.size(),
-                                                      operation.get_options(),
-                                                      operation.get_expected_result()));
+        return add(
+            [&]
+            {
+                return detail::ml::make_compare_task(src1_view.data(),
+                                                     src2_view.data(),
+                                                     src1_view.size(),
+                                                     operation.get_options(),
+                                                     operation.get_expected_result());
+            });
     }
 
     template <typename allocator_t>
     inline status_code sequence<allocator_t>::add(compare_pattern_operation operation, uint64_t pattern, const_data_view src_view)
     {
-        return add(detail::ml::make_compare_pattern_operation(pattern,
-                                                              src_view.data(),
-                                                              src_view.size(),
-                                                              operation.get_options(),
-                                                              operation.get_expected_result()));
+        return add(
+            [&]
+            {
+                return detail::ml::make_compare_pattern_task(pattern,
+                                                             src_view.data(),
+                                                             src_view.size(),
+                                                             operation.get_options(),
+                                                             operation.get_expected_result());
+            });
     }
 
     template <typename allocator_t>
@@ -426,13 +454,17 @@ namespace dml
     {
         DML_VALIDATE_SIZE_CONSISTENCY(src1_view.size(), src2_view.size());
 
-        return add(detail::ml::make_create_delta_operation(src1_view.data(),
-                                                           src2_view.data(),
-                                                           src1_view.size(),
-                                                           delta_view.data(),
-                                                           delta_view.size(),
-                                                           operation.get_options(),
-                                                           operation.get_expected_result()));
+        return add(
+            [&]
+            {
+                return detail::ml::make_create_delta_task(src1_view.data(),
+                                                          src2_view.data(),
+                                                          src1_view.size(),
+                                                          delta_view.data(),
+                                                          delta_view.size(),
+                                                          operation.get_options(),
+                                                          operation.get_expected_result());
+            });
     }
 
     template <typename allocator_t>
@@ -445,21 +477,29 @@ namespace dml
         {
             return status_code::delta_delta_empty;
         }
-        return add(detail::ml::make_apply_delta_operation(delta_view.data(),
-                                                          delta_result.delta_record_size,
-                                                          dst_view.data(),
-                                                          dst_view.size(),
-                                                          operation.get_options()));
+        return add(
+            [&]
+            {
+                return detail::ml::make_apply_delta_task(delta_view.data(),
+                                                         delta_result.delta_record_size,
+                                                         dst_view.data(),
+                                                         dst_view.size(),
+                                                         operation.get_options());
+            });
     }
 
     template <typename allocator_t>
     inline status_code sequence<allocator_t>::add(crc_operation operation, const_data_view src_view, uint32_t crc_seed)
     {
-        return add(detail::ml::make_crc_operation(src_view.data(),
-                                                  src_view.size(),
-                                                  crc_seed,
-                                                  operation.get_options(),
-                                                  operation.get_specific_options()));
+        return add(
+            [&]
+            {
+                return detail::ml::make_crc_task(src_view.data(),
+                                                 src_view.size(),
+                                                 crc_seed,
+                                                 operation.get_options(),
+                                                 operation.get_specific_options());
+            });
     }
 
     template <typename allocator_t>
@@ -469,18 +509,26 @@ namespace dml
                                                   uint32_t           crc_seed)
     {
         DML_VALIDATE_SIZE_CONSISTENCY(src_view.size(), dst_view.size());
-        return add(detail::ml::make_copy_crc_operation(src_view.data(),
-                                                       dst_view.data(),
-                                                       src_view.size(),
-                                                       crc_seed,
-                                                       operation.get_options(),
-                                                       operation.get_specific_options()));
+        return add(
+            [&]
+            {
+                return detail::ml::make_copy_crc_task(src_view.data(),
+                                                      dst_view.data(),
+                                                      src_view.size(),
+                                                      crc_seed,
+                                                      operation.get_options(),
+                                                      operation.get_specific_options());
+            });
     }
 
     template <typename allocator_t>
     inline status_code sequence<allocator_t>::add(cache_flush_operation operation, data_view dst_view)
     {
-        return add(detail::ml::make_cache_flush_operation(dst_view.data(), dst_view.size(), operation.get_options()));
+        return add(
+            [&]
+            {
+                return detail::ml::make_cache_flush_task(dst_view.data(), dst_view.size(), operation.get_options());
+            });
     }
 }  // namespace dml
 

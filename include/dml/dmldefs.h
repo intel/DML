@@ -381,6 +381,7 @@ typedef struct
     dml_meta_result_t      expected_result;        /**< Expected result for some operations                         */
     dml_operation_flags_t  flags;                  /**< Auxiliary DML operation flags - see below                   */
     dml_dif_config_t       dif_config;             /**< Properties for DIF operations                               */
+    uint32_t               numa_id;                /**< NUMA node id for submission                                 */
     dml_internal_data_t   *internal_data_ptr;      /**< Internal memory buffers & structures for all DML operations */
 } dml_job_t;
 

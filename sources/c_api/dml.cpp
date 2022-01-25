@@ -18,6 +18,7 @@
 
 #include <memory>
 #include <new>
+#include <limits>
 
 #include "impl.hpp"
 #include "job_view.hpp"
@@ -45,6 +46,9 @@ extern "C" dml_status_t dml_init_job(const dml_path_t path, dml_job_t *const dml
 
     // Zeroing-out everything
     std::fill_n(job_ptr, dml::get_job_size(), 0);
+
+    // Special value for "any" numa id
+    dml_job_ptr->numa_id = std::numeric_limits<decltype(dml_job_ptr->numa_id)>::max();
 
     // Take a pointer to the place right after the last struct member and align to default boundary.
     dml_job_ptr->internal_data_ptr = dml::align(job_ptr + job_size);

@@ -19,33 +19,18 @@
 
 #include <dml/detail/common/status.hpp>
 #include <dml/detail/common/types.hpp>
-#include <dml/detail/ml/operation.hpp>
 
 namespace dml::detail::ml
 {
-    struct alignas(32) result
-    {
-        byte_t bytes[32];
-    };
+    [[nodiscard]] detail::execution_status get_status(completion_record& record) noexcept;
 
-    void bind(operation& op, result& res) noexcept;
+    [[nodiscard]] detail::result_t get_result(completion_record& record) noexcept;
 
-    void wait(result& res) noexcept;
+    [[nodiscard]] detail::transfer_size_t get_bytes_completed(completion_record& record) noexcept;
 
-    [[nodiscard]] detail::execution_status get_status(result& res) noexcept;
+    [[nodiscard]] detail::transfer_size_t get_delta_record_size(completion_record& record) noexcept;
 
-    [[nodiscard]] detail::result_t get_result(result& res) noexcept;
-
-    [[nodiscard]] detail::transfer_size_t get_bytes_completed(result& res) noexcept;
-
-    [[nodiscard]] detail::transfer_size_t get_delta_record_size(result& res) noexcept;
-
-    [[nodiscard]] detail::transfer_size_t get_crc_value(result& res) noexcept;
-
-    [[nodiscard]] inline bool is_finished(const volatile result& res) noexcept
-    {
-        return 0 != res.bytes[0];
-    }
+    [[nodiscard]] detail::transfer_size_t get_crc_value(completion_record& record) noexcept;
 }  // namespace dml::detail::ml
 
 #endif  //DML_ML_RESULT_HPP

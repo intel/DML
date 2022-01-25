@@ -42,6 +42,11 @@ namespace dml
         {
         }
 
+        [[nodiscard]] auto numa_id() const noexcept
+        {
+            return job_ptr_->numa_id;
+        }
+
         [[nodiscard]] auto& state() const noexcept
         {
             return *std::launder(reinterpret_cast<dml::state*>(job_ptr_->internal_data_ptr));

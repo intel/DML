@@ -14,20 +14,26 @@
  *
  */
 
-#include <core/device.hpp>
-#include <dml/detail/ml/execution_path.hpp>
+#ifndef DML_CORE_UTILS_HPP
+#define DML_CORE_UTILS_HPP
 
-#include "ml_utils.hpp"
+#include <core/view.hpp>
 
-namespace dml::detail::ml::execution_path
+namespace dml::core
 {
-    submission_status software::submit(operation& op, result& res) noexcept
+    // TODO: Should not be passed by ref
+    template <typename type>
+    [[nodiscard]] inline auto& get_completion_record(any_descriptor<type>& view) noexcept
     {
-        return core::software_device().submit(as_core(op), as_core(res));
+        return *reinterpret_cast<completion_record*>(view.completion_record_address());
     }
 
-    submission_status hardware::submit(operation& op, result& res) noexcept
+    [[nodiscard]] inline auto& get_completion_record(const descriptor& dsc) noexcept
     {
-        return core::hardware_device().submit(as_core(op), as_core(res));
+        // TODO: One-liner after the function above fixed
+        auto view = any_descriptor(dsc);
+        return get_completion_record(view);
     }
-}  // namespace dml::detail::ml::execution_path
+}  // namespace dml::core
+
+#endif  //DML_CORE_UTILS_HPP

@@ -18,11 +18,21 @@
 #define DML_CORE_COMPLETION_RECORD_VIEWS_HPP
 
 #include <core/types.hpp>
+#include <type_traits>
 
 namespace dml::core
 {
+    template <typename completion_record_t>
     class any_completion_record
     {
+        // Requires
+        static_assert(std::is_same_v<std::decay_t<completion_record_t>, completion_record>);
+
+    protected:
+        // Add const if view is created over constant object
+        template <typename type>
+        using return_type_t = std::conditional_t<std::is_const_v<completion_record_t>, std::add_const_t<type>, type>;
+
     private:
         struct offsets
         {
@@ -33,99 +43,129 @@ namespace dml::core
         };
 
     public:
-        explicit any_completion_record(completion_record& record): record_(record)
+        explicit any_completion_record(completion_record_t& record): record_(record)
         {
         }
 
-        [[nodiscard]] status_t& status() const noexcept
+        [[nodiscard]] auto& status() noexcept
         {
-            return reinterpret_cast<status_t&>(record_.bytes[offsets::status]);
+            return reinterpret_cast<return_type_t<status_t>&>(record_.bytes[offsets::status]);
         }
 
-        [[nodiscard]] result_t& result() const noexcept
+        [[nodiscard]] auto& result() noexcept
         {
-            return reinterpret_cast<result_t&>(record_.bytes[offsets::result]);
+            return reinterpret_cast<return_type_t<result_t>&>(record_.bytes[offsets::result]);
         }
 
-        [[nodiscard]] transfer_size_t& bytes_completed() const noexcept
+        [[nodiscard]] auto& bytes_completed() noexcept
         {
-            return reinterpret_cast<transfer_size_t&>(record_.bytes[offsets::bytes_completed]);
+            return reinterpret_cast<return_type_t<transfer_size_t>&>(record_.bytes[offsets::bytes_completed]);
         }
 
-        [[nodiscard]] address_t& fault_address() const noexcept
+        [[nodiscard]] auto& fault_address() noexcept
         {
-            return reinterpret_cast<address_t&>(record_.bytes[offsets::fault_address]);
+            return reinterpret_cast<return_type_t<address_t>&>(record_.bytes[offsets::fault_address]);
         }
 
     protected:
-        completion_record& record_;
+        completion_record_t& record_;
     };
 
-    class nop_completion_record: public any_completion_record
+    template <typename completion_record_t>
+    class nop_completion_record: public any_completion_record<completion_record_t>
     {
+        using base = any_completion_record<completion_record_t>;
+
     public:
-        using any_completion_record::any_completion_record;
+        using base::base;
 
     private:
-        using any_completion_record::result;
-        using any_completion_record::bytes_completed;
-        using any_completion_record::fault_address;
+        using base::result;
+        using base::bytes_completed;
+        using base::fault_address;
     };
 
-    class batch_completion_record: public any_completion_record
+    template <typename completion_record_t>
+    class batch_completion_record: public any_completion_record<completion_record_t>
     {
-    public:
-        using any_completion_record::any_completion_record;
+        using base = any_completion_record<completion_record_t>;
 
-        [[nodiscard]] transfer_size_t& descriptors_completed() const noexcept
+        template <typename type>
+        using return_type_t = typename base::template return_type_t<type>;
+
+    public:
+        using base::base;
+
+        [[nodiscard]] auto& descriptors_completed() noexcept
         {
             return this->bytes_completed();
         }
 
     private:
-        using any_completion_record::result;
+        using base::result;
     };
 
-    class drain_completion_record: public any_completion_record
+    template <typename completion_record_t>
+    class drain_completion_record: public any_completion_record<completion_record_t>
     {
+        using base = any_completion_record<completion_record_t>;
+
     public:
-        using any_completion_record::any_completion_record;
+        using base::base;
 
     private:
-        using any_completion_record::result;
-        using any_completion_record::bytes_completed;
-        using any_completion_record::fault_address;
+        using base::result;
+        using base::bytes_completed;
+        using base::fault_address;
     };
 
-    class mem_move_completion_record: public any_completion_record
+    template <typename completion_record_t>
+    class mem_move_completion_record: public any_completion_record<completion_record_t>
     {
+        using base = any_completion_record<completion_record_t>;
+
     public:
-        using any_completion_record::any_completion_record;
+        using base::base;
     };
 
-    class fill_completion_record: public any_completion_record
+    template <typename completion_record_t>
+    class fill_completion_record: public any_completion_record<completion_record_t>
     {
+        using base = any_completion_record<completion_record_t>;
+
     public:
-        using any_completion_record::any_completion_record;
+        using base::base;
 
     private:
-        using any_completion_record::result;
+        using base::result;
     };
 
-    class compare_completion_record: public any_completion_record
+    template <typename completion_record_t>
+    class compare_completion_record: public any_completion_record<completion_record_t>
     {
+        using base = any_completion_record<completion_record_t>;
+
     public:
-        using any_completion_record::any_completion_record;
+        using base::base;
     };
 
-    class compare_pattern_completion_record: public any_completion_record
+    template <typename completion_record_t>
+    class compare_pattern_completion_record: public any_completion_record<completion_record_t>
     {
+        using base = any_completion_record<completion_record_t>;
+
     public:
-        using any_completion_record::any_completion_record;
+        using base::base;
     };
 
-    class create_delta_completion_record: public any_completion_record
+    template <typename completion_record_t>
+    class create_delta_completion_record: public any_completion_record<completion_record_t>
     {
+        using base = any_completion_record<completion_record_t>;
+
+        template <typename type>
+        using return_type_t = typename base::template return_type_t<type>;
+
     private:
         struct offsets
         {
@@ -133,34 +173,49 @@ namespace dml::core
         };
 
     public:
-        using any_completion_record::any_completion_record;
+        using base::base;
 
-        [[nodiscard]] transfer_size_t& delta_record_size() const noexcept
+        [[nodiscard]] auto& delta_record_size() noexcept
         {
-            return reinterpret_cast<transfer_size_t&>(record_.bytes[offsets::delta_record_size]);
+            return reinterpret_cast<return_type_t<transfer_size_t>&>(record_.bytes[offsets::delta_record_size]);
         }
-    };
-
-    class apply_delta_completion_record: public any_completion_record
-    {
-    public:
-        using any_completion_record::any_completion_record;
 
     private:
-        using any_completion_record::result;
+        using base::record_;
     };
 
-    class dualcast_completion_record: public any_completion_record
+    template <typename completion_record_t>
+    class apply_delta_completion_record: public any_completion_record<completion_record_t>
     {
+        using base = any_completion_record<completion_record_t>;
+
     public:
-        using any_completion_record::any_completion_record;
+        using base::base;
 
     private:
-        using any_completion_record::result;
+        using base::result;
     };
 
-    class crc_completion_record: public any_completion_record
+    template <typename completion_record_t>
+    class dualcast_completion_record: public any_completion_record<completion_record_t>
     {
+        using base = any_completion_record<completion_record_t>;
+
+    public:
+        using base::base;
+
+    private:
+        using base::result;
+    };
+
+    template <typename completion_record_t>
+    class crc_completion_record: public any_completion_record<completion_record_t>
+    {
+        using base = any_completion_record<completion_record_t>;
+
+        template <typename type>
+        using return_type_t = typename base::template return_type_t<type>;
+
     private:
         struct offsets
         {
@@ -168,19 +223,26 @@ namespace dml::core
         };
 
     public:
-        using any_completion_record::any_completion_record;
+        using base::base;
 
-        [[nodiscard]] crc_value_t& crc_value() const noexcept
+        [[nodiscard]] auto& crc_value() noexcept
         {
-            return reinterpret_cast<crc_value_t&>(record_.bytes[offsets::crc_value]);
+            return reinterpret_cast<return_type_t<crc_value_t>&>(record_.bytes[offsets::crc_value]);
         }
 
     private:
-        using any_completion_record::result;
+        using base::record_;
+        using base::result;
     };
 
-    class dif_check_completion_record: public any_completion_record
+    template <typename completion_record_t>
+    class dif_check_completion_record: public any_completion_record<completion_record_t>
     {
+        using base = any_completion_record<completion_record_t>;
+
+        template <typename type>
+        using return_type_t = typename base::template return_type_t<type>;
+
     private:
         struct offsets
         {
@@ -190,34 +252,41 @@ namespace dml::core
         };
 
     public:
-        using any_completion_record::any_completion_record;
+        using base::base;
 
-        [[nodiscard]] dif_status_t& dif_status() const noexcept
+        [[nodiscard]] auto& dif_status() noexcept
         {
             return this->result();
         }
 
-        [[nodiscard]] dif_ref_tag_t& source_ref_tag() const noexcept
+        [[nodiscard]] auto& source_ref_tag() noexcept
         {
-            return reinterpret_cast<dif_ref_tag_t&>(record_.bytes[offsets::ref_tag]);
+            return reinterpret_cast<return_type_t<dif_ref_tag_t>&>(record_.bytes[offsets::ref_tag]);
         }
 
-        [[nodiscard]] dif_app_tag_t& source_app_tag() const noexcept
+        [[nodiscard]] auto& source_app_tag() noexcept
         {
-            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::app_tag]);
+            return reinterpret_cast<return_type_t<dif_app_tag_t>&>(record_.bytes[offsets::app_tag]);
         }
 
-        [[nodiscard]] dif_app_tag_t& source_app_tag_mask() const noexcept
+        [[nodiscard]] auto& source_app_tag_mask() noexcept
         {
-            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::app_tag_mask]);
+            return reinterpret_cast<return_type_t<dif_app_tag_t>&>(record_.bytes[offsets::app_tag_mask]);
         }
 
     private:
-        using any_completion_record::result;
+        using base::result;
+        using base::record_;
     };
 
-    class dif_insert_completion_record: public any_completion_record
+    template <typename completion_record_t>
+    class dif_insert_completion_record: public any_completion_record<completion_record_t>
     {
+        using base = any_completion_record<completion_record_t>;
+
+        template <typename type>
+        using return_type_t = typename base::template return_type_t<type>;
+
     private:
         struct offsets
         {
@@ -227,29 +296,36 @@ namespace dml::core
         };
 
     public:
-        using any_completion_record::any_completion_record;
+        using base::base;
 
-        [[nodiscard]] dif_ref_tag_t& destination_ref_tag() const noexcept
+        [[nodiscard]] auto& destination_ref_tag() noexcept
         {
-            return reinterpret_cast<dif_ref_tag_t&>(record_.bytes[offsets::ref_tag]);
+            return reinterpret_cast<return_type_t<dif_ref_tag_t>&>(record_.bytes[offsets::ref_tag]);
         }
 
-        [[nodiscard]] dif_app_tag_t& destination_app_tag() const noexcept
+        [[nodiscard]] auto& destination_app_tag() noexcept
         {
-            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::app_tag]);
+            return reinterpret_cast<return_type_t<dif_app_tag_t>&>(record_.bytes[offsets::app_tag]);
         }
 
-        [[nodiscard]] dif_app_tag_t& destination_app_tag_mask() const noexcept
+        [[nodiscard]] auto& destination_app_tag_mask() noexcept
         {
-            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::app_tag_mask]);
+            return reinterpret_cast<return_type_t<dif_app_tag_t>&>(record_.bytes[offsets::app_tag_mask]);
         }
 
     private:
-        using any_completion_record::result;
+        using base::result;
+        using base::record_;
     };
 
-    class dif_strip_completion_record: public any_completion_record
+    template <typename completion_record_t>
+    class dif_strip_completion_record: public any_completion_record<completion_record_t>
     {
+        using base = any_completion_record<completion_record_t>;
+
+        template <typename type>
+        using return_type_t = typename base::template return_type_t<type>;
+
     private:
         struct offsets
         {
@@ -259,34 +335,41 @@ namespace dml::core
         };
 
     public:
-        using any_completion_record::any_completion_record;
+        using base::base;
 
-        [[nodiscard]] dif_status_t& dif_status() const noexcept
+        [[nodiscard]] auto& dif_status() noexcept
         {
             return this->result();
         }
 
-        [[nodiscard]] dif_ref_tag_t& source_ref_tag() const noexcept
+        [[nodiscard]] auto& source_ref_tag() noexcept
         {
-            return reinterpret_cast<dif_ref_tag_t&>(record_.bytes[offsets::ref_tag]);
+            return reinterpret_cast<return_type_t<dif_ref_tag_t>&>(record_.bytes[offsets::ref_tag]);
         }
 
-        [[nodiscard]] dif_app_tag_t& source_app_tag() const noexcept
+        [[nodiscard]] auto& source_app_tag() noexcept
         {
-            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::app_tag]);
+            return reinterpret_cast<return_type_t<dif_app_tag_t>&>(record_.bytes[offsets::app_tag]);
         }
 
-        [[nodiscard]] dif_app_tag_t& source_app_tag_mask() const noexcept
+        [[nodiscard]] auto& source_app_tag_mask() noexcept
         {
-            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::app_tag_mask]);
+            return reinterpret_cast<return_type_t<dif_app_tag_t>&>(record_.bytes[offsets::app_tag_mask]);
         }
 
     private:
-        using any_completion_record::result;
+        using base::result;
+        using base::record_;
     };
 
-    class dif_update_completion_record: public any_completion_record
+    template <typename completion_record_t>
+    class dif_update_completion_record: public any_completion_record<completion_record_t>
     {
+        using base = any_completion_record<completion_record_t>;
+
+        template <typename type>
+        using return_type_t = typename base::template return_type_t<type>;
+
     private:
         struct offsets
         {
@@ -299,54 +382,58 @@ namespace dml::core
         };
 
     public:
-        using any_completion_record::any_completion_record;
+        using base::base;
 
-        [[nodiscard]] dif_status_t& dif_status() const noexcept
+        [[nodiscard]] auto& dif_status() noexcept
         {
             return this->result();
         }
 
-        [[nodiscard]] dif_ref_tag_t& source_ref_tag() const noexcept
+        [[nodiscard]] auto& source_ref_tag() noexcept
         {
-            return reinterpret_cast<dif_ref_tag_t&>(record_.bytes[offsets::source_ref_tag]);
+            return reinterpret_cast<return_type_t<dif_ref_tag_t>&>(record_.bytes[offsets::source_ref_tag]);
         }
 
-        [[nodiscard]] dif_app_tag_t& source_app_tag() const noexcept
+        [[nodiscard]] auto& source_app_tag() noexcept
         {
-            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::source_app_tag]);
+            return reinterpret_cast<return_type_t<dif_app_tag_t>&>(record_.bytes[offsets::source_app_tag]);
         }
 
-        [[nodiscard]] dif_app_tag_t& source_app_tag_mask() const noexcept
+        [[nodiscard]] auto& source_app_tag_mask() noexcept
         {
-            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::source_app_tag_mask]);
+            return reinterpret_cast<return_type_t<dif_app_tag_t>&>(record_.bytes[offsets::source_app_tag_mask]);
         }
 
-        [[nodiscard]] dif_ref_tag_t& destination_ref_tag() const noexcept
+        [[nodiscard]] auto& destination_ref_tag() noexcept
         {
-            return reinterpret_cast<dif_ref_tag_t&>(record_.bytes[offsets::destination_ref_tag]);
+            return reinterpret_cast<return_type_t<dif_ref_tag_t>&>(record_.bytes[offsets::destination_ref_tag]);
         }
 
-        [[nodiscard]] dif_app_tag_t& destination_app_tag() const noexcept
+        [[nodiscard]] auto& destination_app_tag() noexcept
         {
-            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::destination_app_tag]);
+            return reinterpret_cast<return_type_t<dif_app_tag_t>&>(record_.bytes[offsets::destination_app_tag]);
         }
 
-        [[nodiscard]] dif_app_tag_t& destination_app_tag_mask() const noexcept
+        [[nodiscard]] auto& destination_app_tag_mask() noexcept
         {
-            return reinterpret_cast<dif_app_tag_t&>(record_.bytes[offsets::destination_app_tag_mask]);
+            return reinterpret_cast<return_type_t<dif_app_tag_t>&>(record_.bytes[offsets::destination_app_tag_mask]);
         }
 
     private:
-        using any_completion_record::result;
+        using base::result;
+        using base::record_;
     };
 
-    class cache_flush_completion_record: public any_completion_record
+    template <typename completion_record_t>
+    class cache_flush_completion_record: public any_completion_record<completion_record_t>
     {
+        using base = any_completion_record<completion_record_t>;
+
     public:
-        using any_completion_record::any_completion_record;
+        using base::base;
 
     private:
-        using any_completion_record::result;
+        using base::result;
     };
 }  // namespace dml::core
 

@@ -34,6 +34,7 @@ namespace dml
     {
         ok,                    /**< Operation completed successfully */
         false_predicate,       /**< Operation completed successfully, but result is unexpected */
+        partial_completion,    /**< Operation was partially completed */
         nullptr_error,         /**< One of data pointers is NULL */
         bad_size,              /**< Invalid byte size was specified */
         bad_length,            /**< Invalid number of elements was specified */

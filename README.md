@@ -1,97 +1,35 @@
 Intel® Data Mover Library (Intel® DML) Beta
 =================================================
-[Get Started](#get-started) | [Documentation](#documentation) | [License](#license) | [GitHub repository](https://github.com/intel-innersource/libraries.performance.accelerators.dml.dml-library.git)
+[Get Started](#get-started) | [Documentation](#documentation) | [License](#license) | [GitHub repository](https://github.com/intel/DML)
 
 Intel® Data Mover Library (Intel® DML) is an open-source library to provide high-performance data manipulation on Intel CPUs. Intel® DML is intended for streaming data movement and transformation operations optimization that is applicable for effective storage, networking, persistent memory, and various data processing applications. 
 
 ## Get Started
 
-### Prerequisites
+To get started with Intel DML, follow instructions below:
 
-To build the library, make sure all system and build requirements are set up.
-See [Library Presetting](./doc/DML_REFERENCE_MANUAL.md#library-presetting) section for the list of all requirements.
+1. Make sure your system meets all [System Requirements](https://intel.github.io/DML/documentation/introduction_docs/system_requirements.html).
 
-### Build
+2. Follow instructions to build the library. See [Installation](https://intel.github.io/DML/documentation/get_started_docs/installation.html) for more details.
 
-To build the library, complete the following steps:
+## Documentation 
 
-1.  Make sure that all the tools from the Prerequisites section are available from your environment.
+### Online Documentation
 
-2.  Extract git sources using the following command:
+Documentation is delivered using GitHub Pages. See full Intel DML [online documentation](https://intel.github.io/DML/index.html).
 
-```shell
-git clone --recursive https://github.com/intel/DML.git
-```
+### Offline Documentation
 
-3.  Build the library and tests by executing the following list of commands from \<dml_library\>:
+**Note**: Before building Intel DML offline documentation, make sure you have all documentation generation tools properly installed and set up. See, [Documentation Build Prerequisites](https://intel.github.io/DML/documentation/get_started_docs/installation.html#documentation-build-prerequisites) for more details.
 
-#### Windows* OS 
+To generate full offline documentation from sources, use the following commands:
 
 ```shell
-mkdir build
-cd build
-cmake -DCMAKE_INSTALL_PREFIX=<install_dir> -G "NMake Makefiles" ..
-cmake --build . --target install
+cmd> cd <dml_library catalog path>/doc
+cmd> _get_docs.sh
 ```
 
-#### Linux* OS 
-
-```shell
-mkdir build
-cd build
-cmake -DCMAKE_INSTALL_PREFIX=<install_dir> ..
-cmake --build . --target install
-```
-
-Note: If you need to build a particular type of the library and tests (`DEBUG`|`RELEASE`), use the `CMAKE_BUILD_TYPE` flag as follows:
-
-```shell
-# Debug
-cmake -DCMAKE_BUILD_TYPE=Debug <path_to_cmake_folder>
-
-# Release
-cmake -DCMAKE_BUILD_TYPE=Release <path_to_cmake_folder>
-
-# Release with debug information
-cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo <path_to_cmake_folder>
-```
-
-Note: 
-- CMake generates the script for release build as default.
-
-- On Linux* OS, the default `<install_dir>` is `/usr/local/`.
-
-- The library builds by default with software path only. If you need to build the library with enabled hardware, use the DML_HW option as follows:
-
-```shell
-# Enable hardware path
-cmake -DCMAKE_BUILD_TYPE=Release -DDML_HW=ON <path_to_cmake_folder>
-```
-
-- To enable `-frecord-gcc-switches` flag, use the DML_RECORD_SWITCHES option as follows:
-
-```shell
-# Enable -frecord-gcc-switches
-cmake -DCMAKE_BUILD_TYPE=Release -DDML_RECORD_SWITCHES=ON <path_to_cmake_folder>
-```
-
-The resulting library is available in the `<install_dir>/lib` folder.
-
-## Documentation
-
-- [Intel DML Reference Manual](./doc/DML_REFERENCE_MANUAL.md)
-- [Security Policy](./SECURITY.md) 
-
-To generate full documentation from sources with Doxygen, use the following commands:
-
-```shell
-cmd> cd <dml_library catalog path>
-cmd> doxygen ./Doxyfile
-```
-
-To open the generated HTML Reference, open the `<dml_library>/doc/html/index.html` file.
-
-***Note:*** You can find the Doxygen processor at [Doxygen official site](http://www.doxygen.nl/).
+After generation process is completed, open the `<dml_library>/doc/build/html/index.html` file.
 
 ## How to Contribute
 

@@ -23,7 +23,7 @@
 #define DML_HANDLER_HPP
 
 #include <dml/detail/ml/result.hpp>
-#include <dml/hl/detail/buffer.hpp>
+#include <dml/detail/ml/task.hpp>
 #include <dml/hl/detail/handler.hpp>
 
 namespace dml
@@ -39,11 +39,6 @@ namespace dml
     class handler
     {
         /**
-         * @brief Internal buffer type for a result
-         */
-        using buffer_type = detail::buffer<detail::ml::result, allocator_t>;
-
-        /**
          * @brief Actual operation's result type
          */
         using result_type = typename operation_t::result_type;
@@ -53,13 +48,22 @@ namespace dml
 
     public:
         /**
-         * @brief Construct empty handler
+         * @brief Construct empty and invalid handler
+         */
+        handler(): task_(), status_(status_code::error), is_hw(false)
+        {
+        }
+
+        /**
+         * @brief Construct a handler from a task
          *
-         * Handler is invalid until assigned with a valid one
-         *
+         * @param some_task Task for handler construction
          * @param allocator Memory allocator to use
          */
-        explicit handler(allocator_t allocator = allocator_t()) noexcept: record_(allocator, false), status_(status_code::error)
+        explicit handler(detail::ml::task<allocator_t> &&some_task, allocator_t allocator):
+            task_(std::move(some_task)),
+            status_(status_code::ok),
+            is_hw(false)
         {
         }
 
@@ -87,11 +91,21 @@ namespace dml
          */
         auto get() noexcept
         {
+            auto  task_view         = make_view(task_);
+            auto &completion_record = task_view.get_completion_record();
+
             if (status_ == status_code::ok)
             {
-                detail::ml::wait(record_.get());
+                if (is_hw)
+                {
+                    detail::ml::wait<detail::ml::execution_path::hardware>(task_view);
+                }
+                else
+                {
+                    detail::ml::wait<detail::ml::execution_path::software>(task_view);
+                }
 
-                return detail::make_result<result_type>(record_.get());
+                return detail::make_result<result_type>(completion_record);
             }
             else
             {
@@ -105,11 +119,14 @@ namespace dml
          *
          * @return False if an operation is still being processed, True otherwise.
          */
-        [[nodiscard]] bool is_finished() const noexcept
+        [[nodiscard]] bool is_finished() noexcept
         {
+            auto  task_view  = make_view(task_);
+
             if (status_ == status_code::ok)
             {
-                return detail::ml::is_finished(record_.get());
+                return is_hw ? detail::ml::finished<detail::ml::execution_path::hardware>(task_view)
+                             : detail::ml::finished<detail::ml::execution_path::software>(task_view);
             }
             else
             {
@@ -118,24 +135,19 @@ namespace dml
         }
 
     private:
-        /**
-         * @brief Constructs a handler with initial status and allocator
-         *
-         * Memory allocation is done only if status is @ref status::ok, otherwise hanlder is empty.
-         *
-         * @param status    Initial status
-         * @param allocator Instance of memory allocator
-         */
-        explicit handler(status_code status, allocator_t allocator): record_(allocator, status == status_code::ok), status_(status)
-        {
-        }
+        template <typename operation_t_, typename allocator_t_>
+        friend dml::detail::ml::task_view detail::get_task_view(handler<operation_t_, allocator_t_> &h) noexcept;
 
         template <typename operation_t_, typename allocator_t_>
-        friend detail::ml::result &detail::get_ml_result(handler<operation_t_, allocator_t_> &h) noexcept;
+        friend void detail::set_hw_path(handler<operation_t_, allocator_t_> &h) noexcept;
+
+        template <typename operation_t_, typename allocator_t_>
+        friend void detail::set_status(handler<operation_t_, allocator_t_> &h, status_code status) noexcept;
 
     private:
-        buffer_type record_; /**< Memory buffer for a result */
-        status_code status_; /**< This handler status */
+        detail::ml::task<allocator_t> task_;   /**< @todo */
+        status_code                   status_; /**< This handler status */
+        bool                          is_hw;   /**< @todo */
     };
 }  // namespace dml
 

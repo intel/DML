@@ -14,43 +14,38 @@
  *
  */
 
-#include <core/descriptor_views.hpp>
-#include <core/operations.hpp>
-#include <dml/detail/common/flags.hpp>
+#include <core/device.hpp>
+#include <core/utils.hpp>
+#include <limits>
 #include <dml/detail/common/status.hpp>
 
-#include "core/device.hpp"
 #include "hw_dispatcher/hw_dispatcher.hpp"
 #include "hw_dispatcher/numa.hpp"
 
 namespace dml::core
 {
 #ifdef DML_HW
-    static inline auto enqueue(const dispatcher::hw_device &device, descriptor &dsc, completion_record &record) noexcept
+    static inline auto enqueue(const dispatcher::hw_device &device, const descriptor &dsc) noexcept
     {
-        auto view = any_descriptor(dsc);
-        view.flags() |= static_cast<flags_t>(dml::detail::flag::completion_record_address_valid) |
-                        static_cast<flags_t>(dml::detail::flag::request_completion_record);
-
-        // Use BlockOnFault on hardware, until page fault handling is implemented in software side
-        if (view.operation() != static_cast<operation_t>(operation::batch) &&
-            view.operation() != static_cast<operation_t>(operation::drain) && view.operation() != static_cast<operation_t>(operation::nop))
+        // Write 0 to completion record before submit
+        auto &record = get_completion_record(dsc);
+        for (auto& byte : record.bytes)
         {
-            view.flags() |= static_cast<flags_t>(dml::detail::flag::block_on_fault);
+            byte = 0u;
         }
-
-        view.completion_record_address() = reinterpret_cast<address_t>(&record);
-        record.bytes[0]                  = 0;
 
         auto status = device.enqueue_descriptor(reinterpret_cast<const dsahw_descriptor_t *>(&dsc));
 
-        return status == DML_STATUS_OK ? dml::detail::submission_status::success : dml::detail::submission_status::failure;
+        return status == DML_STATUS_OK ? dml::detail::submission_status::success
+                                       : dml::detail::submission_status::failure;
     }
 #endif
 
-    dml::detail::submission_status hardware_device::submit(descriptor &dsc, completion_record &completion_record) noexcept
+    dml::detail::submission_status hardware_device::submit(const descriptor &dsc, std::uint32_t numa_id) noexcept
     {
 #ifdef DML_HW
+        const auto own_numa_id = (numa_id == std::numeric_limits<decltype(numa_id)>::max()) ? util::get_numa_id() : numa_id;
+
         auto &dispatcher = dispatcher::hw_dispatcher::get_instance();
 
         if (dispatcher.is_hw_support())
@@ -65,15 +60,15 @@ namespace dml::core
                 auto &current_device = *(dispatcher.begin() + current_device_idx);
                 current_device_idx   = (current_device_idx + 1) % device_count;
 
-                if (util::get_numa_id() != current_device.numa_id())
+                if (own_numa_id != current_device.numa_id())
                 {
                     tried_devices++;
                     continue;
                 }
 
-                auto status = enqueue(current_device, dsc, completion_record);
+                auto status = enqueue(current_device, dsc);
 
-                if (status != detail::submission_status::success)
+                if (status != dml::detail::submission_status::success)
                 {
                     tried_devices++;
                 }
@@ -83,11 +78,11 @@ namespace dml::core
                 }
             }
 
-            return detail::submission_status::queue_busy;
+            return dml::detail::submission_status::queue_busy;
         }
 #else
         static_cast<void>(dsc);
-        static_cast<void>(completion_record);
+        static_cast<void>(numa_id);
 #endif
 
         return dml::detail::submission_status::failure;

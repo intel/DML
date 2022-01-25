@@ -22,9 +22,8 @@
 #ifndef DML_DETAIL_EXECUTE_HPP
 #define DML_DETAIL_EXECUTE_HPP
 
-#include <dml/detail/ml/operation.hpp>
 #include <dml/detail/ml/result.hpp>
-#include <dml/detail/ml/validation.hpp>
+#include <dml/detail/ml/view.hpp>
 #include <dml/hl/detail/utils.hpp>
 #include <dml/hl/execution_path.hpp>
 #include <dml/hl/status_code.hpp>
@@ -38,43 +37,41 @@ namespace dml::detail
      *
      * @tparam execution_path   Type of execution path
      * @tparam operation        Type of operation
-     * @tparam make_operation_t Type of callable make functor
+     * @tparam make_task_t      Type of callable make functor
      * @tparam range_check_t    Type of callable range check
      *
-     * @param make_operation    Instance of callable make functor
+     * @param make_task         Instance of callable make functor
      * @param range_check       Instance of callable range check
      *
      * @return Result of operation
      */
-    template <typename execution_path, typename operation, typename make_operation_t, typename range_check_t = detail::always_success>
-    inline auto execute(make_operation_t &&make_operation, range_check_t range_check = range_check_t()) noexcept
+    template <typename execution_path_t, typename operation, typename make_task_t, typename range_check_t = detail::always_success>
+    inline auto execute(make_task_t &&make_task, range_check_t range_check = range_check_t()) noexcept
     {
+        constexpr auto numa = std::numeric_limits<std::uint32_t>::max();
+
+        using execution_path = typename execution_path_t::execution_path;
+
         if (auto status = range_check(); status != status_code::ok)
         {
             return typename operation::result_type{ status };
         }
 
-        auto descriptor = make_operation();
+        auto task = make_task();
 
-        if (auto status = ml::validate(descriptor); status != detail::validation_status::success)
+        auto [validation_status, submission_status] = execute<execution_path>(make_view(task), numa);
+
+        if (validation_status != detail::validation_status::success)
         {
-            return typename operation::result_type{ detail::to_own(status) };
+            return typename operation::result_type{ detail::to_own(validation_status) };
         }
 
-        auto record = detail::ml::result();
-        // If execution_path::run returns status code
-        auto status = execution_path()(descriptor, record);
-        if (status != detail::submission_status::success)
+        if (submission_status != detail::submission_status::success)
         {
             return typename operation::result_type{ status_code::error };
         }
 
-        if constexpr (std::is_same_v<execution_path, hardware>)
-        {
-            detail::ml::wait(record);
-        }
-
-        return make_result<typename operation::result_type>(record);
+        return make_result<typename operation::result_type>(make_view(task).get_completion_record());
     }
 
 }  // namespace dml::detail

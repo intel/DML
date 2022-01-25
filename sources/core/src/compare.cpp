@@ -14,6 +14,7 @@
  *
  */
 
+#include <core/utils.hpp>
 #include <dml/detail/common/flags.hpp>
 #include <dml/detail/common/specific_flags.hpp>
 #include <dml/detail/common/status.hpp>
@@ -26,8 +27,10 @@
 
 namespace dml::core::kernels
 {
-    void compare(compare_descriptor dsc, compare_completion_record record) noexcept
+    void compare(const_view<descriptor, operation::compare> dsc) noexcept
     {
+        auto record = make_view<operation::compare>(get_completion_record(dsc));
+
         const auto src1            = reinterpret_cast<byte_t *>(dsc.source_1_address());
         const auto src2            = reinterpret_cast<byte_t *>(dsc.source_2_address());
         const auto transfer_size   = dsc.transfer_size();

@@ -35,7 +35,8 @@ namespace dml::detail
         wrong_dif_size,
         wrong_dualcast_address,
         wrong_batch_size,
-        unsupported_operation
+        unsupported_operation,
+        error
     };
 
     enum class submission_status

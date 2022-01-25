@@ -79,38 +79,32 @@ namespace dml
          * @return Executor return value (if present)
          */
         template <typename task_t>
-        auto execute(task_t &&task) const noexcept(noexcept(std::declval<executor_t>()(std::forward<task_t>(task))))
+        auto execute(task_t&& task) const noexcept(noexcept(std::declval<executor_t>()(std::forward<task_t>(task))))
         {
             return executor_(std::forward<task_t>(task));
-        }
-
-        /**
-         * @brief Constructs a @ref handler, but with range check
-         *
-         * @tparam operation     Type of operation
-         * @tparam range_check_t Type of callable range check
-         * @param check          Instance of callable range check
-         *
-         * @return Operation @ref handler, if range check fails - empty handler.
-         */
-        template <typename operation, typename range_check_t>
-        auto make_handler_with_range_check(range_check_t &&check) const
-        {
-            return handler<operation, allocator_t>(check(), allocator_);
         }
 
         /**
          * @brief Constructs a @ref handler
          *
          * @tparam operation Type of operation
-         * @param status     Initial status for a handler
          *
          * @return Operation @ref handler
          */
-        template <typename operation>
-        auto make_handler(status_code status) const
+        template <typename operation, typename task_t>
+        [[nodiscard]] auto make_handler(task_t&& task) const
         {
-            return handler<operation, allocator_t>(status, allocator_);
+            return handler<operation, allocator_t>(std::forward<task_t>(task), allocator_);
+        }
+
+        /**
+         * @brief Returns allocator instance
+         *
+         * @return allocator instance
+         */
+        [[nodiscard]] auto get_allocator() const noexcept
+        {
+            return allocator_;
         }
 
     private:

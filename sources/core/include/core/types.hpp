@@ -23,15 +23,9 @@ namespace dml::core
 {
     using byte_t = dml::detail::byte_t;
 
-    struct alignas(64u) descriptor
-    {
-        byte_t bytes[64u]{};
-    };
+    using descriptor = detail::descriptor;
 
-    struct alignas(32u) completion_record
-    {
-        byte_t bytes[32u]{};
-    };
+    using completion_record = detail::completion_record;
 
     using status_t = dml::detail::status_t;
 
@@ -43,11 +37,11 @@ namespace dml::core
 
     using operation_specific_flags_t = dml::detail::operation_specific_flags_t;
 
-    using completion_interrupt_handle_t = std::uint16_t;
+    using completion_interrupt_handle_t = detail::completion_interrupt_handle_t;
 
     using transfer_size_t = dml::detail::transfer_size_t;
 
-    using address_t = uint64_t;
+    using address_t = detail::address_t;
 
     using pattern_t = dml::detail::pattern_t;
 

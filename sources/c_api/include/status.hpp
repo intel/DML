@@ -153,9 +153,9 @@ namespace dml
             case detail::submission_status::success:
                 return DML_STATUS_OK;
             case detail::submission_status::queue_busy:
-                return DML_STATUS_WORK_QUEUE_OVERFLOW_ERROR;
-            case detail::submission_status::failure:
                 return DML_STATUS_WORK_QUEUES_NOT_AVAILABLE;
+            case detail::submission_status::failure:
+                return DML_STATUS_LIBACCEL_NOT_FOUND;
             default:
                 return DML_STATUS_INTERNAL_ERROR;
         }

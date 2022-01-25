@@ -22,7 +22,6 @@
 #ifndef DML_DETAIL_SUBMIT_HPP
 #define DML_DETAIL_SUBMIT_HPP
 
-#include <dml/detail/ml/validation.hpp>
 #include <dml/hl/detail/handler.hpp>
 #include <dml/hl/detail/utils.hpp>
 #include <dml/hl/execution_path.hpp>
@@ -36,70 +35,53 @@ namespace dml::detail
      * @tparam operation_t           Type of operation
      * @tparam execution_interface_t Type of execution interface
      * @tparam range_check_t         Type of callable range check
-     * @tparam make_operation_t      Type of callable make functor
+     * @tparam make_task_t           Type of callable make functor
      * @param executor               Instance of execution interface
      * @param range_check            Instance of callable range check
-     * @param make_operation         Instance of callable make functor
+     * @param make_task              Instance of callable make functor
      *
      * @return Handler for operation
      */
-    template <typename execution_path,
+    template <typename execution_path_t,
               typename operation_t,
               typename execution_interface_t,
-              typename make_operation_t,
+              typename make_task_t,
               typename range_check_t = detail::always_success>
     inline auto submit(const execution_interface_t& executor,
-                       make_operation_t&&           make_operation,
+                       make_task_t&&           make_task,
                        range_check_t                range_check = range_check_t())
     {
+        constexpr auto numa = std::numeric_limits<std::uint32_t>::max();
+
+        using execution_path = typename execution_path_t::execution_path;
+
+        auto op_handler = executor.template make_handler<operation_t>(make_task());
+
         if (auto status = range_check(); status != status_code::ok)
         {
-            return executor.template make_handler<operation_t>(status);
-        }
-
-        auto operation = make_operation();
-
-        auto op_handler = executor.template make_handler<operation_t>(detail::to_own(detail::ml::validate(operation)));
-
-        if (!op_handler.valid())
-        {
+            detail::set_status(op_handler, status);
             return op_handler;
         }
 
-        // If execution_path{} returns status code (hw path)
+        auto task_view = detail::get_task_view(op_handler);
+
+        auto [validation_status, submission_status] = submit<execution_path>(task_view, numa);
+
+        if (validation_status != detail::validation_status::success)
+        {
+            detail::set_status(op_handler, to_own(validation_status));
+            return op_handler;
+        }
+
+        if (submission_status != detail::submission_status::success)
+        {
+            detail::set_status(op_handler, status_code::error);
+            return op_handler;
+        }
+
         if constexpr (std::is_same_v<execution_path, hardware>)
         {
-            auto& result = detail::get_ml_result(op_handler);
-            auto  status = executor.execute(
-                [operation, &result]() mutable
-                {
-                    return execution_path{}(operation, result);
-                });
-
-            if (status != detail::submission_status::success)
-            {
-                if(status == detail::submission_status::queue_busy)
-                {
-                    return executor.template make_handler<operation_t>(status_code::queue_busy);
-                }
-                else
-                {
-                    return executor.template make_handler<operation_t>(status_code::error);
-                }
-            }
-        }
-        else
-        {
-            auto& result = detail::get_ml_result(op_handler);
-            executor.execute(
-                [operation, &result]() mutable
-                {
-                    auto status = execution_path{}(operation, result);
-                    if (status != detail::submission_status::success)
-                    {
-                        result.bytes[0] = 0xFF;  // Temporary
-                    }
-                });
+            detail::set_hw_path(op_handler);
         }
 
         return op_handler;

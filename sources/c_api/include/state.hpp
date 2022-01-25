@@ -18,15 +18,14 @@
 #define DML_STATE_HPP
 
 #include <cstddef>
-#include <dml/detail/common/types.hpp>
+#include <dml/detail/ml/task.hpp>
 
 namespace dml
 {
     struct state
     {
-        dml::detail::ml::operation dsc;
-        dml::detail::ml::result    record;
-        dml_path_t                 path;
+        dml::detail::ml::task<dml::detail::ml::stack_allocator> task;
+        dml_path_t                                              path;
     };
 }  // namespace dml
 

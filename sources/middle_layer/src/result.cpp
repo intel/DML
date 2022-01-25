@@ -14,109 +14,34 @@
  *
  */
 
-#include <core/completion_record_views.hpp>
-#include <core/descriptor_views.hpp>
+#include <core/view.hpp>
 #include <dml/detail/ml/result.hpp>
-
-#include "ml_utils.hpp"
-
-#if defined(linux)
-#include <x86intrin.h>
-#else
-#include <emmintrin.h>
-#include <intrin.h>
-#endif
 
 namespace dml::detail::ml
 {
-    /**
-     * @brief Class that allows to defer scope exit to the moment when a certain address is changed
-     */
-    class awaiter final
+    detail::execution_status get_status(completion_record &record) noexcept
     {
-    public:
-        /**
-         * @brief Constructor of the class
-         *
-         * @param address       pointer to memory that should be asynchronously changed
-         * @param initial_value value to compare with
-         * @param period        number of clocks between checks
-         */
-        explicit awaiter(volatile void *address, uint8_t initial_value, uint32_t period = 200) noexcept:
-            address_ptr_(reinterpret_cast<volatile uint8_t *>(address)),
-            period_(period),
-            initial_value_(initial_value)
-        {
-            // Empty constructor
-        }
-
-        /**
-         * @brief Destructor that performs actual wait
-         */
-        ~awaiter() noexcept
-        {
-#ifdef DML_EFFICIENT_WAIT
-            while (initial_value_ == *address_ptr_)
-            {
-                monitor_address(address_ptr_);
-
-                auto start = current_time();
-                wait_until(start + period_, idle_state_);
-            }
-#else
-            while (initial_value_ == *address_ptr_)
-            {
-                _mm_pause();
-            }
-#endif
-        }
-
-    private:
-        volatile uint8_t *address_ptr_;        /**<Pointer to memory that should be asynchronously changed */
-        uint32_t          period_        = 0u; /**<Number of clocks between checks */
-        uint8_t           initial_value_ = 0u; /**<Value to compare with */
-        uint32_t          idle_state_    = 0u; /**<State for CPU wait control */
-    };
-
-    void wait(result &res) noexcept
-    {
-        awaiter wait_for(static_cast<volatile void *>(&res), 0);
+        return static_cast<execution_status>(core::any_completion_record(record).status());
     }
 
-    void bind(operation &op, result &res) noexcept
+    detail::result_t get_result(completion_record &record) noexcept
     {
-        auto view = core::any_descriptor(as_core(op));
-
-        view.flags() |= static_cast<flags_t>(flag::completion_record_address_valid) | static_cast<flags_t>(flag::request_completion_record);
-
-        view.completion_record_address() = reinterpret_cast<address_t>(&res);
-
-        res.bytes[0] = 0;
+        return core::any_completion_record(record).result();
     }
 
-    detail::execution_status get_status(result &res) noexcept
+    detail::transfer_size_t get_bytes_completed(completion_record &record) noexcept
     {
-        return static_cast<execution_status>(core::any_completion_record(as_core(res)).status());
+        return core::any_completion_record(record).bytes_completed();
     }
 
-    detail::result_t get_result(result &res) noexcept
+    detail::transfer_size_t get_delta_record_size(completion_record &record) noexcept
     {
-        return core::any_completion_record(as_core(res)).result();
+        return core::make_view<core::operation::create_delta>(record).delta_record_size();
     }
 
-    detail::transfer_size_t get_bytes_completed(result &res) noexcept
+    detail::transfer_size_t get_crc_value(completion_record &record) noexcept
     {
-        return core::any_completion_record(as_core(res)).bytes_completed();
-    }
-
-    detail::transfer_size_t get_delta_record_size(result &res) noexcept
-    {
-        return core::create_delta_completion_record(as_core(res)).delta_record_size();
-    }
-
-    detail::transfer_size_t get_crc_value(result &res) noexcept
-    {
-        return core::crc_completion_record(as_core(res)).crc_value();
+        return core::make_view<core::operation::crc>(record).crc_value();
     }
 
 }  // namespace dml::detail::ml

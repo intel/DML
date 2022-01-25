@@ -14,6 +14,7 @@
  *
  */
 
+#include <core/utils.hpp>
 #include <dml/detail/common/specific_flags.hpp>
 #include <dml/detail/common/status.hpp>
 #include <dml/detail/common/utils/enum.hpp>
@@ -24,8 +25,10 @@
 
 namespace dml::core::kernels
 {
-    void crc(crc_descriptor dsc, crc_completion_record record) noexcept
+    void crc(const_view<descriptor, operation::crc> dsc) noexcept
     {
+        auto record = make_view<operation::crc>(get_completion_record(dsc));
+
         const auto src           = reinterpret_cast<byte_t *>(dsc.source_address());
         const auto transfer_size = dsc.transfer_size();
         const auto crc_seed      = dsc.crc_seed();

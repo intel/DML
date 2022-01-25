@@ -16,6 +16,7 @@
 
 #include <dml_dif.h>
 
+#include <core/utils.hpp>
 #include <cstring>
 #include <dml/detail/common/status.hpp>
 #include <dml/detail/common/utils/enum.hpp>
@@ -26,8 +27,10 @@
 
 namespace dml::core::kernels
 {
-    void dif_insert(dif_insert_descriptor dsc, dif_insert_completion_record record) noexcept
+    void dif_insert(const_view<descriptor, operation::dif_insert> dsc) noexcept
     {
+        auto record = make_view<operation::dif_insert>(get_completion_record(dsc));
+
         const auto src              = reinterpret_cast<byte_t *>(dsc.source_address());
         const auto dst              = reinterpret_cast<byte_t *>(dsc.destination_address());
         const auto transfer_size    = dsc.transfer_size();

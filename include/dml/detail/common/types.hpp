@@ -24,6 +24,32 @@ namespace dml::detail
 {
     using byte_t = std::uint8_t;
 
+    struct alignas(64u) descriptor
+    {
+        descriptor() noexcept : bytes()
+        {
+            for (auto& byte : bytes)
+            {
+                byte = 0u;
+            }
+        }
+
+        byte_t bytes[64];
+    };
+
+    struct alignas(32) completion_record
+    {
+        completion_record() noexcept : bytes()
+        {
+            for (auto& byte : bytes)
+            {
+                byte = 0u;
+            }
+        }
+
+        byte_t bytes[32];
+    };
+
     using size_t = std::size_t;
 
     using transfer_size_t = std::uint32_t;
@@ -40,7 +66,7 @@ namespace dml::detail
 
     using transfer_size_t = std::uint32_t;
 
-    using address_t = uint64_t;
+    using address_t = uintptr_t;
 
     using pattern_t = uint64_t;
 

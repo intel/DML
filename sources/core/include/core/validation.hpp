@@ -22,7 +22,7 @@
 
 namespace dml::core
 {
-    [[nodiscard]] dml::detail::validation_status validate(descriptor &dsc) noexcept;
+    [[nodiscard]] dml::detail::validation_status validate(const descriptor &dsc) noexcept;
 }  // namespace dml::core
 
 #endif  //DML_CORE_VALIDATION_HPP

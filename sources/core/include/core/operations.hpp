@@ -17,7 +17,7 @@
 #ifndef DML_CORE_OPERATIONS_HPP
 #define DML_CORE_OPERATIONS_HPP
 
-#include <dml/detail/common/types.hpp>
+#include <core/types.hpp>
 #include <type_traits>
 
 namespace dml::core
@@ -27,7 +27,7 @@ namespace dml::core
         nop             = 0x00,
         batch           = 0x01,
         drain           = 0x02,
-        memory_move     = 0x03,
+        mem_move        = 0x03,
         fill            = 0x04,
         compare         = 0x05,
         compare_pattern = 0x06,

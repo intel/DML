@@ -17,6 +17,7 @@
 #include <core/descriptor_views.hpp>
 #include <core/operations.hpp>
 #include <core/validation.hpp>
+#include <core/view.hpp>
 #include <dml/detail/common/status.hpp>
 
 #include "utils.hpp"
@@ -25,100 +26,98 @@ namespace dml::core
 {
     static constexpr uint32_t dif_block_sizes[4] = { 512u, 520u, 4096u, 4104u };
 
-    static dml::detail::validation_status validate(nop_descriptor nop) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::nop> nop) noexcept;
 
-    static dml::detail::validation_status validate(batch_descriptor batch) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::batch> batch) noexcept;
 
-    static dml::detail::validation_status validate(drain_descriptor drain) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::drain> drain) noexcept;
 
-    static dml::detail::validation_status validate(mem_move_descriptor mem_move) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::mem_move> mem_move) noexcept;
 
-    static dml::detail::validation_status validate(fill_descriptor fill) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::fill> fill) noexcept;
 
-    static dml::detail::validation_status validate(compare_descriptor compare) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::compare> compare) noexcept;
 
-    static dml::detail::validation_status validate(compare_pattern_descriptor compare_pattern) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::compare_pattern> compare_pattern) noexcept;
 
-    static dml::detail::validation_status validate(create_delta_descriptor create_delta) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::create_delta> create_delta) noexcept;
 
-    static dml::detail::validation_status validate(apply_delta_descriptor apply_delta) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::apply_delta> apply_delta) noexcept;
 
-    static dml::detail::validation_status validate(dualcast_descriptor dualcast) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::dualcast> dualcast) noexcept;
 
-    static dml::detail::validation_status validate(crc_descriptor crc) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::crc> crc) noexcept;
 
-    static dml::detail::validation_status validate(copy_crc_descriptor copy_crc) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::copy_crc> copy_crc) noexcept;
 
-    static dml::detail::validation_status validate(dif_check_descriptor dif_check) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::dif_check> dif_check) noexcept;
 
-    static dml::detail::validation_status validate(dif_insert_descriptor dif_insert) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::dif_insert> dif_insert) noexcept;
 
-    static dml::detail::validation_status validate(dif_strip_descriptor dif_strip) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::dif_strip> dif_strip) noexcept;
 
-    static dml::detail::validation_status validate(dif_update_descriptor dif_update) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::dif_update> dif_update) noexcept;
 
-    static dml::detail::validation_status validate(cache_flush_descriptor cache_flush) noexcept;
+    static dml::detail::validation_status validate(const_view<descriptor, operation::cache_flush> cache_flush) noexcept;
 
-    dml::detail::validation_status validate(descriptor &dsc) noexcept
+    dml::detail::validation_status validate(const descriptor &dsc) noexcept
     {
-        auto view = any_descriptor(dsc);
-
-        switch (static_cast<operation>(view.operation()))
+        switch (static_cast<operation>(any_descriptor(dsc).operation()))
         {
             case operation::nop:
-                return validate(nop_descriptor(dsc));
+                return validate(make_view<operation::nop>(dsc));
             case operation::batch:
-                return validate(batch_descriptor(dsc));
+                return validate(make_view<operation::batch>(dsc));
             case operation::drain:
-                return validate(drain_descriptor(dsc));
-            case operation::memory_move:
-                return validate(mem_move_descriptor(dsc));
+                return validate(make_view<operation::drain>(dsc));
+            case operation::mem_move:
+                return validate(make_view<operation::mem_move>(dsc));
             case operation::fill:
-                return validate(fill_descriptor(dsc));
+                return validate(make_view<operation::fill>(dsc));
             case operation::compare:
-                return validate(compare_descriptor(dsc));
+                return validate(make_view<operation::compare>(dsc));
             case operation::compare_pattern:
-                return validate(compare_pattern_descriptor(dsc));
+                return validate(make_view<operation::compare_pattern>(dsc));
             case operation::create_delta:
-                return validate(create_delta_descriptor(dsc));
+                return validate(make_view<operation::create_delta>(dsc));
             case operation::apply_delta:
-                return validate(apply_delta_descriptor(dsc));
+                return validate(make_view<operation::apply_delta>(dsc));
             case operation::dualcast:
-                return validate(dualcast_descriptor(dsc));
+                return validate(make_view<operation::dualcast>(dsc));
             case operation::crc:
-                return validate(crc_descriptor(dsc));
+                return validate(make_view<operation::crc>(dsc));
             case operation::copy_crc:
-                return validate(copy_crc_descriptor(dsc));
+                return validate(make_view<operation::copy_crc>(dsc));
             case operation::dif_check:
-                return validate(dif_check_descriptor(dsc));
+                return validate(make_view<operation::dif_check>(dsc));
             case operation::dif_insert:
-                return validate(dif_insert_descriptor(dsc));
+                return validate(make_view<operation::dif_insert>(dsc));
             case operation::dif_strip:
-                return validate(dif_strip_descriptor(dsc));
+                return validate(make_view<operation::dif_strip>(dsc));
             case operation::dif_update:
-                return validate(dif_update_descriptor(dsc));
+                return validate(make_view<operation::dif_update>(dsc));
             case operation::cache_flush:
-                return validate(cache_flush_descriptor(dsc));
+                return validate(make_view<operation::cache_flush>(dsc));
             default:
                 return dml::detail::validation_status::unsupported_operation;
         }
     }
 
-    static dml::detail::validation_status validate(nop_descriptor nop) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::nop> nop) noexcept
     {
         static_cast<void>(nop);
 
         return dml::detail::validation_status::success;
     }
 
-    static dml::detail::validation_status validate(drain_descriptor drain) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::drain> drain) noexcept
     {
         static_cast<void>(drain);
 
         return dml::detail::validation_status::success;
     }
 
-    static dml::detail::validation_status validate(mem_move_descriptor mem_move) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::mem_move> mem_move) noexcept
     {
         RETURN_STATUS_IF(any_equal_zero(mem_move.source_address(), mem_move.destination_address()),
                          dml::detail::validation_status::null_address);
@@ -127,7 +126,7 @@ namespace dml::core
         return dml::detail::validation_status::success;
     }
 
-    static dml::detail::validation_status validate(fill_descriptor fill) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::fill> fill) noexcept
     {
         RETURN_STATUS_IF(any_equal_zero(fill.destination_address()), dml::detail::validation_status::null_address);
         RETURN_STATUS_IF(any_equal_zero(fill.transfer_size()), dml::detail::validation_status::null_size);
@@ -135,7 +134,7 @@ namespace dml::core
         return dml::detail::validation_status::success;
     }
 
-    static dml::detail::validation_status validate(compare_descriptor compare) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::compare> compare) noexcept
     {
         RETURN_STATUS_IF(any_equal_zero(compare.source_1_address(), compare.source_2_address()),
                          dml::detail::validation_status::null_address);
@@ -144,7 +143,7 @@ namespace dml::core
         return dml::detail::validation_status::success;
     }
 
-    static dml::detail::validation_status validate(compare_pattern_descriptor compare_pattern) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::compare_pattern> compare_pattern) noexcept
     {
         RETURN_STATUS_IF(any_equal_zero(compare_pattern.source_address()), dml::detail::validation_status::null_address);
         RETURN_STATUS_IF(any_equal_zero(compare_pattern.transfer_size()), dml::detail::validation_status::null_size);
@@ -152,7 +151,7 @@ namespace dml::core
         return dml::detail::validation_status::success;
     }
 
-    static dml::detail::validation_status validate(create_delta_descriptor create_delta) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::create_delta> create_delta) noexcept
     {
         constexpr auto max_size = 0x80000;
 
@@ -177,7 +176,7 @@ namespace dml::core
         return dml::detail::validation_status::success;
     }
 
-    static dml::detail::validation_status validate(apply_delta_descriptor apply_delta) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::apply_delta> apply_delta) noexcept
     {
         constexpr auto max_size = 0x80000;
 
@@ -204,7 +203,7 @@ namespace dml::core
         return dml::detail::validation_status::success;
     }
 
-    static dml::detail::validation_status validate(dualcast_descriptor dualcast) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::dualcast> dualcast) noexcept
     {
         RETURN_STATUS_IF(any_equal_zero(dualcast.source_address(), dualcast.destination_1_address(), dualcast.destination_2_address()),
                          dml::detail::validation_status::null_address);
@@ -225,7 +224,7 @@ namespace dml::core
         return dml::detail::validation_status::success;
     }
 
-    static dml::detail::validation_status validate(crc_descriptor crc) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::crc> crc) noexcept
     {
         RETURN_STATUS_IF(any_equal_zero(crc.source_address()), dml::detail::validation_status::null_address);
         RETURN_STATUS_IF(any_equal_zero(crc.transfer_size()), dml::detail::validation_status::null_size);
@@ -233,7 +232,7 @@ namespace dml::core
         return dml::detail::validation_status::success;
     }
 
-    static dml::detail::validation_status validate(copy_crc_descriptor copy_crc) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::copy_crc> copy_crc) noexcept
     {
         RETURN_STATUS_IF(any_equal_zero(copy_crc.source_address(), copy_crc.destination_address()),
                          dml::detail::validation_status::null_address);
@@ -245,7 +244,7 @@ namespace dml::core
         return dml::detail::validation_status::success;
     }
 
-    static dml::detail::validation_status validate(cache_flush_descriptor cache_flush) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::cache_flush> cache_flush) noexcept
     {
         RETURN_STATUS_IF(any_equal_zero(cache_flush.destination_address()), dml::detail::validation_status::null_address);
         RETURN_STATUS_IF(any_equal_zero(cache_flush.transfer_size()), dml::detail::validation_status::null_size);
@@ -253,7 +252,7 @@ namespace dml::core
         return dml::detail::validation_status::success;
     }
 
-    static dml::detail::validation_status validate(dif_check_descriptor dif_check) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::dif_check> dif_check) noexcept
     {
         const auto block_size = dif_block_sizes[dif_check.dif_flags() & 0b11];
 
@@ -264,7 +263,7 @@ namespace dml::core
         return dml::detail::validation_status::success;
     }
 
-    static dml::detail::validation_status validate(dif_insert_descriptor dif_insert) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::dif_insert> dif_insert) noexcept
     {
         const auto block_size = dif_block_sizes[dif_insert.dif_flags() & 0b11];
 
@@ -281,7 +280,7 @@ namespace dml::core
         return dml::detail::validation_status::success;
     }
 
-    static dml::detail::validation_status validate(dif_strip_descriptor dif_strip) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::dif_strip> dif_strip) noexcept
     {
         const auto block_size = dif_block_sizes[dif_strip.dif_flags() & 0b11];
 
@@ -308,7 +307,7 @@ namespace dml::core
         return dml::detail::validation_status::success;
     }
 
-    static dml::detail::validation_status validate(dif_update_descriptor dif_update) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::dif_update> dif_update) noexcept
     {
         const auto block_size = dif_block_sizes[dif_update.dif_flags() & 0b11];
 
@@ -322,7 +321,7 @@ namespace dml::core
         return dml::detail::validation_status::success;
     }
 
-    static dml::detail::validation_status validate(batch_descriptor batch) noexcept
+    static dml::detail::validation_status validate(const_view<descriptor, operation::batch> batch) noexcept
     {
         RETURN_STATUS_IF(any_equal_zero(batch.descriptor_list_address()), dml::detail::validation_status::null_address);
         RETURN_STATUS_IF(batch.descriptors_count() < 4, dml::detail::validation_status::wrong_batch_size);

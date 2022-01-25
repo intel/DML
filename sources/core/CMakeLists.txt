@@ -43,6 +43,8 @@ add_library(dml_core OBJECT
         include/core/validation.hpp
         include/core/device.hpp
         include/core/types.hpp
+        include/core/view.hpp
+        include/core/utils.hpp
         )
 
 target_link_libraries(dml_core

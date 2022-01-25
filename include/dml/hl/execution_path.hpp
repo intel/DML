@@ -65,16 +65,9 @@ namespace dml
         using default_allocator = std::allocator<byte_t>;
 
         /**
-         * @brief Executes Middle Layer operation on a software execution path
-         *
-         * @tparam operation Type of Middle Layer operation
-         * @param op         Instance of Middle Layer operation
-         * @param res        Instance of Middle Layer result
+         * @brief Proxy for lower level execution path
          */
-        auto operator()(detail::ml::operation &op, detail::ml::result &res) const noexcept
-        {
-            return detail::ml::execution_path::software::submit(op, res);
-        }
+        using execution_path = detail::ml::execution_path::software;
     };
 
     /**
@@ -110,18 +103,9 @@ namespace dml
         using default_allocator = std::allocator<byte_t>;
 
         /**
-         * @brief Executes Middle Layer operation on a hardware execution path
-         *
-         * @tparam operation Type of Middle Layer operation
-         * @param op         Instance of Middle Layer operation
-         * @param res        Instance of Middle Layer result
-         *
-         * @return @ref status_code::ok if submission was a success, error code otherwise
+         * @brief Proxy for lower level execution path
          */
-        [[nodiscard]] auto operator()(detail::ml::operation &op, detail::ml::result &res) const noexcept
-        {
-            return detail::ml::execution_path::hardware::submit(op, res);
-        }
+        using execution_path = detail::ml::execution_path::hardware;
     };
 
     /**

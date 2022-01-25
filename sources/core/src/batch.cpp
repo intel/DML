@@ -17,6 +17,7 @@
 #include <core/completion_record_views.hpp>
 #include <core/descriptor_views.hpp>
 #include <core/operations.hpp>
+#include <core/utils.hpp>
 #include <dml/detail/common/status.hpp>
 #include <dml/detail/common/utils/enum.hpp>
 
@@ -25,8 +26,10 @@
 
 namespace dml::core::kernels
 {
-    void batch(batch_descriptor dsc, batch_completion_record record) noexcept
+    void batch(const_view<descriptor, operation::batch> dsc) noexcept
     {
+        auto record = make_view<operation::batch>(get_completion_record(dsc));
+
         const auto operations        = reinterpret_cast<descriptor *>(dsc.descriptor_list_address());
         const auto descriptors_count = dsc.descriptors_count();
 
@@ -35,57 +38,57 @@ namespace dml::core::kernels
 
         while (index < descriptors_count && status == dml::detail::execution_status::processing)
         {
-            auto &current_dsc    = operations[index];
-            auto &current_record = *reinterpret_cast<completion_record *>(any_descriptor(current_dsc).completion_record_address());
+            const auto &current_dsc    = operations[index];
+            auto       &current_record = *reinterpret_cast<completion_record *>(any_descriptor(current_dsc).completion_record_address());
 
             auto op = operation(any_descriptor(current_dsc).operation());
 
             switch (op)
             {
                 case operation::nop:
-                    kernels::nop(nop_descriptor(current_dsc), nop_completion_record(current_record));
+                    kernels::nop(make_view<operation::nop>(current_dsc));
                     break;
-                case operation::memory_move:
-                    kernels::mem_move(mem_move_descriptor(current_dsc), mem_move_completion_record(current_record));
+                case operation::mem_move:
+                    kernels::mem_move(make_view<operation::mem_move>(current_dsc));
                     break;
                 case operation::fill:
-                    kernels::fill(fill_descriptor(current_dsc), fill_completion_record(current_record));
+                    kernels::fill(make_view<operation::fill>(current_dsc));
                     break;
                 case operation::compare:
-                    kernels::compare(compare_descriptor(current_dsc), compare_completion_record(current_record));
+                    kernels::compare(make_view<operation::compare>(current_dsc));
                     break;
                 case operation::compare_pattern:
-                    kernels::compare_pattern(compare_pattern_descriptor(current_dsc), compare_pattern_completion_record(current_record));
+                    kernels::compare_pattern(make_view<operation::compare_pattern>(current_dsc));
                     break;
                 case operation::create_delta:
-                    kernels::create_delta(create_delta_descriptor(current_dsc), create_delta_completion_record(current_record));
+                    kernels::create_delta(make_view<operation::create_delta>(current_dsc));
                     break;
                 case operation::apply_delta:
-                    kernels::apply_delta(apply_delta_descriptor(current_dsc), apply_delta_completion_record(current_record));
+                    kernels::apply_delta(make_view<operation::apply_delta>(current_dsc));
                     break;
                 case operation::dualcast:
-                    kernels::dualcast(dualcast_descriptor(current_dsc), dualcast_completion_record(current_record));
+                    kernels::dualcast(make_view<operation::dualcast>(current_dsc));
                     break;
                 case operation::crc:
-                    kernels::crc(crc_descriptor(current_dsc), crc_completion_record(current_record));
+                    kernels::crc(make_view<operation::crc>(current_dsc));
                     break;
                 case operation::copy_crc:
-                    kernels::copy_crc(copy_crc_descriptor(current_dsc), crc_completion_record(current_record));
+                    kernels::copy_crc(make_view<operation::copy_crc>(current_dsc));
                     break;
                 case operation::dif_check:
-                    kernels::dif_check(dif_check_descriptor(current_dsc), dif_check_completion_record(current_record));
+                    kernels::dif_check(make_view<operation::dif_check>(current_dsc));
                     break;
                 case operation::dif_insert:
-                    kernels::dif_insert(dif_insert_descriptor(current_dsc), dif_insert_completion_record(current_record));
+                    kernels::dif_insert(make_view<operation::dif_insert>(current_dsc));
                     break;
                 case operation::dif_strip:
-                    kernels::dif_strip(dif_strip_descriptor(current_dsc), dif_strip_completion_record(current_record));
+                    kernels::dif_strip(make_view<operation::dif_strip>(current_dsc));
                     break;
                 case operation::dif_update:
-                    kernels::dif_update(dif_update_descriptor(current_dsc), dif_update_completion_record(current_record));
+                    kernels::dif_update(make_view<operation::dif_update>(current_dsc));
                     break;
                 case operation::cache_flush:
-                    kernels::cache_flush(cache_flush_descriptor(current_dsc), cache_flush_completion_record(current_record));
+                    kernels::cache_flush(make_view<operation::cache_flush>(current_dsc));
                     break;
                 default:
                     status = dml::detail::execution_status::batch_error;

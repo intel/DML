@@ -53,7 +53,7 @@ PROJECT_NAME           = "Intel DML Library"
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = "v0.1.6-beta"
+PROJECT_NUMBER         = "v0.1.7-beta"
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
@@ -73,7 +73,7 @@ PROJECT_LOGO           =
 # entered, it will be relative to the location where doxygen was started. If
 # left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = doc
+OUTPUT_DIRECTORY       = doc/build
 
 # If the CREATE_SUBDIRS tag is set to YES then doxygen will create 4096 sub-
 # directories (in 2 levels) under the output directory of each output format and
@@ -831,14 +831,7 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = examples \
-                         README.md \
-                         CONTRIBUTING.md \
-                         SECURITY.md \
-                         include \
-                         doc/LOW_LEVEL_API_GUIDE.md \
-                         doc/HIGH_LEVEL_API_GUIDE.md \
-                         doc/DML_REFERENCE_MANUAL.md \
-                         doc/RELEASE_NOTES.md
+                         include
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -960,12 +953,15 @@ EXCLUDE_SYMBOLS        = *_H__ \
                          DML_CORE_CHECK_* \
                          DML_BAD_* \
                          DML_PACKED_STRUCT_DECLARATION* \
+                         TEST_REGISTER* \
                          NULL \
                          DML_FUN \
                          OWN_API \
                          OWN_FUN \
                          OWN_API_INLINE \
-                         OWN_FUN_INLINE
+                         OWN_FUN_INLINE \
+                         DML_JOB_API_TEST_REGISTER \
+                         DML_UNIT_TEST_REGISTER
 
 # The EXAMPLE_PATH tag can be used to specify one or more files or directories
 # that contain example code fragments that are included (see the \include
@@ -1161,7 +1157,7 @@ IGNORE_PREFIX          =
 # If the GENERATE_HTML tag is set to YES, doxygen will generate HTML output
 # The default value is: YES.
 
-GENERATE_HTML          = YES
+GENERATE_HTML          = NO
 
 # The HTML_OUTPUT tag is used to specify where the HTML docs will be put. If a
 # relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
@@ -1169,7 +1165,7 @@ GENERATE_HTML          = YES
 # The default directory is: html.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_OUTPUT            = html
+HTML_OUTPUT            = doxygen_html
 
 # The HTML_FILE_EXTENSION tag can be used to specify the file extension for each
 # generated HTML page (for example: .htm, .php, .asp).
@@ -2024,7 +2020,7 @@ MAN_LINKS              = NO
 # captures the structure of the code including all documentation.
 # The default value is: NO.
 
-GENERATE_XML           = NO
+GENERATE_XML           = YES
 
 # The XML_OUTPUT tag is used to specify where the XML pages will be put. If a
 # relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
@@ -2032,7 +2028,7 @@ GENERATE_XML           = NO
 # The default directory is: xml.
 # This tag requires that the tag GENERATE_XML is set to YES.
 
-XML_OUTPUT             = xml
+XML_OUTPUT             = doxygen_xml
 
 # If the XML_PROGRAMLISTING tag is set to YES, doxygen will dump the program
 # listings (including syntax highlighting and cross-referencing information) to

@@ -14,7 +14,7 @@
 #
 
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
-project(Dml VERSION 0.1.6 LANGUAGES C CXX)
+project(Dml VERSION 0.1.7 LANGUAGES C CXX)
 
 set(PROJECT_SOVERSION 0)
 
@@ -27,7 +27,6 @@ else()
     set(DML_RECORD_SWITCHES OFF CACHE BOOL "Disable recording of switches for non-gnu compiler" FORCE)
 endif()
 
-# TODO: Remove all options below
 option(LOG_HW_INIT "Enables HW initialization log" OFF)
 option(EFFICIENT_WAIT "Enables usage of umonitor/umwait" OFF)
 
@@ -67,7 +66,6 @@ endif()
 get_git_revision()
 
 add_subdirectory(sources)
-add_subdirectory(examples)
 
 # Install rules
 install(EXPORT ${PROJECT_NAME}Targets

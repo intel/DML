@@ -17,44 +17,43 @@
 #ifndef DML_CORE_OWN_KERNELS_HPP
 #define DML_CORE_OWN_KERNELS_HPP
 
-#include <core/completion_record_views.hpp>
-#include <core/descriptor_views.hpp>
+#include <core/view.hpp>
 
 namespace dml::core::kernels
 {
-    void nop(nop_descriptor dsc, nop_completion_record record) noexcept;
+    void nop(const_view<descriptor, operation::nop> dsc) noexcept;
 
-    void batch(batch_descriptor dsc, batch_completion_record record) noexcept;
+    void batch(const_view<descriptor, operation::batch> dsc) noexcept;
 
-    void drain(drain_descriptor dsc, drain_completion_record record) noexcept;
+    void drain(const_view<descriptor, operation::drain> dsc) noexcept;
 
-    void mem_move(mem_move_descriptor dsc, mem_move_completion_record record) noexcept;
+    void mem_move(const_view<descriptor, operation::mem_move> dsc) noexcept;
 
-    void fill(fill_descriptor dsc, fill_completion_record record) noexcept;
+    void fill(const_view<descriptor, operation::fill> dsc) noexcept;
 
-    void compare(compare_descriptor dsc, compare_completion_record record) noexcept;
+    void compare(const_view<descriptor, operation::compare> dsc) noexcept;
 
-    void compare_pattern(compare_pattern_descriptor dsc, compare_pattern_completion_record record) noexcept;
+    void compare_pattern(const_view<descriptor, operation::compare_pattern>  dsc) noexcept;
 
-    void create_delta(create_delta_descriptor dsc, create_delta_completion_record record) noexcept;
+    void create_delta(const_view<descriptor, operation::create_delta>  dsc) noexcept;
 
-    void apply_delta(apply_delta_descriptor dsc, apply_delta_completion_record record) noexcept;
+    void apply_delta(const_view<descriptor, operation::apply_delta> dsc) noexcept;
 
-    void dualcast(dualcast_descriptor dsc, dualcast_completion_record record) noexcept;
+    void dualcast(const_view<descriptor, operation::dualcast> dsc) noexcept;
 
-    void crc(crc_descriptor dsc, crc_completion_record record) noexcept;
+    void crc(const_view<descriptor, operation::crc> dsc) noexcept;
 
-    void copy_crc(copy_crc_descriptor dsc, crc_completion_record record) noexcept;
+    void copy_crc(const_view<descriptor, operation::copy_crc> dsc) noexcept;
 
-    void dif_check(dif_check_descriptor dsc, dif_check_completion_record record) noexcept;
+    void dif_check(const_view<descriptor, operation::dif_check> dsc) noexcept;
 
-    void dif_insert(dif_insert_descriptor dsc, dif_insert_completion_record record) noexcept;
+    void dif_insert(const_view<descriptor, operation::dif_insert> dsc) noexcept;
 
-    void dif_strip(dif_strip_descriptor dsc, dif_strip_completion_record record) noexcept;
+    void dif_strip(const_view<descriptor, operation::dif_strip> dsc) noexcept;
 
-    void dif_update(dif_update_descriptor dsc, dif_update_completion_record record) noexcept;
+    void dif_update(const_view<descriptor, operation::dif_update> dsc) noexcept;
 
-    void cache_flush(cache_flush_descriptor dsc, cache_flush_completion_record record) noexcept;
+    void cache_flush(const_view<descriptor, operation::cache_flush> dsc) noexcept;
 }  // namespace dml::core::kernels
 
 #endif  //DML_CORE_OWN_KERNELS_HPP

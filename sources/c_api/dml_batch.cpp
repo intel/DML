@@ -17,10 +17,11 @@
 #include <dml/detail/common/flags.hpp>
 #include <dml/detail/common/specific_flags.hpp>
 #include <dml/detail/common/types.hpp>
-#include <dml/detail/ml/operation.hpp>
+#include <dml/detail/ml/execution_path.hpp>
+#include <dml/detail/ml/make_task.hpp>
 #include <dml/detail/ml/options.hpp>
 #include <dml/detail/ml/result.hpp>
-#include <dml/detail/ml/validation.hpp>
+#include <dml/detail/ml/view.hpp>
 
 #include "dml/dml.h"
 #include "macros.hpp"
@@ -33,7 +34,7 @@ namespace dml
 
     constexpr auto get_task_size() noexcept -> uint32_t
     {
-        return sizeof(dml::detail::ml::operation) + sizeof(dml::detail::ml::result);
+        return sizeof(dml::detail::descriptor) + sizeof(dml::detail::completion_record);
     }
 
     class batch
@@ -46,31 +47,36 @@ namespace dml
         template <typename make_operation>
         void add_by_index(uint32_t index, make_operation &&make) const noexcept
         {
-            const auto operations = reinterpret_cast<dml::detail::ml::operation *>(batch_data_);
+            const auto descriptors = reinterpret_cast<dml::detail::descriptor *>(batch_data_);
+            const auto records     = reinterpret_cast<dml::detail::completion_record *>(descriptors + tasks_count_);
 
-            operations[index] = make();
-
-            const auto results = reinterpret_cast<dml::detail::ml::result *>(operations + tasks_count_);
-
-            dml::detail::ml::bind(operations[index], results[index]);
+            detail::ml::make_view(descriptors[index], records[index]) = make();
         }
 
         [[nodiscard]] auto get_status(uint32_t index) const noexcept
         {
-            const auto operations = reinterpret_cast<dml::detail::ml::operation *>(batch_data_);
+            const auto operations = reinterpret_cast<dml::detail::descriptor *>(batch_data_);
 
-            const auto records = reinterpret_cast<dml::detail::ml::result *>(operations + tasks_count_);
+            const auto records = reinterpret_cast<dml::detail::completion_record *>(operations + tasks_count_);
 
             return to_own_status(dml::detail::ml::get_status(records[index]));
         }
 
         [[nodiscard]] auto get_result(uint32_t index) const noexcept
         {
-            const auto operations = reinterpret_cast<dml::detail::ml::operation *>(batch_data_);
+            const auto descriptors = reinterpret_cast<dml::detail::descriptor *>(batch_data_);
 
-            const auto records = reinterpret_cast<dml::detail::ml::result *>(operations + tasks_count_);
+            const auto records = reinterpret_cast<dml::detail::completion_record *>(descriptors + tasks_count_);
 
             return dml::detail::ml::get_result(records[index]);
+        }
+
+        [[nodiscard]] auto &get_record(uint32_t index) noexcept
+        {
+            const auto descriptors = reinterpret_cast<dml::detail::descriptor *>(batch_data_);
+            const auto records     = reinterpret_cast<dml::detail::completion_record *>(descriptors + tasks_count_);
+
+            return records[index];
         }
 
     private:
@@ -106,12 +112,13 @@ extern "C" dml_status_t dml_batch_set_nop_by_index(dml_job_t *dml_job_ptr, uint3
         return DML_STATUS_BATCH_TASK_INDEX_OVERFLOW;
     }
 
-    dml::batch(dml_job_ptr->destination_first_ptr, task_count)
-        .add_by_index(task_index,
-                      [&]
-                      {
-                          return dml::detail::ml::make_nop_operation(dml::detail::ml::nop_options(static_cast<uint16_t>(flags & 0xFFFF)));
-                      });
+    auto batch = dml::batch(dml_job_ptr->destination_first_ptr, task_count);
+
+    batch.add_by_index(task_index,
+                       [&]
+                       {
+                           return dml::detail::ml::make_nop_task(dml::detail::ml::nop_options(static_cast<uint16_t>(flags & 0xFFFF)));
+                       });
 
     return DML_STATUS_OK;
 }
@@ -138,23 +145,24 @@ extern "C" dml_status_t dml_batch_set_mem_move_by_index(dml_job_t            *dm
         return status;
     }
 
-    auto operation = dml::detail::ml::make_mem_move_operation(source_ptr,
-                                                              destination_ptr,
-                                                              byte_length,
-                                                              dml::detail::ml::mem_move_options(static_cast<uint16_t>(flags & 0xFFFF)));
+    auto batch = dml::batch(dml_job_ptr->destination_first_ptr, task_count);
 
-    status = dml::to_own_status(dml::detail::ml::validate(operation));
+    auto task = dml::detail::ml::make_mem_move_task(source_ptr,
+                                                    destination_ptr,
+                                                    byte_length,
+                                                    dml::detail::ml::mem_move_options(static_cast<uint16_t>(flags & 0xFFFF)));
+
+    status = dml::to_own_status(dml::detail::ml::execution_path::automatic::validate(dml::detail::ml::make_view(task).get_descriptor()));
     if (status != DML_STATUS_OK)
     {
         return status;
     }
 
-    dml::batch(dml_job_ptr->destination_first_ptr, task_count)
-        .add_by_index(task_index,
-                      [&]
-                      {
-                          return operation;
-                      });
+    batch.add_by_index(task_index,
+                       [&]
+                       {
+                           return std::move(task);
+                       });
 
     return DML_STATUS_OK;
 }
@@ -176,26 +184,27 @@ extern "C" dml_status_t dml_batch_set_dualcast_by_index(dml_job_t            *dm
         return DML_STATUS_BATCH_TASK_INDEX_OVERFLOW;
     }
 
-    auto operation =
-        dml::detail::ml::make_dualcast_operation(source_ptr,
-                                                 destination_first_ptr,
-                                                 destination_second_ptr,
-                                                 byte_length,
-                                                 dml::detail::ml::dualcast_options(static_cast<uint16_t>(flags & 0xFFFF)),
-                                                 dml::detail::ml::dualcast_specific_options(static_cast<uint8_t>((flags >> 16) & 0xFF)));
+    auto batch = dml::batch(dml_job_ptr->destination_first_ptr, task_count);
 
-    auto status = dml::to_own_status(dml::detail::ml::validate(operation));
+    auto task = dml::detail::ml::make_dualcast_task(source_ptr,
+                                                    destination_first_ptr,
+                                                    destination_second_ptr,
+                                                    byte_length,
+                                                    dml::detail::ml::dualcast_options(static_cast<uint16_t>(flags & 0xFFFF)),
+                                                    dml::detail::ml::dualcast_specific_options(static_cast<uint8_t>((flags >> 16) & 0xFF)));
+
+    auto status =
+        dml::to_own_status(dml::detail::ml::execution_path::automatic::validate(dml::detail::ml::make_view(task).get_descriptor()));
     if (status != DML_STATUS_OK)
     {
         return status;
     }
 
-    dml::batch(dml_job_ptr->destination_first_ptr, task_count)
-        .add_by_index(task_index,
-                      [&]
-                      {
-                          return operation;
-                      });
+    batch.add_by_index(task_index,
+                       [&]
+                       {
+                           return std::move(task);
+                       });
 
     return DML_STATUS_OK;
 }
@@ -217,23 +226,25 @@ extern "C" dml_status_t dml_batch_set_compare_by_index(dml_job_t            *dml
         return DML_STATUS_BATCH_TASK_INDEX_OVERFLOW;
     }
 
-    auto operation = make_compare_operation(source_first_ptr,
-                                            source_second_ptr,
-                                            byte_length,
-                                            dml::detail::ml::compare_options(static_cast<uint16_t>(flags & 0xFFFF)),
-                                            dml::detail::compare_result(expected_result));
-    auto status    = dml::to_own_status(dml::detail::ml::validate(operation));
+    auto batch = dml::batch(dml_job_ptr->destination_first_ptr, task_count);
+
+    auto task = dml::detail::ml::make_compare_task(source_first_ptr,
+                                                   source_second_ptr,
+                                                   byte_length,
+                                                   dml::detail::ml::compare_options(static_cast<uint16_t>(flags & 0xFFFF)),
+                                                   dml::detail::compare_result(expected_result));
+    auto status =
+        dml::to_own_status(dml::detail::ml::execution_path::automatic::validate(dml::detail::ml::make_view(task).get_descriptor()));
     if (status != DML_STATUS_OK)
     {
         return status;
     }
 
-    dml::batch(dml_job_ptr->destination_first_ptr, task_count)
-        .add_by_index(task_index,
-                      [&]
-                      {
-                          return operation;
-                      });
+    batch.add_by_index(task_index,
+                       [&]
+                       {
+                           return std::move(task);
+                       });
 
     return DML_STATUS_OK;
 }
@@ -256,24 +267,25 @@ extern "C" dml_status_t dml_batch_set_compare_pattern_by_index(dml_job_t        
         return DML_STATUS_BATCH_TASK_INDEX_OVERFLOW;
     }
 
-    auto operation =
-        dml::detail::ml::make_compare_pattern_operation(*reinterpret_cast<uint64_t *>(pattern_ptr),
-                                                        source_ptr,
-                                                        byte_length,
-                                                        dml::detail::ml::compare_pattern_options(static_cast<uint16_t>(flags & 0xFFFF)),
-                                                        dml::detail::compare_result(expected_result));
-    auto status = dml::to_own_status(dml::detail::ml::validate(operation));
+    auto batch = dml::batch(dml_job_ptr->destination_first_ptr, task_count);
+
+    auto task = dml::detail::ml::make_compare_pattern_task(*reinterpret_cast<uint64_t *>(pattern_ptr),
+                                                           source_ptr,
+                                                           byte_length,
+                                                           dml::detail::ml::compare_pattern_options(static_cast<uint16_t>(flags & 0xFFFF)),
+                                                           dml::detail::compare_result(expected_result));
+    auto status =
+        dml::to_own_status(dml::detail::ml::execution_path::automatic::validate(dml::detail::ml::make_view(task).get_descriptor()));
     if (status != DML_STATUS_OK)
     {
         return status;
     }
 
-    dml::batch(dml_job_ptr->destination_first_ptr, task_count)
-        .add_by_index(task_index,
-                      [&]
-                      {
-                          return operation;
-                      });
+    batch.add_by_index(task_index,
+                       [&]
+                       {
+                           return std::move(task);
+                       });
 
     return DML_STATUS_OK;
 }
@@ -301,23 +313,24 @@ extern "C" dml_status_t dml_batch_set_crc_by_index(dml_job_t            *dml_job
         return status;
     }
 
-    auto operation = dml::detail::ml::make_crc_operation(source_ptr,
-                                                         byte_length,
-                                                         *crc_seed_ptr,
-                                                         dml::detail::ml::crc_options(static_cast<uint16_t>(flags & 0xFFFF)),
-                                                         dml::detail::ml::crc_specific_options(static_cast<uint8_t>((flags >> 16) & 0xFF)));
-    status         = dml::to_own_status(dml::detail::ml::validate(operation));
+    auto batch = dml::batch(dml_job_ptr->destination_first_ptr, task_count);
+
+    auto task = dml::detail::ml::make_crc_task(source_ptr,
+                                               byte_length,
+                                               *crc_seed_ptr,
+                                               dml::detail::ml::crc_options(static_cast<uint16_t>(flags & 0xFFFF)),
+                                               dml::detail::ml::crc_specific_options(static_cast<uint8_t>((flags >> 16) & 0xFF)));
+    status    = dml::to_own_status(dml::detail::ml::execution_path::automatic::validate(dml::detail::ml::make_view(task).get_descriptor()));
     if (status != DML_STATUS_OK)
     {
         return status;
     }
 
-    dml::batch(dml_job_ptr->destination_first_ptr, task_count)
-        .add_by_index(task_index,
-                      [&]
-                      {
-                          return operation;
-                      });
+    batch.add_by_index(task_index,
+                       [&]
+                       {
+                           return std::move(task);
+                       });
 
     return DML_STATUS_OK;
 }
@@ -346,25 +359,25 @@ extern "C" dml_status_t dml_batch_set_copy_crc_by_index(dml_job_t            *dm
         return status;
     }
 
-    auto operation =
-        dml::detail::ml::make_copy_crc_operation(source_ptr,
-                                                 destination_ptr,
-                                                 byte_length,
-                                                 *crc_seed_ptr,
-                                                 dml::detail::ml::copy_crc_options(static_cast<uint16_t>(flags & 0xFFFF)),
-                                                 dml::detail::ml::copy_crc_specific_options(static_cast<uint8_t>((flags >> 16) & 0xFF)));
-    status = dml::to_own_status(dml::detail::ml::validate(operation));
+    auto batch = dml::batch(dml_job_ptr->destination_first_ptr, task_count);
+
+    auto task = dml::detail::ml::make_copy_crc_task(source_ptr,
+                                                    destination_ptr,
+                                                    byte_length,
+                                                    *crc_seed_ptr,
+                                                    dml::detail::ml::copy_crc_options(static_cast<uint16_t>(flags & 0xFFFF)),
+                                                    dml::detail::ml::copy_crc_specific_options(static_cast<uint8_t>((flags >> 16) & 0xFF)));
+    status    = dml::to_own_status(dml::detail::ml::execution_path::automatic::validate(dml::detail::ml::make_view(task).get_descriptor()));
     if (status != DML_STATUS_OK)
     {
         return status;
     }
 
-    dml::batch(dml_job_ptr->destination_first_ptr, task_count)
-        .add_by_index(task_index,
-                      [&]
-                      {
-                          return operation;
-                      });
+    batch.add_by_index(task_index,
+                       [&]
+                       {
+                           return std::move(task);
+                       });
 
     return DML_STATUS_OK;
 }
@@ -386,22 +399,24 @@ extern "C" dml_status_t dml_batch_set_fill_by_index(dml_job_t            *dml_jo
         return DML_STATUS_BATCH_TASK_INDEX_OVERFLOW;
     }
 
-    auto operation = dml::detail::ml::make_fill_operation(*reinterpret_cast<const uint64_t *>(pattern_ptr),
-                                                          destination_ptr,
-                                                          byte_length,
-                                                          dml::detail::ml::fill_options(static_cast<uint16_t>(flags & 0xFFFF)));
-    auto status    = dml::to_own_status(dml::detail::ml::validate(operation));
+    auto batch = dml::batch(dml_job_ptr->destination_first_ptr, task_count);
+
+    auto task = dml::detail::ml::make_fill_task(*reinterpret_cast<const uint64_t *>(pattern_ptr),
+                                                destination_ptr,
+                                                byte_length,
+                                                dml::detail::ml::fill_options(static_cast<uint16_t>(flags & 0xFFFF)));
+    auto status =
+        dml::to_own_status(dml::detail::ml::execution_path::automatic::validate(dml::detail::ml::make_view(task).get_descriptor()));
     if (status != DML_STATUS_OK)
     {
         return status;
     }
 
-    dml::batch(dml_job_ptr->destination_first_ptr, task_count)
-        .add_by_index(task_index,
-                      [&]
-                      {
-                          return operation;
-                      });
+    batch.add_by_index(task_index,
+                       [&]
+                       {
+                           return std::move(task);
+                       });
 
     return DML_STATUS_OK;
 }
@@ -421,22 +436,23 @@ extern "C" dml_status_t dml_batch_set_cache_flush_by_index(dml_job_t            
         return DML_STATUS_BATCH_TASK_INDEX_OVERFLOW;
     }
 
-    auto operation =
-        dml::detail::ml::make_cache_flush_operation(destination_ptr,
-                                                    byte_length,
-                                                    dml::detail::ml::cache_flush_options(static_cast<uint16_t>(flags & 0xFFFF)));
-    auto status = dml::to_own_status(dml::detail::ml::validate(operation));
+    auto batch = dml::batch(dml_job_ptr->destination_first_ptr, task_count);
+
+    auto task = dml::detail::ml::make_cache_flush_task(destination_ptr,
+                                                       byte_length,
+                                                       dml::detail::ml::cache_flush_options(static_cast<uint16_t>(flags & 0xFFFF)));
+    auto status =
+        dml::to_own_status(dml::detail::ml::execution_path::automatic::validate(dml::detail::ml::make_view(task).get_descriptor()));
     if (status != DML_STATUS_OK)
     {
         return status;
     }
 
-    dml::batch(dml_job_ptr->destination_first_ptr, task_count)
-        .add_by_index(task_index,
-                      [&]
-                      {
-                          return operation;
-                      });
+    batch.add_by_index(task_index,
+                       [&]
+                       {
+                           return std::move(task);
+                       });
 
     return DML_STATUS_OK;
 }
@@ -460,26 +476,27 @@ extern "C" dml_status_t dml_batch_set_delta_create_by_index(dml_job_t           
         return DML_STATUS_BATCH_TASK_INDEX_OVERFLOW;
     }
 
-    auto operation =
-        dml::detail::ml::make_create_delta_operation(source_ptr,
-                                                     reference_ptr,
-                                                     compare_length,
-                                                     delta_record_ptr,
-                                                     delta_record_length,
-                                                     dml::detail::ml::create_delta_options(static_cast<uint16_t>(flags & 0xFFFF)),
-                                                     dml::detail::create_delta_result(expected_result));
-    auto status = dml::to_own_status(dml::detail::ml::validate(operation));
+    auto batch = dml::batch(dml_job_ptr->destination_first_ptr, task_count);
+
+    auto task = dml::detail::ml::make_create_delta_task(source_ptr,
+                                                        reference_ptr,
+                                                        compare_length,
+                                                        delta_record_ptr,
+                                                        delta_record_length,
+                                                        dml::detail::ml::create_delta_options(static_cast<uint16_t>(flags & 0xFFFF)),
+                                                        dml::detail::create_delta_result(expected_result));
+    auto status =
+        dml::to_own_status(dml::detail::ml::execution_path::automatic::validate(dml::detail::ml::make_view(task).get_descriptor()));
     if (status != DML_STATUS_OK)
     {
         return status;
     }
 
-    dml::batch(dml_job_ptr->destination_first_ptr, task_count)
-        .add_by_index(task_index,
-                      [&]
-                      {
-                          return operation;
-                      });
+    batch.add_by_index(task_index,
+                       [&]
+                       {
+                           return std::move(task);
+                       });
 
     return DML_STATUS_OK;
 }
@@ -501,24 +518,25 @@ extern "C" dml_status_t dml_batch_set_delta_apply_by_index(dml_job_t            
         return DML_STATUS_BATCH_TASK_INDEX_OVERFLOW;
     }
 
-    auto operation =
-        dml::detail::ml::make_apply_delta_operation(delta_record_ptr,
-                                                    delta_record_length,
-                                                    destination_ptr,
-                                                    destination_length,
-                                                    dml::detail::ml::apply_delta_options(static_cast<uint16_t>(flags & 0xFFFF)));
-    auto status = dml::to_own_status(dml::detail::ml::validate(operation));
+    auto batch = dml::batch(dml_job_ptr->destination_first_ptr, task_count);
+
+    auto task = dml::detail::ml::make_apply_delta_task(delta_record_ptr,
+                                                       delta_record_length,
+                                                       destination_ptr,
+                                                       destination_length,
+                                                       dml::detail::ml::apply_delta_options(static_cast<uint16_t>(flags & 0xFFFF)));
+    auto status =
+        dml::to_own_status(dml::detail::ml::execution_path::automatic::validate(dml::detail::ml::make_view(task).get_descriptor()));
     if (status != DML_STATUS_OK)
     {
         return status;
     }
 
-    dml::batch(dml_job_ptr->destination_first_ptr, task_count)
-        .add_by_index(task_index,
-                      [&]
-                      {
-                          return operation;
-                      });
+    batch.add_by_index(task_index,
+                       [&]
+                       {
+                           return std::move(task);
+                       });
 
     return DML_STATUS_OK;
 }
@@ -541,7 +559,9 @@ extern "C" dml_status_t dml_batch_set_dif_check_by_index(dml_job_t              
         return DML_STATUS_BATCH_TASK_INDEX_OVERFLOW;
     }
 
-    auto operation = dml::detail::ml::make_dif_check_operation(
+    auto batch = dml::batch(dml_job_ptr->destination_first_ptr, task_count);
+
+    auto task = dml::detail::ml::make_dif_check_task(
         source_ptr,
         source_length,
         { dif_config_ptr->source_reference_tag_seed,
@@ -550,18 +570,18 @@ extern "C" dml_status_t dml_batch_set_dif_check_by_index(dml_job_t              
         dml::detail::ml::dif_check_options(static_cast<uint16_t>(flags & 0xFFFF)),
         dml::detail::ml::dif_specific_options(static_cast<uint8_t>(((dif_config_ptr->flags >> 16) & 0xFF) | dif_config_ptr->block_size)),
         dml::detail::ml::dif_source_options(static_cast<uint8_t>(dif_config_ptr->flags & 0xFF)));
-    auto status = dml::to_own_status(dml::detail::ml::validate(operation));
+    auto status =
+        dml::to_own_status(dml::detail::ml::execution_path::automatic::validate(dml::detail::ml::make_view(task).get_descriptor()));
     if (status != DML_STATUS_OK)
     {
         return status;
     }
 
-    dml::batch(dml_job_ptr->destination_first_ptr, task_count)
-        .add_by_index(task_index,
-                      [&]
-                      {
-                          return operation;
-                      });
+    batch.add_by_index(task_index,
+                       [&]
+                       {
+                           return std::move(task);
+                       });
 
     return DML_STATUS_OK;
 }
@@ -589,7 +609,9 @@ extern "C" dml_status_t dml_batch_set_dif_update_by_index(dml_job_t             
         return DML_STATUS_BATCH_TASK_INDEX_OVERFLOW;
     }
 
-    auto operation = dml::detail::ml::make_dif_update_operation(
+    auto batch = dml::batch(dml_job_ptr->destination_first_ptr, task_count);
+
+    auto task = dml::detail::ml::make_dif_update_task(
         source_ptr,
         destination_ptr,
         source_length,
@@ -603,18 +625,18 @@ extern "C" dml_status_t dml_batch_set_dif_update_by_index(dml_job_t             
         dml::detail::ml::dif_specific_options(static_cast<uint8_t>(((dif_config_ptr->flags >> 16) & 0xFF) | dif_config_ptr->block_size)),
         dml::detail::ml::dif_source_options(static_cast<uint8_t>(dif_config_ptr->flags & 0xFF)),
         dml::detail::ml::dif_destination_options(static_cast<uint8_t>((dif_config_ptr->flags >> 8) & 0xFF)));
-    auto status = dml::to_own_status(dml::detail::ml::validate(operation));
+    auto status =
+        dml::to_own_status(dml::detail::ml::execution_path::automatic::validate(dml::detail::ml::make_view(task).get_descriptor()));
     if (status != DML_STATUS_OK)
     {
         return status;
     }
 
-    dml::batch(dml_job_ptr->destination_first_ptr, task_count)
-        .add_by_index(task_index,
-                      [&]
-                      {
-                          return operation;
-                      });
+    batch.add_by_index(task_index,
+                       [&]
+                       {
+                           return std::move(task);
+                       });
 
     return DML_STATUS_OK;
 }
@@ -642,7 +664,9 @@ extern "C" dml_status_t dml_batch_set_dif_insert_by_index(dml_job_t             
         return DML_STATUS_BATCH_TASK_INDEX_OVERFLOW;
     }
 
-    auto operation = dml::detail::ml::make_dif_insert_operation(
+    auto batch = dml::batch(dml_job_ptr->destination_first_ptr, task_count);
+
+    auto task = dml::detail::ml::make_dif_insert_task(
         source_ptr,
         destination_ptr,
         source_length,
@@ -652,18 +676,18 @@ extern "C" dml_status_t dml_batch_set_dif_insert_by_index(dml_job_t             
         dml::detail::ml::dif_insert_options(static_cast<uint16_t>(flags & 0xFFFF)),
         dml::detail::ml::dif_specific_options(static_cast<uint8_t>(((dif_config_ptr->flags >> 16) & 0xFF) | dif_config_ptr->block_size)),
         dml::detail::ml::dif_destination_options(static_cast<uint8_t>((dif_config_ptr->flags >> 8) & 0xFF)));
-    auto status = dml::to_own_status(dml::detail::ml::validate(operation));
+    auto status =
+        dml::to_own_status(dml::detail::ml::execution_path::automatic::validate(dml::detail::ml::make_view(task).get_descriptor()));
     if (status != DML_STATUS_OK)
     {
         return status;
     }
 
-    dml::batch(dml_job_ptr->destination_first_ptr, task_count)
-        .add_by_index(task_index,
-                      [&]
-                      {
-                          return operation;
-                      });
+    batch.add_by_index(task_index,
+                       [&]
+                       {
+                           return std::move(task);
+                       });
 
     return DML_STATUS_OK;
 }
@@ -691,7 +715,9 @@ extern "C" dml_status_t dml_batch_set_dif_strip_by_index(dml_job_t              
         return DML_STATUS_BATCH_TASK_INDEX_OVERFLOW;
     }
 
-    auto operation = dml::detail::ml::make_dif_strip_operation(
+    auto batch = dml::batch(dml_job_ptr->destination_first_ptr, task_count);
+
+    auto task = dml::detail::ml::make_dif_strip_task(
         source_ptr,
         destination_ptr,
         source_length,
@@ -702,18 +728,18 @@ extern "C" dml_status_t dml_batch_set_dif_strip_by_index(dml_job_t              
         dml::detail::ml::dif_specific_options(static_cast<uint8_t>(((dif_config_ptr->flags >> 16) & 0xFF) | dif_config_ptr->block_size)),
         dml::detail::ml::dif_source_options(static_cast<uint8_t>(dif_config_ptr->flags & 0xFF)));
 
-    auto status = dml::to_own_status(dml::detail::ml::validate(operation));
+    auto status =
+        dml::to_own_status(dml::detail::ml::execution_path::automatic::validate(dml::detail::ml::make_view(task).get_descriptor()));
     if (status != DML_STATUS_OK)
     {
         return status;
     }
 
-    dml::batch(dml_job_ptr->destination_first_ptr, task_count)
-        .add_by_index(task_index,
-                      [&]
-                      {
-                          return operation;
-                      });
+    batch.add_by_index(task_index,
+                       [&]
+                       {
+                           return std::move(task);
+                       });
 
     return DML_STATUS_OK;
 }

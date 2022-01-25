@@ -24,7 +24,18 @@
 #error "Unsupported compiler"
 #endif
 
-#define DML_DISABLE_OPTIMIZATION_
+#define D_POLINOM_1 0x1EDC6F41
+
+static const uint8_t opt_poly_1_ptr[128] = {
+    0x41, 0x6f, 0xdc, 0x1e, 0x01, 0x00, 0x00, 0x00, 0xf6, 0xca, 0x91, 0x1f, 0x01, 0x00, 0x00, 0x00,
+    0x76, 0x45, 0xab, 0x3a, 0x65, 0x16, 0xa0, 0xd7, 0x9e, 0x60, 0x60, 0xff, 0xba, 0xe4, 0x87, 0xe2,
+    0x39, 0xa4, 0xca, 0xb8, 0x37, 0x68, 0x8c, 0xb7, 0x70, 0x28, 0x71, 0x41, 0xf2, 0xa4, 0x76, 0x3f,
+    0x5c, 0xe0, 0xee, 0x81, 0x38, 0x97, 0x9b, 0xd2, 0x20, 0xb8, 0xec, 0x6e, 0x81, 0x3e, 0x3b, 0x8a,
+    0x07, 0x9d, 0x39, 0xd3, 0x85, 0xd8, 0x5f, 0xcf, 0xa8, 0x36, 0x71, 0x18, 0x60, 0xb9, 0x0d, 0x92,
+    0x2c, 0x93, 0xe6, 0x8a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+};
 
 /**
 *  @todo
@@ -131,15 +142,20 @@ static inline void own_gen_crc_opt_poly_8u(uint64_t poly, uint8_t optPoly[128])
 }
 
 static inline void dmlc_own_calculate_crc_32u(const uint8_t* const memory_region_ptr,
-                                              uint32_t             bytes_to_hash,
-                                              uint32_t* const      crc_ptr,
-                                              uint32_t             polynomial)
+    uint32_t             bytes_to_hash,
+    uint32_t* const      crc_ptr,
+    uint32_t             polynomial)
 {
-    uint64_t poly = (uint64_t)polynomial | ((uint64_t)1u << (uint64_t)32u);
-    uint8_t  opt_poly_ptr[128];
+    uint64_t    poly = (uint64_t)polynomial | ((uint64_t)1u << (uint64_t)32u);
 
-    own_gen_crc_opt_poly_8u(poly, opt_poly_ptr);
-    own_CRC_8u_k0(memory_region_ptr, bytes_to_hash, poly, opt_poly_ptr, *crc_ptr, crc_ptr);
+    if (D_POLINOM_1 == polynomial) {
+        own_CRC_8u_k0(memory_region_ptr, bytes_to_hash, poly, opt_poly_1_ptr, *crc_ptr, crc_ptr);
+    }
+    else {
+        uint8_t opt_poly_ptr[128];
+        own_gen_crc_opt_poly_8u(poly, opt_poly_ptr);
+        own_CRC_8u_k0(memory_region_ptr, bytes_to_hash, poly, opt_poly_ptr, *crc_ptr, crc_ptr);
+    }
 }
 
 #if defined(_MSC_VER)
@@ -168,9 +184,6 @@ static void own_CRC_8u_opt_k0(const uint8_t* src_ptr, uint32_t init_crc, int len
     uint8_t* ptr;
 
     __m128i xmm0, xmm1, xmm2, xmm3, xmm4, xmm5, xmm6, xmm7, xmm8, xmm9, xmm10, xmm12, xmm13;
-#ifndef DML_DISABLE_OPTIMIZATION_
-    __m128i xmm11;
-#endif  // DML_DISABLE_OPTIMIZATION_
 
     int     eax, ecx, r9;
     __m128i ENDIA_SHUF_MASK = _mm_set_epi8(0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F);
@@ -462,7 +475,6 @@ _less_than_256:
     {
         goto _less_than_32;
     }
-    xmm11 = ENDIA_SHUF_MASK;
     //; if there is, load the constants
     xmm10 = _mm_set_epi64x(k_160 /*rk2*/, k_96 /*rk1*/);
     xmm0  = _mm_cvtsi32_si128(arg1_low32);
@@ -486,7 +498,6 @@ _less_than_32:
     if (len == 0)
         goto _cleanup;  //je	_cleanup
     //
-    xmm11 = ENDIA_SHUF_MASK;
 
     xmm0 = _mm_cvtsi32_si128(arg1_low32);
     xmm0 = _mm_slli_si128(xmm0, 12);
@@ -615,7 +626,7 @@ _only_less_than_2:
 
 uint32_t dml_avx512_crc_u32(const uint8_t* src, uint32_t transfer_size, uint32_t crc_value, uint32_t polynomial)
 {
-    const size_t optimization_border = 256;
+    const size_t optimization_border = (D_POLINOM_1 == polynomial) ? 32 : 256;
 
     if (transfer_size < optimization_border)
     {

@@ -1,18 +1,18 @@
 /*
-* Copyright 2021 Intel Corporation.
-*
-* This software and the related documents are Intel copyrighted materials,
-* and your use of them is governed by the express license under which they
-* were provided to you ("License"). Unless the License provides otherwise,
-* you may not use, modify, copy, publish, distribute, disclose or transmit
-* this software or the related documents without Intel's prior written
-* permission.
-*
-* This software and the related documents are provided as is, with no
-* express or implied warranties, other than those that are expressly
-* stated in the License.
-*
-*/
+ * Copyright 2021 Intel Corporation.
+ *
+ * This software and the related documents are Intel copyrighted materials,
+ * and your use of them is governed by the express license under which they
+ * were provided to you ("License"). Unless the License provides otherwise,
+ * you may not use, modify, copy, publish, distribute, disclose or transmit
+ * this software or the related documents without Intel's prior written
+ * permission.
+ *
+ * This software and the related documents are provided as is, with no
+ * express or implied warranties, other than those that are expressly
+ * stated in the License.
+ *
+ */
 
 #ifndef DML_SOURCES_HW_PATH_INCLUDE_HW_CONFIGURATION_DRIVER_H_
 #define DML_SOURCES_HW_PATH_INCLUDE_HW_CONFIGURATION_DRIVER_H_
@@ -30,33 +30,35 @@ extern "C" {
 #endif
 
 /**
-* @brief Type of function that should be loaded from accelerator configuration driver
-*/
+ * @brief Type of function that should be loaded from accelerator configuration driver
+ */
 typedef int (*library_function)();
 
 /**
-* @brief Structure that maps function implementation to its name
-*/
-typedef struct {
-   library_function function;          /**< Function address */
-   const char       *function_name;    /**< Function name */
+ * @brief Structure that maps function implementation to its name
+ */
+typedef struct
+{
+    library_function function;      /**< Function address */
+    const char      *function_name; /**< Function name */
 
 } dsa_desc_t;
 
 /**
-* @brief Structure represents configuration driver used for access to accelerator instances and their properties
-*/
-typedef struct {
-   void *driver_instance_ptr; /**< Pointer to a loaded driver */
+ * @brief Structure represents configuration driver used for access to accelerator instances and their properties
+ */
+typedef struct
+{
+    void *driver_instance_ptr; /**< Pointer to a loaded driver */
 } hw_driver_t;
 
 /**
-* @brief Initializes driver functions
-*
-* @note Should be called only once
-*
-* @return status of initialization
-*/
+ * @brief Initializes driver functions
+ *
+ * @note Should be called only once
+ *
+ * @return status of initialization
+ */
 dsahw_status_t DML_HW_API(initialize_accelerator_driver)(hw_driver_t *driver_ptr);
 
 void DML_HW_API(finalize_accelerator_driver)(hw_driver_t *driver_ptr);

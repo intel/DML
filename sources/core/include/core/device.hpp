@@ -25,13 +25,13 @@ namespace dml::core
     class software_device
     {
     public:
-        [[nodiscard]] dml::detail::submission_status submit(descriptor& dsc, completion_record& completion_record) noexcept;
+        [[nodiscard]] dml::detail::submission_status submit(const descriptor& dsc) noexcept;
     };
 
     class hardware_device
     {
     public:
-        [[nodiscard]] dml::detail::submission_status submit(descriptor& descriptor, completion_record& completion_record) noexcept;
+        [[nodiscard]] dml::detail::submission_status submit(const descriptor& descriptor, std::uint32_t numa_id) noexcept;
     };
 }  // namespace dml::core
 

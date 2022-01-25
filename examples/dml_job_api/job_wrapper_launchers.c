@@ -49,7 +49,7 @@
 /**
  * @brief Resets job input/output stream fields
  *
- * @param[in,out] dml_job_ptr   pointer to @ref dml_job_t
+ * @param[in,out] job_ptr   pointer to @ref dml_job_t
  */
 static inline void reset_job_streams(dml_job_t *const job_ptr)
 {

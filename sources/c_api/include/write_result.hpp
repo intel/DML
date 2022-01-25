@@ -96,100 +96,100 @@ namespace dml
 
     inline dml_status_t write_result_nop(job_view job) noexcept
     {
-        return to_own_status(dml::detail::ml::get_status(job.state().record));
+        return to_own_status(dml::detail::ml::get_status(make_view(job.state().task).get_completion_record()));
     }
 
     inline dml_status_t write_result_batch(job_view job) noexcept
     {
-        return to_own_status(dml::detail::ml::get_status(job.state().record));
+        return to_own_status(dml::detail::ml::get_status(make_view(job.state().task).get_completion_record()));
     }
 
     inline dml_status_t write_result_drain(job_view job) noexcept
     {
-        return to_own_status(dml::detail::ml::get_status(job.state().record));
+        return to_own_status(dml::detail::ml::get_status(make_view(job.state().task).get_completion_record()));
     }
 
     inline dml_status_t write_result_mem_move(job_view job) noexcept
     {
-        job.set_result(detail::ml::get_result(job.state().record));
+        job.set_result(detail::ml::get_result(make_view(job.state().task).get_completion_record()));
 
-        return to_own_status(dml::detail::ml::get_status(job.state().record));
+        return to_own_status(dml::detail::ml::get_status(make_view(job.state().task).get_completion_record()));
     }
 
     inline dml_status_t write_result_fill(job_view job) noexcept
     {
-        return to_own_status(dml::detail::ml::get_status(job.state().record));
+        return to_own_status(dml::detail::ml::get_status(make_view(job.state().task).get_completion_record()));
     }
 
     inline dml_status_t write_result_dualcast(job_view job) noexcept
     {
-        return to_own_status(dml::detail::ml::get_status(job.state().record));
+        return to_own_status(dml::detail::ml::get_status(make_view(job.state().task).get_completion_record()));
     }
 
     inline dml_status_t write_result_crc(job_view job) noexcept
     {
-        job.set_crc(dml::detail::ml::get_crc_value(job.state().record));
+        job.set_crc(dml::detail::ml::get_crc_value(make_view(job.state().task).get_completion_record()));
 
-        return to_own_status(dml::detail::ml::get_status(job.state().record));
+        return to_own_status(dml::detail::ml::get_status(make_view(job.state().task).get_completion_record()));
     }
 
     inline dml_status_t write_result_compare(job_view job) noexcept
     {
-        job.set_offset(dml::detail::ml::get_bytes_completed(job.state().record));
-        job.set_result(dml::detail::ml::get_result(job.state().record));
+        job.set_offset(dml::detail::ml::get_bytes_completed(make_view(job.state().task).get_completion_record()));
+        job.set_result(dml::detail::ml::get_result(make_view(job.state().task).get_completion_record()));
 
-        return to_own_status(dml::detail::ml::get_status(job.state().record));
+        return to_own_status(dml::detail::ml::get_status(make_view(job.state().task).get_completion_record()));
     }
 
     inline dml_status_t write_result_create_delta(job_view job) noexcept
     {
         //job.set_offset();
-        job.set_destination_length(dml::detail::ml::get_delta_record_size(job.state().record));
-        job.set_result(dml::detail::ml::get_result(job.state().record));
+        job.set_destination_length(dml::detail::ml::get_delta_record_size(make_view(job.state().task).get_completion_record()));
+        job.set_result(dml::detail::ml::get_result(make_view(job.state().task).get_completion_record()));
         job.set_offset(*reinterpret_cast<uint16_t *>(job.destination_first()));
 
-        return to_own_status(dml::detail::ml::get_status(job.state().record));
+        return to_own_status(dml::detail::ml::get_status(make_view(job.state().task).get_completion_record()));
     }
 
     inline dml_status_t write_result_apply_delta(job_view job) noexcept
     {
-        return to_own_status(dml::detail::ml::get_status(job.state().record));
+        return to_own_status(dml::detail::ml::get_status(make_view(job.state().task).get_completion_record()));
     }
 
     inline dml_status_t write_result_dif_check(job_view job) noexcept
     {
-        job.set_offset(dml::detail::ml::get_bytes_completed(job.state().record));
-        job.set_result(dml::detail::ml::get_result(job.state().record));
+        job.set_offset(dml::detail::ml::get_bytes_completed(make_view(job.state().task).get_completion_record()));
+        job.set_result(dml::detail::ml::get_result(make_view(job.state().task).get_completion_record()));
 
-        return to_own_status(dml::detail::ml::get_status(job.state().record));
+        return to_own_status(dml::detail::ml::get_status(make_view(job.state().task).get_completion_record()));
     }
 
     inline dml_status_t write_result_dif_insert(job_view job) noexcept
     {
-        job.set_offset(dml::detail::ml::get_bytes_completed(job.state().record));
+        job.set_offset(dml::detail::ml::get_bytes_completed(make_view(job.state().task).get_completion_record()));
 
-        return to_own_status(dml::detail::ml::get_status(job.state().record));
+        return to_own_status(dml::detail::ml::get_status(make_view(job.state().task).get_completion_record()));
     }
 
     inline dml_status_t write_result_dif_strip(job_view job) noexcept
     {
-        job.set_offset(dml::detail::ml::get_bytes_completed(job.state().record));
-        job.set_result(dml::detail::ml::get_result(job.state().record));
+        job.set_offset(dml::detail::ml::get_bytes_completed(make_view(job.state().task).get_completion_record()));
+        job.set_result(dml::detail::ml::get_result(make_view(job.state().task).get_completion_record()));
 
-        return to_own_status(dml::detail::ml::get_status(job.state().record));
+        return to_own_status(dml::detail::ml::get_status(make_view(job.state().task).get_completion_record()));
     }
 
     inline dml_status_t write_result_dif_update(job_view job) noexcept
     {
-        job.set_offset(dml::detail::ml::get_bytes_completed(job.state().record));
-        job.set_result(dml::detail::ml::get_result(job.state().record));
+        job.set_offset(dml::detail::ml::get_bytes_completed(make_view(job.state().task).get_completion_record()));
+        job.set_result(dml::detail::ml::get_result(make_view(job.state().task).get_completion_record()));
 
-        return to_own_status(dml::detail::ml::get_status(job.state().record));
+        return to_own_status(dml::detail::ml::get_status(make_view(job.state().task).get_completion_record()));
     }
 
     inline dml_status_t write_result_cache_flush(job_view job) noexcept
     {
-        return to_own_status(dml::detail::ml::get_status(job.state().record));
+        return to_own_status(dml::detail::ml::get_status(make_view(job.state().task).get_completion_record()));
     }
 }  // namespace dml
 

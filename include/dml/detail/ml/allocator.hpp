@@ -14,15 +14,16 @@
  *
  */
 
-#include <core/validation.hpp>
-#include <dml/detail/ml/validation.hpp>
+#ifndef DML_DETAIL_ML_ALLOCATOR_HPP
+#define DML_DETAIL_ML_ALLOCATOR_HPP
 
-#include "ml_utils.hpp"
+#include <dml/detail/common/types.hpp>
 
 namespace dml::detail::ml
 {
-    validation_status validate(operation& op) noexcept
+    class stack_allocator
     {
-        return core::validate(as_core(op));
-    }
+    };
 }  // namespace dml::detail::ml
+
+#endif  //DML_DETAIL_ML_ALLOCATOR_HPP
