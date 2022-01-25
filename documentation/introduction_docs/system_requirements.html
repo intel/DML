@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>System Requirements &mdash; Intel® DML v0.1.7-beta documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="License" href="license.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Intel® DML
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">System Requirements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#software-path-requirements">Software Path Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#hardware-path-requirements">Hardware Path Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#accelerator-configuration">Accelerator Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">License</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Get Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/quick_start.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/code_samples_and_examples.html">Code Samples and examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api_docs/high_level_api.html">High-level C++ API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_docs/low_level_api.html">Low-level C API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Release Notes:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release Notes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Intel® DML</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>System Requirements</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/documentation/introduction_docs/system_requirements.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <blockquote>
+<div></div></blockquote>
+<div class="section" id="system-requirements">
+<h1>System Requirements<a class="headerlink" href="#system-requirements" title="Permalink to this headline"></a></h1>
+<div class="section" id="software-path-requirements">
+<h2>Software Path Requirements<a class="headerlink" href="#software-path-requirements" title="Permalink to this headline"></a></h2>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>Minimal</strong></p></td>
+<td><p>x86-64 CPU with Intel® Advanced Vector Extensions 2 support
+(Intel® microarchitecture code name Broadwell) not optimized code.</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Recommended</strong></p></td>
+<td><p>x86-64 CPU with Intel® Advanced Vector Extensions 512 (Intel® AVX-512) support
+(Intel® microarchitecture code name Skylake (Server) processor or higher).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="hardware-path-requirements">
+<h2>Hardware Path Requirements<a class="headerlink" href="#hardware-path-requirements" title="Permalink to this headline"></a></h2>
+<ul class="simple">
+<li><p><strong>Minimal:</strong> CPU with Intel® Data Streaming Acceleratir (Sapphire Rapids and higher).</p></li>
+<li><p>Virtualization technology for directed I/O (VT-d) is enabled through the BIOS menu.</p></li>
+<li><p><strong>Linux* OS:</strong></p>
+<ul>
+<li><p>kernel version 5.10 or higher (<a class="reference external" href="https://www.kernel.org/doc/Documentation/ABI/stable/sysfs-driver-dma-idxd">https://www.kernel.org/doc/Documentation/ABI/stable/sysfs-driver-dma-idxd</a>) <strong>Validated 5.10 - 5.12</strong>.</p></li>
+<li><p>accel-config version 3.2 or higher placed in /usr/lib64/ (<a class="reference external" href="https://github.com/intel/idxd-config">https://github.com/intel/idxd-config</a>) <strong>Validated 3.2 - 3.4.1</strong>.</p></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="accelerator-configuration">
+<h2>Accelerator Configuration<a class="headerlink" href="#accelerator-configuration" title="Permalink to this headline"></a></h2>
+<p>Accelerator configuration can be performed with libaccel-config application.
+Such application can be founded here: <a class="reference external" href="https://github.com/intel/idxd-config">https://github.com/intel/idxd-config</a>.</p>
+<p>How to work with it correctly is not a goal of this chapter.
+Follow instructions that are placed here: <a class="reference external" href="https://github.com/intel/idxd-config">https://github.com/intel/idxd-config</a>.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="license.html" class="btn btn-neutral float-right" title="License" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

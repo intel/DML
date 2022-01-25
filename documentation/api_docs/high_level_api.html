@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>High-level C++ API &mdash; Intel® DML v0.1.7-beta documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Low-level C API" href="low_level_api.html" />
+    <link rel="prev" title="Code Samples and examples" href="../get_started_docs/code_samples_and_examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Intel® DML
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction_docs/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction_docs/system_requirements.html">System Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction_docs/license.html">License</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Get Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/quick_start.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/code_samples_and_examples.html">Code Samples and examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Reference:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">High-level C++ API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#disclaimer">Disclaimer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#header-files">Header Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#namespace">Namespace</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#numa-support">NUMA support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#page-fault-handling">Page Fault handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-use-the-library">How to Use the Library</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#example-usage">Example usage</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#make-view">Make view</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#operation-data-type">Operation Data Type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sequence">Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#handler">Handler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#results">Results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#advanced-usage">Advanced usage</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#operations">Operations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#flow-control-features">Flow Control Features</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#no-op-operation">No-op operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#batch-operation">Batch operation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-transferring-and-filling-features">Memory Transferring and Filling Features</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#memory-move">Memory Move</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#memory-copy-with-dualcast">Memory Copy with Dualcast</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fill">Fill</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-compare-and-restoring-features">Memory Compare and Restoring Features</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#compare">Compare</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#compare-pattern">Compare Pattern</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#create-delta-record">Create Delta Record</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#apply-delta-record">Apply Delta Record</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-hash-features">Memory Hash Features</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#crc-generation">CRC Generation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#copy-with-crc-generation">Copy with CRC Generation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#utility-features">Utility Features</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#cache-flush">Cache Flush</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#operation-status-values">Operation Status Values</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="low_level_api.html">Low-level C API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Release Notes:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release Notes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Intel® DML</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>High-level C++ API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/documentation/api_docs/high_level_api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <blockquote>
+<div></div></blockquote>
+<div class="section" id="high-level-c-api">
+<h1>High-level C++ API<a class="headerlink" href="#high-level-c-api" title="Permalink to this headline"></a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<p>This document provides quick introduction into usage of High Level API
+for Intel® DML. It describes general usage concepts, main entities and
+detailed operation descriptions.</p>
+<p>For general introduction to Intel® DML, see <a class="reference external" href="../introduction_docs/introduction.html">Introduction</a>.</p>
+<div class="section" id="disclaimer">
+<h3>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline"></a></h3>
+<p>The library exists in a prototype form and is being actively
+developed. This means that some of the things described here may change
+in the future. However, the library is released now with the expectation
+that it will be more useful than nothing to people who may use it.</p>
+</div>
+</div>
+<div class="section" id="header-files">
+<h2>Header Files<a class="headerlink" href="#header-files" title="Permalink to this headline"></a></h2>
+<p>Your application only needs to include one header file: <code class="docutils literal notranslate"><span class="pre">dml/dml.hpp</span></code>,
+which includes the entire API definitions.</p>
+</div>
+<div class="section" id="namespace">
+<h2>Namespace<a class="headerlink" href="#namespace" title="Permalink to this headline"></a></h2>
+<p>All API declarations are included into <code class="docutils literal notranslate"><span class="pre">dml</span></code> namespace.</p>
+<p>Identifiers from <code class="docutils literal notranslate"><span class="pre">dml::ml</span></code> and <code class="docutils literal notranslate"><span class="pre">dml::detail</span></code> namespaces shall not be
+used. They are implementation details and are subject to change
+frequently.</p>
+</div>
+<div class="section" id="numa-support">
+<h2>NUMA support<a class="headerlink" href="#numa-support" title="Permalink to this headline"></a></h2>
+<p>The library is NUMA aware and respects the NUMA node id of the calling thread. If a user needs to use a device from a specific node, it can be done in one way:</p>
+<ul class="simple">
+<li><p>Pin thread which performs submissions to the specific NUMA, the library will use devices only from this node.</p></li>
+</ul>
+<p>Load balancer of the library doesn’t cross a detected NUMA boundary. Balancing workloads between different nodes is the responsibility of a user.</p>
+</div>
+<div class="section" id="page-fault-handling">
+<h2>Page Fault handling<a class="headerlink" href="#page-fault-handling" title="Permalink to this headline"></a></h2>
+<p>Page fault can occur during workload processing on a hardware. When the fault occurs, the outcome is based on the execution path:
+- Hardware path: <code class="docutils literal notranslate"><span class="pre">dml::status_code::partial_completion</span></code> is written to result structure.
+- Auto path: the library resolves the fault via completion of the workload on a CPU.</p>
+</div>
+<div class="section" id="how-to-use-the-library">
+<h2>How to Use the Library<a class="headerlink" href="#how-to-use-the-library" title="Permalink to this headline"></a></h2>
+<p>The library usage is based on the following concepts:</p>
+<ul class="simple">
+<li><p>Your application should call either <code class="docutils literal notranslate"><span class="pre">dml::submit</span></code> or <code class="docutils literal notranslate"><span class="pre">dml::execute</span></code>
+function to evaluate an operation.</p></li>
+<li><p>Operation type, input data, and input parameters are
+all configured via function arguments.</p></li>
+<li><p>Execution path for an operation is provided via the first template argument of
+<code class="docutils literal notranslate"><span class="pre">dml::submit</span></code> and <code class="docutils literal notranslate"><span class="pre">dml::execute</span></code> functions. It can be on of the
+following: <code class="docutils literal notranslate"><span class="pre">dml::software</span></code>, <code class="docutils literal notranslate"><span class="pre">dml::hardware</span></code>.</p></li>
+<li><p>Memory regions (data) should be passed as <code class="docutils literal notranslate"><span class="pre">dml::data_view</span></code> objects.</p></li>
+</ul>
+<div class="section" id="example-usage">
+<h3>Example usage<a class="headerlink" href="#example-usage" title="Permalink to this headline"></a></h3>
+<p>Here is the generic flow for the library (synchronous execution):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Some data definitions</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">src_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">{...};</span><span class="w"></span>
+<span class="k">auto</span><span class="w"> </span><span class="n">dst_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">src_data</span><span class="p">.</span><span class="n">size</span><span class="p">());</span><span class="w"></span>
+
+<span class="c1">// Use an operation</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">mem_move</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                          </span><span class="n">dml</span><span class="o">::</span><span class="n">make_view</span><span class="p">(</span><span class="n">src_data</span><span class="p">),</span><span class="w"></span>
+<span class="w">                                          </span><span class="n">dml</span><span class="o">::</span><span class="n">make_view</span><span class="p">(</span><span class="n">dst_data</span><span class="p">));</span><span class="w"></span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">status_code</span><span class="o">::</span><span class="n">ok</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Here is the generic flow for the library (asynchronous execution):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Some data definitions</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">src_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">{...};</span><span class="w"></span>
+<span class="k">auto</span><span class="w"> </span><span class="n">dst_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">src_data</span><span class="p">.</span><span class="n">size</span><span class="p">());</span><span class="w"></span>
+
+<span class="c1">// Use operation</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">submit</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">mem_move</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                          </span><span class="n">dml</span><span class="o">::</span><span class="n">make_view</span><span class="p">(</span><span class="n">src_data</span><span class="p">),</span><span class="w"></span>
+<span class="w">                                          </span><span class="n">dml</span><span class="o">::</span><span class="n">make_view</span><span class="p">(</span><span class="n">dst_data</span><span class="p">));</span><span class="w"></span>
+
+<span class="c1">// Evaluate other asynchronous operations...</span>
+
+<span class="c1">// Wait for the result</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">handler</span><span class="p">.</span><span class="n">get</span><span class="p">();</span><span class="w"></span>
+
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">result</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">status_code</span><span class="o">::</span><span class="n">ok</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Use <code class="docutils literal notranslate"><span class="pre">dml::hardware</span></code> to evaluate an operation on a dedicated
+hardware.</p>
+</div>
+</div>
+<div class="section" id="make-view">
+<h3>Make view<a class="headerlink" href="#make-view" title="Permalink to this headline"></a></h3>
+<p>All operations handle user’s data via <code class="docutils literal notranslate"><span class="pre">dml::data_view</span></code> so there are
+functions to constructs one:</p>
+<ul class="simple">
+<li><p>View from a raw pointer and a size.</p></li>
+<li><p>View from a pair of iterators</p></li>
+<li><p>View from a range (<code class="docutils literal notranslate"><span class="pre">.begin()</span></code> and <code class="docutils literal notranslate"><span class="pre">.end()</span></code> pair)</p></li>
+</ul>
+<p>Usage:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">};</span><span class="w"></span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">view_from_raw_pointer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">make_view</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">);</span><span class="w"></span>
+<span class="k">auto</span><span class="w"> </span><span class="n">view_from_iterators</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">make_view</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">end</span><span class="p">());</span><span class="w"></span>
+<span class="k">auto</span><span class="w"> </span><span class="n">view_from_range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">make_view</span><span class="p">(</span><span class="n">data</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently the library uses only <code class="docutils literal notranslate"><span class="pre">uint8_t</span></code> views.</p>
+</div>
+</div>
+<div class="section" id="operation-data-type">
+<h3>Operation Data Type<a class="headerlink" href="#operation-data-type" title="Permalink to this headline"></a></h3>
+<p>Operations are represented via
+<a class="reference external" href="https://en.cppreference.com/w/cpp/named_req/LiteralType">literal-type</a>
+classes and instances of those classes, for example
+<code class="docutils literal notranslate"><span class="pre">dml::mem_move_operation</span></code> and <code class="docutils literal notranslate"><span class="pre">dml::mem_move</span></code>. Detailed description
+for each operation can be found below.</p>
+<p>Operations are used for tag-dispatching of <code class="docutils literal notranslate"><span class="pre">dml::submit</span></code> and
+<code class="docutils literal notranslate"><span class="pre">dml::execute</span></code> functions, and also for passing additional parameters.
+Several operations are configurable via set of methods. Those methods
+construct a new object with specified feature enabled, they can be
+chained.</p>
+<p>Example (pseudocode)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">some_operation</span><span class="p">.</span><span class="n">enable_feature1</span><span class="p">().</span><span class="n">enable_feature3</span><span class="p">(),</span><span class="w"></span>
+<span class="w">                           </span><span class="n">args1</span><span class="p">,</span><span class="w"> </span><span class="n">args2</span><span class="p">,</span><span class="w"> </span><span class="n">args3</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="sequence">
+<span id="sequence-cpp-api"></span><h3>Sequence<a class="headerlink" href="#sequence" title="Permalink to this headline"></a></h3>
+<p>You should prepare <code class="docutils literal notranslate"><span class="pre">dml::sequence</span></code> to use the <code class="docutils literal notranslate"><span class="pre">dml::batch</span></code>
+operation. It is a special container for ready to be evaluated
+operations. You can construct the one by passing number of operations
+and allocator. After construction, operations can be appended via
+<code class="docutils literal notranslate"><span class="pre">.add()</span></code> method. The method has similar to <code class="docutils literal notranslate"><span class="pre">dml::execute</span></code> interface,
+but it stores an operation instead of starting evaluation.</p>
+<p>Add method returns status code, reporting successful (or not)
+completion. If an error occurred during an attempt to add an
+operation to a sequence, then the sequence remains the same as it was
+before the call.</p>
+<p>Example:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">sequence</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">sequence</span><span class="p">(</span><span class="n">op_count</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">byte_t</span><span class="o">&gt;</span><span class="p">());</span><span class="w"></span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sequence</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">mem_move</span><span class="p">,</span><span class="w"> </span><span class="n">src_view</span><span class="p">,</span><span class="w"> </span><span class="n">dst1_view</span><span class="p">);</span><span class="w"></span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">status_code</span><span class="o">::</span><span class="n">ok</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+
+<span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sequence</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">fill</span><span class="p">,</span><span class="w"> </span><span class="n">pattern</span><span class="p">,</span><span class="w"> </span><span class="n">dst2_view</span><span class="p">);</span><span class="w"></span>
+<span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">status_code</span><span class="o">::</span><span class="n">ok</span><span class="p">)</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">-1</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="handler">
+<h3>Handler<a class="headerlink" href="#handler" title="Permalink to this headline"></a></h3>
+<p>Each <code class="docutils literal notranslate"><span class="pre">dml::submit</span></code> function returns <code class="docutils literal notranslate"><span class="pre">dml::handler</span></code>. This object
+provides a handle to a concurrently running operation. When it is
+needed to wait for the finish and get the result, there is a <code class="docutils literal notranslate"><span class="pre">.get()</span></code>
+method provided.</p>
+</div>
+<div class="section" id="results">
+<h3>Results<a class="headerlink" href="#results" title="Permalink to this headline"></a></h3>
+<p>Each operation has the corresponding result type. Results are C-structs
+with at least one status field. Use cases for the results are:</p>
+<ul class="simple">
+<li><p>Check whether an operation is completed successfully or not</p></li>
+<li><p>Check what amount of work has been done before the failure occurred (if applicable)</p></li>
+<li><p>Check specific operation’s result (e.g. computed crc, mismatch position for compare operations)</p></li>
+<li><p>Use as input to other operation (e.g create_delta -&gt; apply_delta)</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There are several operations, which reuse other operation’s result
+structure: <code class="docutils literal notranslate"><span class="pre">dml::crc</span></code> and <code class="docutils literal notranslate"><span class="pre">dml::copy_crc</span></code>, <code class="docutils literal notranslate"><span class="pre">dml::compare</span></code> and
+<code class="docutils literal notranslate"><span class="pre">dml::compare_pattern</span></code></p>
+</div>
+</div>
+<div class="section" id="advanced-usage">
+<h3>Advanced usage<a class="headerlink" href="#advanced-usage" title="Permalink to this headline"></a></h3>
+<p>The function <code class="docutils literal notranslate"><span class="pre">dml::submit</span></code> can be configured for custom thread and
+memory management. The configuration is done via
+<code class="docutils literal notranslate"><span class="pre">dml::execution_interface</span></code> class. Each submit-function is provided
+with default execution interface for each supported execution path
+(<code class="docutils literal notranslate"><span class="pre">dml::software</span></code> and <code class="docutils literal notranslate"><span class="pre">dml::hardware</span></code>).</p>
+<p>Default behavior for <strong>software</strong> execution path is:</p>
+<ul class="simple">
+<li><p>Uses <code class="docutils literal notranslate"><span class="pre">std::thread(task).detach()</span></code> to evaluate operations in a thread.</p></li>
+<li><p>Uses <code class="docutils literal notranslate"><span class="pre">std::allocator</span></code> to manage memory.</p></li>
+</ul>
+<p>Default behavior for <strong>hardware</strong> execution path is:</p>
+<ul class="simple">
+<li><p>Uses <code class="docutils literal notranslate"><span class="pre">task()</span></code> to submit a task sequentially onto asynchronously working dedicated hardware.</p></li>
+<li><p>Uses <code class="docutils literal notranslate"><span class="pre">std::allocator</span></code> to manage memory.</p></li>
+</ul>
+<p>You can use custom execution interface. To create the one use:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">my_thread_pool</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_my_pool</span><span class="p">();</span><span class="w"></span>
+<span class="k">auto</span><span class="w"> </span><span class="n">my_allocator</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_my_alloc</span><span class="p">();</span><span class="w"></span>
+
+<span class="c1">// The first argument is a lambda that takes a task and call it in a custom way.</span>
+<span class="c1">// The second argument is an instance of an allocator.</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">my_exec_iface</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execution_interface</span><span class="p">(</span><span class="w"></span>
+<span class="w">    </span><span class="p">[</span><span class="o">&amp;</span><span class="n">my_thread_pool</span><span class="p">]</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">task</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">my_thread_pool</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="k">decltype</span><span class="p">(</span><span class="n">task</span><span class="p">)</span><span class="o">&gt;</span><span class="p">(</span><span class="n">task</span><span class="p">));</span><span class="w"></span>
+<span class="w">    </span><span class="p">},</span><span class="w"></span>
+<span class="w">    </span><span class="n">my_allocator</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Every <code class="docutils literal notranslate"><span class="pre">dml::submit</span></code> function has <code class="docutils literal notranslate"><span class="pre">dml::execution_interface</span></code> as the
+last argument:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">submit</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">mem_move</span><span class="p">,</span><span class="w"></span>
+<span class="w">                                          </span><span class="n">dml</span><span class="o">::</span><span class="n">make_view</span><span class="p">(</span><span class="n">src_data</span><span class="p">),</span><span class="w"></span>
+<span class="w">                                          </span><span class="n">dml</span><span class="o">::</span><span class="n">make_view</span><span class="p">(</span><span class="n">dst_data</span><span class="p">),</span><span class="w"></span>
+<span class="w">                                          </span><span class="n">my_exec_iface</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The library supports STL-compliant allocators.</p>
+</div>
+</div>
+</div>
+<div class="section" id="operations">
+<h2>Operations<a class="headerlink" href="#operations" title="Permalink to this headline"></a></h2>
+<p>The library supports several groups of operations:</p>
+<ul class="simple">
+<li><p>Flow Control</p></li>
+<li><p>Memory Transferring and Filling</p></li>
+<li><p>Memory Compare and Restore</p></li>
+<li><p>Memory Hash</p></li>
+<li><p>Utility</p></li>
+</ul>
+<div class="section" id="flow-control-features">
+<h3>Flow Control Features<a class="headerlink" href="#flow-control-features" title="Permalink to this headline"></a></h3>
+<p>This group of operations is used for configuration of operation
+sequences.</p>
+<div class="section" id="no-op-operation">
+<h4>No-op operation<a class="headerlink" href="#no-op-operation" title="Permalink to this headline"></a></h4>
+<p>Not implemented</p>
+</div>
+<div class="section" id="batch-operation">
+<h4>Batch operation<a class="headerlink" href="#batch-operation" title="Permalink to this headline"></a></h4>
+<p>This operation process multiple operations at once. Sequence of
+operations to process is provided via <code class="docutils literal notranslate"><span class="pre">sequence</span></code> argument.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::batch</span></code> object.</p>
+<p>Usage:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">batch</span><span class="p">,</span><span class="w"> </span><span class="n">sequence</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Result for this operation is:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">batch_result</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">status_code</span><span class="w"> </span><span class="n">status</span><span class="p">{</span><span class="n">status_code</span><span class="o">::</span><span class="n">error</span><span class="p">};</span><span class="w"> </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w">      </span><span class="n">operations_completed</span><span class="p">{};</span><span class="w">     </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<p>See detailed <a class="reference internal" href="#sequence-cpp-api"><span class="std std-ref">Sequence</span></a> description.</p>
+</div>
+</div>
+<div class="section" id="memory-transferring-and-filling-features">
+<h3>Memory Transferring and Filling Features<a class="headerlink" href="#memory-transferring-and-filling-features" title="Permalink to this headline"></a></h3>
+<p>This group of operations is used for memory moving, copying and filling.</p>
+<div class="section" id="memory-move">
+<h4>Memory Move<a class="headerlink" href="#memory-move" title="Permalink to this headline"></a></h4>
+<p>This operation moves or copies data from a memory region represented via
+<code class="docutils literal notranslate"><span class="pre">src_view</span></code> to a memory region represented via <code class="docutils literal notranslate"><span class="pre">dst_view</span></code>.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::mem_move</span></code> object.</p>
+<p>Usage:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">mem_move</span><span class="p">,</span><span class="w"> </span><span class="n">src_view</span><span class="p">,</span><span class="w"> </span><span class="n">dst_view</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Result for this operation is:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">mem_move_result</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">status_code</span><span class="w"> </span><span class="n">status</span><span class="p">{</span><span class="n">status_code</span><span class="o">::</span><span class="n">error</span><span class="p">};</span><span class="w"> </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="w">    </span><span class="n">result_t</span><span class="w">    </span><span class="n">result</span><span class="p">{};</span><span class="w">                   </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="memory-copy-with-dualcast">
+<h4>Memory Copy with Dualcast<a class="headerlink" href="#memory-copy-with-dualcast" title="Permalink to this headline"></a></h4>
+<p>This operation copies data from a memory region represented via
+<code class="docutils literal notranslate"><span class="pre">src_view</span></code> to memory regions represented via <code class="docutils literal notranslate"><span class="pre">dst1_view</span></code> and
+<code class="docutils literal notranslate"><span class="pre">dst2_view</span></code>.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::dualcast</span></code> object.</p>
+<p>Usage:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">dualcast</span><span class="p">,</span><span class="w"> </span><span class="n">src_view</span><span class="p">,</span><span class="w"> </span><span class="n">dst1_view</span><span class="p">,</span><span class="w"> </span><span class="n">dst2_view</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Result for this operation is:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">dualcast_result</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">status_code</span><span class="w"> </span><span class="n">status</span><span class="p">{</span><span class="n">status_code</span><span class="o">::</span><span class="n">error</span><span class="p">};</span><span class="w"> </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ol class="arabic simple">
+<li><p>There are no alignment requirements for <code class="docutils literal notranslate"><span class="pre">src_view</span></code> data.</p></li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">dst1_view</span></code> and <code class="docutils literal notranslate"><span class="pre">dst2_view</span></code>, the data address’ 11:0 bits must be the same.</p></li>
+<li><p>The data regions passed to the operation shall not overlap.</p></li>
+</ol>
+</div>
+</div>
+<div class="section" id="fill">
+<h4>Fill<a class="headerlink" href="#fill" title="Permalink to this headline"></a></h4>
+<p>This operation fills data at memory region represented via <code class="docutils literal notranslate"><span class="pre">dst_view</span></code>
+with 64-bit <code class="docutils literal notranslate"><span class="pre">pattern</span></code>.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::fill</span></code> object.</p>
+<p>Usage:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">fill</span><span class="p">,</span><span class="w"> </span><span class="n">pattern</span><span class="p">,</span><span class="w"> </span><span class="n">dst_view</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Result for this operation is:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">fill_result</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">status_code</span><span class="w"> </span><span class="n">status</span><span class="p">{</span><span class="n">status_code</span><span class="o">::</span><span class="n">error</span><span class="p">};</span><span class="w"> </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ol class="arabic simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">pattern</span></code> size is always 8 bytes.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">dst_view</span></code> size does not need to be a multiple of 8.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="section" id="memory-compare-and-restoring-features">
+<h3>Memory Compare and Restoring Features<a class="headerlink" href="#memory-compare-and-restoring-features" title="Permalink to this headline"></a></h3>
+<p>This group of operation is used for memory comparing and restoring to
+proper state.</p>
+<div class="section" id="compare">
+<h4>Compare<a class="headerlink" href="#compare" title="Permalink to this headline"></a></h4>
+<p>This operation compares data at memory region represented via
+<code class="docutils literal notranslate"><span class="pre">src1_view</span></code> with data at memory region represented via <code class="docutils literal notranslate"><span class="pre">src2_view</span></code>.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::compare</span></code> object.</p>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N3dml17compare_operationE">
+<span id="_CPPv3N3dml17compare_operationE"></span><span id="_CPPv2N3dml17compare_operationE"></span><span id="dml::compare_operation"></span><span class="target" id="df/d14/classdml_1_1compare__operation"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dml</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">compare_operation</span></span></span><a class="headerlink" href="#_CPPv4N3dml17compare_operationE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Compare operation. </p>
+<p>This operation compares data at the first memory region with data at the second memory region.</p>
+<p>Comparison result will be written into compare_result::result field.</p>
+<p>By default the operation doesn’t check for comparison result and always returns status_code::ok. To enable result checking use one of this class methods. See the following table for detailed view on options:</p>
+<p><table class="colwidths-auto docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Expected result   </p></th>
+<th class="head"><p>Actual result   </p></th>
+<th class="head"><p>Returned status    </p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Not specified   </p></td>
+<td><p>Any   </p></td>
+<td><p>status_code::ok</p></td>
+</tr>
+<tr class="row-odd"><td><p>Equal   </p></td>
+<td><p>Equal   </p></td>
+<td><p>status_code::ok</p></td>
+</tr>
+<tr class="row-even"><td><p>Equal   </p></td>
+<td><p>Not equal   </p></td>
+<td><p>status_code::false_predicate</p></td>
+</tr>
+<tr class="row-odd"><td><p>Not equal   </p></td>
+<td><p>Equal   </p></td>
+<td><p>status_code::false_predicate</p></td>
+</tr>
+<tr class="row-even"><td><p>Not equal   </p></td>
+<td><p>Not equal   </p></td>
+<td><p>status_code::ok</p></td>
+</tr>
+</tbody>
+</table>
+</p>
+<p>See also dml::compare </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N3dml17compare_operation11result_typeE">
+<span id="_CPPv3N3dml17compare_operation11result_typeE"></span><span id="_CPPv2N3dml17compare_operation11result_typeE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1afcf6ad84696e1001a199d7fdd38be562"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">result_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">compare_result</span></span><a class="headerlink" href="#_CPPv4N3dml17compare_operation11result_typeE" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Result type for this operation. </p>
+<p>See compare_result </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N3dml17compare_operation17compare_operationEv">
+<span id="_CPPv3N3dml17compare_operation17compare_operationEv"></span><span id="_CPPv2N3dml17compare_operation17compare_operationEv"></span><span id="dml::compare_operation::compare_operationCE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1a24582a191baa7ec4b9f18ba50db868ba"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compare_operation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N3dml17compare_operation17compare_operationEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Constructs the operation with default parameters. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3dml17compare_operation12expect_equalEv">
+<span id="_CPPv3NK3dml17compare_operation12expect_equalEv"></span><span id="_CPPv2NK3dml17compare_operation12expect_equalEv"></span><span id="dml::compare_operation::expect_equalCCE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1a1221a5045d13181597b72bbc19096f36"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">expect_equal</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK3dml17compare_operation12expect_equalEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Returns a new instance of the operation with “equal” expected result. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>New instance of the operation </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3dml17compare_operation16expect_not_equalEv">
+<span id="_CPPv3NK3dml17compare_operation16expect_not_equalEv"></span><span id="_CPPv2NK3dml17compare_operation16expect_not_equalEv"></span><span id="dml::compare_operation::expect_not_equalCCE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1a0e291d333e023d8a647873413d3bcba7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">expect_not_equal</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK3dml17compare_operation16expect_not_equalEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Returns a new instance of the operation with “not_equal” expected result. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>New instance of the operation </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3dml17compare_operation11get_optionsEv">
+<span id="_CPPv3NK3dml17compare_operation11get_optionsEv"></span><span id="_CPPv2NK3dml17compare_operation11get_optionsEv"></span><span id="dml::compare_operation::get_optionsCCE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1afcce21d81c4637b825f49041bfe315d5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_options</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK3dml17compare_operation11get_optionsEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p><dl>
+<dt class="sig sig-object cpp">
+<em><span class="pre">Todo:</span></em></dt>
+<dd></dd></dl>
+
+</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3dml17compare_operation19get_expected_resultEv">
+<span id="_CPPv3NK3dml17compare_operation19get_expected_resultEv"></span><span id="_CPPv2NK3dml17compare_operation19get_expected_resultEv"></span><span id="dml::compare_operation::get_expected_resultC"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1a50cce8c8a866d51a64892039aeb91a3e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">compare_result</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_expected_result</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3dml17compare_operation19get_expected_resultEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Returns expected result. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Expected result </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<p>Usage:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">compare</span><span class="p">,</span><span class="w"> </span><span class="n">src1_view</span><span class="p">,</span><span class="w"> </span><span class="n">src2_view</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Result for this operation is:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">compare_result</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">status_code</span><span class="w"> </span><span class="n">status</span><span class="p">{</span><span class="n">status_code</span><span class="o">::</span><span class="n">error</span><span class="p">};</span><span class="w"> </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="w">    </span><span class="n">result_t</span><span class="w">    </span><span class="n">result</span><span class="p">{};</span><span class="w">                   </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w">      </span><span class="n">bytes_completed</span><span class="p">{};</span><span class="w">          </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="compare-pattern">
+<h4>Compare Pattern<a class="headerlink" href="#compare-pattern" title="Permalink to this headline"></a></h4>
+<p>This operation compares data at memory region represented via
+<code class="docutils literal notranslate"><span class="pre">src_view</span></code> with 64-bit <code class="docutils literal notranslate"><span class="pre">pattern</span></code>.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::compare</span></code> object.</p>
+<p>The operation <code class="docutils literal notranslate"><span class="pre">execute</span></code> method has the following arguments:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pattern</span></code> - 64-bit pattern for data comparison</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code> - source data represented via <code class="docutils literal notranslate"><span class="pre">dml::data_view</span></code> object</p></li>
+</ul>
+<p>Usage:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">compare_pattern</span><span class="p">,</span><span class="w"> </span><span class="n">pattern</span><span class="p">,</span><span class="w"> </span><span class="n">src_view</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Result for this operation is:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">compare_result</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">status_code</span><span class="w"> </span><span class="n">status</span><span class="p">{</span><span class="n">status_code</span><span class="o">::</span><span class="n">error</span><span class="p">};</span><span class="w"> </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="w">    </span><span class="n">result_t</span><span class="w">    </span><span class="n">result</span><span class="p">{};</span><span class="w">                   </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w">      </span><span class="n">bytes_completed</span><span class="p">{};</span><span class="w">          </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">src_view</span></code> parameter size does not need to be a multiple of 8.</p>
+</div>
+</div>
+<div class="section" id="create-delta-record">
+<h4>Create Delta Record<a class="headerlink" href="#create-delta-record" title="Permalink to this headline"></a></h4>
+<p>This operation compares data at memory region represented via
+<code class="docutils literal notranslate"><span class="pre">src1_view</span></code> with data at memory region represented via <code class="docutils literal notranslate"><span class="pre">src2_view</span></code>.
+Then it writes delta record to memory region represented via
+<code class="docutils literal notranslate"><span class="pre">delta_view</span></code>. The delta record contains the information needed to
+update the data at the <code class="docutils literal notranslate"><span class="pre">src1_view</span></code> memory region to match the data at
+the <code class="docutils literal notranslate"><span class="pre">src2_view</span></code> memory region.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::create_delta</span></code> object.</p>
+<p>The operation <code class="docutils literal notranslate"><span class="pre">execute</span></code> method has the following arguments:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">base</span></code> - base source data represented via <code class="docutils literal notranslate"><span class="pre">dml::data_view</span></code> object</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code> - source data represented via <code class="docutils literal notranslate"><span class="pre">dml::data_view</span></code> object</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">delta</span></code> - destination data represented via <code class="docutils literal notranslate"><span class="pre">dml::data_view</span></code> object for delta record</p></li>
+</ul>
+<p>Usage:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">create_delta</span><span class="p">,</span><span class="w"> </span><span class="n">src1_view</span><span class="p">,</span><span class="w"> </span><span class="n">src2_view</span><span class="p">,</span><span class="w"> </span><span class="n">delta_view</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Result for this operation is:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">create_delta_result</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">status_code</span><span class="w"> </span><span class="n">status</span><span class="p">{</span><span class="n">status_code</span><span class="o">::</span><span class="n">error</span><span class="p">};</span><span class="w"> </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="w">    </span><span class="n">result_t</span><span class="w">    </span><span class="n">result</span><span class="p">{};</span><span class="w">                   </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w">      </span><span class="n">bytes_completed</span><span class="p">{};</span><span class="w">          </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w">      </span><span class="n">delta_record_size</span><span class="p">{};</span><span class="w">        </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>1. The <code class="docutils literal notranslate"><span class="pre">src1_view</span></code> parameter is limited by the maximum offset that can
+be stored in the delta record.</p>
+<p>1. <code class="docutils literal notranslate"><span class="pre">src1_view</span></code>, <code class="docutils literal notranslate"><span class="pre">src2_view</span></code> and <code class="docutils literal notranslate"><span class="pre">delta_view</span></code> addresses must be
+8-byte aligned (multiple of 8).</p>
+<p>1. <code class="docutils literal notranslate"><span class="pre">delta_view</span></code> size must be a multiple of 10, and not less that 80
+bytes.</p>
+<p>1. Since the <code class="docutils literal notranslate"><span class="pre">offset</span></code> field in the delta record is <code class="docutils literal notranslate"><span class="pre">uint16_t</span></code>
+representing a multiple of 8 bytes, the maximum offset that can be
+expressed is <code class="docutils literal notranslate"><span class="pre">0x7fff8</span></code>, so the maximum transfer size (the
+<code class="docutils literal notranslate"><span class="pre">src1_view</span></code> parameter) is <code class="docutils literal notranslate"><span class="pre">0x80000</span></code> bytes (512KB).</p>
+</div>
+</div>
+<div class="section" id="apply-delta-record">
+<h4>Apply Delta Record<a class="headerlink" href="#apply-delta-record" title="Permalink to this headline"></a></h4>
+<p>This operation applies delta record written to memory region represented
+via <code class="docutils literal notranslate"><span class="pre">delta_view</span></code> view onto data at memory region represented via
+<code class="docutils literal notranslate"><span class="pre">dst_view</span></code> view.</p>
+<p>This operation is used in pair with Create Delta operation to update
+<code class="docutils literal notranslate"><span class="pre">src1_view</span></code> so that it matches <code class="docutils literal notranslate"><span class="pre">src2_view</span></code>, using <code class="docutils literal notranslate"><span class="pre">delta_view</span></code>
+written.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::apply_delta</span></code> object.</p>
+<p>Usage:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">create_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">create_delta</span><span class="p">,</span><span class="w"> </span><span class="n">src1_view</span><span class="p">,</span><span class="w"> </span><span class="n">src2_view</span><span class="p">,</span><span class="w"> </span><span class="n">delta_view</span><span class="p">);</span><span class="w"></span>
+<span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">apply_delta</span><span class="p">,</span><span class="w"> </span><span class="n">delta_view</span><span class="p">,</span><span class="w"> </span><span class="n">src1_view</span><span class="p">,</span><span class="w"> </span><span class="n">create_result</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Result for this operation is:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">apply_delta_result</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">status_code</span><span class="w"> </span><span class="n">status</span><span class="p">{</span><span class="n">status_code</span><span class="o">::</span><span class="n">error</span><span class="p">};</span><span class="w"> </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">delta_view</span></code> parameter shall be got from a successful call of
+create_delta, it is automatically checked through <code class="docutils literal notranslate"><span class="pre">create_result</span></code>
+parameter.</p>
+</div>
+</div>
+</div>
+<div class="section" id="memory-hash-features">
+<h3>Memory Hash Features<a class="headerlink" href="#memory-hash-features" title="Permalink to this headline"></a></h3>
+<p>This group of operation is used for ensuring data integrity with hash
+algorithms.</p>
+<div class="section" id="crc-generation">
+<h4>CRC Generation<a class="headerlink" href="#crc-generation" title="Permalink to this headline"></a></h4>
+<p>This operation computes CRC on the data at memory region represented via
+<code class="docutils literal notranslate"><span class="pre">src_view</span></code>. Initial crc seed is provided via <code class="docutils literal notranslate"><span class="pre">crc_seed</span></code> argument.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::crc</span></code> object. The operation is
+configurable via <code class="docutils literal notranslate"><span class="pre">.bypass_reflection()</span></code> and <code class="docutils literal notranslate"><span class="pre">.bypass_data_reflection()</span></code> methods.</p>
+<p>Usage:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">crc</span><span class="p">,</span><span class="w"> </span><span class="n">src_view</span><span class="p">,</span><span class="w"> </span><span class="n">crc_seed</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Result for this operation is:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">crc_result</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">status_code</span><span class="w"> </span><span class="n">status</span><span class="p">{</span><span class="n">status_code</span><span class="o">::</span><span class="n">error</span><span class="p">};</span><span class="w"> </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w">    </span><span class="n">crc_value</span><span class="p">{};</span><span class="w">                </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This operation computes CRC using the polynomial 0x11edc6f41 (iSCSI
+Protocol, RFC 3720). When the size of <code class="docutils literal notranslate"><span class="pre">src_view</span></code> parameter is not a
+multiple of 4 bytes, the source data is padded to the end with zeros.</p>
+</div>
+</div>
+<div class="section" id="copy-with-crc-generation">
+<h4>Copy with CRC Generation<a class="headerlink" href="#copy-with-crc-generation" title="Permalink to this headline"></a></h4>
+<p>This operation copies data at memory region represented via <code class="docutils literal notranslate"><span class="pre">src_view</span></code>
+to memory region represented via <code class="docutils literal notranslate"><span class="pre">dst_view</span></code>, and then computes CRC on
+the data copied. Initial crc seed is provided via <code class="docutils literal notranslate"><span class="pre">crc_seed</span></code> argument.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::crc</span></code> object. The operation is
+configurable via <code class="docutils literal notranslate"><span class="pre">.bypass_reflection()</span></code> and <code class="docutils literal notranslate"><span class="pre">.bypass_data_reflection()</span></code> methods.</p>
+<p>Usage:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">copy_crc</span><span class="p">,</span><span class="w"> </span><span class="n">src_view</span><span class="p">,</span><span class="w"> </span><span class="n">dst_view</span><span class="p">,</span><span class="w"> </span><span class="n">crc_seed</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Result for this operation is:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">crc_result</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">status_code</span><span class="w"> </span><span class="n">status</span><span class="p">{</span><span class="n">status_code</span><span class="o">::</span><span class="n">error</span><span class="p">};</span><span class="w"> </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w">    </span><span class="n">crc_value</span><span class="p">{};</span><span class="w">                </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Memory regions represented via <code class="docutils literal notranslate"><span class="pre">src_view</span></code> and <code class="docutils literal notranslate"><span class="pre">dst_view</span></code> should
+not overlap.</p>
+</div>
+</div>
+</div>
+<div class="section" id="utility-features">
+<h3>Utility Features<a class="headerlink" href="#utility-features" title="Permalink to this headline"></a></h3>
+<p>This group of operation is used for utility purposes.</p>
+<div class="section" id="cache-flush">
+<h4>Cache Flush<a class="headerlink" href="#cache-flush" title="Permalink to this headline"></a></h4>
+<p>The Cache Flush operation flushes the processor caches at memory region
+represented via <code class="docutils literal notranslate"><span class="pre">dst_view</span></code>.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::cache_flush</span></code> object. The operation
+is configurable via <code class="docutils literal notranslate"><span class="pre">.dont_invalidate_cache()</span></code> method.</p>
+<p>Usage:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">cache_flush</span><span class="p">,</span><span class="w"> </span><span class="n">dst_view</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Result for this operation is:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">cache_flush_result</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">status_code</span><span class="w"> </span><span class="n">status</span><span class="p">{</span><span class="n">status_code</span><span class="o">::</span><span class="n">error</span><span class="p">};</span><span class="w"> </span><span class="cm">/**&lt; @todo */</span><span class="w"></span>
+<span class="p">};</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By default this operation invalidates affected cache lines from every
+level of cache hierarchy. To disable that, use
+<code class="docutils literal notranslate"><span class="pre">dml::cache_flush.dont_invalidate_cache()</span></code> as the first argument.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="operation-status-values">
+<h2>Operation Status Values<a class="headerlink" href="#operation-status-values" title="Permalink to this headline"></a></h2>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dml</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">status_code</span></span></span><br /></dt>
+<dd><p>Status codes for error reporting. </p>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ok</span></span></span><br /></dt>
+<dd><p>Operation completed successfully </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">false_predicate</span></span></span><br /></dt>
+<dd><p>Operation completed successfully, but result is unexpected </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">partial_completion</span></span></span><br /></dt>
+<dd><p>Operation was partially completed </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nullptr_error</span></span></span><br /></dt>
+<dd><p>One of data pointers is NULL </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bad_size</span></span></span><br /></dt>
+<dd><p>Invalid byte size was specified </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bad_length</span></span></span><br /></dt>
+<dd><p>Invalid number of elements was specified </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">inconsistent_size</span></span></span><br /></dt>
+<dd><p>Input data sizes are different </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dualcast_bad_padding</span></span></span><br /></dt>
+<dd><p>Bits 11:0 of the two destination addresses are not the same. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bad_alignment</span></span></span><br /></dt>
+<dd><p>One of data pointers has invalid alignment </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buffers_overlapping</span></span></span><br /></dt>
+<dd><p>Buffers overlap with each other </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">delta_bad_size</span></span></span><br /></dt>
+<dd><p>Invalid delta record size was specified </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">delta_delta_empty</span></span></span><br /></dt>
+<dd><p>Delta record is empty </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">batch_overflow</span></span></span><br /></dt>
+<dd><p>Batch is full </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">execution_failed</span></span></span><br /></dt>
+<dd><p>Unknown execution error </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">unsupported_operation</span></span></span><br /></dt>
+<dd><p>Unknown execution error </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">queue_busy</span></span></span><br /></dt>
+<dd><p>Enqueue failed to one or several queues </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">error</span></span></span><br /></dt>
+<dd><p>Internal library error occurred </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../get_started_docs/code_samples_and_examples.html" class="btn btn-neutral float-left" title="Code Samples and examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="low_level_api.html" class="btn btn-neutral float-right" title="Low-level C API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

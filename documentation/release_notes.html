@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Release Notes &mdash; Intel® DML v0.1.7-beta documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Low-level C API" href="api_docs/low_level_api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> Intel® DML
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction_docs/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction_docs/system_requirements.html">System Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction_docs/license.html">License</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Get Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="get_started_docs/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_started_docs/quick_start.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="get_started_docs/code_samples_and_examples.html">Code Samples and examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Reference:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api_docs/high_level_api.html">High-level C++ API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs/low_level_api.html">Low-level C API</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Release Notes:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Release Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-7-beta">v0.1.7-beta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-6-beta">v0.1.6-beta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-5-beta">v0.1.5-beta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-4-beta">v0.1.4-beta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#v0-1-3-beta">v0.1.3-beta</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Intel® DML</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Release Notes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/documentation/release_notes.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <blockquote>
+<div></div></blockquote>
+<div class="section" id="release-notes">
+<h1>Release Notes<a class="headerlink" href="#release-notes" title="Permalink to this headline"></a></h1>
+<div class="section" id="v0-1-7-beta">
+<h2>v0.1.7-beta<a class="headerlink" href="#v0-1-7-beta" title="Permalink to this headline"></a></h2>
+<p><strong>Date</strong>: January 2022</p>
+<p><strong>Note</strong>: Release introduces initial implementation for the auto execution path, page fault handling, and manual NUMA node selection API</p>
+<p><strong>Features</strong>:</p>
+<ul class="simple">
+<li><p>Implemented the auto execution path (software fallback) for C API. The library will try to use hardware, but in case it is unavailable there is a software fallback.</p></li>
+<li><dl class="simple">
+<dt>Added page fault handling:</dt><dd><ul>
+<li><p>Removed usage of BlockOnFault flag</p></li>
+<li><dl class="simple">
+<dt>If page fault occurred during descriptor processing:</dt><dd><ul>
+<li><p>For the hardware execution path an erroneous status is returned</p></li>
+<li><p>For the auto execution path there is a software fallback, so the remainder of the workload is processed on CPU.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">numa_id</span></code> field for <code class="docutils literal notranslate"><span class="pre">dml_job_t</span></code> structure to specify custom NUMA node id for submission. Setting a number allows the library to do cross-socket submissions.</p></li>
+</ul>
+<p><strong>Optimizations</strong>:</p>
+<ul class="simple">
+<li><p>Optimized CRC operation for short lengths</p></li>
+</ul>
+</div>
+<div class="section" id="v0-1-6-beta">
+<h2>v0.1.6-beta<a class="headerlink" href="#v0-1-6-beta" title="Permalink to this headline"></a></h2>
+<p><strong>Date</strong>: December 2021</p>
+<p><strong>Note</strong>: Release introduces bug fixes and several minor improvements</p>
+<p><strong>Features</strong>:</p>
+<ul class="simple">
+<li><p>Improved incorrect input checking</p></li>
+<li><p>Added check for adjacent buffers for the DIF Strip operation. Status: <code class="docutils literal notranslate"><span class="pre">DML_STATUS_DIF_STRIP_ADJACENT_ERROR</span></code></p></li>
+<li><p>Reworked hardware related statuses for C API</p></li>
+<li><p>Added new status to indicate submission failure:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">DML_STATUS_WORK_QUEUES_NOT_AVAILABLE</span></code> for C API</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml::status_code::queue_busy</span></code> for C++ API</p></li>
+</ul>
+</li>
+<li><p>Removed LIBACCEL_3_2 cmake option. The supported version of accel-config is now 3.2 and higher</p></li>
+<li><p>NUMA node id is detected before each submission now, so threads are safe to change nodes at any time</p></li>
+</ul>
+<p><strong>Bug fix</strong>:</p>
+<ul class="simple">
+<li><p>Fixed the issue when batch operation doesn’t work for buffer not aligned on 64 bytes boundary</p></li>
+<li><p>Fixed the issue when current thread NUMA node id is deduced incorrectly</p></li>
+<li><p>Fixed crashes when there are no available devices for the current thread NUMA node id</p></li>
+<li><p>Removed dependencies on C++ runtime from C API</p></li>
+</ul>
+<p><strong>Warnings</strong>:</p>
+<ul class="simple">
+<li><p>As NUMA node id of the current thread is now deduced correctly,
+ensure that accelerators’ configuration is compatible.
+The library does no cross-socket submissions.
+If there is no available device for the current NUMA node id,
+then an error status code is reported.</p></li>
+</ul>
+</div>
+<div class="section" id="v0-1-5-beta">
+<h2>v0.1.5-beta<a class="headerlink" href="#v0-1-5-beta" title="Permalink to this headline"></a></h2>
+<p><strong>Date</strong>: November 2021</p>
+<p><strong>Note</strong>: Release introduces unification of underlying implementation for both C and C++ APIs</p>
+<p><strong>Features</strong>:</p>
+<ul class="simple">
+<li><p>Added internal device selection logic to C API (the same as for C++ API)</p>
+<ul>
+<li><p>Selector considers submitting thread’s NUMA node id</p></li>
+<li><p>Selector switches devices and work queues with each submission</p></li>
+</ul>
+</li>
+<li><p>Improved range checking for C and C++ APIs</p></li>
+</ul>
+<p><strong>Bug fix</strong>:</p>
+<ul class="simple">
+<li><p>Lowered memory size requirements for job structure by ~100x</p></li>
+</ul>
+</div>
+<div class="section" id="v0-1-4-beta">
+<h2>v0.1.4-beta<a class="headerlink" href="#v0-1-4-beta" title="Permalink to this headline"></a></h2>
+<p><strong>Date</strong>: Ocotber 2021</p>
+<p><strong>Note</strong>: Release introduces several fixes for code and infrastructure</p>
+<p><strong>Bug fix</strong>:</p>
+<ul class="simple">
+<li><p>Fixed crashes when C++ API was used without root permissions.</p></li>
+<li><p>Fixed crashes when HW initialization failed.</p></li>
+<li><p>Fixed documentation section about system requirements.</p></li>
+<li><p>Fixed project install-paths. They are now following GNU guidelines.</p></li>
+<li><p>Fixed wrong path for loading <code class="docutils literal notranslate"><span class="pre">libaccel-config.so</span></code> to <code class="docutils literal notranslate"><span class="pre">/usr/lib64/libaccel-config.so</span></code>.</p></li>
+</ul>
+<p><strong>Warnings</strong>:</p>
+<ul class="simple">
+<li><p>Correct inclusion path for C API is <code class="docutils literal notranslate"><span class="pre">&lt;dml/dml.h&gt;</span></code> now.</p></li>
+</ul>
+</div>
+<div class="section" id="v0-1-3-beta">
+<h2>v0.1.3-beta<a class="headerlink" href="#v0-1-3-beta" title="Permalink to this headline"></a></h2>
+<p><strong>Date</strong>: August, 2021</p>
+<p><strong>Note</strong>: Initial library version</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api_docs/low_level_api.html" class="btn btn-neutral float-left" title="Low-level C API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

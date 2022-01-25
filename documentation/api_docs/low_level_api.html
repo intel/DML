@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Low-level C API &mdash; Intel® DML v0.1.7-beta documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Release Notes" href="../release_notes.html" />
+    <link rel="prev" title="High-level C++ API" href="high_level_api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> Intel® DML
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">About:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction_docs/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction_docs/system_requirements.html">System Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction_docs/license.html">License</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Get Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/quick_start.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/code_samples_and_examples.html">Code Samples and examples</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Reference:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="high_level_api.html">High-level C++ API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Low-level C API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#disclaimer">Disclaimer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#header-files">Header Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-use-the-library">How to Use the Library</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#memory-allocation-and-job-structure-initialization">Memory Allocation and Job Structure Initialization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#job-execution">Job Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#low-bandwidth-memory">Low Bandwidth Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#persistent-memory-support">Persistent Memory Support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#numa-support">NUMA support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#page-fault-handling">Page Fault handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#basic-fields-of-job-structure">Basic Fields of Job Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#operations">Operations</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#job-flow-control-features">Job Flow Control Features</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#no-op-operation">No-op operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#batch-operation">Batch operation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#drain">Drain</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-transferring-and-filling-features">Memory Transferring and Filling Features</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#memory-move">Memory Move</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#memory-copy-with-dualcast">Memory Copy with Dualcast</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-compare-and-restoring-features">Memory Compare and Restoring Features</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#compare">Compare</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#compare-pattern">Compare Pattern</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#create-delta-record">Create Delta Record</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#apply-delta-record">Apply Delta Record</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-hash-features">Memory Hash Features</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#crc-generation">CRC Generation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#copy-with-crc-generation">Copy with CRC Generation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#data-integrity-field-features">Data Integrity Field Features</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#dif-check">DIF Check</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dif-insert">DIF Insert</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dif-strip">DIF Strip</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dif-update">DIF Update</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#cache-flush">Cache Flush</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#job-structure-description">Job Structure Description</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#operation-status-values">Operation Status Values</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Release Notes:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release Notes</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Intel® DML</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Low-level C API</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/documentation/api_docs/low_level_api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <blockquote>
+<div></div></blockquote>
+<div class="section" id="low-level-c-api">
+<h1>Low-level C API<a class="headerlink" href="#low-level-c-api" title="Permalink to this headline"></a></h1>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<p>This document provides instructions on how to use the Intel® Data Mover
+Library. It describes general usage concepts, main entities and
+detailed operation descriptions.</p>
+<p>For general introduction to Intel® DML, see <a class="reference external" href="../introduction_docs/introduction.html">Introduction</a>.</p>
+<div class="section" id="disclaimer">
+<h3>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline"></a></h3>
+<p>The library exists in a prototype form and is being actively
+developed. This means that some of the things described here may change
+in the future. However, the library is released now with the expectation
+that it will be more useful than nothing to people who may use it.</p>
+</div>
+</div>
+<div class="section" id="header-files">
+<h2>Header Files<a class="headerlink" href="#header-files" title="Permalink to this headline"></a></h2>
+<p>Your application only needs to include one header file: <code class="docutils literal notranslate"><span class="pre">dml.h</span></code>, which
+includes the entire API definition.</p>
+</div>
+<div class="section" id="how-to-use-the-library">
+<h2>How to Use the Library<a class="headerlink" href="#how-to-use-the-library" title="Permalink to this headline"></a></h2>
+<p>The library operation is based on the following concepts:</p>
+<ul class="simple">
+<li><p>Your application needs to fill in a data structure with the necessary
+parameters to describe the job to be done. The structure is passed to
+the library and contains the results (error codes, output parameters,
+and so on) after operation.</p></li>
+<li><p>The Intel® DML library does not perform any internal memory allocations.</p></li>
+<li><p>Your application must provide all the memory buffers that are required for the execution.</p></li>
+</ul>
+</div>
+<div class="section" id="memory-allocation-and-job-structure-initialization">
+<h2>Memory Allocation and Job Structure Initialization<a class="headerlink" href="#memory-allocation-and-job-structure-initialization" title="Permalink to this headline"></a></h2>
+<p>As the library supports several implementations/execution paths – <code class="docutils literal notranslate"><span class="pre">DML_PATH_HW</span></code>,
+<code class="docutils literal notranslate"><span class="pre">DML_PATH_SW</span></code>, and <code class="docutils literal notranslate"><span class="pre">DML_PATH_AUTO</span></code> – the size of the required memory
+buffer for a job structure is not predefined and depends on the used
+CPU/HW and execution path.</p>
+<p>Before submitting any job to the library, your application must
+determine the size of the required memory buffer, allocate, and
+initialize it. The algorithm of these steps is as follows:</p>
+<ol class="arabic simple">
+<li><p>Call the <code class="docutils literal notranslate"><span class="pre">dml_get_job_size()</span></code> function:</p></li>
+</ol>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml_get_job_size</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">job_size_ptr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">status</span></code> - has type <code class="docutils literal notranslate"><span class="pre">dml_status_t</span></code> and contains execution status of the function
+– success or error code – see <code class="docutils literal notranslate"><span class="pre">dml.h</span></code> for details.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">path</span></code> – has type <code class="docutils literal notranslate"><span class="pre">dml_path_t</span></code>, which can be:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">DML_PATH_HW</span></code>   – all hardware-supported features are executed by Intel® Data Streaming Accelerator</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DML_PATH_SW</span></code>   – all supported features is executed by the software path of the library</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DML_PATH_AUTO</span></code> – the library automatically dispatches execution of the requested jobs either to Intel® Data Streaming Accelerator or to the software path of the library depending on internal heuristics</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">job_size_ptr</span></code> – has type <code class="docutils literal notranslate"><span class="pre">uint32_t*</span></code> (a pointer to unsigned int)
+and stores the calculated memory buffer size returned by the function.</p></li>
+</ul>
+<ol class="arabic simple">
+<li><p>Allocate the required memory buffer (size in bytes =
+<code class="docutils literal notranslate"><span class="pre">*job_size_ptr</span></code>). The Intel® Data Mover Library does not allocate
+or free memory, therefore an application must provide required memory
+buffer for the job structure and free it after it becomes
+unnecessary. During allocation, the memory buffer should be casted to
+<code class="docutils literal notranslate"><span class="pre">dml_job_t</span> <span class="pre">*data</span> <span class="pre">type</span></code> – for example:</p></li>
+</ol>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">dml_job_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">dml_job_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="o">*</span><span class="n">job_size_ptr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>Check allocation results for success.</p>
+<ol class="arabic simple" start="3">
+<li><p>Call the <code class="docutils literal notranslate"><span class="pre">dml_init_job()</span></code> function:</p></li>
+</ol>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml_init_job</span><span class="p">(</span><span class="n">path</span><span class="p">,</span><span class="w"> </span><span class="n">dml_job_ptr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>where:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">status</span></code> - has type <code class="docutils literal notranslate"><span class="pre">dml_status_t</span></code> and contains execution status
+of the function: success or error code. See <code class="docutils literal notranslate"><span class="pre">dml.h</span></code> for details.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">path</span></code> - has type <code class="docutils literal notranslate"><span class="pre">dml_path_t</span></code> and supports the following values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DML_PATH_HW</span></code> – all hardware-supported features are executed
+by Intel® DSA</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DML_PATH_SW</span></code> – all supported features are executed by the
+software path of the library</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DML_PATH_AUTO</span></code> – the library automatically dispatches execution
+of the requested jobs either to accelerator or to the software
+path of the library depending on internal heuristics</p></li>
+</ul>
+<blockquote>
+<div><p><strong>NOTE:</strong> It shall have the same value as at the first step – the
+call to <code class="docutils literal notranslate"><span class="pre">dml_get_job_size()</span></code>.</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_job_ptr</span></code> – has type dml_job_t (Intel DML job structure) and
+stores the initialized Intel DML job structure returned by the
+function.</p></li>
+</ul>
+<p>An example of C code for these first steps:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">size</span><span class="p">;</span><span class="w"></span>
+<span class="n">dml_job_t</span><span class="w"> </span><span class="o">*</span><span class="n">dml_job_ptr</span><span class="p">;</span><span class="w"></span>
+<span class="n">dml_status_t</span><span class="w"> </span><span class="n">status</span><span class="p">;</span><span class="w"></span>
+
+<span class="n">status</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">dml_get_job_size</span><span class="p">(</span><span class="n">DML_PATH_AUTO</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">size</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
+<span class="n">dml_job_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">dml_job_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="p">);</span><span class="w"></span>
+<span class="n">status</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="n">dml_init_job</span><span class="p">(</span><span class="n">DML_PATH_AUTO</span><span class="p">,</span><span class="w"> </span><span class="mi">0u</span><span class="p">,</span><span class="w"> </span><span class="n">dml_job_ptr</span><span class="p">);</span><span class="w"></span>
+</pre></div>
+</div>
+<p>At this stage, the application has the initialized job structure and can
+request any library operation it needs.</p>
+</div>
+<div class="section" id="job-execution">
+<h2>Job Execution<a class="headerlink" href="#job-execution" title="Permalink to this headline"></a></h2>
+<p>The simplest interface is <code class="docutils literal notranslate"><span class="pre">dml_execute_job()</span></code>. It does not return any
+result until the job has completed. It is the “synchronous” interface.</p>
+<p>If the application wants to do other work while the job is being
+processed, it can use the “asynchronous” interface. The job is submitted
+with <code class="docutils literal notranslate"><span class="pre">dml_submit_job()</span></code>. The application can then periodically query
+the status of the job with <code class="docutils literal notranslate"><span class="pre">dml_check_job()</span></code>. If the application needs
+to wait until the job completes, it can call <code class="docutils literal notranslate"><span class="pre">dml_wait_job()</span></code>.</p>
+<p>Note that the <code class="docutils literal notranslate"><span class="pre">dml_execute_job()</span></code> function is essentially a
+combination of <code class="docutils literal notranslate"><span class="pre">dml_submit_job()</span></code> followed by <code class="docutils literal notranslate"><span class="pre">dml_wait_job()</span></code>.</p>
+<p>In the context of the behavioral model (i.e. without actual hardware
+support), the job is processed when it is submitted, and so the
+<code class="docutils literal notranslate"><span class="pre">dml_wait_job()</span></code> function always returns completed status. It is not
+the case when real hardware is involved.</p>
+<p>The job structure contains three types of data:</p>
+<ol class="arabic simple">
+<li><p>Parameters from the application to the library defining the job to be
+done;</p></li>
+<li><p>Results from the library to the application;</p></li>
+<li><p>Internal state.</p></li>
+</ol>
+<p>In some cases, a larger overall task may be broken into a series of
+separate library calls. For example, an application copying a large
+amount of data might call the library repeatedly with 64kB buffers,
+until the end of the data buffer is reached. The mechanism used to
+relate these calls to each other is that they all use the same job
+structure. As it will be described later, flags are used to indicate
+whether a particular job submission is the start of a new overall task
+or whether it is continuing a previous one. Because of it, there is no
+separate “init” function; the initialization is implied by the job’s
+parameters.</p>
+<p>There are also a number of auxiliary functions, which will be described
+as they become relevant.</p>
+<p>A number of examples can be found in the <a class="reference external" href="#examples">Examples</a> section.</p>
+</div>
+<div class="section" id="low-bandwidth-memory">
+<h2>Low Bandwidth Memory<a class="headerlink" href="#low-bandwidth-memory" title="Permalink to this headline"></a></h2>
+<p>The Library includes features to improve system performance when
+accessing memory with lower bandwidth or higher latency than DRAM. To
+use these features, WQs must be configured to work with various traffic
+classes (TC). The next flags allow you to choose which of the TCs to use
+for the operation:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DML_FLAG_ADDRESS1_TCB</span></code> - for most operation types selects TC-B for reads from the source address</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DML_FLAG_ADDRESS2_TCB</span></code> - for most operation types selects TC-B for writes to the destination address</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DML_FLAG_ADDRESS3_TCB</span></code> - specific flag that is interpreted differently for each operation</p></li>
+</ul>
+<p>You can read more about the flags in our docs</p>
+</div>
+<div class="section" id="persistent-memory-support">
+<h2>Persistent Memory Support<a class="headerlink" href="#persistent-memory-support" title="Permalink to this headline"></a></h2>
+<p>The Library provides several features intended to improve its utility
+with persistent memory:</p>
+<ol class="arabic simple">
+<li><p>The Steering Tag selector - allows user to select platform-defined
+steering tag. In the Library it is represented by two flags:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DML_FLAG_DST1_DURABLE</span></code> - writes to the first destination are
+identified as writes to durable memory</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DML_FLAG_DUALCAST_DST2_DURABLE</span></code> - specific flag for memory copy
+with dualcast operation. Writes to the second destination are
+identified as writes to durable memory</p></li>
+</ul>
+</li>
+</ol>
+<p>You can read more about the flags in our docs</p>
+</div>
+<div class="section" id="numa-support">
+<h2>NUMA support<a class="headerlink" href="#numa-support" title="Permalink to this headline"></a></h2>
+<p>The library is NUMA aware and respects the NUMA node id of the calling thread. If a user needs to use a device from a specific node, it can be done in two ways:</p>
+<ul class="simple">
+<li><p>Pin thread which performs submissions to the specific NUMA, the library will use devices only from this node.</p></li>
+<li><p>Set NUMA id parameter of the job to the specific node id, then devices will be selected only from this node.</p></li>
+</ul>
+<p>Load balancer of the library doesn’t cross a detected or specified NUMA boundary. Balancing workloads between different nodes is the responsibility of a user.</p>
+</div>
+<div class="section" id="page-fault-handling">
+<h2>Page Fault handling<a class="headerlink" href="#page-fault-handling" title="Permalink to this headline"></a></h2>
+<p>Page fault can occur during workload processing on a hardware. When the fault occurs, the outcome is based on the execution path:
+- Hardware path: <code class="docutils literal notranslate"><span class="pre">DML_STATUS_PAGE_FAULT_ERROR</span></code> is returned.
+- Auto path: the library resolves the fault via completion of the workload on a CPU.</p>
+</div>
+<div class="section" id="basic-fields-of-job-structure">
+<h2>Basic Fields of Job Structure<a class="headerlink" href="#basic-fields-of-job-structure" title="Permalink to this headline"></a></h2>
+<p>A complete description of the job structure fields can be found in
+Section (N).</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code></p></td>
+<td><p>The starting point of the input data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">source_length</span></code></p></td>
+<td><p>Length of the input data.
+On completion, the <code class="docutils literal notranslate"><span class="pre">source_length</span></code> field contains the number of
+bytes remained unprocessed in case of any library/HW issue, or it
+contains zero if everything is successful.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">source_second_ptr</span></code></p></td>
+<td><p>The starting point of the input data in case if the second buffer is
+required (length is described with <code class="docutils literal notranslate"><span class="pre">source_length</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code></p></td>
+<td><p>The starting point of the resulting data.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">destination_length</span></code></p></td>
+<td><p>Length of the resulting data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">destination_second_ptr</span></code></p></td>
+<td><p>The starting point of the resulting data
+in case if the second output buffer is required (length is described
+with <code class="docutils literal notranslate"><span class="pre">destination_length</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">operation</span></code></p></td>
+<td><p>Enumerated field that defines that operation to be performed.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">flags</span></code></p></td>
+<td><p>Flags that affect the operation behavior.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">crc</span></code></p></td>
+<td><p>Sets CRC initial value (seed). This field also returns the calculated CRC value.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">pattern[8]</span></code></p></td>
+<td><p>An array of patterns for the Compare Pattern operation.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">numa_id</span></code></p></td>
+<td><p>NUMA node id which is used to select a device.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="operations">
+<h2>Operations<a class="headerlink" href="#operations" title="Permalink to this headline"></a></h2>
+<div class="section" id="job-flow-control-features">
+<h3>Job Flow Control Features<a class="headerlink" href="#job-flow-control-features" title="Permalink to this headline"></a></h3>
+<div class="section" id="no-op-operation">
+<h4>No-op operation<a class="headerlink" href="#no-op-operation" title="Permalink to this headline"></a></h4>
+<p>The No-op operation can be used with the <code class="docutils literal notranslate"><span class="pre">Fence</span></code> flag in the batch to
+ensure that all previous operations in the batch completed. It performs
+no any other operation.</p>
+</div>
+<div class="section" id="batch-operation">
+<h4>Batch operation<a class="headerlink" href="#batch-operation" title="Permalink to this headline"></a></h4>
+<p>The Batch operation processes multiple jobs at once. Batch operation has
+sequence of operations at <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>, the size of memory
+region for a specific number of operations can be calculated via
+<code class="docutils literal notranslate"><span class="pre">dml_get_batch_size</span></code>. Operations can be added to the batch via set of
+set-functions:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_set_nop_by_index</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_set_mem_move_by_index</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_set_dualcast_by_index</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_set_compare_by_index</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_set_compare_pattern_by_index</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_set_crc_by_index</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_set_copy_crc_by_index</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_set_fill_by_index</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_set_cache_flush_by_index</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_set_delta_create_by_index</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_set_delta_apply_by_index</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_set_dif_check_by_index</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_set_dif_update_by_index</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_set_dif_insert_by_index</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_set_dif_strip_by_index</span></code></p></li>
+</ul>
+<p>Result and status of specific operation can be obtained via
+get-functions:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_get_result</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_get_status</span></code></p></li>
+</ul>
+<p>The maximum number of jobs available in a batch can be obtained with the service function:
+<code class="docutils literal notranslate"><span class="pre">dml_status_t</span> <span class="pre">dml_get_limits(dml_job_t</span> <span class="pre">*dml_job_ptr,</span> <span class="pre">dml_limits_t</span> <span class="pre">*dml_limits_ptr)</span></code>.</p>
+</div>
+<div class="section" id="drain">
+<h4>Drain<a class="headerlink" href="#drain" title="Permalink to this headline"></a></h4>
+<p>Use the Drain operation to wait for all jobs completion before exiting.
+It cannot be a part of batch and is treated as unsupported operation
+type for a batch.</p>
+</div>
+</div>
+<div class="section" id="memory-transferring-and-filling-features">
+<h3>Memory Transferring and Filling Features<a class="headerlink" href="#memory-transferring-and-filling-features" title="Permalink to this headline"></a></h3>
+<div class="section" id="memory-move">
+<h4>Memory Move<a class="headerlink" href="#memory-move" title="Permalink to this headline"></a></h4>
+<p>The Memory Move operation copies (moves) memory from
+<code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>. The number of moved
+bytes is given by the <code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter.</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">destination_length</span></code> parameter must contain the size of
+destinations (for internal validation).</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter must contain count of bytes to copy.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By default, the Memory Move operation is enabled for overlapping
+buffers. If you need to disable Move and enable only Copy behavior,
+you should set the <code class="docutils literal notranslate"><span class="pre">DML_FLAG_COPY</span></code> flag.</p>
+</div>
+</div>
+<div class="section" id="memory-copy-with-dualcast">
+<h4>Memory Copy with Dualcast<a class="headerlink" href="#memory-copy-with-dualcast" title="Permalink to this headline"></a></h4>
+<p>The Memory Copy with Dualcast operation copies memory from the
+<code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> to both <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> and
+<code class="docutils literal notranslate"><span class="pre">destination_second_ptr</span></code>.</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">destination_length</span></code> parameter must contain the size of destinations (for internal validation).</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter must contain count of bytes to copy.</p></li>
+<li><p>There are no alignment requirements for <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> and <code class="docutils literal notranslate"><span class="pre">source_length</span></code>.</p></li>
+<li><p>For <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> and <code class="docutils literal notranslate"><span class="pre">destination_second_ptr</span></code>, the 11:0 bits must be the same.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Move operation is not supported for Memory Copy with Dualcast. If
+<code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code>, <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> and
+<code class="docutils literal notranslate"><span class="pre">destination_second_ptr</span></code> overlap in any combination, the error is
+thrown.</p>
+</div>
+<div class="section" id="fill">
+<h5>Fill<a class="headerlink" href="#fill" title="Permalink to this headline"></a></h5>
+<p>The Memory Fill operation fills the memory at <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>
+with the bytes from the <code class="docutils literal notranslate"><span class="pre">pattern[8]</span></code> parameter.</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">destination_length</span></code> parameter must contain the number of bytes to fill.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">pattern</span></code> size is always 8 bytes.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter does not need to be a multiple of 8.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="memory-compare-and-restoring-features">
+<h3>Memory Compare and Restoring Features<a class="headerlink" href="#memory-compare-and-restoring-features" title="Permalink to this headline"></a></h3>
+<div class="section" id="compare">
+<h4>Compare<a class="headerlink" href="#compare" title="Permalink to this headline"></a></h4>
+<p>The Memory Compare operation compares memory at <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code>
+with memory at <code class="docutils literal notranslate"><span class="pre">source_second_ptr</span></code>.</p>
+<ul class="simple">
+<li><p>The number of bytes compared is given by the <code class="docutils literal notranslate"><span class="pre">source_length</span></code>
+parameter.</p></li>
+<li><p>You can configure the operation with the <code class="docutils literal notranslate"><span class="pre">DML_FLAG_CHECK_RESULT</span></code>
+flag and the <code class="docutils literal notranslate"><span class="pre">expected_result</span></code> field to implement
+<code class="docutils literal notranslate"><span class="pre">is_equal_memory</span></code> and <code class="docutils literal notranslate"><span class="pre">is_not_equal_memory</span></code>. This allows
+subsequent jobs in the same batch with the DML_FLAG_FENCE flag to
+continue or stop execution of the batch based on the result of
+comparison.</p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">DML_FLAG_CHECK_RESULT</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">expected_result</span></code> value</p></th>
+<th class="head"><p>Operational Goal</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>X</p></td>
+<td><p>Check if memory regions are equal</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>Check if memory regions are equal</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>Check if memory regions aren’t equal</p></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><p>If memory regions match each other, the result field contains 0, otherwise, it has 1.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">result</span> <span class="pre">==</span> <span class="pre">1</span></code>, the <code class="docutils literal notranslate"><span class="pre">offset</span></code> field contains the offset of the first difference.</p></li>
+<li><p>If operation is successful and <code class="docutils literal notranslate"><span class="pre">DML_FLAG_CHECK_RESULT</span></code> flag is set, the <code class="docutils literal notranslate"><span class="pre">result</span></code> field bit 1 is set according to the table below.</p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">DML_FLAG_CHECK_RESULT</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">expected_result</span></code> value</p></th>
+<th class="head"><p>result bit-0</p></th>
+<th class="head"><p>result bit-1</p></th>
+<th class="head"><p>meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0</p></td>
+<td><p>X</p></td>
+<td><p>X</p></td>
+<td><p>0</p></td>
+<td><p>EQUAL(expected result)</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>0</p></td>
+<td><p>EQUAL(expected result)</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>NOT EQUAL(expected result)</p></td>
+</tr>
+<tr class="row-odd"><td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+<td><p>NOT EQUAL(not expected result)</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+<td><p>0</p></td>
+<td><p>EQUAL(not expected result)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="compare-pattern">
+<h4>Compare Pattern<a class="headerlink" href="#compare-pattern" title="Permalink to this headline"></a></h4>
+<p>The Compare Pattern operation compares memory at <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code>
+with the value in the pattern field.</p>
+<ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> memory region matches the pattern, then the
+result field contains 0, otherwise it has 1.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">result</span> <span class="pre">==</span> <span class="pre">1</span></code>, the <code class="docutils literal notranslate"><span class="pre">offset</span></code> field contains the offset of the
+first difference. (It may not be the exact byte location, but it is
+guaranteed to be no greater than the first difference).</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter does not need to be a multiple of 8.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This operation can be used with the <code class="docutils literal notranslate"><span class="pre">DML_FLAG_CHECK_RESULT</span></code> flag and
+<code class="docutils literal notranslate"><span class="pre">expected_result</span></code> field. You can find mode details in the Compare
+Operation section.</p>
+</div>
+</div>
+<div class="section" id="create-delta-record">
+<h4>Create Delta Record<a class="headerlink" href="#create-delta-record" title="Permalink to this headline"></a></h4>
+<p>The Create Delta Record operation compares memory at
+<code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> with memory at <code class="docutils literal notranslate"><span class="pre">source_second_ptr</span></code> and generates
+a delta record containing the information needed to update
+<code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> to match <code class="docutils literal notranslate"><span class="pre">source_second_ptr</span></code>. The number of bytes
+compared is given by the <code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter.</p>
+<ul class="simple">
+<li><p>The delta record is written into the address specified in
+<code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>. Destination buffer size must be set in the
+<code class="docutils literal notranslate"><span class="pre">destination_length</span></code> field.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter is limited by the maximum offset that
+can be stored in the delta record.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code>, <code class="docutils literal notranslate"><span class="pre">source_second_ptr</span></code> and <code class="docutils literal notranslate"><span class="pre">source_length</span></code>
+must be 8-byte aligned (multiple of 8).</p>
+<p><code class="docutils literal notranslate"><span class="pre">destination_length</span></code> must be a multiple of 10.</p>
+</div>
+<p>Delta record format is described below:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>Off set</p></td>
+<td><p>Data byte 0</p></td>
+<td><p>Data byte 1</p></td>
+<td><p>Data byte 2</p></td>
+<td><p>Data byte 3</p></td>
+<td><p>Data byte 4</p></td>
+<td><p>Data byte 5</p></td>
+<td><p>Data byte 6</p></td>
+<td><p>Data byte 7</p></td>
+</tr>
+<tr class="row-even"><td><p>Off set 1</p></td>
+<td><p>Data byte 0</p></td>
+<td><p>Data byte 1</p></td>
+<td><p>Data byte 2</p></td>
+<td><p>Data byte 3</p></td>
+<td><p>Data byte 4</p></td>
+<td><p>Data byte 5</p></td>
+<td><p>Data byte 6</p></td>
+<td><p>Data byte 7</p></td>
+</tr>
+<tr class="row-odd"><td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+</tr>
+<tr class="row-even"><td><p>Off set n</p></td>
+<td><p>Data byte 0</p></td>
+<td><p>Data byte 1</p></td>
+<td><p>Data byte 2</p></td>
+<td><p>Data byte 3</p></td>
+<td><p>Data byte 4</p></td>
+<td><p>Data byte 5</p></td>
+<td><p>Data byte 6</p></td>
+<td><p>Data byte 7</p></td>
+</tr>
+</tbody>
+</table>
+<p>The maximum size of the delta record is given by the
+<code class="docutils literal notranslate"><span class="pre">dml_limits_t.dml_max_delta_record_size</span></code> field (service function
+<code class="docutils literal notranslate"><span class="pre">dml_status_t</span> <span class="pre">dml_get_limits(dml_job_t*</span> <span class="pre">dml_job_ptr,</span> <span class="pre">dml_limits_t*</span> <span class="pre">dml_limits_ptr)</span></code>).</p>
+<p>The delta records are written to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>, therefore it
+must point to the memory buffer of the appropriate size. The <code class="docutils literal notranslate"><span class="pre">offset</span></code>
+field of the delta record has <code class="docutils literal notranslate"><span class="pre">uint16_t</span></code> data type, therefore the size
+of the delta record must be:</p>
+<ul class="simple">
+<li><p>a multiple of the delta size (10 bytes)</p></li>
+<li><p>less than the maximum number of deltas that can be generated from a single cache line (80 bytes)</p></li>
+<li><p>not greater than the value allowed by the <code class="docutils literal notranslate"><span class="pre">dml_limits_t.dml_max_transfer_size</span></code></p></li>
+</ul>
+<p>The actual size of the generated delta record depends on the number of
+differences detected. This size is written to the <code class="docutils literal notranslate"><span class="pre">destination_length</span></code>
+field of the <code class="docutils literal notranslate"><span class="pre">dml_job_t</span></code> structure. The result of comparison is
+written to the <code class="docutils literal notranslate"><span class="pre">result</span></code> field of the <code class="docutils literal notranslate"><span class="pre">dml_job_t</span></code> structure.</p>
+<ol class="arabic simple">
+<li><p>If two regions match exactly, then the <code class="docutils literal notranslate"><span class="pre">result</span></code> field is 0,
+<code class="docutils literal notranslate"><span class="pre">bytes_processed</span></code> field is 0, <code class="docutils literal notranslate"><span class="pre">destination_length</span></code> field is 0.</p></li>
+<li><p>If two regions do not match, and a complete set of deltas is written
+to the delta record, then the result field is 1, the <code class="docutils literal notranslate"><span class="pre">offset</span></code> field
+contains the first difference’s offset, and the
+<code class="docutils literal notranslate"><span class="pre">destination_length</span></code> field contains byte size of the delta record.</p></li>
+<li><p>If two regions do not match, and the space needed to record all the
+deltas exceeds the significant <code class="docutils literal notranslate"><span class="pre">destination_length</span></code>, then result is
+2, when:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">destination_length</span></code> contains a created delta record size before
+<code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> buffer size has been overflowed</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">source_length</span></code> contains the remaining number of bytes to
+compare</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">offset</span></code> field contains the first difference’s offset</p></li>
+</ul>
+</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since the <code class="docutils literal notranslate"><span class="pre">offset</span></code> field in the delta record is <code class="docutils literal notranslate"><span class="pre">uint16_t</span></code>
+representing a multiple of 8 bytes, the maximum offset that can be
+expressed is <code class="docutils literal notranslate"><span class="pre">0x7fff8</span></code>, so the maximum transfer size (the
+<code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter) is <code class="docutils literal notranslate"><span class="pre">0x80000</span></code> bytes (512KB).</p>
+<p>This operation can be used with the <code class="docutils literal notranslate"><span class="pre">DML_FLAG_CHECK_RESULT</span></code> flag and
+<code class="docutils literal notranslate"><span class="pre">expected_result</span></code> field. Mode details are in the Compare Operation
+description.</p>
+</div>
+</div>
+<div class="section" id="apply-delta-record">
+<h4>Apply Delta Record<a class="headerlink" href="#apply-delta-record" title="Permalink to this headline"></a></h4>
+<p>The Apply Delta Record operation applies a delta record at
+<code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>. The delta record must
+be created by the Create Delta Record operation with <code class="docutils literal notranslate"><span class="pre">result</span></code> equal to
+1.</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">destination_length</span></code> parameter must contain the size of memory
+region to update.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter must contain the delta record size as
+returned to the <code class="docutils literal notranslate"><span class="pre">destination_length</span></code> field after the Create Delta
+Record operation.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="memory-hash-features">
+<h3>Memory Hash Features<a class="headerlink" href="#memory-hash-features" title="Permalink to this headline"></a></h3>
+<div class="section" id="crc-generation">
+<h4>CRC Generation<a class="headerlink" href="#crc-generation" title="Permalink to this headline"></a></h4>
+<p>The CRC Generation computes the CRC on memory at <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code>.
+The number of bytes used for CRC computation is given by the
+<code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter. The <code class="docutils literal notranslate"><span class="pre">crc_ptr</span></code> field in the <code class="docutils literal notranslate"><span class="pre">dml_job_t</span></code>
+is used as a seed for CRC calculation, therefore it can be used for
+continuation.</p>
+<p>This operation computes CRC using the polynomial <code class="docutils literal notranslate"><span class="pre">0x11edc6f41</span></code> (iSCSI
+Protocol, RFC 3720). When the <code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter is not a
+multiple of 4 bytes, the source data is padded to the end with zeros.</p>
+</div>
+<div class="section" id="copy-with-crc-generation">
+<h4>Copy with CRC Generation<a class="headerlink" href="#copy-with-crc-generation" title="Permalink to this headline"></a></h4>
+<p>The Copy with CRC Generation operation copies memory from
+<code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> and computes CRC on
+the data copied.</p>
+<p>The number of bytes copied is given by the <code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter.
+This operation runs as a sequential call of two operations.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> and <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> overlap, the error
+is thrown.</p>
+</div>
+</div>
+<div class="section" id="data-integrity-field-features">
+<h3>Data Integrity Field Features<a class="headerlink" href="#data-integrity-field-features" title="Permalink to this headline"></a></h3>
+<p>The Data Integrity Field (DIF) provides a system solution to protect the
+communication path between a host and storage device for end-to-end
+integrity.</p>
+<p>Data block protected with DIF has the following format:</p>
+<ul class="simple">
+<li><p>Data block (512, 520, 4096 or 4104 bytes)</p></li>
+<li><p>Reference tag (4 bytes)</p></li>
+<li><p>Meta tag (2 bytes)</p></li>
+<li><p>Guard (2 bytes)</p></li>
+</ul>
+<p>where:</p>
+<ul class="simple">
+<li><p>Data block contains some binary data.</p></li>
+<li><p>The Reference Tag nominally contains information associated with a
+specific data block within some context, such as the lower 4 bytes of
+the Logical Block Address.</p></li>
+<li><p>The Meta Tag (called as Application in Intel DML context) contains
+additional context information that is nominally held fixed within
+the context of a given I/O operation.</p></li>
+<li><p>Guard field is computed from the data in the standard data block with
+CRC16.</p></li>
+</ul>
+<p>You can find more information about End-to-End Data Protection
+Justification with DIF
+<a class="reference external" href="https://www.t10.org/ftp/t10/document.03/03-224r0.pdf">here</a>.</p>
+<p><strong>How to configure Data Integrity Field Operation</strong></p>
+<p>You can configure all the Intel DML operations that work with data
+protected with DIF using the <code class="docutils literal notranslate"><span class="pre">dml_dif_config_t</span></code> structure. This
+structure is provided as a field of <code class="docutils literal notranslate"><span class="pre">dml_job_t</span></code>.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">flags</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">source_reference_tag_seed</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">source_application_tag_seed</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">source_application_tag_mask</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">destination_reference_tag_seed</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">destination_application_tag_seed</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">destination_application_tag_mask</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">dml_dif_block_size_t</span><span class="w"> </span><span class="n">block_size</span><span class="p">;</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">dml_dif_config_t</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+<ol class="arabic">
+<li><p><code class="docutils literal notranslate"><span class="pre">block_size</span></code> - field can be used to set the size of a block that is
+protected with DIF. All possible data block sizes are presented
+below:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">typedef</span><span class="w"> </span><span class="k">enum</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="n">DML_DIF_BLOCK_SIZE_512</span><span class="p">,</span><span class="w">     </span><span class="cm">/**&lt; Size is 512 bytes  */</span><span class="w"></span>
+<span class="w">    </span><span class="n">DML_DIF_BLOCK_SIZE_520</span><span class="p">,</span><span class="w">     </span><span class="cm">/**&lt; Size is 520 bytes  */</span><span class="w"></span>
+<span class="w">    </span><span class="n">DML_DIF_BLOCK_SIZE_4096</span><span class="p">,</span><span class="w">    </span><span class="cm">/**&lt; Size is 4096 bytes */</span><span class="w"></span>
+<span class="w">    </span><span class="n">DML_DIF_BLOCK_SIZE_4104</span><span class="w">     </span><span class="cm">/**&lt; Size is 4104 bytes */</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="n">dml_dif_block_size_t</span><span class="p">;</span><span class="w"></span>
+</pre></div>
+</div>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">target_reference_tag_seed</span></code> and <code class="docutils literal notranslate"><span class="pre">target_application_tag_seed</span></code>
+fields contain values for tags of the first data block (seed). For
+each operation, fill in these fields in accordance with the table
+below:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Operation</p></th>
+<th class="head"><p>Source Tag Seeds</p></th>
+<th class="head"><p>Destination Tag Seeds</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>DML_OP_DIF_CHECK</p></td>
+<td><p>Required</p></td>
+<td><p>Not required</p></td>
+</tr>
+<tr class="row-odd"><td><p>DML_OP_DIF_INSERT</p></td>
+<td><p>Not required</p></td>
+<td><p>Required</p></td>
+</tr>
+<tr class="row-even"><td><p>DML_OP_DIF_STRIP</p></td>
+<td><p>Required if DIF check enabled</p></td>
+<td><p>Not required</p></td>
+</tr>
+<tr class="row-odd"><td><p>DML_OP_DIF_UPDATE</p></td>
+<td><p>Required if DIF check enabled</p></td>
+<td><p>Required</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">target_aplication_tag_mask</span></code> field can be used to mask some
+application tag bits. Note that 1 bit in the mask means that the
+corresponding bit is masked in the tag. For example, 0xFE masks all
+application tag bits except the first low bit.</p></li>
+<li><p>With the <code class="docutils literal notranslate"><span class="pre">flags</span></code> field, you can thoroughly configure the operation
+behavior. Flags are separated by groups and presented below.</p>
+<ol class="arabic">
+<li><p>СRC generation can be configured with the following flags:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Flag</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_FLAG_INVERT_CRC_SEED</span></code></p></td>
+<td><p>The initial crc seed is <code class="docutils literal notranslate"><span class="pre">0xFFFF</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_FLAG_INVERT_CRC_RESULT</span></code></p></td>
+<td><p>Invert CRC result</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Source DIF can be configured with following flags:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Flag</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_FLAG_SRC_F_ENABLE_ERROR</span></code></p></td>
+<td><p>Throw an error on condition set by the <code class="docutils literal notranslate"><span class="pre">DML_DIF_FLAG_SRC_F_DETECT_ALL</span></code> flag</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_FLAG_SRC_F_DETECT_ALL</span></code></p></td>
+<td><p>Detect if all DIF bytes are equal to <code class="docutils literal notranslate"><span class="pre">0xFF</span></code> in the source</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_FLAG_SRC_F_DETECT_APP_TAG</span></code></p></td>
+<td><p>Skip check of protected block if Application tag is equal to <code class="docutils literal notranslate"><span class="pre">0xFF</span></code> on the source</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_FLAG_SRC_F_DETECT_TAGS</span></code></p></td>
+<td><p>Skip check of protected block if Application and Reference tag bytes is equal to <code class="docutils literal notranslate"><span class="pre">0xFF</span></code> in the source</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_FLAG_SRC_INC_APP_TAG</span></code></p></td>
+<td><p>Source Application format: Fixed(0) or Incrementing(1)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_FLAG_SRC_GUARD_CHECK_DISABLE</span></code></p></td>
+<td><p>Source Check Guard filed: Enabled (0) or Disabled (1)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_FLAG_SRC_REF_TAG_CHECK_DISABLE</span></code></p></td>
+<td><p>Source Check Reference tag: Enabled (0) or Disabled (1)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_FLAG_SRC_FIX_REF_TAG</span></code></p></td>
+<td><p>Source Reference TAG format: Incrementing(0), Fixed(1)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p>Destination DIF can be configured with following flags:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Flag</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_FLAG_DST_PASS_APP_TAG</span></code></p></td>
+<td><p>Destination Application calculation: Enabled(0) or Disabled (1 Copy from Source)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_FLAG_DST_INC_APP_TAG</span></code></p></td>
+<td><p>Destination Application tag format: Fixed(0), Incrementing(1)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_FLAG_DST_PASS_GUARD</span></code></p></td>
+<td><p>Destination Guard calculation: Enabled(0) or Disabled (1 Copy from Source)</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_FLAG_DST_PASS_REF_TAG</span></code></p></td>
+<td><p>Destination Reference calculation: Enabled(0) or Disabled (1 Copy from Source)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_FLAG_DST_FIX_REF_TAG</span></code></p></td>
+<td><p>Destination Reference tag format: Incrementing(0) or Fixed(1)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+</li>
+</ol>
+<div class="section" id="dif-check">
+<h4>DIF Check<a class="headerlink" href="#dif-check" title="Permalink to this headline"></a></h4>
+<p>The DIF Check operation computes the Data Integrity Field (DIF) on the
+source data and compares the computed DIF to the DIF contained in the
+source data (<code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code>).</p>
+<ul class="simple">
+<li><p>The number of source bytes read is given by the <code class="docutils literal notranslate"><span class="pre">source_length</span></code>
+parameter. The DIF computation is performed on each block of source
+data that is 512, 520, 4096, or 4104 bytes.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter should be a multiple of the source
+block size plus 8 bytes for each source block.</p></li>
+<li><p>If an error is detected in the DIF in the source data, the operation
+stops.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">result</span></code> field contains a type of the DIF error in flag format
+(see the table below for more information) and the <code class="docutils literal notranslate"><span class="pre">offset</span></code> field
+contains the number of bytes successfully processed (it does not
+include the block in which the error was detected).</p></li>
+</ul>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Hex Value</p></th>
+<th class="head"><p>Result Flag Name</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x</span> <span class="pre">01</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_CHECK_GUARD_MISMATCH</span></code></p></td>
+<td><p>Guard mismatch. This value is reported under the following conditions:</p>
+<ul class="simple">
+<li><p>Guard Check Disable is 0</p></li>
+<li><p>F Detect condition is not detected</p></li>
+<li><p>The guard value computed from the source data does not match the Guard field in the source Data Integrity Field</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0x</span> <span class="pre">02</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_CHECK_APPLICATION_TAG_MISMATCH</span></code></p></td>
+<td><p>Application Tag mismatch. This value is reported under the following conditions:</p>
+<ul class="simple">
+<li><p>Source Application Tag Mask is not equal to <code class="docutils literal notranslate"><span class="pre">0xFFFF</span></code></p></li>
+<li><p>F Detect condition is not detected</p></li>
+<li><p>The computed Application Tag value does not match the Application Tag field in the source Data Integrity Field</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">0x</span> <span class="pre">04</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_CHECK_REFERENCE_TAG_MISMATCH</span></code></p></td>
+<td><p>Reference Tag mismatch. This value is reported under the following conditions:</p>
+<ul class="simple">
+<li><p>Reference Tag Check Disable is 0</p></li>
+<li><p>F Detect condition is not detected</p></li>
+<li><p>The computed Application Tag value does not match the Application Tag field in the source Data Integrity Field</p></li>
+</ul>
+</td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">0x</span> <span class="pre">08</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DML_DIF_CHECK_ALL_BITS_SET_DETECT_ERROR</span></code></p></td>
+<td><p>All F Detect Error. This value is reported under the following conditions:</p>
+<ul class="simple">
+<li><p>All F Detect is 1</p></li>
+<li><p>Enable All F Detect Error is 1</p></li>
+<li><p>All bits of the Application Tag, Reference Tag, and Guard fields of the source Data Integrity Field are equal to 1</p></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="dif-insert">
+<h4>DIF Insert<a class="headerlink" href="#dif-insert" title="Permalink to this headline"></a></h4>
+<p>The DIF Insert operation copies memory from the <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> to
+<code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> (length bytes) while computing the DIF on the
+source data and inserting the DIF into the output data.</p>
+<ul class="simple">
+<li><p>The number of bytes copied is given by the <code class="docutils literal notranslate"><span class="pre">source_length</span></code>
+parameter.</p></li>
+<li><p>The number of available bytes in <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> is given
+by the <code class="docutils literal notranslate"><span class="pre">destination_length</span></code> parameter.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">destination_length</span></code> is the number of bytes that are written to
+<code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> (can be calculated as <code class="docutils literal notranslate"><span class="pre">source_length</span></code>
+plus 8 bytes for each source block).</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> and <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> overlap, the error is thrown.</p></li>
+</ul>
+</div>
+<div class="section" id="dif-strip">
+<h4>DIF Strip<a class="headerlink" href="#dif-strip" title="Permalink to this headline"></a></h4>
+<p>The DIF Strip operation copies memory from <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> to
+<code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>, removing the DIF.</p>
+<p>Additionally, it computes the DIF value on <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> data and
+compares to the DIF contained in <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> according to the
+DIF Source Flags values.</p>
+<ul class="simple">
+<li><p>The number of bytes copied is given by the <code class="docutils literal notranslate"><span class="pre">source_length</span></code>
+parameter and must be a multiple of block size plus 8 for each source
+block.</p></li>
+<li><p>The number of bytes available to write into destination buffer must
+be set into <code class="docutils literal notranslate"><span class="pre">destination_size</span></code>.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">destination_size</span></code> field after job execution contains the
+successfully written bytes to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> (the result
+size is always <code class="docutils literal notranslate"><span class="pre">source_length</span></code> minus 8 bytes for each source
+block).</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> and <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> overlap, the error is thrown.</p></li>
+<li><dl class="simple">
+<dt>If an error is detected in the DIF in the source data, the operation</dt><dd><p>stops. The job structure is updated in the same way as in the DIF Check operation.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="dif-update">
+<h4>DIF Update<a class="headerlink" href="#dif-update" title="Permalink to this headline"></a></h4>
+<p>The DIF Update operation copies memory from <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> to
+<code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> and updates DIFs in accordance with
+destination flags. (length bytes).</p>
+<p>Additionally, it computes the DIF value on the <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> data
+and compares it to the DIF contained in the <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code>
+according to the DIF Source Flags values.</p>
+<ul class="simple">
+<li><p>The number of bytes copied is given by the <code class="docutils literal notranslate"><span class="pre">source_length</span></code>
+parameter.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">destination_length</span></code> parameter must contain the size of
+destinations (for internal validation).</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> and <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> overlap, the error is thrown.</p></li>
+<li><dl class="simple">
+<dt>If an error is detected in the DIF in the source data, the operation stops.</dt><dd><p>The job structure is updated in the same way as in the DIF Check operation.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="cache-flush">
+<h4>Cache Flush<a class="headerlink" href="#cache-flush" title="Permalink to this headline"></a></h4>
+<p>The Cache Flush operation flushes the processor caches at the
+<code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> address. The number of bytes flushed is given
+by the <code class="docutils literal notranslate"><span class="pre">destination_length</span></code> parameter.</p>
+<ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">DML_FLAG_CACHE_CRTL</span></code> flag is not set, the affected cache lines
+are invalidated from every level of the cache hierarchy. If it is set
+to 1, then modified cache lines are written to main memory, but are
+not evicted from the caches.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="job-structure-description">
+<h2>Job Structure Description<a class="headerlink" href="#job-structure-description" title="Permalink to this headline"></a></h2>
+<p>The Job structure is defined in <code class="docutils literal notranslate"><span class="pre">dmldefs.h</span></code>.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Field</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code></p></td>
+<td><p>IN</p></td>
+<td><p>Pointer to the next input byte in input stream #1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">source_second_ptr</span></code></p></td>
+<td><p>IN</p></td>
+<td><p>Pointer to the next input byte in input stream #2</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code></p></td>
+<td><p>OUT</p></td>
+<td><p>Pointer to the next output byte in output stream #1</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">destination_second_ptr</span></code></p></td>
+<td><p>OUT</p></td>
+<td><p>Pointer to the next output byte in output stream #2</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">crc_ptr</span></code></p></td>
+<td><p>IN/OUT</p></td>
+<td><p>CRC for OUT, CRC seed for IN</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">source_length</span></code></p></td>
+<td><p>IN</p></td>
+<td><p>Number of bytes in source to process</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">destination_length</span></code></p></td>
+<td><p>IN</p></td>
+<td><p>Available bytes count in destination buffer</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">offset</span></code></p></td>
+<td><p>OUT</p></td>
+<td><p>Offset field for operations</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pattern</span></code></p></td>
+<td><p>IN</p></td>
+<td><p>Pattern for operations with pattern</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">operation</span></code></p></td>
+<td><p>IN</p></td>
+<td><p>Operation to be done</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">flags</span></code></p></td>
+<td><p>IN</p></td>
+<td><p>Flags indicating specific modes of operations</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">result</span></code></p></td>
+<td><p>OUT</p></td>
+<td><p>Result field for some operation where status is not enough</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">expected_result</span></code></p></td>
+<td><p>IN</p></td>
+<td><p>Expected result for some operations</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dif_tag_seed</span></code></p></td>
+<td><p>IN</p></td>
+<td><p>Initial tag seed for DIF operations</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">spec</span></code></p></td>
+<td><p>IN</p></td>
+<td><p>Internal spec structure</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="operation-status-values">
+<h2>Operation Status Values<a class="headerlink" href="#operation-status-values" title="Permalink to this headline"></a></h2>
+<p>The return values are defined in <code class="docutils literal notranslate"><span class="pre">dmldefs.h</span></code>.</p>
+<dl class="cpp enum">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dml_status_t</span></span></span><br /></dt>
+<dd><p>All possible return values of the Intel DML Library functions. </p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>All general statuses are described here. </p>
+</div>
+<p><em>Values:</em></p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_OK</span></span></span><br /></dt>
+<dd><p>Operation completed successfully. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_FALSE_PREDICATE_OK</span></span></span><br /></dt>
+<dd><p>Success with false predicate. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_BEING_PROCESSED</span></span></span><br /></dt>
+<dd><p>Operation is still being processed. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_INTERNAL_ERROR</span></span></span><br /></dt>
+<dd><p>Unexpected internal error condition. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_NULL_POINTER_ERROR</span></span></span><br /></dt>
+<dd><p>Null pointer error. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_LIMITS_ERROR</span></span></span><br /></dt>
+<dd><p>One of the job parameters exceeds configured DML limits. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_PATH_ERROR</span></span></span><br /></dt>
+<dd><p>Invalid dmlPath parameter. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_HINT_ERROR</span></span></span><br /></dt>
+<dd><p>Invalid hint parameter. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_CRC_ALIGN_ERROR</span></span></span><br /></dt>
+<dd><p>crc_checksum_ptr must be 4-byte aligned </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_BATCH_ERROR</span></span></span><br /></dt>
+<dd><p>One or more operation in the batch completed with status &gt; 0. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_DELTA_ASCENDT_ERROR</span></span></span><br /></dt>
+<dd><p>Offsets in the delta record were not in increasing order. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_DELTA_OFFSET_ERROR</span></span></span><br /></dt>
+<dd><p>The input length is greater than max available offset </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_DIF_CHECK_ERROR</span></span></span><br /></dt>
+<dd><p>DIF check failed. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_JOB_OPERATION_ERROR</span></span></span><br /></dt>
+<dd><p>Invalid op field in dml_job_t. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_JOB_FLAGS_ERROR</span></span></span><br /></dt>
+<dd><p>Invalid flags field in dml_job_t. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_JOB_LENGTH_ERROR</span></span></span><br /></dt>
+<dd><p>Invalid length field in dml_job_t. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_BATCH_LIMITS_ERROR</span></span></span><br /></dt>
+<dd><p>Invalid number of Jobs for batch operation (LT than 2 or GT than dml_limits_t.dmlMaxBatchSize) </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_DELTA_RECORD_SIZE_ERROR</span></span></span><br /></dt>
+<dd><p>Delta Record Size is out of range or delta record size is not multiple of 10. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_OVERLAPPING_BUFFER_ERROR</span></span></span><br /></dt>
+<dd><p>Overlapping buffers. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_DUALCAST_ALIGN_ERROR</span></span></span><br /></dt>
+<dd><p>Bit 11:0 of pDst1 and pDst2 differ in Memory Copy with Dualcast operation. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_DELTA_ALIGN_ERROR</span></span></span><br /></dt>
+<dd><p>Misaligned address for Delta Record: pSrc1, pSrc2, pDst1 or length is not 8 - byte aligned. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_DELTA_INPUT_SIZE_ERROR</span></span></span><br /></dt>
+<dd><p>Input size is not multiple of 8 for delta operations. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_MEMORY_OVERFLOW_ERROR</span></span></span><br /></dt>
+<dd><p>Buffer detected an overflow. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_JOB_CORRUPTED</span></span></span><br /></dt>
+<dd><p>dml_job_t structure is corrupted </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_WORK_QUEUE_OVERFLOW_ERROR</span></span></span><br /></dt>
+<dd><p>WQ overflow. </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_PAGE_FAULT_ERROR</span></span></span><br /></dt>
+<dd><p>Page Fault occurred during processing on hardware </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dml_status_tC_A_NOT_AVAILABLE</span></span></span><br /></dt>
+<dd><p>WQs configured to work with TC-A are not visible </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dml_status_tC_B_NOT_AVAILABLE</span></span></span><br /></dt>
+<dd><p>WQs configured to work with TC-B are not visible </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_BATCH_TASK_INDEX_OVERFLOW</span></span></span><br /></dt>
+<dd><p>Batch task index is bigger than size of the batch </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_BATCH_SIZE_ERROR</span></span></span><br /></dt>
+<dd><p>The desired batch size is bigger than the possible one </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_DRAIN_PAGE_FAULT_ERROR</span></span></span><br /></dt>
+<dd><p>A page fault occured while translating a Readback Addres in a Drain descriptor </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_UNKNOWN_CACHE_SIZE_ERROR</span></span></span><br /></dt>
+<dd><p>Max cache size can’t be calculated </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_DIF_STRIP_ADJACENT_ERROR</span></span></span><br /></dt>
+<dd><p>SRC Address for DIF Strip operation should be greater than (DST Address + SRC Size) </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_LIBACCEL_NOT_FOUND</span></span></span><br /></dt>
+<dd><p>Unable to initialize job because hardware driver was not found </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_LIBACCEL_ERROR</span></span></span><br /></dt>
+<dd><p>Unable to initialize job because hardware driver API is incompatible </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_WORK_QUEUES_NOT_AVAILABLE</span></span></span><br /></dt>
+<dd><p>Enabled work queues are not found </p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="high_level_api.html" class="btn btn-neutral float-left" title="High-level C++ API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../release_notes.html" class="btn btn-neutral float-right" title="Release Notes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Intel.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
