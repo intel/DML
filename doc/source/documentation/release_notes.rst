@@ -1,21 +1,34 @@
  .. ***************************************************************************
- .. * Copyright 2020-2021 Intel Corporation.
+ .. * Copyright (C) 2021 Intel Corporation
  .. *
- .. * This software and the related documents are Intel copyrighted materials,
- .. * and your use of them is governed by the express license under which they
- .. * were provided to you ("License"). Unless the License provides otherwise,
- .. * you may not use, modify, copy, publish, distribute, disclose or transmit
- .. * this software or the related documents without Intel's prior written
- .. * permission.
- .. *
- .. * This software and the related documents are provided as is, with no
- .. * express or implied warranties, other than those that are expressly
- .. * stated in the License.
- .. *
+ .. * SPDX-License-Identifier: MIT
  .. ***************************************************************************/
 
 Release Notes
 #############
+
+v0.1.8-beta
+***********
+
+**Date**: February 2022
+
+**Note**: Release introduces the auto execution path and manual NUMA selection for C++ API as well as several page fault handling bugfixes.
+
+**Features**:
+
+- Implemented the auto execution path (software fallback) for C++ API. The library tries to use hardware, but in case it is unavailable, there is a software fallback.
+- Added ``numa_id`` parameter for ``dml::execute`` and ``dml::submit`` functions to specify custom NUMA node id for submission. Setting a number allows the library to do cross-socket submissions.
+- Removed DML_HW cmake option. The library is built with HW support by default.
+- Added dynamic optimization dispatcher. The library checks if a necessary instruction set is supported on the system at runtime.
+
+**Bug fix**:
+
+- Fixed erroneous results for Compare operations when a page fault occurred during processing.
+- Fixed wrong detection for the on-write page faults.
+
+**Optimizations**:
+
+- Optimized reflected CRC operation.
 
 
 v0.1.7-beta

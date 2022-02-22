@@ -1,17 +1,7 @@
 # ==========================================================================
-#  Copyright 2020-2021 Intel Corporation.
+# Copyright (C) 2021 Intel Corporation
 #
-#  This software and the related documents are Intel copyrighted materials,
-#  and your use of them is governed by the express license under which they
-#  were provided to you ("License"). Unless the License provides otherwise,
-#  you may not use, modify, copy, publish, distribute, disclose or transmit
-#  this software or the related documents without Intel's prior written
-#  permission.
-#
-#  This software and the related documents are provided as is, with no
-#  express or implied warranties, other than those that are expressly
-#  stated in the License.
-#
+# SPDX-License-Identifier: MIT
 # ==========================================================================
 
 # -- Path setup --------------------------------------------------------------
@@ -30,12 +20,11 @@ import docutils
 project = 'Intel® DML'
 copyright = '2022, Intel'
 author = 'Intel'
-release = 'v0.1.7-beta'
+release = 'v0.1.8-beta'
 
 # -- General configuration ---------------------------------------------------
 
 extensions = [
-    'sphinx_rtd_theme',
     'breathe'
 ]
 templates_path = ['_templates']
@@ -62,10 +51,16 @@ breathe_default_project = "Intel DML"
 
 # -- Options for HTML output -------------------------------------------------
 
-import sphinx_rtd_theme
+html_theme = "sphinx_book_theme"
 
-html_theme = 'sphinx_rtd_theme'
-# html_theme = 'sphinx_book_theme'
+html_theme_options = {
+    'repository_url': 'https://github.com/intel/DML',
+    'path_to_docs': 'doc/source',
+    'use_issues_button': True,
+    'use_edit_page_button': True,
+    'repository_branch': 'develop',
+    'extra_footer': '<p align="right"><a href="https://www.intel.com/content/www/us/en/privacy/intel-cookie-notice.html">Cookies</a></p>'
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

@@ -1,18 +1,8 @@
-/*
- * Copyright 2021 Intel Corporation.
+/*******************************************************************************
+ * Copyright (C) 2021 Intel Corporation
  *
- * This software and the related documents are Intel copyrighted materials,
- * and your use of them is governed by the express license under which they
- * were provided to you ("License"). Unless the License provides otherwise,
- * you may not use, modify, copy, publish, distribute, disclose or transmit
- * this software or the related documents without Intel's prior written
- * permission.
- *
- * This software and the related documents are provided as is, with no
- * express or implied warranties, other than those that are expressly
- * stated in the License.
- *
- */
+ * SPDX-License-Identifier: MIT
+ ******************************************************************************/
 
 #include <core/device.hpp>
 #include <core/utils.hpp>
@@ -24,7 +14,7 @@
 
 namespace dml::core
 {
-#ifdef DML_HW
+#if defined(linux)
     static inline auto enqueue(const dispatcher::hw_device &device, const descriptor &dsc) noexcept
     {
         // Write 0 to completion record before submit
@@ -43,7 +33,7 @@ namespace dml::core
 
     dml::detail::submission_status hardware_device::submit(const descriptor &dsc, std::uint32_t numa_id) noexcept
     {
-#ifdef DML_HW
+#if defined(linux)
         const auto own_numa_id = (numa_id == std::numeric_limits<decltype(numa_id)>::max()) ? util::get_numa_id() : numa_id;
 
         auto &dispatcher = dispatcher::hw_dispatcher::get_instance();

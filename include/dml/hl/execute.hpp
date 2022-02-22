@@ -1,18 +1,8 @@
-/*
- * Copyright 2021 Intel Corporation.
+/*******************************************************************************
+ * Copyright (C) 2021 Intel Corporation
  *
- * This software and the related documents are Intel copyrighted materials,
- * and your use of them is governed by the express license under which they
- * were provided to you ("License"). Unless the License provides otherwise,
- * you may not use, modify, copy, publish, distribute, disclose or transmit
- * this software or the related documents without Intel's prior written
- * permission.
- *
- * This software and the related documents are provided as is, with no
- * express or implied warranties, other than those that are expressly
- * stated in the License.
- *
- */
+ * SPDX-License-Identifier: MIT
+ ******************************************************************************/
 
 /**
  * @date 05/20/2021
@@ -45,6 +35,7 @@ namespace dml
      * @tparam sequence_allocator_t Type of @ref sequence allocator
      * @param operation             Instance of @ref batch_operation
      * @param seq                   Instance of @ref sequence filled with operations
+     * @param numa_id               Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -58,9 +49,12 @@ namespace dml
      * @return @ref batch_result
      */
     template <typename execution_path, typename sequence_allocator_t>
-    auto execute(batch_operation operation, const sequence<sequence_allocator_t> &seq)
+    auto execute(batch_operation operation,
+                 const sequence<sequence_allocator_t> &seq,
+                 std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
     {
         return detail::execute<execution_path, batch_operation>(
+            numa_id,
             [&]
             {
                 return detail::ml::make_batch_task(seq.data(), seq.length(), operation.get_options());
@@ -76,6 +70,7 @@ namespace dml
      * @param operation       Instance of @ref mem_move_operation
      * @param src_view        @ref data_view to the source memory region
      * @param dst_view        @ref data_view to the destination memory region
+     * @param numa_id         Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -89,9 +84,13 @@ namespace dml
      * @return @ref mem_move_result
      */
     template <typename execution_path>
-    inline auto execute(mem_move_operation operation, const_data_view src_view, data_view dst_view) noexcept
+    inline auto execute(mem_move_operation operation,
+                        const_data_view src_view,
+                        data_view dst_view,
+                        std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max()) noexcept
     {
         return detail::execute<execution_path, mem_move_operation>(
+            numa_id,
             [&]
             {
                 return detail::ml::make_mem_move_task(src_view.data(), dst_view.data(), src_view.size(), operation.get_options());
@@ -112,6 +111,7 @@ namespace dml
      * @param operation       Instance of @ref mem_copy_operation
      * @param src_view        @ref data_view to the source memory region
      * @param dst_view        @ref data_view to the destination memory region
+     * @param numa_id         Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -125,9 +125,13 @@ namespace dml
      * @return @ref mem_copy_result
      */
     template <typename execution_path>
-    inline auto execute(mem_copy_operation operation, const_data_view src_view, data_view dst_view) noexcept
+    inline auto execute(mem_copy_operation operation,
+                        const_data_view src_view,
+                        data_view dst_view,
+                        std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max()) noexcept
     {
         return detail::execute<execution_path, mem_copy_operation>(
+            numa_id,
             [&]
             {
                 return detail::ml::make_mem_move_task(src_view.data(), dst_view.data(), src_view.size(), operation.get_options());
@@ -148,6 +152,7 @@ namespace dml
      * @param operation       Instance of @ref fill_operation
      * @param pattern         64-bit pattern used to fill the destination
      * @param dst_view        @ref data_view to the destination memory region
+     * @param numa_id         Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -161,9 +166,13 @@ namespace dml
      * @return @ref fill_result
      */
     template <typename execution_path>
-    auto execute(fill_operation operation, uint64_t pattern, data_view dst_view)
+    auto execute(fill_operation operation,
+                 uint64_t pattern,
+                 data_view dst_view,
+                 std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
     {
         return detail::execute<execution_path, fill_operation>(
+            numa_id,
             [&]
             {
                 return detail::ml::make_fill_task(pattern, dst_view.data(), dst_view.size(), operation.get_options());
@@ -180,6 +189,7 @@ namespace dml
      * @param src_view        @ref data_view to the source memory region
      * @param dst1_view       @ref data_view to the first destination memory region
      * @param dst2_view       @ref data_view to the second destination memory region
+     * @param numa_id         Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -193,9 +203,14 @@ namespace dml
      * @return @ref dualcast_result
      */
     template <typename execution_path>
-    auto execute(dualcast_operation operation, const_data_view src_view, data_view dst1_view, data_view dst2_view)
+    auto execute(dualcast_operation operation,
+                 const_data_view src_view,
+                 data_view dst1_view,
+                 data_view dst2_view,
+                 std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
     {
         return detail::execute<execution_path, dualcast_operation>(
+            numa_id,
             [&]
             {
                 return detail::ml::make_dualcast_task(src_view.data(),
@@ -222,6 +237,7 @@ namespace dml
      * @param operation       Instance of @ref compare_operation
      * @param src1_view       @ref data_view to the first source memory region
      * @param src2_view       @ref data_view to the second source memory region
+     * @param numa_id         Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -235,9 +251,13 @@ namespace dml
      * @return @ref compare_result
      */
     template <typename execution_path>
-    auto execute(compare_operation operation, const_data_view src1_view, const_data_view src2_view)
+    auto execute(compare_operation operation,
+                 const_data_view src1_view,
+                 const_data_view src2_view,
+                 std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
     {
         return detail::execute<execution_path, compare_operation>(
+            numa_id,
             [&]
             {
                 return detail::ml::make_compare_task(src1_view.data(),
@@ -262,6 +282,7 @@ namespace dml
      * @param operation       Instance of @ref compare_pattern_operation
      * @param pattern         64-bit pattern to compare with the memory region
      * @param src_view        @ref data_view to the source memory region
+     * @param numa_id         Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -275,9 +296,13 @@ namespace dml
      * @return @ref compare_result
      */
     template <typename execution_path>
-    auto execute(compare_pattern_operation operation, uint64_t pattern, const_data_view src_view)
+    auto execute(compare_pattern_operation operation,
+                 uint64_t pattern,
+                 const_data_view src_view,
+                 std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
     {
         return detail::execute<execution_path, compare_pattern_operation>(
+            numa_id,
             [&]
             {
                 return detail::ml::make_compare_pattern_task(pattern,
@@ -298,6 +323,7 @@ namespace dml
      * @param src1_view       @ref data_view to the first source memory region
      * @param src2_view       @ref data_view to the second source memory region
      * @param delta_view      @ref data_view to the memory region for delta record
+     * @param numa_id         Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -311,9 +337,14 @@ namespace dml
      * @return @ref create_delta_result
      */
     template <typename execution_path>
-    auto execute(create_delta_operation operation, const_data_view src1_view, const_data_view src2_view, data_view delta_view)
+    auto execute(create_delta_operation operation,
+                 const_data_view src1_view,
+                 const_data_view src2_view,
+                 data_view delta_view,
+                 std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
     {
         return detail::execute<execution_path, create_delta_operation>(
+            numa_id,
             [&]
             {
                 return detail::ml::make_create_delta_task(src1_view.data(),
@@ -341,6 +372,7 @@ namespace dml
      * @param delta_view      @ref data_view to the memory region with delta record
      * @param dst_view        @ref data_view to the destination memory region (the first source from Create Delta)
      * @param delta_result    Result from Create Delta operation
+     * @param numa_id         Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -354,9 +386,14 @@ namespace dml
      * @return @ref apply_delta_result
      */
     template <typename execution_path>
-    auto execute(apply_delta_operation operation, const_data_view delta_view, data_view dst_view, create_delta_result delta_result)
+    auto execute(apply_delta_operation operation,
+                 const_data_view delta_view,
+                 data_view dst_view,
+                 create_delta_result delta_result,
+                 std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
     {
         return detail::execute<execution_path, apply_delta_operation>(
+            numa_id,
             [&]
             {
                 return detail::ml::make_apply_delta_task(delta_view.data(),
@@ -384,6 +421,7 @@ namespace dml
      * @param operation       Instance of @ref crc_operation
      * @param src_view        @ref data_view to the source memory region
      * @param crc_seed        Initial CRC value
+     * @param numa_id         Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -397,9 +435,13 @@ namespace dml
      * @return @ref crc_result
      */
     template <typename execution_path>
-    auto execute(crc_operation operation, const_data_view src_view, uint32_t crc_seed)
+    auto execute(crc_operation operation,
+                 const_data_view src_view,
+                 uint32_t crc_seed,
+                 std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
     {
         return detail::execute<execution_path, crc_operation>(
+            numa_id,
             [&]
             {
                 return detail::ml::make_crc_task(src_view.data(),
@@ -420,6 +462,7 @@ namespace dml
      * @param src_view        @ref data_view to the source memory region
      * @param dst_view        @ref data_view to the destination memory region
      * @param crc_seed        Initial CRC value
+     * @param numa_id         Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -433,9 +476,14 @@ namespace dml
      * @return @ref crc_result
      */
     template <typename execution_path>
-    auto execute(copy_crc_operation operation, const_data_view src_view, data_view dst_view, uint32_t crc_seed)
+    auto execute(copy_crc_operation operation,
+                 const_data_view src_view,
+                 data_view dst_view,
+                 uint32_t crc_seed,
+                 std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
     {
         return detail::execute<execution_path, copy_crc_operation>(
+            numa_id,
             [&]
             {
                 return detail::ml::make_copy_crc_task(src_view.data(),
@@ -460,6 +508,7 @@ namespace dml
      * @tparam execution_path Type of @ref dmlhl_aux_path
      * @param operation       Instance of @ref cache_flush_operation
      * @param dst_view        @ref data_view to the destination memory region
+     * @param numa_id         Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -473,9 +522,12 @@ namespace dml
      * @return @ref cache_flush_result
      */
     template <typename execution_path>
-    auto execute(cache_flush_operation operation, data_view dst_view)
+    auto execute(cache_flush_operation operation,
+                 data_view dst_view,
+                 std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
     {
         return detail::execute<execution_path, cache_flush_operation>(
+            numa_id,
             [&]
             {
                 return detail::ml::make_cache_flush_task(dst_view.data(), dst_view.size(), operation.get_options());

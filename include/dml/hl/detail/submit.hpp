@@ -1,18 +1,8 @@
-/*
- * Copyright 2021 Intel Corporation.
+/*******************************************************************************
+ * Copyright (C) 2021 Intel Corporation
  *
- * This software and the related documents are Intel copyrighted materials,
- * and your use of them is governed by the express license under which they
- * were provided to you ("License"). Unless the License provides otherwise,
- * you may not use, modify, copy, publish, distribute, disclose or transmit
- * this software or the related documents without Intel's prior written
- * permission.
- *
- * This software and the related documents are provided as is, with no
- * express or implied warranties, other than those that are expressly
- * stated in the License.
- *
- */
+ * SPDX-License-Identifier: MIT
+ ******************************************************************************/
 
 /**
  * @date 05/20/2021
@@ -36,6 +26,7 @@ namespace dml::detail
      * @tparam execution_interface_t Type of execution interface
      * @tparam range_check_t         Type of callable range check
      * @tparam make_task_t           Type of callable make functor
+     * @param numa_id                Numa id for submission
      * @param executor               Instance of execution interface
      * @param range_check            Instance of callable range check
      * @param make_task              Instance of callable make functor
@@ -47,12 +38,11 @@ namespace dml::detail
               typename execution_interface_t,
               typename make_task_t,
               typename range_check_t = detail::always_success>
-    inline auto submit(const execution_interface_t& executor,
+    inline auto submit(std::uint32_t numa_id,
+                       const execution_interface_t& executor,
                        make_task_t&&           make_task,
                        range_check_t                range_check = range_check_t())
     {
-        constexpr auto numa = std::numeric_limits<std::uint32_t>::max();
-
         using execution_path = typename execution_path_t::execution_path;
 
         auto op_handler = executor.template make_handler<operation_t>(make_task());
@@ -65,7 +55,7 @@ namespace dml::detail
 
         auto task_view = detail::get_task_view(op_handler);
 
-        auto [validation_status, submission_status] = submit<execution_path>(task_view, numa);
+        auto [validation_status, submission_status] = submit<execution_path>(task_view, numa_id);
 
         if (validation_status != detail::validation_status::success)
         {

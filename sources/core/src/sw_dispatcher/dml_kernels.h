@@ -1,18 +1,8 @@
-/*
- * Copyright 2021 Intel Corporation.
+/*******************************************************************************
+ * Copyright (C) 2021 Intel Corporation
  *
- * This software and the related documents are Intel copyrighted materials,
- * and your use of them is governed by the express license under which they
- * were provided to you ("License"). Unless the License provides otherwise,
- * you may not use, modify, copy, publish, distribute, disclose or transmit
- * this software or the related documents without Intel's prior written
- * permission.
- *
- * This software and the related documents are provided as is, with no
- * express or implied warranties, other than those that are expressly
- * stated in the License.
- *
- */
+ * SPDX-License-Identifier: MIT
+ ******************************************************************************/
 
 #ifndef DML_CORE_OWN_KERNELS_DEFS_H
 #define DML_CORE_OWN_KERNELS_DEFS_H
@@ -56,6 +46,8 @@ uint32_t dml_ref_crc_32u(const uint8_t *src, uint32_t transfer_size, uint32_t cr
 uint32_t dml_avx512_crc_u32(const uint8_t *src, uint32_t transfer_size, uint32_t crc_value, uint32_t polynomial);
 
 uint32_t dml_ref_crc_reflected_u32(const uint8_t *src, uint32_t transfer_size, uint32_t crc_value, uint32_t polynomial);
+
+uint32_t dml_avx512_crc_reflected_u32(const uint8_t* src, uint32_t transfer_size, uint32_t crc_value, uint32_t polynomial);
 
 void dml_clflushopt(uint8_t *dst, uint32_t transfer_size);
 

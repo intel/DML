@@ -1,18 +1,8 @@
-/*
- * Copyright 2021 Intel Corporation.
+/*******************************************************************************
+ * Copyright (C) 2021 Intel Corporation
  *
- * This software and the related documents are Intel copyrighted materials,
- * and your use of them is governed by the express license under which they
- * were provided to you ("License"). Unless the License provides otherwise,
- * you may not use, modify, copy, publish, distribute, disclose or transmit
- * this software or the related documents without Intel's prior written
- * permission.
- *
- * This software and the related documents are provided as is, with no
- * express or implied warranties, other than those that are expressly
- * stated in the License.
- *
- */
+ * SPDX-License-Identifier: MIT
+ ******************************************************************************/
 
 /**
  * @date 05/20/2021
@@ -51,6 +41,7 @@ namespace dml
      * @param operation              Instance of @ref batch_operation
      * @param seq                    Instance of @ref sequence filled with operations
      * @param executor               Instance of @ref execution_interface
+     * @param numa_id                Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -74,10 +65,12 @@ namespace dml
               typename execution_interface_t = default_execution_interface<execution_path>>
     inline auto submit(batch_operation                       operation,
                        const sequence<sequence_allocator_t> &seq,
-                       const execution_interface_t          &executor = execution_interface_t())
+                       const execution_interface_t          &executor = execution_interface_t(),
+                       std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
         -> handler<batch_operation, typename execution_interface_t::allocator_type>
     {
         return detail::submit<execution_path, batch_operation>(
+            numa_id,
             executor,
             [&]
             {
@@ -99,6 +92,7 @@ namespace dml
      * @param src_view               @ref data_view to the source memory region
      * @param dst_view               @ref data_view to the destination memory region
      * @param executor               Instance of @ref execution_interface
+     * @param numa_id                Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -121,10 +115,12 @@ namespace dml
     inline auto submit(mem_move_operation           operation,
                        const_data_view              src_view,
                        data_view                    dst_view,
-                       const execution_interface_t &executor = execution_interface_t())
+                       const execution_interface_t &executor = execution_interface_t(),
+                       std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
         -> handler<mem_move_operation, typename execution_interface_t::allocator_type>
     {
         return detail::submit<execution_path, mem_move_operation>(
+            numa_id,
             executor,
             [&]
             {
@@ -151,6 +147,7 @@ namespace dml
      * @param src_view               @ref data_view to the source memory region
      * @param dst_view               @ref data_view to the destination memory region
      * @param executor               Instance of @ref execution_interface
+     * @param numa_id                Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -173,10 +170,12 @@ namespace dml
     inline auto submit(mem_copy_operation           operation,
                        const_data_view              src_view,
                        data_view                    dst_view,
-                       const execution_interface_t &executor = execution_interface_t())
+                       const execution_interface_t &executor = execution_interface_t(),
+                       std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
         -> handler<mem_copy_operation, typename execution_interface_t::allocator_type>
     {
         return detail::submit<execution_path, mem_copy_operation>(
+            numa_id,
             executor,
             [&]
             {
@@ -203,6 +202,7 @@ namespace dml
      * @param pattern                64-bit pattern used to fill the destination
      * @param dst_view               @ref data_view to the destination memory region
      * @param executor               Instance of @ref execution_interface
+     * @param numa_id                Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -225,10 +225,12 @@ namespace dml
     inline auto submit(fill_operation               operation,
                        uint64_t                     pattern,
                        data_view                    dst_view,
-                       const execution_interface_t &executor = execution_interface_t())
+                       const execution_interface_t &executor = execution_interface_t(),
+                       std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
         -> handler<fill_operation, typename execution_interface_t::allocator_type>
     {
         return detail::submit<execution_path, fill_operation>(
+            numa_id,
             executor,
             [&]
             {
@@ -251,6 +253,7 @@ namespace dml
      * @param dst1_view              @ref data_view to the first destination memory region
      * @param dst2_view              @ref data_view to the second destination memory region
      * @param executor               Instance of @ref execution_interface
+     * @param numa_id                Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -274,10 +277,12 @@ namespace dml
                        const_data_view              src_view,
                        data_view                    dst1_view,
                        data_view                    dst2_view,
-                       const execution_interface_t &executor = execution_interface_t())
+                       const execution_interface_t &executor = execution_interface_t(),
+                       std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
         -> handler<dualcast_operation, typename execution_interface_t::allocator_type>
     {
         return detail::submit<execution_path, dualcast_operation>(
+            numa_id,
             executor,
             [&]
             {
@@ -310,6 +315,7 @@ namespace dml
      * @param src1_view              @ref data_view to the first source memory region
      * @param src2_view              @ref data_view to the second source memory region
      * @param executor               Instance of @ref execution_interface
+     * @param numa_id                Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -332,10 +338,12 @@ namespace dml
     inline auto submit(compare_operation            operation,
                        const_data_view              src1_view,
                        const_data_view              src2_view,
-                       const execution_interface_t &executor = execution_interface_t())
+                       const execution_interface_t &executor = execution_interface_t(),
+                       std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
         -> handler<compare_operation, typename execution_interface_t::allocator_type>
     {
         return detail::submit<execution_path, compare_operation>(
+            numa_id,
             executor,
             [&]
             {
@@ -366,6 +374,7 @@ namespace dml
      * @param pattern                64-bit pattern to compare with the memory region
      * @param src_view               @ref data_view to the source memory region
      * @param executor               Instance of @ref execution_interface
+     * @param numa_id                Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -388,10 +397,12 @@ namespace dml
     inline auto submit(compare_pattern_operation    operation,
                        uint64_t                     pattern,
                        const_data_view              src_view,
-                       const execution_interface_t &executor = execution_interface_t())
+                       const execution_interface_t &executor = execution_interface_t(),
+                       std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
         -> handler<compare_pattern_operation, typename execution_interface_t::allocator_type>
     {
-        return detail::submit<execution_path, compare_pattern_operation>(executor,
+        return detail::submit<execution_path, compare_pattern_operation>(numa_id,
+                                                                         executor,
                                                                          [&]
                                                                          {
                                                                              return detail::ml::make_compare_pattern_task(
@@ -418,6 +429,7 @@ namespace dml
      * @param src2_view              @ref data_view to the second source memory region
      * @param delta_view             @ref data_view to the memory region for delta record
      * @param executor               Instance of @ref execution_interface
+     * @param numa_id                Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -441,10 +453,12 @@ namespace dml
                        const_data_view              src1_view,
                        const_data_view              src2_view,
                        data_view                    delta_view,
-                       const execution_interface_t &executor = execution_interface_t())
+                       const execution_interface_t &executor = execution_interface_t(),
+                       std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
         -> handler<create_delta_operation, typename execution_interface_t::allocator_type>
     {
         return detail::submit<execution_path, create_delta_operation>(
+            numa_id,
             executor,
             [&]
             {
@@ -478,6 +492,7 @@ namespace dml
      * @param dst_view               @ref data_view to the destination memory region (the first source from Create Delta)
      * @param delta_result           Result from Create Delta operation
      * @param executor               Instance of @ref execution_interface
+     * @param numa_id                Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -501,10 +516,12 @@ namespace dml
                        const_data_view              delta_view,
                        data_view                    dst_view,
                        create_delta_result          delta_result,
-                       const execution_interface_t &executor = execution_interface_t())
+                       const execution_interface_t &executor = execution_interface_t(),
+                       std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
         -> handler<apply_delta_operation, typename execution_interface_t::allocator_type>
     {
         return detail::submit<execution_path, apply_delta_operation>(
+            numa_id,
             executor,
             [&]
             {
@@ -538,6 +555,7 @@ namespace dml
      * @param src_view               @ref data_view to the source memory region
      * @param crc_seed               Initial CRC value
      * @param executor               Instance of @ref execution_interface
+     * @param numa_id                Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -560,10 +578,12 @@ namespace dml
     inline auto submit(crc_operation                operation,
                        const_data_view              src_view,
                        uint32_t                     crc_seed,
-                       const execution_interface_t &executor = execution_interface_t())
+                       const execution_interface_t &executor = execution_interface_t(),
+                       std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
         -> handler<crc_operation, typename execution_interface_t::allocator_type>
     {
-        return detail::submit<execution_path, crc_operation>(executor,
+        return detail::submit<execution_path, crc_operation>(numa_id,
+                                                             executor,
                                                              [&]
                                                              {
                                                                  return detail::ml::make_crc_task(src_view.data(),
@@ -589,6 +609,7 @@ namespace dml
      * @param dst_view               @ref data_view to the destination memory region
      * @param crc_seed               Initial CRC value
      * @param executor               Instance of @ref execution_interface
+     * @param numa_id                Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -612,10 +633,12 @@ namespace dml
                        const_data_view              src_view,
                        data_view                    dst_view,
                        uint32_t                     crc_seed,
-                       const execution_interface_t &executor = execution_interface_t())
+                       const execution_interface_t &executor = execution_interface_t(),
+                       std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
         -> handler<copy_crc_operation, typename execution_interface_t::allocator_type>
     {
         return detail::submit<execution_path, copy_crc_operation>(
+            numa_id,
             executor,
             [&]
             {
@@ -646,6 +669,7 @@ namespace dml
      * @param operation              Instance of @ref cache_flush_operation
      * @param dst_view               @ref data_view to the destination memory region
      * @param executor               Instance of @ref execution_interface
+     * @param numa_id                Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
@@ -665,10 +689,14 @@ namespace dml
      * @return @ref handler for @ref cache_flush_operation
      */
     template <typename execution_path, typename execution_interface_t = default_execution_interface<execution_path>>
-    inline auto submit(cache_flush_operation operation, data_view dst_view, const execution_interface_t &executor = execution_interface_t())
+    inline auto submit(cache_flush_operation operation,
+                       data_view dst_view,
+                       const execution_interface_t &executor = execution_interface_t(),
+                       std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
         -> handler<cache_flush_operation, typename execution_interface_t::allocator_type>
     {
         return detail::submit<execution_path, cache_flush_operation>(
+            numa_id,
             executor,
             [&]
             {

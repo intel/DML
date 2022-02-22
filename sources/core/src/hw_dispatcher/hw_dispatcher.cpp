@@ -1,22 +1,12 @@
-/*
- * Copyright 2021 Intel Corporation.
+/*******************************************************************************
+ * Copyright (C) 2021 Intel Corporation
  *
- * This software and the related documents are Intel copyrighted materials,
- * and your use of them is governed by the express license under which they
- * were provided to you ("License"). Unless the License provides otherwise,
- * you may not use, modify, copy, publish, distribute, disclose or transmit
- * this software or the related documents without Intel's prior written
- * permission.
- *
- * This software and the related documents are provided as is, with no
- * express or implied warranties, other than those that are expressly
- * stated in the License.
- *
- */
+ * SPDX-License-Identifier: MIT
+ ******************************************************************************/
 
 #include "hw_dispatcher.hpp"
 
-#if defined(DML_HW) && defined(linux)
+#if defined(linux)
 
 #include "legacy_headers/libaccel_config.h"
 
@@ -37,7 +27,7 @@ namespace dml::core::dispatcher
 
     hw_dispatcher::hw_dispatcher() noexcept
     {
-#ifdef DML_HW
+#if defined(linux)
         hw_init_status_ = hw_dispatcher::initialize_hw();
         hw_support_     = hw_init_status_ == DML_STATUS_OK;
 #else
@@ -45,7 +35,7 @@ namespace dml::core::dispatcher
 #endif
     }
 
-#ifdef DML_HW
+#if defined(linux)
 
     auto hw_dispatcher::initialize_hw() noexcept -> dsahw_status_t
     {
@@ -92,7 +82,7 @@ namespace dml::core::dispatcher
 
     hw_dispatcher::~hw_dispatcher() noexcept
     {
-#ifdef DML_HW
+#if defined(linux)
         // Variables
         auto *context_ptr = hw_context_.get_driver_context_ptr();
 
@@ -118,7 +108,7 @@ namespace dml::core::dispatcher
         return hw_support_;
     }
 
-#ifdef DML_HW
+#if defined(linux)
 
     void hw_dispatcher::fill_hw_context(dsahw_context_t *const hw_context_ptr) noexcept
     {
@@ -137,7 +127,7 @@ namespace dml::core::dispatcher
         return hw_init_status_;
     }
 
-#ifdef DML_HW
+#if defined(linux)
 
     auto hw_dispatcher::begin() const noexcept -> device_container_t::const_iterator
     {

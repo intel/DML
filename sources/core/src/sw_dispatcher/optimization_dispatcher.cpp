@@ -1,18 +1,8 @@
-/*
- * Copyright 2021 Intel Corporation.
+/*******************************************************************************
+ * Copyright (C) 2021 Intel Corporation
  *
- * This software and the related documents are Intel copyrighted materials,
- * and your use of them is governed by the express license under which they
- * were provided to you ("License"). Unless the License provides otherwise,
- * you may not use, modify, copy, publish, distribute, disclose or transmit
- * this software or the related documents without Intel's prior written
- * permission.
- *
- * This software and the related documents are provided as is, with no
- * express or implied warranties, other than those that are expressly
- * stated in the License.
- *
- */
+ * SPDX-License-Identifier: MIT
+ ******************************************************************************/
 
 #include "optimization_dispatcher.hpp"
 
@@ -40,18 +30,7 @@ namespace dml::core::dispatch
     public:
         dispatcher() noexcept
         {
-#ifdef DML_AVX512
-            gs_mem_move         = dml_avx512_mem_move;
-            gs_fill_u64         = dml_avx512_fill_u64;
-            gs_compare          = dml_avx512_compare;
-            gs_compare_pattern  = dml_avx512_compare_pattern;
-            gs_crc_u32          = dml_avx512_crc_u32;
-            gs_cache_flush      = dml_clflushopt;
-            gs_cache_write_back = dml_clwb;
-#endif
 
-            // Disable software dispatcher to preserve previous behavior
-#if 0
             auto registers = dml_core_cpuid(DML_CPUID_EXTENSIONS);
 
             if ((registers.ebx & DML_AVX512_MASK) == DML_AVX512_MASK)
@@ -61,6 +40,7 @@ namespace dml::core::dispatch
                 gs_compare         = dml_avx512_compare;
                 gs_compare_pattern = dml_avx512_compare_pattern;
                 gs_crc_u32         = dml_avx512_crc_u32;
+                gs_crc_reflected_u32 = dml_avx512_crc_reflected_u32;
             }
 
             if ((registers.ebx & DML_CLFLUSHOPT) == DML_CLFLUSHOPT)
@@ -72,7 +52,6 @@ namespace dml::core::dispatch
             {
                 gs_cache_write_back = dml_clwb;
             }
-#endif
         }
     };
 

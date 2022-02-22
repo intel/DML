@@ -1,18 +1,8 @@
-/*
- * Copyright 2021 Intel Corporation.
+/*******************************************************************************
+ * Copyright (C) 2021 Intel Corporation
  *
- * This software and the related documents are Intel copyrighted materials,
- * and your use of them is governed by the express license under which they
- * were provided to you ("License"). Unless the License provides otherwise,
- * you may not use, modify, copy, publish, distribute, disclose or transmit
- * this software or the related documents without Intel's prior written
- * permission.
- *
- * This software and the related documents are provided as is, with no
- * express or implied warranties, other than those that are expressly
- * stated in the License.
- *
- */
+ * SPDX-License-Identifier: MIT
+ ******************************************************************************/
 
 #include <core/device.hpp>
 #include <core/utils.hpp>
@@ -22,6 +12,7 @@
 
 #include "awaiter.hpp"
 #include "partial_completion.hpp"
+#include "accumulate_records.hpp"
 
 namespace dml::detail::ml::impl
 {
@@ -114,12 +105,17 @@ namespace dml::detail::ml::impl
         auto  status = core::any_completion_record(record).status();
         if ((status & page_fault_mask) == page_fault_mask)
         {
+            // Clone
+            auto prev_record = record;
+
             update_for_continuation(dsc);
 
             // Must not fail
             static_cast<void>(software::submit(dsc, 0));
 
             software::wait(dsc);
+
+            accumulate_records(dsc, prev_record);
         }
     }
 

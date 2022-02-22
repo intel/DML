@@ -1,18 +1,8 @@
-/*
- * Copyright 2020-2021 Intel Corporation.
+/*******************************************************************************
+ * Copyright (C) 2021 Intel Corporation
  *
- * This software and the related documents are Intel copyrighted materials,
- * and your use of them is governed by the express license under which they
- * were provided to you ("License"). Unless the License provides otherwise,
- * you may not use, modify, copy, publish, distribute, disclose or transmit
- * this software or the related documents without Intel's prior written
- * permission.
- *
- * This software and the related documents are provided as is, with no
- * express or implied warranties, other than those that are expressly
- * stated in the License.
- *
- */
+ * SPDX-License-Identifier: MIT
+ ******************************************************************************/
 
 /**
  * @brief Contains a runner for Intel DML Job API Examples
@@ -35,18 +25,9 @@ void print_hello()
     printf("Intel(R) Data Mover Library Job API Examples\n\n"
            "============================== LEGALS ==============================\n"
            "\n"
-           "Copyright 2020-2021 Intel Corporation\n"
+           "Copyright (C) 2021 Intel Corporation\n"
            "\n"
-           "This software and the related documents are Intel copyrighted materials,\n"
-           "and your use of them is governed by the express license under which they\n"
-           "were provided to you (\"License\"). Unless the License provides otherwise,\n"
-           "you may not use, modify, copy, publish, distribute, disclose or transmit\n"
-           "this software or the related documents without Intel's prior written\n"
-           "permission.\n"
-           "\n"
-           "This software and the related documents are provided as is, with no\n"
-           "express or implied warranties, other than those that are expressly\n"
-           "stated in the License.\n"
+           "SPDX-License-Identifier: MIT"
            "====================================================================\n");
 }
 

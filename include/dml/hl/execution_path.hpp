@@ -1,18 +1,8 @@
-/*
- * Copyright 2021 Intel Corporation.
+/*******************************************************************************
+ * Copyright (C) 2021 Intel Corporation
  *
- * This software and the related documents are Intel copyrighted materials,
- * and your use of them is governed by the express license under which they
- * were provided to you ("License"). Unless the License provides otherwise,
- * you may not use, modify, copy, publish, distribute, disclose or transmit
- * this software or the related documents without Intel's prior written
- * permission.
- *
- * This software and the related documents are provided as is, with no
- * express or implied warranties, other than those that are expressly
- * stated in the License.
- *
- */
+ * SPDX-License-Identifier: MIT
+ ******************************************************************************/
 
 /**
  * @date 05/20/2021
@@ -106,6 +96,44 @@ namespace dml
          * @brief Proxy for lower level execution path
          */
         using execution_path = detail::ml::execution_path::hardware;
+    };
+
+    /**
+     * @brief Represent automatic execution path
+     *
+     * Specifies that an operation is executed either on a dedicated hardware or CPU.
+     */
+    struct automatic
+    {
+        /**
+         * @brief Default thread spawner for the automatic execution path
+         */
+        struct default_thread_spawner
+        {
+            /**
+             * @brief Starts a task directly (assume the hardware is asynchronous)
+             *
+             * @tparam task_t Type of callable task
+             * @param task    Instance of a callable task
+             *
+             * @return Task return value (if present)
+             */
+            template <typename task_t>
+            decltype(auto) operator()(task_t &&task) const noexcept(noexcept(task()))
+            {
+                return task();
+            }
+        };
+
+        /**
+         * @brief Default allocator type for automatic execution path
+         */
+        using default_allocator = std::allocator<byte_t>;
+
+        /**
+         * @brief Proxy for lower level execution path
+         */
+        using execution_path = detail::ml::execution_path::automatic;
     };
 
     /**

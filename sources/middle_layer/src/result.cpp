@@ -1,18 +1,8 @@
-/*
- * Copyright 2021 Intel Corporation.
+/*******************************************************************************
+ * Copyright (C) 2021 Intel Corporation
  *
- * This software and the related documents are Intel copyrighted materials,
- * and your use of them is governed by the express license under which they
- * were provided to you ("License"). Unless the License provides otherwise,
- * you may not use, modify, copy, publish, distribute, disclose or transmit
- * this software or the related documents without Intel's prior written
- * permission.
- *
- * This software and the related documents are provided as is, with no
- * express or implied warranties, other than those that are expressly
- * stated in the License.
- *
- */
+ * SPDX-License-Identifier: MIT
+ ******************************************************************************/
 
 #include <core/view.hpp>
 #include <dml/detail/ml/result.hpp>
@@ -21,7 +11,7 @@ namespace dml::detail::ml
 {
     detail::execution_status get_status(completion_record &record) noexcept
     {
-        return static_cast<execution_status>(core::any_completion_record(record).status());
+        return static_cast<execution_status>(0b111111 & core::any_completion_record(record).status());
     }
 
     detail::result_t get_result(completion_record &record) noexcept
