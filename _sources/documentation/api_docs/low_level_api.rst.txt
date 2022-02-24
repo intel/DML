@@ -1,17 +1,7 @@
  .. ***************************************************************************
- .. * Copyright 2020-2021 Intel Corporation.
+ .. * Copyright (C) 2021 Intel Corporation
  .. *
- .. * This software and the related documents are Intel copyrighted materials,
- .. * and your use of them is governed by the express license under which they
- .. * were provided to you ("License"). Unless the License provides otherwise,
- .. * you may not use, modify, copy, publish, distribute, disclose or transmit
- .. * this software or the related documents without Intel's prior written
- .. * permission.
- .. *
- .. * This software and the related documents are provided as is, with no
- .. * express or implied warranties, other than those that are expressly
- .. * stated in the License.
- .. *
+ .. * SPDX-License-Identifier: MIT
  .. ***************************************************************************/
 
 Low-level C API
@@ -22,8 +12,8 @@ Introduction
 ************
 
 
-This document provides instructions on how to use the Intel® Data Mover
-Library. It describes general usage concepts, main entities and
+This document provides instructions on how to use the Intel® Data Mover Library.
+It describes general usage concepts, main entities and
 detailed operation descriptions.
 
 For general introduction to Intel® DML, see `Introduction
@@ -116,7 +106,7 @@ where:
 -  ``path`` - has type ``dml_path_t`` and supports the following values:
 
    -  ``DML_PATH_HW`` – all hardware-supported features are executed
-      by Intel® DSA
+      by Intel® Data Streaming Accelerator
    -  ``DML_PATH_SW`` – all supported features are executed by the
       software path of the library
    -  ``DML_PATH_AUTO`` – the library automatically dispatches execution

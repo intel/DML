@@ -1,17 +1,7 @@
  .. ***************************************************************************
- .. * Copyright 2020-2021 Intel Corporation.
+ .. * Copyright (C) 2021 Intel Corporation
  .. *
- .. * This software and the related documents are Intel copyrighted materials,
- .. * and your use of them is governed by the express license under which they
- .. * were provided to you ("License"). Unless the License provides otherwise,
- .. * you may not use, modify, copy, publish, distribute, disclose or transmit
- .. * this software or the related documents without Intel's prior written
- .. * permission.
- .. *
- .. * This software and the related documents are provided as is, with no
- .. * express or implied warranties, other than those that are expressly
- .. * stated in the License.
- .. *
+ .. * SPDX-License-Identifier: MIT
  .. ***************************************************************************/
 
 Installation
@@ -27,7 +17,7 @@ Repository Structure
      ├── cmake
      │   └── Modules         # Cmake modules and configuration
      ├── doc                 # Contains library documentation
-     ├── examples            
+     ├── examples
      │   ├── high_level_api  # C++ API usage examples
      │   └── dml_job_api     # C API usage examples
      ├── google-benchmark    # link to google-bechmarks
@@ -41,7 +31,7 @@ Repository Structure
      │   ├── include         # Private includes
      │   └── sw-path         # SW path of the library
      └── tests
-         ├── common          # Common service functions for testing 
+         ├── common          # Common service functions for testing
          ├── benchmarks      # Benchmarks
          ├── testdata        # Corpuses for Compression testing
          ├── high-level-api  # C++ API usage examples
@@ -59,7 +49,7 @@ configuration. If configuration is invalid or doesn’t exist, library
 returns an appropriate status code in case if hardware execution path
 used.
 
-.. note:: 
+.. note::
 
    Intel® DML doesn’t support all hardware possibilities. Library
    limitations are described in the `Library
@@ -70,7 +60,7 @@ System Requirements
 ===================
 
 
-For more information about system requirements, 
+For more information about system requirements,
 see `System Requirements <../introduction_docs/system_requirements.html>`__.
 
 
@@ -87,7 +77,7 @@ Before building the library, install and set up the following tools:
 
 - Libraries:
 
-   -  Linux* OS: Universally Unique ID library: ``uuid-dev`` version 2.35.2 or higher  
+   -  Linux* OS: Universally Unique ID library: ``uuid-dev`` version 2.35.2 or higher
 
 -  Cross-platform build tool: CMake* version 3.12 or higher
 -  Make: GNU ‘make’ (Linux* OS) or ‘nmake’ (Windows* OS)
@@ -103,13 +93,13 @@ make sure the following documentation generation tools are installed and set up:
 -  `Doxygen <https://www.doxygen.nl/index.html>`__ 1.8.17 or higher: ``apt install doxygen``
 -  `Python <https://www.python.org/>`__ 3.8.5 or higher: ``apt install python3.X``
 -  `Sphinx <https://www.sphinx-doc.org/en/master/>`__ 3.5.4 or higher: ``pip3 install sphinx``
--  `Read the Docs Sphinx Theme <https://sphinx-rtd-theme.readthedocs.io/en/stable/>`__ : ``pip3 install sphinx-book-theme``
+-  `sphinx_book_theme <https://executablebooks.org/en/latest/>`__ : ``pip3 install sphinx-book-theme``
 -  `Breathe <https://breathe.readthedocs.io/en/latest/>`__ 4.29.0 or higher: ``pip3 install breathe``
 
 
 .. note::
 
-   Linux* OS shell (or Windows* OS shell alternatives) is required to run the build script. 
+   Linux* OS shell (or Windows* OS shell alternatives) is required to run the build script.
 
 To generate full offline documentation from sources, use the following commands:
 
@@ -176,19 +166,6 @@ If you need to build a particular type of the library and tests
 
 CMake generates the script for release build as default.
 On Linux* OS, the default ``<install_dir>`` is ``/usr/local/``.
-   
-The library builds by default with software path only. If you need to
-build the library with enabled hardware, use the ``DML_HW`` option as follows:
-
-.. code-block:: shell
-
-   # Enable hardware path
-   cmake -DCMAKE_BUILD_TYPE=Release -DDML_HW=ON <path_to_cmake_folder>
-
-.. code-block:: shell
-
-   # Enable libaccel-config-3.2 support for hardware path
-   cmake -DCMAKE_BUILD_TYPE=Release -DDML_HW=ON -DLIB_ACCEL_3_2=ON <path_to_cmake_folder> 
 
 To enable ``-frecord-gcc-switches`` flag, use the ``DML_RECORD_SWITCHES`` option as follows:
 
