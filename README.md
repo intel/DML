@@ -35,6 +35,10 @@ After generation process is completed, open the `<dml_library>/doc/build/html/in
 
 See [Contributing document](./CONTRIBUTING.md) for details about contribution process.
 
+## How to Report Issues
+
+See [Issue Reporting](https://intel.github.io/DML/documentation/introduction_docs/issue_reporting.html) for details about issue reporting process.
+
 ## License
 
 The library is licensed under the MIT license. Refer to the

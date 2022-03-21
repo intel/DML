@@ -20,7 +20,7 @@ import docutils
 project = 'Intel® DML'
 copyright = '2022, Intel'
 author = 'Intel'
-release = 'v0.1.8-beta'
+release = 'v0.1.9-beta'
 
 # -- General configuration ---------------------------------------------------
 

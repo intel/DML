@@ -1,0 +1,4 @@
+[submodule "google-test"]
+	path = google-test
+	url = https://github.com/google/googletest.git
+	branch = release-1.11.0

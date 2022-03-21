@@ -36,13 +36,11 @@ namespace dml
         template <typename executor_t, typename allocator_type>
         friend class execution_interface;
 
-    public:
+       public:
         /**
          * @brief Construct empty and invalid handler
          */
-        handler(): task_(), status_(status_code::error), is_hw(false)
-        {
-        }
+        handler() : task_(), status_(status_code::error), is_hw(false) {}
 
         /**
          * @brief Construct a handler from a task
@@ -50,11 +48,40 @@ namespace dml
          * @param some_task Task for handler construction
          * @param allocator Memory allocator to use
          */
-        explicit handler(detail::ml::task<allocator_t> &&some_task, allocator_t allocator):
-            task_(std::move(some_task)),
-            status_(status_code::ok),
-            is_hw(false)
+        explicit handler(detail::ml::task<allocator_t> &&some_task, allocator_t allocator)
+            : task_(std::move(some_task)), status_(status_code::ok), is_hw(false)
         {
+        }
+
+        /**
+         * @brief Move constructor
+         *
+         * @param other Other instance
+         */
+        handler(handler &&other) noexcept
+            : task_(std::move(other.task_)),
+              status_(std::exchange(other.status_, status_code::error)),
+              is_hw(other.is_hw)
+        {
+        }
+
+        /**
+         * @brief Move assignment operator
+         *
+         * @param other  Other instance
+         *
+         * @return Self
+         */
+        handler &operator=(handler &&other) noexcept
+        {
+            if (this != &other)
+            {
+                std::swap(task_, other.task_);
+                std::swap(status_, other.status_);
+                std::swap(is_hw, other.is_hw);
+            }
+
+            return *this;
         }
 
         /**
@@ -111,12 +138,13 @@ namespace dml
          */
         [[nodiscard]] bool is_finished() noexcept
         {
-            auto  task_view  = make_view(task_);
+            auto task_view = make_view(task_);
 
             if (status_ == status_code::ok)
             {
-                return is_hw ? detail::ml::finished<detail::ml::execution_path::hardware>(task_view)
-                             : detail::ml::finished<detail::ml::execution_path::software>(task_view);
+                return is_hw
+                           ? detail::ml::finished<detail::ml::execution_path::hardware>(task_view)
+                           : detail::ml::finished<detail::ml::execution_path::software>(task_view);
             }
             else
             {
@@ -124,21 +152,23 @@ namespace dml
             }
         }
 
-    private:
+       private:
         template <typename operation_t_, typename allocator_t_>
-        friend dml::detail::ml::task_view detail::get_task_view(handler<operation_t_, allocator_t_> &h) noexcept;
+        friend dml::detail::ml::task_view detail::get_task_view(
+            handler<operation_t_, allocator_t_> &h) noexcept;
 
         template <typename operation_t_, typename allocator_t_>
         friend void detail::set_hw_path(handler<operation_t_, allocator_t_> &h) noexcept;
 
         template <typename operation_t_, typename allocator_t_>
-        friend void detail::set_status(handler<operation_t_, allocator_t_> &h, status_code status) noexcept;
+        friend void detail::set_status(handler<operation_t_, allocator_t_> &h,
+                                       status_code                          status) noexcept;
 
-    private:
+       private:
         detail::ml::task<allocator_t> task_;   /**< @todo */
         status_code                   status_; /**< This handler status */
         bool                          is_hw;   /**< @todo */
     };
-}  // namespace dml
+} // namespace dml
 
-#endif  //DML_HANDLER_HPP
+#endif //DML_HANDLER_HPP

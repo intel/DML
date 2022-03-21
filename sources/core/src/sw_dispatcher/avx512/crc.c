@@ -15,7 +15,7 @@
 #error "Unsupported compiler"
 #endif
 
-#define D_POLINOM_1 0x1EDC6F41
+#define D_POLYNOMIAL_1 0x1EDC6F41
 
  /**
  *  @todo
@@ -59,7 +59,7 @@ static uint32_t own_crc32_long_be_k0(const uint8_t* src_ptr, uint32_t length, ui
 */
 static void own_CRC_8u_k0(const uint8_t* src_ptr, uint32_t len, uint64_t poly, const uint8_t optPoly[128], uint32_t init, uint32_t* crc_ptr)
 {
-    if (((((uint64_t)1 << 32) | D_POLINOM_1) == poly)) {
+    if (((((uint64_t)1 << 32) | D_POLYNOMIAL_1) == poly)) {
         if (len < 1024) {
             own_CRC_8u_opt_k0(src_ptr, init, len, 32, (uint32_t*)optPoly, crc_ptr);
         }
@@ -77,7 +77,7 @@ static void own_CRC_8u_k0(const uint8_t* src_ptr, uint32_t len, uint64_t poly, c
 */
 static void own_CRC_reflected_8u_k0(const uint8_t* src_ptr, uint32_t len, uint64_t poly, const uint8_t optPoly[128], uint32_t init, uint32_t* crc_ptr)
 {
-    if (((((uint64_t)1 << 32) | D_POLINOM_1) == poly)) {
+    if (((((uint64_t)1 << 32) | D_POLYNOMIAL_1) == poly)) {
         if (len < 1024) {
             own_CRC_reflected_8u_opt_k0(src_ptr, init, len, 32, (uint32_t*)optPoly, crc_ptr);
         }
@@ -177,7 +177,7 @@ static inline void dmlc_own_calculate_crc_32u(const uint8_t* const memory_region
 {
     uint64_t    poly = (uint64_t)polynomial | ((uint64_t)1u << (uint64_t)32u);
 
-    if (D_POLINOM_1 == polynomial) {
+    if (D_POLYNOMIAL_1 == polynomial) {
         own_CRC_8u_k0(memory_region_ptr, bytes_to_hash, poly, opt_poly_1_ptr, *crc_ptr, crc_ptr);
     }
     else {
@@ -194,7 +194,7 @@ static inline void dmlc_own_calculate_crc_reflected_32u(const uint8_t* const mem
 {
     uint64_t    poly = (uint64_t)polynomial | ((uint64_t)1u << (uint64_t)32u);
 
-    if (D_POLINOM_1 == polynomial) {
+    if (D_POLYNOMIAL_1 == polynomial) {
         own_CRC_reflected_8u_k0(memory_region_ptr, bytes_to_hash, poly, opt_poly_1_ptr, *crc_ptr, crc_ptr);
     }
     else {
@@ -1235,7 +1235,7 @@ static void own_shift_two_lanes(int offset, __m128i* _xmm0, __m128i* _xmm1) {
 #pragma optimize("", off)
 #endif
 static uint64_t own_crc32_long_le_k0(const uint8_t* src_ptr, uint32_t length, uint32_t crc) {
-    const uint32_t polynomial = D_POLINOM_1;
+    const uint32_t polynomial = D_POLYNOMIAL_1;
     if (length >= 16u) {
         __m128i     xmm0, xmm1, xmm2;
         __m128i     xCRC, k_koef;
@@ -1505,7 +1505,7 @@ static void own_shift_two_lanes_be(int offset, __m128i* _xmm0, __m128i* _xmm1) {
 }
 
 uint32_t own_crc32_long_be_k0(const uint8_t* src_ptr, uint32_t length, uint32_t crc) {
-    const uint32_t polynomial = D_POLINOM_1;
+    const uint32_t polynomial = D_POLYNOMIAL_1;
     crc = bit_reflect_32(crc);
     if (length >= 16u) {
         __m128i     xmm0, xmm1, xmm2;
@@ -1698,6 +1698,3 @@ uint32_t dml_avx512_crc_reflected_u32(const uint8_t* src, uint32_t transfer_size
     dmlc_own_calculate_crc_reflected_32u(src, transfer_size, &crc_value, polynomial);
     return crc_value;
 }
-
-
-
