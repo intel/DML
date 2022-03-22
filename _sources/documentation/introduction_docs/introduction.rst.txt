@@ -21,8 +21,7 @@ of available modern CPU capabilities. This can provide tremendous
 development and maintenance savings. The goal of the Intel DML is to
 provide application programming interface (API) with:
 
--  a simple C/C++ interface and data structures to enhance usability and
-   portability
+-  a simple C/C++ interface and data structures to enhance usability and portability
 -  faster time-to-market
 -  scalability with Intel® Data Streaming Accelerator (Intel® DSA) hardware
 
@@ -54,12 +53,10 @@ Library Limitations
 *******************
 
 
--  Library doesn’t work with Dedicated WQs for the accelerator, but uses
-   shared ones only.
--  Library doesn’t have API for the hardware path configuration.
--  Library doesn’t support Hardware execution path on Windows OS.
--  Library is not developed for kernel mode usage. It is user level
-   driver library.
+-  Library does not work with Dedicated WQs for the accelerator, but uses shared ones only.
+-  Library does not have API for the hardware path configuration.
+-  Library does not support Hardware execution path on Windows OS.
+-  Library is not developed for kernel mode usage. It is user level driver library.
 
 Library APIs
 ************
@@ -73,7 +70,7 @@ possibilities through different languages and paradigms: -
 
 Represents a state based interface. The base idea is to allocate a
 single state and configure one with different ways to perform necessary
-operation. Such API doesn’t allocate memory internally.
+operation. Such API does not allocate memory internally.
 
 More details: `C API Manual <../api_docs/low_level_api.html>`_
 
@@ -83,41 +80,3 @@ Represents high level operations API written with C++. API provides
 compile time optimizations and less operation preparation latency.
 
 More details: `C++ API Manual <../api_docs/high_level_api.html>`__
-
-Issue Reporting & Classification
-********************************
-
-
-Intel DML has several execution paths and large number of different
-operations and modes, thus correct issue description is important. Well
-filled description helps to detect and solve problems faster.
-Use GitHub issues to report any problems.
-
-Issues can be classified depending on the step where they occur:
-
-- Configuration step.
-- Hardware path initialization step
-- [TBD] Operation execution step.
-
-All these classes are described below:
-
-**Configuration step issues:**
-
-Intel DML library works with accelerator configuration created by
-system administrator. There can be a lot of different problems. They can
-affect library work correctness. To avoid these problems follow
-instructions in the `Library presetting
-<../get_started_docs/installation.html#library-presetting-and-building>`__
-section. These classes of issue are placed out of scope Intel DML
-library and can be addressed to **idxd-driver** team or **idxd-config**
-team.
-
-**Initialization step issues:**
-
-Intel DML library has 2 different status code groups. The first group
-helps to detect initialization issues. This issue can be caused by:
-
-- Incorrect configuration, that library doesn’t support by reason listed
-  in `Library Limitation <#library-limitations>`__ section
-- Bug in the library initialization code.
-  This kind of problem must be reported to Intel DML team.

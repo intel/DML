@@ -18,36 +18,34 @@ and various data processing applications.
 
 .. toctree::
    :maxdepth: 4
-   :caption: About:
+   :hidden:
+   :caption: About
 
 
    documentation/introduction_docs/introduction.rst
    documentation/introduction_docs/system_requirements.rst
+   documentation/introduction_docs/release_notes.rst
+   documentation/introduction_docs/issue_reporting.rst
    documentation/introduction_docs/license.rst
 
 
 .. toctree::
    :maxdepth: 4
-   :caption: Get Started:
+   :hidden:
+   :caption: Get Started
 
 
    documentation/get_started_docs/installation.rst
    documentation/get_started_docs/quick_start.rst
    documentation/get_started_docs/code_samples_and_examples.rst
+   documentation/get_started_docs/testing.rst
 
 
 .. toctree::
    :maxdepth: 4
-   :caption: Developer Reference:
+   :hidden:
+   :caption: Developer Reference
 
 
    documentation/api_docs/high_level_api.rst
    documentation/api_docs/low_level_api.rst
-
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Release Notes:
-
-
-   documentation/release_notes.rst

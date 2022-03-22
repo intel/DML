@@ -7,6 +7,18 @@
 Release Notes
 #############
 
+v0.1.9-beta
+***********
+
+**Date**: March 2022
+
+**Note**: Release introduces a test system for the library.
+
+**Features**:
+
+- Added tests for the library under the ``tests/`` folder
+- Added example for multi-socket utilization of the library in the `Code Samples and Examples <https://intel.github.io/DML/documentation/get_started_docs/code_samples_and_examples.html>`__ section
+
 v0.1.8-beta
 ***********
 

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introduction &#8212; Intel® DML v0.1.8-beta documentation</title>
+    <title>Introduction &#8212; Intel® DML v0.1.9-beta documentation</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet">
   <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -64,7 +64,7 @@
       
       
       
-      <h1 class="site-logo" id="site-title">Intel® DML v0.1.8-beta documentation</h1>
+      <h1 class="site-logo" id="site-title">Intel® DML v0.1.9-beta documentation</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -74,7 +74,7 @@
     <div class="bd-toc-item active">
         <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  About:
+  About
  </span>
 </p>
 <ul class="current nav bd-sidenav">
@@ -89,6 +89,16 @@
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="release_notes.html">
+   Release Notes
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="issue_reporting.html">
+   Issue Reporting
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="license.html">
    License
   </a>
@@ -96,7 +106,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Get Started:
+  Get Started
  </span>
 </p>
 <ul class="nav bd-sidenav">
@@ -115,10 +125,15 @@
    Code Samples and examples
   </a>
  </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../get_started_docs/testing.html">
+   Test Library
+  </a>
+ </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Developer Reference:
+  Developer Reference
  </span>
 </p>
 <ul class="nav bd-sidenav">
@@ -130,18 +145,6 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../api_docs/low_level_api.html">
    Low-level C API
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Release Notes:
- </span>
-</p>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../release_notes.html">
-   Release Notes
   </a>
  </li>
 </ul>
@@ -245,11 +248,6 @@
    Library APIs
   </a>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#issue-reporting-classification">
-   Issue Reporting &amp; Classification
-  </a>
- </li>
 </ul>
 
             </nav>
@@ -285,11 +283,6 @@
    Library APIs
   </a>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#issue-reporting-classification">
-   Issue Reporting &amp; Classification
-  </a>
- </li>
 </ul>
 
                         </nav>
@@ -316,8 +309,7 @@ of available modern CPU capabilities. This can provide tremendous
 development and maintenance savings. The goal of the Intel DML is to
 provide application programming interface (API) with:</p>
 <ul class="simple">
-<li><p>a simple C/C++ interface and data structures to enhance usability and
-portability</p></li>
+<li><p>a simple C/C++ interface and data structures to enhance usability and portability</p></li>
 <li><p>faster time-to-market</p></li>
 <li><p>scalability with Intel® Data Streaming Accelerator (Intel® DSA) hardware</p></li>
 </ul>
@@ -344,12 +336,10 @@ achieve the optimal system resources utilization:</p>
 <div class="section" id="library-limitations">
 <h2>Library Limitations<a class="headerlink" href="#library-limitations" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><p>Library doesn’t work with Dedicated WQs for the accelerator, but uses
-shared ones only.</p></li>
-<li><p>Library doesn’t have API for the hardware path configuration.</p></li>
-<li><p>Library doesn’t support Hardware execution path on Windows OS.</p></li>
-<li><p>Library is not developed for kernel mode usage. It is user level
-driver library.</p></li>
+<li><p>Library does not work with Dedicated WQs for the accelerator, but uses shared ones only.</p></li>
+<li><p>Library does not have API for the hardware path configuration.</p></li>
+<li><p>Library does not support Hardware execution path on Windows OS.</p></li>
+<li><p>Library is not developed for kernel mode usage. It is user level driver library.</p></li>
 </ul>
 </div>
 <div class="section" id="library-apis">
@@ -360,43 +350,12 @@ possibilities through different languages and paradigms: -
 <p><strong>C API (Job API):</strong></p>
 <p>Represents a state based interface. The base idea is to allocate a
 single state and configure one with different ways to perform necessary
-operation. Such API doesn’t allocate memory internally.</p>
+operation. Such API does not allocate memory internally.</p>
 <p>More details: <a class="reference external" href="../api_docs/low_level_api.html">C API Manual</a></p>
 <p><strong>C++ API (High Level API):</strong></p>
 <p>Represents high level operations API written with C++. API provides
 compile time optimizations and less operation preparation latency.</p>
 <p>More details: <a class="reference external" href="../api_docs/high_level_api.html">C++ API Manual</a></p>
-</div>
-<div class="section" id="issue-reporting-classification">
-<h2>Issue Reporting &amp; Classification<a class="headerlink" href="#issue-reporting-classification" title="Permalink to this headline">¶</a></h2>
-<p>Intel DML has several execution paths and large number of different
-operations and modes, thus correct issue description is important. Well
-filled description helps to detect and solve problems faster.
-Use GitHub issues to report any problems.</p>
-<p>Issues can be classified depending on the step where they occur:</p>
-<ul class="simple">
-<li><p>Configuration step.</p></li>
-<li><p>Hardware path initialization step</p></li>
-<li><p>[TBD] Operation execution step.</p></li>
-</ul>
-<p>All these classes are described below:</p>
-<p><strong>Configuration step issues:</strong></p>
-<p>Intel DML library works with accelerator configuration created by
-system administrator. There can be a lot of different problems. They can
-affect library work correctness. To avoid these problems follow
-instructions in the <a class="reference external" href="../get_started_docs/installation.html#library-presetting-and-building">Library presetting</a>
-section. These classes of issue are placed out of scope Intel DML
-library and can be addressed to <strong>idxd-driver</strong> team or <strong>idxd-config</strong>
-team.</p>
-<p><strong>Initialization step issues:</strong></p>
-<p>Intel DML library has 2 different status code groups. The first group
-helps to detect initialization issues. This issue can be caused by:</p>
-<ul class="simple">
-<li><p>Incorrect configuration, that library doesn’t support by reason listed
-in <a class="reference external" href="#library-limitations">Library Limitation</a> section</p></li>
-<li><p>Bug in the library initialization code.
-This kind of problem must be reported to Intel DML team.</p></li>
-</ul>
 </div>
 </div>
 
