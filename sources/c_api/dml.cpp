@@ -50,11 +50,11 @@ extern "C" dml_status_t dml_init_job(const dml_path_t path, dml_job_t *const dml
     return DML_STATUS_OK;
 }
 
-extern "C" dml_status_t dml_execute_job(dml_job_t *const dml_job_ptr)
+extern "C" dml_status_t dml_execute_job(dml_job_t *const dml_job_ptr, dml_wait_mode_t wait_mode)
 {
     CHECK_NULL(dml_job_ptr);
 
-    return dml::execute(dml::job_view(dml_job_ptr));
+    return dml::execute(dml::job_view(dml_job_ptr), bool(wait_mode));
 }
 
 extern "C" dml_status_t dml_submit_job(dml_job_t *const dml_job_ptr)
@@ -71,11 +71,11 @@ extern "C" dml_status_t dml_check_job(dml_job_t *const dml_job_ptr)
     return dml::check(dml::job_view(dml_job_ptr));
 }
 
-extern "C" dml_status_t dml_wait_job(dml_job_t *const dml_job_ptr)
+extern "C" dml_status_t dml_wait_job(dml_job_t *const dml_job_ptr, dml_wait_mode_t wait_mode)
 {
     CHECK_NULL(dml_job_ptr);
 
-    return dml::wait(dml::job_view(dml_job_ptr));
+    return dml::wait(dml::job_view(dml_job_ptr), bool(wait_mode));
 }
 
 extern "C" dml_status_t dml_finalize_job(dml_job_t *const dml_job_ptr)

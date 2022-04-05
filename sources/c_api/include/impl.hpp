@@ -17,20 +17,20 @@
 
 namespace dml
 {
-    [[nodiscard]] static inline dml_status_t wait(job_view job) noexcept
+    [[nodiscard]] static inline dml_status_t wait(job_view job, bool umwait) noexcept
     {
         auto task_view = detail::ml::make_view(job.state().task);
 
         switch (job.state().path)
         {
             case DML_PATH_SW:
-                detail::ml::wait<detail::ml::execution_path::software>(task_view);
+                detail::ml::wait<detail::ml::execution_path::software>(task_view, umwait);
                 break;
             case DML_PATH_HW:
-                detail::ml::wait<detail::ml::execution_path::hardware>(task_view);
+                detail::ml::wait<detail::ml::execution_path::hardware>(task_view, umwait);
                 break;
             case DML_PATH_AUTO:
-                detail::ml::wait<detail::ml::execution_path::automatic>(task_view);
+                detail::ml::wait<detail::ml::execution_path::automatic>(task_view, umwait);
                 break;
         }
 
@@ -109,14 +109,15 @@ namespace dml
         return DML_STATUS_OK;
     }
 
-    [[nodiscard]] static inline dml_status_t execute(job_view job) noexcept
+    [[nodiscard]] static inline dml_status_t execute(job_view job, bool umwait) noexcept
     {
         if (auto status = submit(job); status != DML_STATUS_OK)
         {
             return status;
         }
 
-        return wait(job);
+        // Busy polling
+        return wait(job, umwait);
     }
 
 }  // namespace dml

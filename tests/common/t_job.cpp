@@ -80,7 +80,7 @@ namespace dml::test
 
     auto dml::test::job_t::run() noexcept -> dml_status_t
     {
-        return dml_execute_job(reinterpret_cast<dml_job_t *>(m_job_ptr.get()));
+        return dml_execute_job(reinterpret_cast<dml_job_t *>(m_job_ptr.get()), DML_WAIT_MODE_BUSY_POLL);
     }
 
 

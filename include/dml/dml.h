@@ -107,6 +107,7 @@ dml_status_t dml_finalize_job(dml_job_t *dml_job_ptr);
  * @brief Performs dml_job_t structure parsing and forming the corresponding processing functions pipeline.
  *
  * @param[in,out] dml_job_ptr   Pointer to the initialized @ref dml_job_t structure
+ * @param[in]     wait_mode     Type of waiting
  *
  * @remark Usage example: @ref JOB_API_EXECUTE_DML_JOB_EXAMPLE
  *
@@ -118,7 +119,7 @@ dml_status_t dml_finalize_job(dml_job_t *dml_job_ptr);
  * - or other status depending on the DML operation in the @ref dml_job_t.operation field.
  *
  */
-dml_status_t dml_execute_job(dml_job_t *dml_job_ptr);
+dml_status_t dml_execute_job(dml_job_t *dml_job_ptr, dml_wait_mode_t wait_mode);
 
 /**
  * @brief Performs @ref dml_job_t structure parsing and forming the corresponding processing functions pipeline.
@@ -142,6 +143,7 @@ dml_status_t dml_submit_job(dml_job_t *dml_job_ptr);
  * @brief Waits for the end of @ref dml_job_t processing. (waits until the job is completed)
  *
  * @param[in,out] dml_job_ptr   Pointer to the initialized @ref dml_job_t structure
+ * @param[in]     wait_mode     Type of waiting
  *
  * @remark Usage example: @ref JOB_API_SUBMIT_DML_JOB_EXAMPLE
  *
@@ -151,7 +153,7 @@ dml_status_t dml_submit_job(dml_job_t *dml_job_ptr);
  * - or other status depending on the DML operation in the @ref dml_job_t.operation field
  *
  */
-dml_status_t dml_wait_job(dml_job_t *dml_job_ptr);
+dml_status_t dml_wait_job(dml_job_t *dml_job_ptr, dml_wait_mode_t wait_mode);
 
 /**
  * @brief Checks the status of @ref dml_job_t processing.

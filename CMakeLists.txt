@@ -17,7 +17,6 @@ endif()
 option(SANITIZE_MEMORY "Enables memory sanitizing" OFF)
 option(SANITIZE_THREADS "Enables threads sanitizing" OFF)
 option(LOG_HW_INIT "Enables HW initialization log" OFF)
-option(EFFICIENT_WAIT "Enables usage of umonitor/umwait" OFF)
 
 if (SANITIZE_MEMORY)
     message(STATUS "Memory sanitizing build is enabled")

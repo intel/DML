@@ -28,7 +28,7 @@ namespace dml::testing
             job->pattern[i] = reinterpret_cast<std::uint8_t*>(&workload.get_pattern())[i];
         }
 
-        auto status = Status(dml_execute_job(job));
+        auto status = Status(dml_execute_job(job, DML_WAIT_MODE_BUSY_POLL));
 #elif defined(CPP_API)
         auto op_result =
             dml::execute<execution_path>(dml::fill,

@@ -24,6 +24,7 @@ add_library(dml_middle_layer OBJECT
 
 target_link_libraries(dml_middle_layer
         PRIVATE dml_core
+        PRIVATE dml_sw_dispatcher
         )
 target_include_directories(dml_middle_layer
         PUBLIC ../../include
@@ -31,6 +32,9 @@ target_include_directories(dml_middle_layer
 target_sources(dml_middle_layer
         PUBLIC $<TARGET_OBJECTS:dml_core>
         PUBLIC $<TARGET_PROPERTY:dml_core,INTERFACE_SOURCES>
+
+        PUBLIC $<TARGET_OBJECTS:dml_sw_dispatcher>
+        PUBLIC $<TARGET_PROPERTY:dml_sw_dispatcher,INTERFACE_SOURCES>
         )
 target_compile_features(dml_middle_layer
         PUBLIC cxx_std_17

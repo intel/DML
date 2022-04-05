@@ -219,6 +219,15 @@ typedef enum
 
 
 /**
+ * @brief Enum for wait mode selection.
+ */
+typedef enum
+{
+  DML_WAIT_MODE_BUSY_POLL = 0x0u, /**< Enables busy polling for completion    */
+  DML_WAIT_MODE_UMWAIT    = 0x1u, /**< Enables umonitor/umwait for completion */
+} dml_wait_mode_t;
+
+/**
  * @brief Describes the size of the data blocks in the stream that is protected by DIF
  */
 typedef enum

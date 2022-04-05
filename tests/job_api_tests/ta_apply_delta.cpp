@@ -183,7 +183,7 @@ namespace dml
 
 
         // Intermediate calculations
-        const auto create_delta_status = dml_execute_job(&(*lib_job));
+        const auto create_delta_status = dml_execute_job(&(*lib_job), DML_WAIT_MODE_BUSY_POLL);
         EXPECT_EQ(DML_STATUS_OK, create_delta_status);
 
 

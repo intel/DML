@@ -57,6 +57,10 @@ void dml_clwb(uint8_t *dst, uint32_t transfer_size);
 
 void dml_clwb_unsupported(uint8_t *dst, uint32_t transfer_size);
 
+void dml_wait_busy_poll(const volatile uint8_t* pointer);
+
+void dml_wait_umwait(const volatile uint8_t* pointer);
+
 #ifdef __cplusplus
 }
 #endif

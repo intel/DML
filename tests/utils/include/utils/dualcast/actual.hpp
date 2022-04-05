@@ -25,7 +25,7 @@ namespace dml::testing
         job->source_length          = workload.get_src().size();
         job->destination_length     = workload.get_dst1().size();
 
-        auto status = Status(dml_execute_job(job));
+        auto status = Status(dml_execute_job(job, DML_WAIT_MODE_BUSY_POLL));
 #elif defined(CPP_API)
         auto result = dml::execute<execution_path>(dml::dualcast,
                                                    dml::make_view(workload.get_src()),

@@ -24,7 +24,7 @@ namespace dml::testing
         job->source_length         = workload.get_delta().size();
         job->destination_length    = workload.get_dst().size();
 
-        auto status = Status(dml_execute_job(job));
+        auto status = Status(dml_execute_job(job, DML_WAIT_MODE_BUSY_POLL));
 #elif defined(CPP_API)
         auto create_result              = dml::create_delta_result{};
         create_result.delta_record_size = workload.get_delta().size();

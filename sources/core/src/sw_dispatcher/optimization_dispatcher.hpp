@@ -37,6 +37,10 @@ namespace dml::core::dispatch
     void cache_flush(uint8_t* dst, uint32_t transfer_size) noexcept;
 
     void cache_write_back(uint8_t* dst, uint32_t transfer_size) noexcept;
+
+    void wait_busy_poll(const volatile uint8_t* pointer) noexcept;
+
+    void wait_umwait(const volatile uint8_t* pointer) noexcept;
 }  // namespace dml::core::dispatch
 
 #endif  //DML_CORE_OWN_KERNELS_OPTIMIZATION_DISPATCHER_HPP

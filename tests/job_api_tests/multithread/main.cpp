@@ -51,7 +51,7 @@ auto custom_mem_move(void *source_ptr, void *destination_ptr, uint32_t length) -
     job_ptr->destination_length    = length;
     job_ptr->operation             = DML_OP_MEM_MOVE;
 
-    auto execute_status = dml_execute_job(job_ptr);
+    auto execute_status = dml_execute_job(job_ptr, DML_WAIT_MODE_BUSY_POLL);
     if (DML_STATUS_OK != execute_status)
     {
         return false;

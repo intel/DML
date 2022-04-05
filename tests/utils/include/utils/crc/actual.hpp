@@ -37,7 +37,7 @@ namespace dml::testing
             job->flags |= DML_FLAG_CRC_BYPASS_DATA_REFLECTION;
         }
 
-        auto status = Status(dml_execute_job(job));
+        auto status = Status(dml_execute_job(job, DML_WAIT_MODE_BUSY_POLL));
 
         auto crc_value = *job->crc_checksum_ptr;
 #elif defined(CPP_API)

@@ -120,7 +120,7 @@ dml_status_t dml_nop(dml_job_t *const dml_job_ptr)
 {
     dml_job_ptr->operation = DML_OP_NOP;
 
-    return dml_execute_job(dml_job_ptr);
+    return dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 }
 /** [DML_NOP_SNIPPET] */
 
@@ -136,7 +136,7 @@ dml_status_t dml_move_8u(const uint8_t *const source_ptr,
     dml_job_ptr->source_length = length;
     dml_job_ptr->destination_length = length;
 
-    return dml_execute_job(dml_job_ptr);
+    return dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 }
 /** [DML_MOVE_8U_SNIPPET] */
 
@@ -155,7 +155,7 @@ dml_status_t dml_fill_pattern_64u(uint8_t *const destination_ptr,
         dml_job_ptr->pattern[i] = pattern_8e_ptr[i];
     }
 
-    return dml_execute_job(dml_job_ptr);
+    return dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 }
 /** [DML_FILL_PATTERN_64U_SNIPPET] */
 
@@ -170,7 +170,7 @@ dml_status_t dml_compare_8u(const uint8_t *const source_first_ptr,
     dml_job_ptr->source_second_ptr = (uint8_t *)source_second_ptr;
     dml_job_ptr->source_length = source_length;
 
-    return dml_execute_job(dml_job_ptr);
+    return dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 }
 /** [DML_COMPARE_8U_SNIPPET] */
 
@@ -189,7 +189,7 @@ dml_status_t dml_compare_pattern_64u(const uint8_t *const source_ptr,
         dml_job_ptr->pattern[i] = pattern_8e_ptr[i];
     }
 
-    return dml_execute_job(dml_job_ptr);
+    return dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 }
 /** [DML_COMPARE_PATTERN_64U_SNIPPET] */
 
@@ -204,7 +204,7 @@ dml_status_t dml_crc(uint8_t *const source_ptr,
     dml_job_ptr->source_length = length;
     dml_job_ptr->crc_checksum_ptr = crc_ptr;
 
-    return dml_execute_job(dml_job_ptr);
+    return dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 }
 /** [DML_CRC_SNIPPET] */
 
@@ -222,7 +222,7 @@ dml_status_t dml_crc_copy_8u(const uint8_t *const source_ptr,
     dml_job_ptr->destination_length = length;
     dml_job_ptr->crc_checksum_ptr = crc_ptr;
 
-    return dml_execute_job(dml_job_ptr);
+    return dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 }
 /** [DML_CRC_COPY_8U_SNIPPET] */
 
@@ -239,7 +239,7 @@ dml_status_t dml_copy_dualcast_8u(const uint8_t *const source_ptr,
     dml_job_ptr->destination_second_ptr = destination_second_ptr;
     dml_job_ptr->source_length = length;
 
-    return dml_execute_job(dml_job_ptr);
+    return dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 }
 /** [DML_COPY_DUALCAST_8U_SNIPPET] */
 
@@ -260,7 +260,7 @@ dml_status_t dml_create_delta_8u(const uint8_t *const source_first_ptr,
     dml_job_ptr->source_length = length;
     dml_job_ptr->destination_length = max_delta_size;
 
-    status = dml_execute_job(dml_job_ptr);
+    status = dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 
     *delta_size_ptr = dml_job_ptr->destination_length;
 
@@ -281,7 +281,7 @@ dml_status_t dml_apply_delta_8u(const uint8_t *const delta_ptr,
     dml_job_ptr->destination_first_ptr = destination_ptr;
     dml_job_ptr->destination_length = destination_length;
 
-    return dml_execute_job(dml_job_ptr);
+    return dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 }
 /** [DML_APPLY_DELTA_8U_SNIPPET] */
 
@@ -306,7 +306,7 @@ dml_status_t dml_dif_check_8u(const uint8_t *const source_ptr,
                                     | DML_DIF_FLAG_SRC_INC_APP_TAG
                                     | DML_DIF_FLAG_SRC_FIX_REF_TAG;
 
-    return dml_execute_job(dml_job_ptr);
+    return dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 }
 /** [DML_DIF_CHECK_8U_SNIPPET] */
 
@@ -348,7 +348,7 @@ dml_status_t dml_dif_update_8u(const uint8_t *const source_ptr,
                                     | DML_DIF_FLAG_DST_INC_APP_TAG
                                     | DML_DIF_FLAG_DST_FIX_REF_TAG;
 
-    return dml_execute_job(dml_job_ptr);
+    return dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 }
 /** [DML_DIF_UPDATE_8U_SNIPPET] */
 
@@ -377,7 +377,7 @@ dml_status_t dml_dif_insert_8u(const uint8_t *const source_ptr,
                                     | DML_DIF_FLAG_DST_INC_APP_TAG
                                     | DML_DIF_FLAG_DST_FIX_REF_TAG;
 
-    return dml_execute_job(dml_job_ptr);
+    return dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 }
 /** [DML_DIF_INSERT_8U_SNIPPET] */
 
@@ -406,7 +406,7 @@ dml_status_t dml_dif_strip_8u(const uint8_t *const source_ptr,
                                     | DML_DIF_FLAG_SRC_INC_APP_TAG
                                     | DML_DIF_FLAG_SRC_FIX_REF_TAG;
 
-    return dml_execute_job(dml_job_ptr);
+    return dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 }
 /** [DML_DIF_STRIP_8U_SNIPPET] */
 
@@ -484,7 +484,7 @@ dml_status_t dml_copy_batch_8u(uint8_t *source_first_ptr,
         return status;
     }
 
-    status = dml_execute_job(dml_job_ptr);
+    status = dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 
     free(batch_buffer_ptr);
 
@@ -502,7 +502,7 @@ dml_status_t dml_cache_flush_8u(uint8_t *const destination_ptr,
     dml_job_ptr->destination_first_ptr = destination_ptr;
     dml_job_ptr->destination_length = length;
 
-    return dml_execute_job(dml_job_ptr);
+    return dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 }
 /** [DML_CACHE_FLUSH_8U_SNIPPET] */
 
@@ -538,12 +538,12 @@ dml_status_t dml_submit(const uint8_t *const source_first_ptr,
         return status;
     }
 
-    status = dml_wait_job(dml_first_job_ptr);
+    status = dml_wait_job(dml_first_job_ptr, DML_WAIT_MODE_BUSY_POLL);
     if (DML_STATUS_OK != status)
     {
         return status;
     }
 
-    return dml_wait_job(dml_second_job_ptr);
+    return dml_wait_job(dml_second_job_ptr, DML_WAIT_MODE_BUSY_POLL);
 }
 /** [dml_submit_job_SNIPPET] */

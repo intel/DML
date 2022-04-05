@@ -29,7 +29,7 @@ namespace dml::testing
             job->flags |= DML_FLAG_CHECK_RESULT;
         }
 
-        auto status   = Status(dml_execute_job(job));
+        auto status   = Status(dml_execute_job(job, DML_WAIT_MODE_BUSY_POLL));
         auto result   = job->result;
         auto mismatch = job->offset;
 #elif defined(CPP_API)

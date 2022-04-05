@@ -27,6 +27,7 @@ typedef unsigned dml_register_t;
 
 #define DML_CLFLUSHOPT (1 << 23)
 #define DML_CLWB       (1 << 24)
+#define DML_WAITPKG    (1 << 5)
 
 #ifdef __cplusplus
 extern "C" {

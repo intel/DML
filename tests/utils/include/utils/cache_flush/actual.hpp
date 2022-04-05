@@ -27,7 +27,7 @@ namespace dml::testing
             job->flags |= DML_FLAG_DONT_INVALIDATE_CACHE;
         }
 
-        auto status = Status(dml_execute_job(job));
+        auto status = Status(dml_execute_job(job, DML_WAIT_MODE_BUSY_POLL));
 #elif defined(CPP_API)
         auto op = dml::cache_flush;
 

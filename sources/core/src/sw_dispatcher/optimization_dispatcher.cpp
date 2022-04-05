@@ -24,6 +24,8 @@ namespace dml::core::dispatch
     static auto gs_crc_reflected_u32 = dml_ref_crc_reflected_u32;
     static auto gs_cache_flush       = dml_clflush;
     static auto gs_cache_write_back  = dml_clwb_unsupported;
+    static auto gs_wait_busy_poll    = dml_wait_busy_poll;
+    static auto gs_wait_umwait       = dml_wait_busy_poll;
 
     class dispatcher
     {
@@ -51,6 +53,11 @@ namespace dml::core::dispatch
             if ((registers.ebx & DML_CLWB) == DML_CLWB)
             {
                 gs_cache_write_back = dml_clwb;
+            }
+
+            if ((registers.ecx & DML_WAITPKG) == DML_WAITPKG)
+            {
+                gs_wait_umwait = dml_wait_umwait;
             }
         }
     };
@@ -124,4 +131,15 @@ namespace dml::core::dispatch
     {
         gs_cache_write_back(dst, transfer_size);
     }
+
+    void wait_busy_poll(const volatile uint8_t* pointer) noexcept
+    {
+        gs_wait_busy_poll(pointer);
+    }
+
+    void wait_umwait(const volatile uint8_t* pointer) noexcept
+    {
+        gs_wait_umwait(pointer);
+    }
+
 }  // namespace dml::core::dispatch

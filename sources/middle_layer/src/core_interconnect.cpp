@@ -7,10 +7,10 @@
 #include <core/device.hpp>
 #include <core/utils.hpp>
 #include <core/validation.hpp>
+#include <optimization_dispatcher.hpp>
 #include <dml/detail/common/flags.hpp>
 #include <dml/detail/ml/impl/core_interconnect.hpp>
 
-#include "awaiter.hpp"
 #include "partial_completion.hpp"
 #include "accumulate_records.hpp"
 
@@ -39,7 +39,7 @@ namespace dml::detail::ml::impl
         return core::software_device().submit(dsc);
     }
 
-    void software::wait(const descriptor& dsc) noexcept
+    void software::wait(const descriptor& dsc, bool umwait) noexcept
     {
         if (finished(dsc))
         {
@@ -48,7 +48,14 @@ namespace dml::detail::ml::impl
 
         auto& record = core::get_completion_record(dsc);
 
-        awaiter wait_for(reinterpret_cast<volatile void*>(&record), 0);
+        if (umwait)
+        {
+            core::dispatch::wait_umwait(&record.bytes[0]);
+        }
+        else
+        {
+            core::dispatch::wait_busy_poll(&record.bytes[0]);
+        }
     }
 
     bool software::finished(const descriptor& dsc) noexcept
@@ -66,9 +73,9 @@ namespace dml::detail::ml::impl
         return core::hardware_device().submit(dsc, numa_id);
     }
 
-    void hardware::wait(const descriptor& dsc) noexcept
+    void hardware::wait(const descriptor& dsc, bool umwait) noexcept
     {
-        software::wait(dsc);
+        software::wait(dsc, umwait);
     }
 
     bool hardware::finished(const descriptor& dsc) noexcept
@@ -94,12 +101,12 @@ namespace dml::detail::ml::impl
         return status;
     }
 
-    void automatic::wait(descriptor& dsc) noexcept
+    void automatic::wait(descriptor& dsc, bool umwait) noexcept
     {
         constexpr auto page_fault_mask =
             to_underlying(execution_status::page_fault_during_processing);
 
-        hardware::wait(dsc);
+        hardware::wait(dsc, umwait);
 
         auto& record = core::get_completion_record(dsc);
         auto  status = core::any_completion_record(record).status();
@@ -113,7 +120,7 @@ namespace dml::detail::ml::impl
             // Must not fail
             static_cast<void>(software::submit(dsc, 0));
 
-            software::wait(dsc);
+            software::wait(dsc, umwait);
 
             accumulate_records(dsc, prev_record);
         }

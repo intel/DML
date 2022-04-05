@@ -33,7 +33,7 @@ namespace dml
 
         dml_job_ptr->operation = static_cast<dml_operation_t>(~0ll);
 
-        const auto execute_job_status = dml_execute_job(dml_job_ptr);
+        const auto execute_job_status = dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
         EXPECT_EQ(DML_STATUS_JOB_OPERATION_ERROR, execute_job_status);
     }
 

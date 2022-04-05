@@ -19,6 +19,7 @@ target_compile_features(dml_sw_dispatcher
         PUBLIC c_std_11
         )
 target_sources(dml_sw_dispatcher
+        PUBLIC $<TARGET_OBJECTS:dml_kernels_wait>
         PUBLIC $<TARGET_OBJECTS:dml_kernels_ref>
         PUBLIC $<TARGET_OBJECTS:dml_kernels_avx512>
         PUBLIC $<TARGET_OBJECTS:dml_kernels_cache_flush>
@@ -32,6 +33,7 @@ if (DML_ARCH STREQUAL avx512)
     target_compile_definitions(dml_sw_dispatcher PRIVATE DML_AVX512)
 endif ()
 
+add_subdirectory(wait)
 add_subdirectory(ref)
 add_subdirectory(avx512)
 add_subdirectory(cache_flush)

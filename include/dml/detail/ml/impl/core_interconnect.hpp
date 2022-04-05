@@ -20,7 +20,7 @@ namespace dml::detail::ml::impl
 
         [[nodiscard]] static submission_status submit(const descriptor& dsc, std::uint32_t numa_id) noexcept;
 
-        static void wait(const descriptor& dsc) noexcept;
+        static void wait(const descriptor& dsc, bool umwait) noexcept;
 
         [[nodiscard]] static bool finished(const descriptor& dsc) noexcept;
     };
@@ -31,7 +31,7 @@ namespace dml::detail::ml::impl
 
         [[nodiscard]] static submission_status submit(const descriptor& dsc, std::uint32_t numa_id) noexcept;
 
-        static void wait(const descriptor& dsc) noexcept;
+        static void wait(const descriptor& dsc, bool umwait) noexcept;
 
         [[nodiscard]] static bool finished(const descriptor& dsc) noexcept;
     };
@@ -42,7 +42,7 @@ namespace dml::detail::ml::impl
 
         [[nodiscard]] static submission_status submit(const descriptor& dsc, std::uint32_t numa_id) noexcept;
 
-        static void wait(descriptor& dsc) noexcept;
+        static void wait(descriptor& dsc, bool umwait) noexcept;
 
         [[nodiscard]] static bool finished(descriptor& dsc) noexcept;
     };

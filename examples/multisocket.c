@@ -99,7 +99,7 @@ int main()
 
     for (uint32_t i = 0; i < SOCKET_COUNT; ++i)
     {
-        status = dml_wait_job((dml_job_t*)((uint8_t*)jobs + (job_size * i)));
+        status = dml_wait_job((dml_job_t*)((uint8_t*)jobs + (job_size * i)), DML_WAIT_MODE_BUSY_POLL);
         if (status != DML_STATUS_OK)
         {
             printf("Operation status is %d", status);

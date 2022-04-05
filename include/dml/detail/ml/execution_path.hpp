@@ -45,15 +45,16 @@ namespace dml::detail::ml
             return statuses;
         }
 
-        execution_path_t::wait(view.get_descriptor());
+        // Busy polling
+        execution_path_t::wait(view.get_descriptor(), false);
 
         return statuses;
     }
 
     template <typename execution_path_t, typename task_view_t>
-    static void wait(task_view_t view) noexcept
+    static void wait(task_view_t view, bool umwait = false) noexcept
     {
-        execution_path_t::wait(view.get_descriptor());
+        execution_path_t::wait(view.get_descriptor(), umwait);
     }
 
     template <typename execution_path_t, typename task_view_t>
