@@ -4,11 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
     <title>Low-level C API &#8212; Intel® DML v0.1.9-beta documentation</title>
     
-  <link href="../../_static/css/theme.css" rel="stylesheet">
-  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -18,20 +20,17 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-      
-
-    
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
     
-  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="prev" title="High-level C++ API" href="high_level_api.html" />
@@ -42,7 +41,21 @@
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
     
     <div class="container-fluid" id="banner"></div>
 
@@ -51,14 +64,10 @@
     <div class="container-xl">
       <div class="row">
           
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
-    
-        <div class="navbar-brand-box">
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../../index.html">
       
       
@@ -149,89 +158,180 @@
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
-</div>
-
-</div>
-
-
-          
-
-
-          
-<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
-<div class="sbt-scroll-pixel-helper"></div>
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
-            <div class="topbar-left">
-                
-                <label class="nav-toggle-button" for="__navigation">
-                    <div class="visually-hidden">Toggle navigation</div>
-                    <i class="fas fa-bars"></i>
-                </label>
-                
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
             </div>
             
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
-        
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../../_sources/documentation/api_docs/low_level_api.rst.txt"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.rst</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
-    </div>
-</div>
-
-            <!-- Source interaction buttons -->
-
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        
-        <a class="issues-button"
-            href="https://github.com/intel/DML/issues/new?title=Issue%20on%20page%20%2Fdocumentation/api_docs/low_level_api.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/intel/DML/edit/develop/doc/source/documentation/api_docs/low_level_api.rst"><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
-    </div>
-</div>
-
-            <!-- Full screen (wrap in <a> to have style consistency -->
-
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
-
-            <!-- Launch buttons -->
-
         </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
-            
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/intel/DML/issues/new?title=Issue%20on%20page%20%2Fdocumentation/api_docs/low_level_api.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/intel/DML/edit/develop/doc/source/documentation/api_docs/low_level_api.rst"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Edit this page"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="headerbtn__text-container">suggest edit</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/documentation/api_docs/low_level_api.rst.txt"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.rst</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#introduction">
    Introduction
@@ -428,12 +528,11 @@
  </li>
 </ul>
 
-            </nav>
-        </div>
-    </div>
+    </nav>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Low-level C API</h1>
@@ -646,34 +745,35 @@
                     </div>
                 </div>
             </div>
-            
+            <main id="main-content" role="main">
+                
               <div>
                 
   <blockquote>
 <div></div></blockquote>
-<div class="section" id="low-level-c-api">
-<h1>Low-level C API<a class="headerlink" href="#low-level-c-api" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<section id="low-level-c-api">
+<h1>Low-level C API<a class="headerlink" href="#low-level-c-api" title="Permalink to this headline">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h2>
 <p>This document provides instructions on how to use the Intel® Data Mover Library.
 It describes general usage concepts, main entities and
 detailed operation descriptions.</p>
 <p>For general introduction to Intel® DML, see <a class="reference external" href="../introduction_docs/introduction.html">Introduction</a>.</p>
-<div class="section" id="disclaimer">
-<h3>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline">¶</a></h3>
+<section id="disclaimer">
+<h3>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this headline">#</a></h3>
 <p>The library exists in a prototype form and is being actively
 developed. This means that some of the things described here may change
 in the future. However, the library is released now with the expectation
 that it will be more useful than nothing to people who may use it.</p>
-</div>
-</div>
-<div class="section" id="header-files">
-<h2>Header Files<a class="headerlink" href="#header-files" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="header-files">
+<h2>Header Files<a class="headerlink" href="#header-files" title="Permalink to this headline">#</a></h2>
 <p>Your application only needs to include one header file: <code class="docutils literal notranslate"><span class="pre">dml.h</span></code>, which
 includes the entire API definition.</p>
-</div>
-<div class="section" id="how-to-use-the-library">
-<h2>How to Use the Library<a class="headerlink" href="#how-to-use-the-library" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="how-to-use-the-library">
+<h2>How to Use the Library<a class="headerlink" href="#how-to-use-the-library" title="Permalink to this headline">#</a></h2>
 <p>The library operation is based on the following concepts:</p>
 <ul class="simple">
 <li><p>Your application needs to fill in a data structure with the necessary
@@ -683,9 +783,9 @@ and so on) after operation.</p></li>
 <li><p>The Intel® DML library does not perform any internal memory allocations.</p></li>
 <li><p>Your application must provide all the memory buffers that are required for the execution.</p></li>
 </ul>
-</div>
-<div class="section" id="memory-allocation-and-job-structure-initialization">
-<h2>Memory Allocation and Job Structure Initialization<a class="headerlink" href="#memory-allocation-and-job-structure-initialization" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="memory-allocation-and-job-structure-initialization">
+<h2>Memory Allocation and Job Structure Initialization<a class="headerlink" href="#memory-allocation-and-job-structure-initialization" title="Permalink to this headline">#</a></h2>
 <p>As the library supports several implementations/execution paths – <code class="docutils literal notranslate"><span class="pre">DML_PATH_HW</span></code>,
 <code class="docutils literal notranslate"><span class="pre">DML_PATH_SW</span></code>, and <code class="docutils literal notranslate"><span class="pre">DML_PATH_AUTO</span></code> – the size of the required memory
 buffer for a job structure is not predefined and depends on the used
@@ -766,9 +866,9 @@ function.</p></li>
 </div>
 <p>At this stage, the application has the initialized job structure and can
 request any library operation it needs.</p>
-</div>
-<div class="section" id="job-execution">
-<h2>Job Execution<a class="headerlink" href="#job-execution" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="job-execution">
+<h2>Job Execution<a class="headerlink" href="#job-execution" title="Permalink to this headline">#</a></h2>
 <p>The simplest interface is <code class="docutils literal notranslate"><span class="pre">dml_execute_job()</span></code>. It does not return any
 result until the job has completed. It is the “synchronous” interface.</p>
 <p>If the application wants to do other work while the job is being
@@ -802,9 +902,9 @@ parameters.</p>
 <p>There are also a number of auxiliary functions, which will be described
 as they become relevant.</p>
 <p>A number of examples can be found in the <a class="reference external" href="#examples">Examples</a> section.</p>
-</div>
-<div class="section" id="low-bandwidth-memory">
-<h2>Low Bandwidth Memory<a class="headerlink" href="#low-bandwidth-memory" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="low-bandwidth-memory">
+<h2>Low Bandwidth Memory<a class="headerlink" href="#low-bandwidth-memory" title="Permalink to this headline">#</a></h2>
 <p>The Library includes features to improve system performance when
 accessing memory with lower bandwidth or higher latency than DRAM. To
 use these features, WQs must be configured to work with various traffic
@@ -816,9 +916,9 @@ for the operation:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">DML_FLAG_ADDRESS3_TCB</span></code> - specific flag that is interpreted differently for each operation</p></li>
 </ul>
 <p>You can read more about the flags in our docs</p>
-</div>
-<div class="section" id="persistent-memory-support">
-<h2>Persistent Memory Support<a class="headerlink" href="#persistent-memory-support" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="persistent-memory-support">
+<h2>Persistent Memory Support<a class="headerlink" href="#persistent-memory-support" title="Permalink to this headline">#</a></h2>
 <p>The Library provides several features intended to improve its utility
 with persistent memory:</p>
 <ol class="arabic simple">
@@ -834,24 +934,24 @@ identified as writes to durable memory</p></li>
 </li>
 </ol>
 <p>You can read more about the flags in our docs</p>
-</div>
-<div class="section" id="numa-support">
-<h2>NUMA support<a class="headerlink" href="#numa-support" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="numa-support">
+<h2>NUMA support<a class="headerlink" href="#numa-support" title="Permalink to this headline">#</a></h2>
 <p>The library is NUMA aware and respects the NUMA node id of the calling thread. If a user needs to use a device from a specific node, it can be done in two ways:</p>
 <ul class="simple">
 <li><p>Pin thread which performs submissions to the specific NUMA, the library will use devices only from this node.</p></li>
 <li><p>Set NUMA id parameter of the job to the specific node id, then devices will be selected only from this node.</p></li>
 </ul>
 <p>Load balancer of the library doesn’t cross a detected or specified NUMA boundary. Balancing workloads between different nodes is the responsibility of a user.</p>
-</div>
-<div class="section" id="page-fault-handling">
-<h2>Page Fault handling<a class="headerlink" href="#page-fault-handling" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="page-fault-handling">
+<h2>Page Fault handling<a class="headerlink" href="#page-fault-handling" title="Permalink to this headline">#</a></h2>
 <p>Page fault can occur during workload processing on a hardware. When the fault occurs, the outcome is based on the execution path:
 - Hardware path: <code class="docutils literal notranslate"><span class="pre">DML_STATUS_PAGE_FAULT_ERROR</span></code> is returned.
 - Auto path: the library resolves the fault via completion of the workload on a CPU.</p>
-</div>
-<div class="section" id="basic-fields-of-job-structure">
-<h2>Basic Fields of Job Structure<a class="headerlink" href="#basic-fields-of-job-structure" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="basic-fields-of-job-structure">
+<h2>Basic Fields of Job Structure<a class="headerlink" href="#basic-fields-of-job-structure" title="Permalink to this headline">#</a></h2>
 <p>A complete description of the job structure fields can be found in
 Section (N).</p>
 <table class="table">
@@ -906,19 +1006,19 @@ with <code class="docutils literal notranslate"><span class="pre">destination_le
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="operations">
-<h2>Operations<a class="headerlink" href="#operations" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="job-flow-control-features">
-<h3>Job Flow Control Features<a class="headerlink" href="#job-flow-control-features" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="no-op-operation">
-<h4>No-op operation<a class="headerlink" href="#no-op-operation" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="operations">
+<h2>Operations<a class="headerlink" href="#operations" title="Permalink to this headline">#</a></h2>
+<section id="job-flow-control-features">
+<h3>Job Flow Control Features<a class="headerlink" href="#job-flow-control-features" title="Permalink to this headline">#</a></h3>
+<section id="no-op-operation">
+<h4>No-op operation<a class="headerlink" href="#no-op-operation" title="Permalink to this headline">#</a></h4>
 <p>The No-op operation can be used with the <code class="docutils literal notranslate"><span class="pre">Fence</span></code> flag in the batch to
 ensure that all previous operations in the batch completed. It performs
 no any other operation.</p>
-</div>
-<div class="section" id="batch-operation">
-<h4>Batch operation<a class="headerlink" href="#batch-operation" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="batch-operation">
+<h4>Batch operation<a class="headerlink" href="#batch-operation" title="Permalink to this headline">#</a></h4>
 <p>The Batch operation processes multiple jobs at once. Batch operation has
 sequence of operations at <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>, the size of memory
 region for a specific number of operations can be calculated via
@@ -949,18 +1049,18 @@ get-functions:</p>
 </ul>
 <p>The maximum number of jobs available in a batch can be obtained with the service function:
 <code class="docutils literal notranslate"><span class="pre">dml_status_t</span> <span class="pre">dml_get_limits(dml_job_t</span> <span class="pre">*dml_job_ptr,</span> <span class="pre">dml_limits_t</span> <span class="pre">*dml_limits_ptr)</span></code>.</p>
-</div>
-<div class="section" id="drain">
-<h4>Drain<a class="headerlink" href="#drain" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="drain">
+<h4>Drain<a class="headerlink" href="#drain" title="Permalink to this headline">#</a></h4>
 <p>Use the Drain operation to wait for all jobs completion before exiting.
 It cannot be a part of batch and is treated as unsupported operation
 type for a batch.</p>
-</div>
-</div>
-<div class="section" id="memory-transferring-and-filling-features">
-<h3>Memory Transferring and Filling Features<a class="headerlink" href="#memory-transferring-and-filling-features" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="memory-move">
-<h4>Memory Move<a class="headerlink" href="#memory-move" title="Permalink to this headline">¶</a></h4>
+</section>
+</section>
+<section id="memory-transferring-and-filling-features">
+<h3>Memory Transferring and Filling Features<a class="headerlink" href="#memory-transferring-and-filling-features" title="Permalink to this headline">#</a></h3>
+<section id="memory-move">
+<h4>Memory Move<a class="headerlink" href="#memory-move" title="Permalink to this headline">#</a></h4>
 <p>The Memory Move operation copies (moves) memory from
 <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>. The number of moved
 bytes is given by the <code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter.</p>
@@ -975,9 +1075,9 @@ destinations (for internal validation).</p></li>
 buffers. If you need to disable Move and enable only Copy behavior,
 you should set the <code class="docutils literal notranslate"><span class="pre">DML_FLAG_COPY</span></code> flag.</p>
 </div>
-</div>
-<div class="section" id="memory-copy-with-dualcast">
-<h4>Memory Copy with Dualcast<a class="headerlink" href="#memory-copy-with-dualcast" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="memory-copy-with-dualcast">
+<h4>Memory Copy with Dualcast<a class="headerlink" href="#memory-copy-with-dualcast" title="Permalink to this headline">#</a></h4>
 <p>The Memory Copy with Dualcast operation copies memory from the
 <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> to both <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> and
 <code class="docutils literal notranslate"><span class="pre">destination_second_ptr</span></code>.</p>
@@ -994,9 +1094,9 @@ you should set the <code class="docutils literal notranslate"><span class="pre">
 <code class="docutils literal notranslate"><span class="pre">destination_second_ptr</span></code> overlap in any combination, the error is
 thrown.</p>
 </div>
-</div>
-<div class="section" id="fill">
-<h4>Fill<a class="headerlink" href="#fill" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="fill">
+<h4>Fill<a class="headerlink" href="#fill" title="Permalink to this headline">#</a></h4>
 <p>The Memory Fill operation fills the memory at <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>
 with the bytes from the <code class="docutils literal notranslate"><span class="pre">pattern[8]</span></code> parameter.</p>
 <ul class="simple">
@@ -1004,12 +1104,12 @@ with the bytes from the <code class="docutils literal notranslate"><span class="
 <li><p>The <code class="docutils literal notranslate"><span class="pre">pattern</span></code> size is always 8 bytes.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter does not need to be a multiple of 8.</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="memory-compare-and-restoring-features">
-<h3>Memory Compare and Restoring Features<a class="headerlink" href="#memory-compare-and-restoring-features" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="compare">
-<h4>Compare<a class="headerlink" href="#compare" title="Permalink to this headline">¶</a></h4>
+</section>
+</section>
+<section id="memory-compare-and-restoring-features">
+<h3>Memory Compare and Restoring Features<a class="headerlink" href="#memory-compare-and-restoring-features" title="Permalink to this headline">#</a></h3>
+<section id="compare">
+<h4>Compare<a class="headerlink" href="#compare" title="Permalink to this headline">#</a></h4>
 <p>The Memory Compare operation compares memory at <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code>
 with memory at <code class="docutils literal notranslate"><span class="pre">source_second_ptr</span></code>.</p>
 <ul class="simple">
@@ -1103,9 +1203,9 @@ comparison.</p></li>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="compare-pattern">
-<h4>Compare Pattern<a class="headerlink" href="#compare-pattern" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="compare-pattern">
+<h4>Compare Pattern<a class="headerlink" href="#compare-pattern" title="Permalink to this headline">#</a></h4>
 <p>The Compare Pattern operation compares memory at <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code>
 with the value in the pattern field.</p>
 <ul class="simple">
@@ -1122,9 +1222,9 @@ guaranteed to be no greater than the first difference).</p></li>
 <code class="docutils literal notranslate"><span class="pre">expected_result</span></code> field. You can find mode details in the Compare
 Operation section.</p>
 </div>
-</div>
-<div class="section" id="create-delta-record">
-<h4>Create Delta Record<a class="headerlink" href="#create-delta-record" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="create-delta-record">
+<h4>Create Delta Record<a class="headerlink" href="#create-delta-record" title="Permalink to this headline">#</a></h4>
 <p>The Create Delta Record operation compares memory at
 <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> with memory at <code class="docutils literal notranslate"><span class="pre">source_second_ptr</span></code> and generates
 a delta record containing the information needed to update
@@ -1244,9 +1344,9 @@ expressed is <code class="docutils literal notranslate"><span class="pre">0x7fff
 <code class="docutils literal notranslate"><span class="pre">expected_result</span></code> field. Mode details are in the Compare Operation
 description.</p>
 </div>
-</div>
-<div class="section" id="apply-delta-record">
-<h4>Apply Delta Record<a class="headerlink" href="#apply-delta-record" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="apply-delta-record">
+<h4>Apply Delta Record<a class="headerlink" href="#apply-delta-record" title="Permalink to this headline">#</a></h4>
 <p>The Apply Delta Record operation applies a delta record at
 <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>. The delta record must
 be created by the Create Delta Record operation with <code class="docutils literal notranslate"><span class="pre">result</span></code> equal to
@@ -1258,12 +1358,12 @@ region to update.</p></li>
 returned to the <code class="docutils literal notranslate"><span class="pre">destination_length</span></code> field after the Create Delta
 Record operation.</p></li>
 </ul>
-</div>
-</div>
-<div class="section" id="memory-hash-features">
-<h3>Memory Hash Features<a class="headerlink" href="#memory-hash-features" title="Permalink to this headline">¶</a></h3>
-<div class="section" id="crc-generation">
-<h4>CRC Generation<a class="headerlink" href="#crc-generation" title="Permalink to this headline">¶</a></h4>
+</section>
+</section>
+<section id="memory-hash-features">
+<h3>Memory Hash Features<a class="headerlink" href="#memory-hash-features" title="Permalink to this headline">#</a></h3>
+<section id="crc-generation">
+<h4>CRC Generation<a class="headerlink" href="#crc-generation" title="Permalink to this headline">#</a></h4>
 <p>The CRC Generation computes the CRC on memory at <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code>.
 The number of bytes used for CRC computation is given by the
 <code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter. The <code class="docutils literal notranslate"><span class="pre">crc_ptr</span></code> field in the <code class="docutils literal notranslate"><span class="pre">dml_job_t</span></code>
@@ -1272,9 +1372,9 @@ continuation.</p>
 <p>This operation computes CRC using the polynomial <code class="docutils literal notranslate"><span class="pre">0x11edc6f41</span></code> (iSCSI
 Protocol, RFC 3720). When the <code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter is not a
 multiple of 4 bytes, the source data is padded to the end with zeros.</p>
-</div>
-<div class="section" id="copy-with-crc-generation">
-<h4>Copy with CRC Generation<a class="headerlink" href="#copy-with-crc-generation" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="copy-with-crc-generation">
+<h4>Copy with CRC Generation<a class="headerlink" href="#copy-with-crc-generation" title="Permalink to this headline">#</a></h4>
 <p>The Copy with CRC Generation operation copies memory from
 <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> and computes CRC on
 the data copied.</p>
@@ -1282,10 +1382,10 @@ the data copied.</p>
 This operation runs as a sequential call of two operations.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> and <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> overlap, the error
 is thrown.</p>
-</div>
-</div>
-<div class="section" id="data-integrity-field-features">
-<h3>Data Integrity Field Features<a class="headerlink" href="#data-integrity-field-features" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="data-integrity-field-features">
+<h3>Data Integrity Field Features<a class="headerlink" href="#data-integrity-field-features" title="Permalink to this headline">#</a></h3>
 <p>The Data Integrity Field (DIF) provides a system solution to protect the
 communication path between a host and storage device for end-to-end
 integrity.</p>
@@ -1478,8 +1578,8 @@ behavior. Flags are separated by groups and presented below.</p>
 </ol>
 </li>
 </ol>
-<div class="section" id="dif-check">
-<h4>DIF Check<a class="headerlink" href="#dif-check" title="Permalink to this headline">¶</a></h4>
+<section id="dif-check">
+<h4>DIF Check<a class="headerlink" href="#dif-check" title="Permalink to this headline">#</a></h4>
 <p>The DIF Check operation computes the Data Integrity Field (DIF) on the
 source data and compares the computed DIF to the DIF contained in the
 source data (<code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code>).</p>
@@ -1551,9 +1651,9 @@ include the block in which the error was detected).</p></li>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="dif-insert">
-<h4>DIF Insert<a class="headerlink" href="#dif-insert" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="dif-insert">
+<h4>DIF Insert<a class="headerlink" href="#dif-insert" title="Permalink to this headline">#</a></h4>
 <p>The DIF Insert operation copies memory from the <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> to
 <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> (length bytes) while computing the DIF on the
 source data and inserting the DIF into the output data.</p>
@@ -1567,9 +1667,9 @@ by the <code class="docutils literal notranslate"><span class="pre">destination_
 plus 8 bytes for each source block).</p></li>
 <li><p>If <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> and <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> overlap, the error is thrown.</p></li>
 </ul>
-</div>
-<div class="section" id="dif-strip">
-<h4>DIF Strip<a class="headerlink" href="#dif-strip" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="dif-strip">
+<h4>DIF Strip<a class="headerlink" href="#dif-strip" title="Permalink to this headline">#</a></h4>
 <p>The DIF Strip operation copies memory from <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> to
 <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>, removing the DIF.</p>
 <p>Additionally, it computes the DIF value on <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> data and
@@ -1592,9 +1692,9 @@ block).</p></li>
 </dl>
 </li>
 </ul>
-</div>
-<div class="section" id="dif-update">
-<h4>DIF Update<a class="headerlink" href="#dif-update" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="dif-update">
+<h4>DIF Update<a class="headerlink" href="#dif-update" title="Permalink to this headline">#</a></h4>
 <p>The DIF Update operation copies memory from <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> to
 <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> and updates DIFs in accordance with
 destination flags. (length bytes).</p>
@@ -1613,9 +1713,9 @@ destinations (for internal validation).</p></li>
 </dl>
 </li>
 </ul>
-</div>
-<div class="section" id="cache-flush">
-<h4>Cache Flush<a class="headerlink" href="#cache-flush" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="cache-flush">
+<h4>Cache Flush<a class="headerlink" href="#cache-flush" title="Permalink to this headline">#</a></h4>
 <p>The Cache Flush operation flushes the processor caches at the
 <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> address. The number of bytes flushed is given
 by the <code class="docutils literal notranslate"><span class="pre">destination_length</span></code> parameter.</p>
@@ -1625,11 +1725,11 @@ are invalidated from every level of the cache hierarchy. If it is set
 to 1, then modified cache lines are written to main memory, but are
 not evicted from the caches.</p></li>
 </ul>
-</div>
-</div>
-</div>
-<div class="section" id="job-structure-description">
-<h2>Job Structure Description<a class="headerlink" href="#job-structure-description" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+</section>
+<section id="job-structure-description">
+<h2>Job Structure Description<a class="headerlink" href="#job-structure-description" title="Permalink to this headline">#</a></h2>
 <p>The Job structure is defined in <code class="docutils literal notranslate"><span class="pre">dmldefs.h</span></code>.</p>
 <table class="table">
 <colgroup>
@@ -1706,9 +1806,9 @@ not evicted from the caches.</p></li>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="operation-status-values">
-<h2>Operation Status Values<a class="headerlink" href="#operation-status-values" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="operation-status-values">
+<h2>Operation Status Values<a class="headerlink" href="#operation-status-values" title="Permalink to this headline">#</a></h2>
 <p>The return values are defined in <code class="docutils literal notranslate"><span class="pre">dmldefs.h</span></code>.</p>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp">
@@ -1937,15 +2037,17 @@ not evicted from the caches.</p></li>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
               </div>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="high_level_api.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -1954,27 +2056,31 @@ not evicted from the caches.</p></li>
         </div>
     </a>
 </div>
-            
+            </footer>
         </div>
     </div>
-    <footer class="footer">
-  <p>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Intel<br/>
+  
+      &copy; Copyright 2022, Intel.<br/>
+    <div class="extra_footer">
+      <p align="right"><a href="https://www.intel.com/content/www/us/en/privacy/intel-cookie-notice.html">Cookies</a></p>
+    </div>
+</p>
+        </footer>
+    </div>
     
-      By Intel<br/>
-    
-        &copy; Copyright 2022, Intel.<br/>
-      <div class="extra_footer">
-        <p align="right"><a href="https://www.intel.com/content/www/us/en/privacy/intel-cookie-notice.html">Cookies</a></p>
-      </div>
-  </p>
-</footer>
-</main>
+</div>
 
 
       </div>
     </div>
   
-  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
 
   </body>
 </html>
