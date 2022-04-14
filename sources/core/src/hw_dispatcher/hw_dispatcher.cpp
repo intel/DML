@@ -23,7 +23,7 @@
 
 namespace dml::core::dispatcher
 {
-    static hw_dispatcher instance{};
+    static thread_local hw_dispatcher instance{};
 
     hw_dispatcher::hw_dispatcher() noexcept
     {
