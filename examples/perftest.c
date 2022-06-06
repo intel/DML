@@ -147,25 +147,22 @@ submit_dml_operations_sync(void * param) {
 
     uint32_t transfer_size = block_size * JOB_NUM;
     dml_status_t status;
-
+    const uint32_t chunk_size = transfer_size / JOB_NUM;
+    dml_job_t* current_job;
     for (j = 0; j < REPEAT; j++) {
-        
         for (i = 0; i < JOB_NUM; ++i) 
         {
-            const uint32_t chunk_size = transfer_size / JOB_NUM;
-            dml_job_t* current_job = (dml_job_t*)((uint8_t*)jobs + (job_size * i));
+            current_job = (dml_job_t*)((uint8_t*)jobs + (job_size * i));
             current_job->operation             = DML_OP_MEM_MOVE;
             current_job->source_first_ptr      = src + (chunk_size * i);
             current_job->destination_first_ptr = dst + (chunk_size * i);
             current_job->source_length         = chunk_size;
             current_job->flags                 = 12|DML_FLAG_PREFETCH_CACHE;
             if (is_dst_pmem) current_job->flags |= DML_FLAG_DST1_DURABLE;
-            //current_job->numa_id               = i;
-        }
+            current_job->numa_id               = 0;
+            *(current_job->destination_first_ptr) = 0; //write touching
 
-        for (i = 0; i < JOB_NUM; ++i)
-        {
-            status = dml_submit_job((dml_job_t*)((uint8_t*)jobs + (job_size * i)));
+            status = dml_submit_job(current_job);
             if (status != DML_STATUS_OK)
             {
                 printf("Failed to submit to node %d", i);
@@ -203,29 +200,30 @@ submit_dml_operations_async(void * param) {
     uint32_t JOB_NUM = operater->job_num;
     uint32_t block_size = operater->block_size;
     uint32_t job_size = operater->job_size;
+    uint8_t is_dst_pmem = operater->is_dest_pmem;
     volatile job_state_t *job_status = operater->job_status;
     uint32_t i,j;
     printf("Starting example for multi-job memory move jobs=%p:\n",jobs);
 
     uint32_t transfer_size = block_size * JOB_NUM;
     dml_status_t status;
+    const uint32_t chunk_size = transfer_size / JOB_NUM;
+    dml_job_t* current_job;
 
     for (j = 0; j < REPEAT; j++) {
         for (i = 0; i < JOB_NUM; ++i) 
         {
-            const uint32_t chunk_size = transfer_size / JOB_NUM;
-            dml_job_t* current_job = (dml_job_t*)((uint8_t*)jobs + (job_size * i));
+            current_job = (dml_job_t*)((uint8_t*)jobs + (job_size * i));
             current_job->operation             = DML_OP_MEM_MOVE;
             current_job->source_first_ptr      = src + (chunk_size * i);
             current_job->destination_first_ptr = dst + (chunk_size * i);
             current_job->source_length         = chunk_size;
             current_job->flags                 = 12|DML_FLAG_PREFETCH_CACHE;
-            //current_job->numa_id               = i;
-        }
-
-        for (i = 0; i < JOB_NUM; ++i)
-        {
-            status = dml_submit_job((dml_job_t*)((uint8_t*)jobs + (job_size * i)));
+            if (is_dst_pmem) current_job->flags |= DML_FLAG_DST1_DURABLE;
+            current_job->numa_id               = 0;
+            *(current_job->destination_first_ptr) = 0; //write touching
+    
+            status = dml_submit_job(current_job);
             if (status != DML_STATUS_OK)
             {
                 printf("Failed to submit to node %d", i);
