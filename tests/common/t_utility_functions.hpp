@@ -7,6 +7,7 @@
 #ifndef DML_T_UTILITY_FUNCTIONS_HPP
 #define DML_T_UTILITY_FUNCTIONS_HPP
 
+#include <stdlib.h>
 #include <vector>
 #include <cstdint>
 
