@@ -5,6 +5,7 @@
  ******************************************************************************/
 
 #include "t_utility_functions.hpp"
+#include <stdlib.h>
 
 namespace dml::test {
 auto get_default_test_lengths() -> std::vector<uint32_t> {
