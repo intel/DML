@@ -7,10 +7,8 @@
 System Requirements
 ###################
 
-
 Software Path Requirements
 **************************
-
 
 .. list-table::
     :header-rows: 0
@@ -26,7 +24,6 @@ Software Path Requirements
 Hardware Path Requirements
 **************************
 
-
 - **Minimal:** CPU with Intel® Data Streaming Accelerator (Sapphire Rapids and higher).
 - Virtualization technology for directed I/O (VT-d) is enabled through the BIOS menu.
 - **Linux* OS:**
@@ -35,12 +32,23 @@ Hardware Path Requirements
   - accel-config version 3.2 or higher placed in /usr/lib64/ (https://github.com/intel/idxd-config) **Validated 3.2 - 3.4.1**.
 
 
+.. _accelerator_configuration_reference_link:
+
 Accelerator Configuration
 *************************
 
+Accelerator configuration can be performed with ``libaccel-config`` library,
+that can be founded at https://github.com/intel/idxd-config.
 
-Accelerator configuration can be performed with libaccel-config application.
-Such application can be founded here: https://github.com/intel/idxd-config.
+For instance, users can use the following commands
+to directly configure the device with the accel-config using existing config file:
 
-How to work with it correctly is not a goal of this chapter.
-Follow instructions that are placed here: https://github.com/intel/idxd-config.
+.. code-block:: shell
+
+    accel-config load-config -c <config file>
+    accel-config enable-device <device>
+    accel-config enable-wq <device>/<wq>
+
+.. attention::
+
+   Sudo privileges are required to configure Intel® Data Streaming Accelerator (Intel® DSA).

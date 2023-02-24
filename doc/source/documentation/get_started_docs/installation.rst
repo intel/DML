@@ -111,9 +111,10 @@ To generate full offline documentation from sources, use the following commands:
 
 After generation process is completed, open the `<dml_library>/doc/build/html/index.html` file.
 
+.. _building_library_reference_link:
+
 Build
 =====
-
 
 To build the library, complete the following steps:
 
