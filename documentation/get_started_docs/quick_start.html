@@ -89,18 +89,8 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../introduction_docs/release_notes.html">
-   Release Notes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../introduction_docs/issue_reporting.html">
-   Issue Reporting
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../introduction_docs/license.html">
-   License
+  <a class="reference internal" href="../introduction_docs/legal.html">
+   Notices and Disclaimers
   </a>
  </li>
 </ul>
@@ -127,7 +117,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="testing.html">
-   Test Library
+   Library Testing
   </a>
  </li>
 </ul>
@@ -145,6 +135,18 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../api_docs/low_level_api.html">
    Low-level C API
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contributing
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributing_docs/issue_reporting.html">
+   Issue Reporting
   </a>
  </li>
 </ul>
@@ -289,6 +291,25 @@ operation for more information.</p>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
+</div>
+<p>In order to build the library and all the examples, including the one above,
+follow the steps at <a class="reference internal" href="installation.html#building-library-reference-link"><span class="std std-ref">Build</span></a>.
+The compiled examples will then be located in &lt;dml_library&gt;/build/examples/.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By default, Intel DML uses Software Path for examples execution.
+In order to use Hardware Path, you must manually substitute <code class="docutils literal notranslate"><span class="pre">execution_path</span> <span class="pre">=</span> <span class="pre">dml::software</span></code>
+to <code class="docutils literal notranslate"><span class="pre">execution_path</span> <span class="pre">=</span> <span class="pre">dml::hardware</span></code> in the examples code.</p>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>With the Hardware Path, the user must either place the <code class="docutils literal notranslate"><span class="pre">libaccel-config</span></code> library in <code class="docutils literal notranslate"><span class="pre">/usr/lib64/</span></code>
+or specify the location of <code class="docutils literal notranslate"><span class="pre">libaccel-config</span></code> in <code class="docutils literal notranslate"><span class="pre">LD_LIBRARY_PATH</span></code> for the dynamic loader to find it.</p>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Hardware Path requires first configuring Intel® Data Streaming Accelerator (Intel® DSA).
+See <a class="reference internal" href="../introduction_docs/system_requirements.html#accelerator-configuration-reference-link"><span class="std std-ref">Accelerator Configuration</span></a>.</p>
 </div>
 </div>
 

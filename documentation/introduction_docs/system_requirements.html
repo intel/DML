@@ -34,7 +34,7 @@
     <script src="../../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Release Notes" href="release_notes.html" />
+    <link rel="next" title="Notices and Disclaimers" href="legal.html" />
     <link rel="prev" title="Introduction" href="introduction.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -89,18 +89,8 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="release_notes.html">
-   Release Notes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="issue_reporting.html">
-   Issue Reporting
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="license.html">
-   License
+  <a class="reference internal" href="legal.html">
+   Notices and Disclaimers
   </a>
  </li>
 </ul>
@@ -127,7 +117,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../get_started_docs/testing.html">
-   Test Library
+   Library Testing
   </a>
  </li>
 </ul>
@@ -145,6 +135,18 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../api_docs/low_level_api.html">
    Low-level C API
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contributing
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributing_docs/issue_reporting.html">
+   Issue Reporting
   </a>
  </li>
 </ul>
@@ -329,11 +331,20 @@
 </ul>
 </div>
 <div class="section" id="accelerator-configuration">
-<h2>Accelerator Configuration<a class="headerlink" href="#accelerator-configuration" title="Permalink to this headline">¶</a></h2>
-<p>Accelerator configuration can be performed with libaccel-config application.
-Such application can be founded here: <a class="reference external" href="https://github.com/intel/idxd-config">https://github.com/intel/idxd-config</a>.</p>
-<p>How to work with it correctly is not a goal of this chapter.
-Follow instructions that are placed here: <a class="reference external" href="https://github.com/intel/idxd-config">https://github.com/intel/idxd-config</a>.</p>
+<span id="accelerator-configuration-reference-link"></span><h2>Accelerator Configuration<a class="headerlink" href="#accelerator-configuration" title="Permalink to this headline">¶</a></h2>
+<p>Accelerator configuration can be performed with <code class="docutils literal notranslate"><span class="pre">libaccel-config</span></code> library,
+that can be founded at <a class="reference external" href="https://github.com/intel/idxd-config">https://github.com/intel/idxd-config</a>.</p>
+<p>For instance, users can use the following commands
+to directly configure the device with the accel-config using existing config file:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>accel-config<span class="w"> </span>load-config<span class="w"> </span>-c<span class="w"> </span>&lt;config<span class="w"> </span>file&gt;
+accel-config<span class="w"> </span>enable-device<span class="w"> </span>&lt;device&gt;
+accel-config<span class="w"> </span>enable-wq<span class="w"> </span>&lt;device&gt;/&lt;wq&gt;
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Sudo privileges are required to configure Intel® Data Streaming Accelerator (Intel® DSA).</p>
+</div>
 </div>
 </div>
 
@@ -350,10 +361,10 @@ Follow instructions that are placed here: <a class="reference external" href="ht
             <p class="prev-next-title">Introduction</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="release_notes.html" title="next page">
+    <a class='right-next' id="next-link" href="legal.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Release Notes</p>
+        <p class="prev-next-title">Notices and Disclaimers</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

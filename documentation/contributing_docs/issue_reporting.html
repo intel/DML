@@ -34,8 +34,7 @@
     <script src="../../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="License" href="license.html" />
-    <link rel="prev" title="Release Notes" href="release_notes.html" />
+    <link rel="prev" title="Low-level C API" href="../api_docs/low_level_api.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -77,30 +76,20 @@
   About
  </span>
 </p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="introduction.html">
+  <a class="reference internal" href="../introduction_docs/introduction.html">
    Introduction
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="system_requirements.html">
+  <a class="reference internal" href="../introduction_docs/system_requirements.html">
    System Requirements
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="release_notes.html">
-   Release Notes
-  </a>
- </li>
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Issue Reporting
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="license.html">
-   License
+  <a class="reference internal" href="../introduction_docs/legal.html">
+   Notices and Disclaimers
   </a>
  </li>
 </ul>
@@ -127,7 +116,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../get_started_docs/testing.html">
-   Test Library
+   Library Testing
   </a>
  </li>
 </ul>
@@ -145,6 +134,18 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../api_docs/low_level_api.html">
    Low-level C API
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contributing
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Issue Reporting
   </a>
  </li>
 </ul>
@@ -188,7 +189,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../../_sources/documentation/introduction_docs/issue_reporting.rst.txt"><button type="button"
+        <a class="dropdown-buttons" href="../../_sources/documentation/contributing_docs/issue_reporting.rst.txt"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.rst</button></a>
         <!-- Download PDF via print -->
@@ -205,10 +206,10 @@
     <div class="dropdown-buttons sourcebuttons">
         
         <a class="issues-button"
-            href="https://github.com/intel/DML/issues/new?title=Issue%20on%20page%20%2Fdocumentation/introduction_docs/issue_reporting.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/intel/DML/issues/new?title=Issue%20on%20page%20%2Fdocumentation/contributing_docs/issue_reporting.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/intel/DML/edit/develop/doc/source/documentation/introduction_docs/issue_reporting.rst"><button
+        <a class="edit-button" href="https://github.com/intel/DML/edit/develop/doc/source/documentation/contributing_docs/issue_reporting.rst"><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
     </div>
@@ -370,9 +371,9 @@
 <h1>Issue Reporting<a class="headerlink" href="#issue-reporting" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p>The Intel® Data Mover Library (Intel® DML) library has several
-execution paths and a large amount of different operations and modes,
-thus correct issue description is important. Well filled description
+<p>The Intel® Data Mover Library (Intel® DML) has several
+execution paths and a large number of different operations and modes,
+so correct issue description is important. A well filled description
 helps to detect and solve problems faster.</p>
 </div>
 <div class="section" id="steps-to-report-an-issue">
@@ -383,10 +384,10 @@ actions must be done:</p>
 <li><p>Research issue.</p></li>
 <li><p>Recheck an application code and <a class="reference external" href="https://intel.github.io/DML/index.html">library documentation</a>.</p></li>
 <li><p>Answer the question: What kind of issue is it? (see <a class="reference internal" href="#issue-classification-link"><span class="std std-ref">Issues Classification</span></a>).</p></li>
-<li><p>Check if the issue wasn’t reported by the Intel DML team or other contributors.
+<li><p>Check whether the issue was reported by the Intel DML team or other contributors.
 Information about already known issues can be found in:</p>
 <ol class="arabic simple">
-<li><p>Release notes: <a class="reference external" href="https://intel.github.io/DML/documentation/release_notes.html">Known Issues</a> section.</p></li>
+<li><p>Release notes: <a class="reference external" href="https://github.com/intel/dml/releases">Release Notes</a> section.</p></li>
 <li><p>Issues tab on GitHub (see <a class="reference external" href="https://github.com/intel/DML/issues">Issues tab</a>).</p></li>
 </ol>
 </li>
@@ -510,19 +511,12 @@ the <a class="reference external" href="https://intel.github.io/DML/index.html">
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="release_notes.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../api_docs/low_level_api.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Release Notes</p>
+            <p class="prev-next-title">Low-level C API</p>
         </div>
-    </a>
-    <a class='right-next' id="next-link" href="license.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">License</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
     </a>
 </div>
             

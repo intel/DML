@@ -8,11 +8,10 @@ Welcome to Intel® DML Documentation!
 ####################################
 
 
-This document describes the Intel® Data Mover Library (Intel® DML) 
-software library. Intel DML is an open-source library  to provide 
-high-performance data manipulation on Intel CPUs. Intel DML is intended 
-for streaming data movement and transformation operations optimization 
-that is applicable for effective storage, networking, persistent memory, 
+This document describes the Intel® Data Mover Library (Intel® DML).
+Intel DML is an open-source library that provides high-performance data manipulation on Intel CPUs.
+Intel DML is intended for streaming data movement and transformation operations optimization
+that is applicable for effective storage, networking, persistent memory,
 and various data processing applications.
 
 
@@ -24,9 +23,7 @@ and various data processing applications.
 
    documentation/introduction_docs/introduction.rst
    documentation/introduction_docs/system_requirements.rst
-   documentation/introduction_docs/release_notes.rst
-   documentation/introduction_docs/issue_reporting.rst
-   documentation/introduction_docs/license.rst
+   documentation/introduction_docs/legal.rst
 
 
 .. toctree::
@@ -49,3 +46,10 @@ and various data processing applications.
 
    documentation/api_docs/high_level_api.rst
    documentation/api_docs/low_level_api.rst
+
+.. toctree::
+   :maxdepth: 4
+   :hidden:
+   :caption: Contributing
+
+   documentation/contributing_docs/issue_reporting.rst

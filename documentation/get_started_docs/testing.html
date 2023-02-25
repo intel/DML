@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Test Library &#8212; Intel® DML v0.1.9-beta documentation</title>
+    <title>Library Testing &#8212; Intel® DML v0.1.9-beta documentation</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet">
   <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -89,18 +89,8 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../introduction_docs/release_notes.html">
-   Release Notes
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../introduction_docs/issue_reporting.html">
-   Issue Reporting
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../introduction_docs/license.html">
-   License
+  <a class="reference internal" href="../introduction_docs/legal.html">
+   Notices and Disclaimers
   </a>
  </li>
 </ul>
@@ -127,7 +117,7 @@
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Test Library
+   Library Testing
   </a>
  </li>
 </ul>
@@ -145,6 +135,18 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../api_docs/low_level_api.html">
    Low-level C API
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contributing
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributing_docs/issue_reporting.html">
+   Issue Reporting
   </a>
  </li>
 </ul>
@@ -228,6 +230,19 @@
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show noprint">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#functional-tests">
+   Functional Tests
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -235,11 +250,24 @@
         <div class="col-12 col-md-9 pl-md-3 pr-md-0">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Test Library</h1>
+                <h1>Library Testing</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#functional-tests">
+   Functional Tests
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -248,10 +276,50 @@
                 
   <blockquote>
 <div></div></blockquote>
-<div class="section" id="test-library">
-<h1>Test Library<a class="headerlink" href="#test-library" title="Permalink to this headline">¶</a></h1>
-<p>To test the library, refer for the instructions to the
-<a class="reference external" href="https://github.com/intel/DML/tests/README.md">Testing document</a> placed in <code class="docutils literal notranslate"><span class="pre">&lt;dml_project_dir&gt;/tests/README.md</span></code>.</p>
+<div class="section" id="library-testing">
+<h1>Library Testing<a class="headerlink" href="#library-testing" title="Permalink to this headline">¶</a></h1>
+<p>The Intel® Data Mover Library (Intel® DML) is distributed with
+its own test system based on the GoogleTest framework.
+You can find various types of tests in <code class="docutils literal notranslate"><span class="pre">&lt;install_dir&gt;/bin/</span></code> folder.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Intel DML test framework development is still in progress.
+Expect to see more coverage and refactoring in future releases.</p>
+</div>
+<div class="section" id="functional-tests">
+<h2>Functional Tests<a class="headerlink" href="#functional-tests" title="Permalink to this headline">¶</a></h2>
+<p>Functional validation of Intel DML could be done with different types of tests provided.</p>
+<p>Low-Level API (or Job API) and core unit tests (comparing internal optimized code path with some
+reference code path) include:</p>
+<ul class="simple">
+<li><p>Algorithmic tests (<code class="docutils literal notranslate"><span class="pre">ta_*</span></code>) serve to find errors that reflect logic
+errors in data processing on correct data.</p></li>
+<li><p>Bad argument tests (<code class="docutils literal notranslate"><span class="pre">tb_*</span></code>) verify the code path for invalid arguments.</p></li>
+</ul>
+<p>Such tests are combined together into <code class="docutils literal notranslate"><span class="pre">tests</span></code> and <code class="docutils literal notranslate"><span class="pre">tests_mt</span></code> (multithreaded version) executables.
+In order to use those, following commands could be used:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./tests<span class="w"> </span>--path<span class="o">=</span>sw
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./tests_mt<span class="w"> </span>--path<span class="o">=</span>sw<span class="w"> </span>--nthreads<span class="o">=</span><span class="m">2</span>
+</pre></div>
+</div>
+<p>Full list of parameters is available via <code class="docutils literal notranslate"><span class="pre">./&lt;executable_name&gt;</span> <span class="pre">--help</span></code>.</p>
+<p>Additional High-Level API and Low-Level API tests are compiled into
+<code class="docutils literal notranslate"><span class="pre">dml_test_functional_&lt;api&gt;_&lt;path&gt;_&lt;operation&gt;</span></code>, where <code class="docutils literal notranslate"><span class="pre">api=c</span></code> refers to
+Low-Level Job API and <code class="docutils literal notranslate"><span class="pre">api=cpp</span></code> refers to High-Level API tests,
+<code class="docutils literal notranslate"><span class="pre">&lt;path&gt;</span></code> could be one of <code class="docutils literal notranslate"><span class="pre">sw</span></code> (DML_PATH_SW for Low-Level API or dml::software for High-Level API, used for host execution),
+<code class="docutils literal notranslate"><span class="pre">hw</span></code> (DML_PATH_HW or hardware, for accelerator offloading), or auto (DML_PATH_AUTO or dml::automatic).</p>
+<p>In order to execute those, use the following command:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./dml_test_functional_&lt;api&gt;_&lt;path&gt;_&lt;operation&gt;
+</pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Hardware Path requires first configuring Intel® Data Streaming Accelerator (Intel® DSA).
+See <a class="reference internal" href="../introduction_docs/system_requirements.html#accelerator-configuration-reference-link"><span class="std std-ref">Accelerator Configuration</span></a>.</p>
+</div>
+</div>
 </div>
 
 
