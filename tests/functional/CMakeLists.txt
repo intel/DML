@@ -19,12 +19,7 @@ set(copy_crc_operation        "copy_crc")
 set(create_delta_operation    "create_delta")
 set(apply_delta_operation     "apply_delta")
 set(dualcast_operation        "dualcast")
-set(dif_check_operation       "dif_check")
-set(dif_insert_operation      "dif_insert")
-set(dif_strip_operation       "dif_strip")
-set(dif_update_operation      "dif_update")
 set(cache_flush_operation     "cache_flush")
-set(batch_operation           "batch")
 
 list(APPEND apis ${c_api} ${cpp_api})
 list(APPEND paths ${sw_path} ${hw_path} ${auto_path})
@@ -38,12 +33,7 @@ list(APPEND operations
         ${dualcast_operation}
         ${crc_operation}
         ${copy_crc_operation}
-        ${dif_check_operation}
-        ${dif_insert_operation}
-        ${dif_strip_operation}
-        ${dif_update_operation}
         ${cache_flush_operation}
-        ${batch_operation}
         )
 
 foreach (api ${apis})
