@@ -53,6 +53,8 @@ extern "C" {
 
 #define DML_BASE_DRIVER_ERROR 100u                  /**< Base for all driver errors  */
 
+#define DML_MIN_BATCH_SIZE (4u)                     /**< Min batch size for bulk operations */
+
 /* ====== DML Macros ====== */
 #define DML_MAX(a, b) ( ((a) > (b)) ? (a) : (b) )   /**< Simple macro to find maximum between pair values */
 #define DML_MIN(a, b) ( ((a) < (b)) ? (a) : (b) )   /**< Simple macro to find minimum between pair values */

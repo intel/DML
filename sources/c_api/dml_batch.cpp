@@ -79,7 +79,7 @@ extern "C" dml_status_t dml_get_batch_size(const dml_job_t *dml_job_ptr, uint32_
 {
     CHECK_NULL(dml_job_ptr);
     CHECK_NULL(byte_size_ptr);
-    if (task_count <= 3u)
+    if (task_count < DML_MIN_BATCH_SIZE)
     {
         return DML_STATUS_BATCH_SIZE_ERROR;
     }

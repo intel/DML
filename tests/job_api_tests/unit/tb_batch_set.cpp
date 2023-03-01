@@ -26,7 +26,7 @@ namespace dml
     {
         auto job_size             = 0u;
         auto byte_size            = 0u;
-        constexpr auto task_count = 4u;
+        constexpr auto task_count = DML_MIN_BATCH_SIZE;
         constexpr auto task_index = 0u;
 
         const auto get_job_size_status  = dml_get_job_size(dml::test::variables_t::path, &job_size);
