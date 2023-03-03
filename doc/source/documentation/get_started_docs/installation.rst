@@ -63,6 +63,47 @@ System Requirements
 For more information about system requirements,
 see `System Requirements <../introduction_docs/system_requirements.html>`__.
 
+.. _accelerator_configuration_reference_link:
+
+Accelerator Configuration
+=========================
+
+An Intel® Data Streaming Accelerator (Intel® DSA) device can be
+configured with the ``libaccel-config`` library, which can be found at
+https://github.com/intel/idxd-config.
+
+Accelerator configuration can be performed with ``libaccel-config`` library,
+that can be founded at https://github.com/intel/idxd-config.
+
+For instance, users can use the following commands
+to directly configure the device with the accel-config using existing config file:
+
+.. code-block:: shell
+
+    accel-config load-config -c <config file>
+    accel-config enable-device <device>
+    accel-config enable-wq <device>/<wq>
+
+Intel® DML also provides a way to configure Intel® DSA through calling
+either of the following commands based on whether you are setting up
+via the Intel® DML source or from the Intel® DML installed directory:
+
+.. code-block:: shell
+
+   sudo python3 <dml-library>/tools/scripts/accel_conf.py --load=<path to config file>
+
+.. code-block:: shell
+
+   sudo python3 <install-dir>/bin/scripts/accel_conf.py --load=<path to config file>
+
+With configuration files found at either ``<dml-library>/tools/configs/`` or ``<install-dir>/bin/configs/``.
+With configuration files of the format ``<# nodes>n<# devices>d<# engines>e<# of workqueues>w-s.conf`` or
+``<# nodes>n<# devices>d<# engines>e<# of workqueues>w-s-n<which node>.conf``.
+
+.. attention::
+
+   Sudo privileges are required to configure Intel® DSA.
+
 
 Build Prerequisites
 ===================
@@ -110,6 +151,29 @@ To generate full offline documentation from sources, use the following commands:
 
 
 After generation process is completed, open the `<dml_library>/doc/build/html/index.html` file.
+
+.. _building_library_build_options_reference_link:
+
+Available Build Options
+=======================
+
+Intel DML supports the following build options:
+
+-  ``-DSANITIZE_MEMORY=[ON|OFF]`` - Enables memory sanitizing (``OFF`` by default).
+-  ``-DSANITIZE_THREADS=[ON|OFF]`` - Enables threads sanitizing (``OFF`` by default).
+-  ``-DLOG_HW_INIT=[ON|OFF]`` - Enables hardware initialization log (``OFF`` by default).
+-  ``-DDML_BUILD_EXAMPLES=[OFF|ON]`` - Enables building library examples (``ON`` by default).
+   For more information on existing examples, see :ref:`code_examples_reference_link`.
+
+-  ``-DDML_BUILD_TESTS=[OFF|ON]`` - Enables building library testing and benchmarks frameworks (``ON`` by default).
+   For more information on library testing, see :ref:`library_testing_reference_link` section.
+   For information on benchmarking the library, see :ref:`library_benchmarking_reference_link`.
+
+.. attention::
+
+   To build Intel DML from the GitHub release package (``.tar``, ``.tgz``)
+   without downloading sub-module dependencies for testing and benchmarking,
+   use ``-DDML_BUILD_TESTS=OFF``.
 
 .. _building_library_reference_link:
 

@@ -18,9 +18,12 @@ option(SANITIZE_MEMORY "Enables memory sanitizing" OFF)
 option(SANITIZE_THREADS "Enables threads sanitizing" OFF)
 option(LOG_HW_INIT "Enables HW initialization log" OFF)
 
-if (SANITIZE_MEMORY)
-    message(STATUS "Memory sanitizing build is enabled")
+# Print user's settings
+message(STATUS "Memory sanitizing build: ${SANITIZE_MEMORY}")
+message(STATUS "Threads sanitizing build: ${SANITIZE_THREADS}")
+message(STATUS "Hardware initialization logging: ${LOG_HW_INIT}")
 
+if (SANITIZE_MEMORY)
     if (WIN32)
         message(FATAL_ERROR "Memory sanitizing is not supported in Windows")
     else ()
@@ -30,8 +33,6 @@ if (SANITIZE_MEMORY)
 endif ()
 
 if (SANITIZE_THREADS)
-    message(STATUS "Threads sanitizing build is enabled")
-
     if (WIN32)
         message(FATAL_ERROR "Threads sanitizing is not supported in Windows")
     else ()
@@ -68,22 +69,6 @@ add_compile_options(
 add_compile_definitions(${DML_SECURITY_DEFINITIONS})
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
-message(STATUS "Hardware initialization logging: ${LOG_HW_INIT}")
-
-# TODO: Remove
-get_git_revision()
-
-add_subdirectory(sources)
-
-# Dependencies
-set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-set(BUILD_GMOCK OFF CACHE BOOL "Suppress gmock build" FORCE)
-set(INSTALL_GTEST OFF CACHE BOOL "Suppress gtest installation" FORCE)
-add_subdirectory(google-test)
-
-# Testing
-add_subdirectory(tests)
-add_subdirectory(examples)
 
 # Install rules
 install(EXPORT ${PROJECT_NAME}Targets
@@ -106,3 +91,25 @@ install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
 install(DIRECTORY include/
         DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
         FILES_MATCHING PATTERN *.h PATTERN *.hpp)
+
+# TODO: Remove
+get_git_revision()
+
+# Build library
+add_subdirectory(sources)
+
+# Build additional components
+# Set of extra options that allows to build only library, or library
+# and examples excluding tests, etc.
+option(DML_BUILD_EXAMPLES "Builds examples" ON)
+option(DML_BUILD_TESTS "Builds tests and benchmarks framework" ON)
+
+# Print user's settings
+message(STATUS "Build with examples: ${DML_BUILD_EXAMPLES}")
+message(STATUS "Build with tests and benchmarks framework: ${DML_BUILD_TESTS}")
+
+if (DML_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif ()
+
+add_subdirectory(tools)

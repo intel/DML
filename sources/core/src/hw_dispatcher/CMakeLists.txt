@@ -30,7 +30,10 @@ target_compile_options(dml_hw_dispatcher
         PRIVATE $<$<COMPILE_LANGUAGE:CXX>:${DML_CPP_PRIVATE_OPTIONS}>
         )
 
-target_include_directories(dml_hw_dispatcher PUBLIC ../../../../include)
+target_include_directories(dml_hw_dispatcher
+        PUBLIC ../../../../include
+        PUBLIC ./
+        )
 
 target_compile_definitions(dml_hw_dispatcher
         PUBLIC $<$<BOOL:${LOG_HW_INIT}>:LOG_HW_INIT>

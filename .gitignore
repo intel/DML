@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: MIT
 
 # Exlude build paths (local and remote)
+/_*
 /*build*
 /*remote*
 
@@ -16,3 +17,11 @@ doc/html/*
 # Exclude IDE projects
 .idea/
 .vscode/
+.vs/
+.cproject
+.project
+.settings/*
+out/
+/tmp
+/b.bat
+CMakeSettings.json
