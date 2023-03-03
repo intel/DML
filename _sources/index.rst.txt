@@ -50,6 +50,13 @@ and various data processing applications.
 .. toctree::
    :maxdepth: 4
    :hidden:
+   :caption: Benchmarking
+
+   documentation/bench_docs/guide.rst
+
+.. toctree::
+   :maxdepth: 4
+   :hidden:
    :caption: Contributing
 
    documentation/contributing_docs/issue_reporting.rst

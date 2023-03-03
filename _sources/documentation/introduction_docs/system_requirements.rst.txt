@@ -7,6 +7,8 @@
 System Requirements
 ###################
 
+.. _system_requirements_sw_path_reference_link:
+
 Software Path Requirements
 **************************
 
@@ -21,6 +23,8 @@ Software Path Requirements
         (Intel® microarchitecture code name Skylake (Server) processor or higher).
 
 
+.. _system_requirements_hw_path_reference_link:
+
 Hardware Path Requirements
 **************************
 
@@ -32,23 +36,10 @@ Hardware Path Requirements
   - accel-config version 3.2 or higher placed in /usr/lib64/ (https://github.com/intel/idxd-config) **Validated 3.2 - 3.4.1**.
 
 
-.. _accelerator_configuration_reference_link:
+.. _system_requirements_benchmark_reference_link:
 
-Accelerator Configuration
-*************************
+Benchmark Requirements
+**********************
 
-Accelerator configuration can be performed with ``libaccel-config`` library,
-that can be founded at https://github.com/intel/idxd-config.
-
-For instance, users can use the following commands
-to directly configure the device with the accel-config using existing config file:
-
-.. code-block:: shell
-
-    accel-config load-config -c <config file>
-    accel-config enable-device <device>
-    accel-config enable-wq <device>/<wq>
-
-.. attention::
-
-   Sudo privileges are required to configure Intel® Data Streaming Accelerator (Intel® DSA).
+Currently, compiling and running benchmark is only available on Linux operating systems.
+And running benchmarks is only available on Intel® Skylake (or later) microarchitecture.

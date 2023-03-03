@@ -4,9 +4,12 @@
  .. * SPDX-License-Identifier: MIT
  .. ***************************************************************************/
 
+.. _code_examples_reference_link:
+
 Code Samples and examples
 #########################
 
+.. _code_examples_c_reference_link:
 
 Low-level C API Examples
 ************************
@@ -41,6 +44,8 @@ to one data array using several sockets at the same time.
 .. literalinclude:: ../../../../examples/multisocket.c
     :language: c
 
+
+.. _code_examples_cpp_reference_link:
 
 High-level C++ API Examples
 ***************************

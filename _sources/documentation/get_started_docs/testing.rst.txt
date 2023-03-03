@@ -4,6 +4,8 @@
  .. * SPDX-License-Identifier: MIT
  .. ***************************************************************************/
 
+.. _library_testing_reference_link:
+
 Library Testing
 ###############
 

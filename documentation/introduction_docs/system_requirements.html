@@ -140,6 +140,18 @@
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
+  Benchmarking
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../bench_docs/guide.html">
+   Benchmarks Framework Guide
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
   Contributing
  </span>
 </p>
@@ -246,8 +258,8 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#accelerator-configuration">
-   Accelerator Configuration
+  <a class="reference internal nav-link" href="#benchmark-requirements">
+   Benchmark Requirements
   </a>
  </li>
 </ul>
@@ -281,8 +293,8 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#accelerator-configuration">
-   Accelerator Configuration
+  <a class="reference internal nav-link" href="#benchmark-requirements">
+   Benchmark Requirements
   </a>
  </li>
 </ul>
@@ -299,7 +311,7 @@
 <div class="section" id="system-requirements">
 <h1>System Requirements<a class="headerlink" href="#system-requirements" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="software-path-requirements">
-<h2>Software Path Requirements<a class="headerlink" href="#software-path-requirements" title="Permalink to this headline">¶</a></h2>
+<span id="system-requirements-sw-path-reference-link"></span><h2>Software Path Requirements<a class="headerlink" href="#software-path-requirements" title="Permalink to this headline">¶</a></h2>
 <table class="table">
 <colgroup>
 <col style="width: 50%" />
@@ -318,7 +330,7 @@
 </table>
 </div>
 <div class="section" id="hardware-path-requirements">
-<h2>Hardware Path Requirements<a class="headerlink" href="#hardware-path-requirements" title="Permalink to this headline">¶</a></h2>
+<span id="system-requirements-hw-path-reference-link"></span><h2>Hardware Path Requirements<a class="headerlink" href="#hardware-path-requirements" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><strong>Minimal:</strong> CPU with Intel® Data Streaming Accelerator (Sapphire Rapids and higher).</p></li>
 <li><p>Virtualization technology for directed I/O (VT-d) is enabled through the BIOS menu.</p></li>
@@ -330,21 +342,10 @@
 </li>
 </ul>
 </div>
-<div class="section" id="accelerator-configuration">
-<span id="accelerator-configuration-reference-link"></span><h2>Accelerator Configuration<a class="headerlink" href="#accelerator-configuration" title="Permalink to this headline">¶</a></h2>
-<p>Accelerator configuration can be performed with <code class="docutils literal notranslate"><span class="pre">libaccel-config</span></code> library,
-that can be founded at <a class="reference external" href="https://github.com/intel/idxd-config">https://github.com/intel/idxd-config</a>.</p>
-<p>For instance, users can use the following commands
-to directly configure the device with the accel-config using existing config file:</p>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>accel-config<span class="w"> </span>load-config<span class="w"> </span>-c<span class="w"> </span>&lt;config<span class="w"> </span>file&gt;
-accel-config<span class="w"> </span>enable-device<span class="w"> </span>&lt;device&gt;
-accel-config<span class="w"> </span>enable-wq<span class="w"> </span>&lt;device&gt;/&lt;wq&gt;
-</pre></div>
-</div>
-<div class="admonition attention">
-<p class="admonition-title">Attention</p>
-<p>Sudo privileges are required to configure Intel® Data Streaming Accelerator (Intel® DSA).</p>
-</div>
+<div class="section" id="benchmark-requirements">
+<span id="system-requirements-benchmark-reference-link"></span><h2>Benchmark Requirements<a class="headerlink" href="#benchmark-requirements" title="Permalink to this headline">¶</a></h2>
+<p>Currently, compiling and running benchmark is only available on Linux operating systems.
+And running benchmarks is only available on Intel® Skylake (or later) microarchitecture.</p>
 </div>
 </div>
 

@@ -1,0 +1,516 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Benchmarks Framework Guide &#8212; Intel® DML v0.1.9-beta documentation</title>
+    
+  <link href="../../_static/css/theme.css" rel="stylesheet">
+  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Issue Reporting" href="../contributing_docs/issue_reporting.html" />
+    <link rel="prev" title="Low-level C API" href="../api_docs/low_level_api.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Intel® DML v0.1.9-beta documentation</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  About
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../introduction_docs/introduction.html">
+   Introduction
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../introduction_docs/system_requirements.html">
+   System Requirements
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../introduction_docs/legal.html">
+   Notices and Disclaimers
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Get Started
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../get_started_docs/installation.html">
+   Installation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../get_started_docs/quick_start.html">
+   Quick start
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../get_started_docs/code_samples_and_examples.html">
+   Code Samples and examples
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../get_started_docs/testing.html">
+   Library Testing
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Developer Reference
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../api_docs/high_level_api.html">
+   High-level C++ API
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../api_docs/low_level_api.html">
+   Low-level C API
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Benchmarking
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Benchmarks Framework Guide
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Contributing
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../contributing_docs/issue_reporting.html">
+   Issue Reporting
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+<div class="sbt-scroll-pixel-helper"></div>
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            <div class="topbar-left">
+                
+                <label class="nav-toggle-button" for="__navigation">
+                    <div class="visually-hidden">Toggle navigation</div>
+                    <i class="fas fa-bars"></i>
+                </label>
+                
+            </div>
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/documentation/bench_docs/guide.rst.txt"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.rst</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        
+        <a class="issues-button"
+            href="https://github.com/intel/DML/issues/new?title=Issue%20on%20page%20%2Fdocumentation/bench_docs/guide.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        <a class="edit-button" href="https://github.com/intel/DML/edit/develop/doc/source/documentation/bench_docs/guide.rst"><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#quick-start">
+   Quick Start
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#key-terms">
+   Key Terms
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-the-benchmarks-framework">
+   Using the Benchmarks Framework
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#executing-on-hardware-path">
+     Executing on Hardware Path
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#latency-tests">
+     Latency Tests
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#throughput-tests">
+     Throughput Tests
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Benchmarks Framework Guide</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#quick-start">
+   Quick Start
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#key-terms">
+   Key Terms
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#using-the-benchmarks-framework">
+   Using the Benchmarks Framework
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#executing-on-hardware-path">
+     Executing on Hardware Path
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#latency-tests">
+     Latency Tests
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#throughput-tests">
+     Throughput Tests
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+              <div>
+                
+  <blockquote>
+<div></div></blockquote>
+<div class="section" id="benchmarks-framework-guide">
+<span id="library-benchmarking-reference-link"></span><h1>Benchmarks Framework Guide<a class="headerlink" href="#benchmarks-framework-guide" title="Permalink to this headline">¶</a></h1>
+<p>Goal of the benchmarks is to provide performance guidance on various use case scenarios
+of the Intel® Data Mover Library (Intel® DML).
+To cover these cases the benchmarks provide several performance metrics and modes of operation.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Currently, the Intel DML benchmarks framework offers limited support.</p>
+<ul class="simple">
+<li><p>Only mem_move cases are currently supported.</p></li>
+</ul>
+</div>
+<div class="section" id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
+<p>Benchmark are based on the Google benchmark library and built as a part of Intel DML.
+Refer to <a class="reference internal" href="../get_started_docs/installation.html#building-library-reference-link"><span class="std std-ref">Installation page</span></a>
+for details on how to build the library and resolve all prerequisites.</p>
+<p>Please refer to <a class="reference internal" href="../introduction_docs/system_requirements.html#system-requirements-benchmark-reference-link"><span class="std std-ref">benchmark system requirements</span></a>
+for more information on the requirements needed for building and running Benchmark.</p>
+<p>The example below demonstrates running a benchmark on a memory-move operation via
+the Low-Level C API using the accelerator, a queue size of 16, and 1 MB of data.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Make sure to resolve <a class="reference internal" href="../introduction_docs/system_requirements.html#system-requirements-hw-path-reference-link"><span class="std std-ref">requirements for running on hardware path</span></a> and
+configure <a class="reference internal" href="../get_started_docs/installation.html#accelerator-configuration-reference-link"><span class="std std-ref">Intel® Data Streaming Accelerator (Intel® DSA)</span></a>
+before executing the example.</p>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>./&lt;install_dir&gt;/bin/dml_benchmarks<span class="w"> </span>--benchmark_min_time<span class="o">=</span><span class="m">0</span>.3<span class="w"> </span>--benchmark_filter<span class="o">=</span>move/api:c/path:.*/exec:.*/qsize:16/bsize:0/in_mem:llc/out_mem:cc_llc/timer:full/size:1048576/.*
+</pre></div>
+</div>
+<div class="literal-block-wrapper docutils container" id="id1">
+<div class="code-block-caption"><span class="caption-text">Output to terminal:</span><a class="headerlink" href="#id1" title="Permalink to this code">¶</a></div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Benchmark<span class="w">                                                                                                                       </span>Time<span class="w">             </span>CPU<span class="w">   </span>Iterations<span class="w"> </span>UserCounters...
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+move/api:c/path:dsa/exec:sync/qsize:16/bsize:0/in_mem:llc/out_mem:cc_llc/timer:full/size:1048576/real_time<span class="w">                 </span><span class="m">833022</span><span class="w"> </span>ns<span class="w">       </span><span class="m">831025</span><span class="w"> </span>ns<span class="w">          </span><span class="m">503</span><span class="w"> </span><span class="nv">Latency</span><span class="o">=</span><span class="m">833</span>.022us<span class="w"> </span>Latency/Op<span class="o">=</span><span class="m">52</span>.0639us<span class="w"> </span><span class="nv">Throughput</span><span class="o">=</span><span class="m">20</span>.1402G/s
+move/api:c/path:dsa/exec:async/qsize:16/bsize:0/in_mem:llc/out_mem:cc_llc/timer:full/size:1048576/real_time/threads:1<span class="w">      </span><span class="m">763158</span><span class="w"> </span>ns<span class="w">       </span><span class="m">760850</span><span class="w"> </span>ns<span class="w">          </span><span class="m">549</span><span class="w"> </span><span class="nv">Latency</span><span class="o">=</span><span class="m">763</span>.158us<span class="w"> </span>Latency/Op<span class="o">=</span><span class="m">47</span>.6974us<span class="w"> </span><span class="nv">Throughput</span><span class="o">=</span><span class="m">21</span>.9839G/s
+move/api:c/path:dsa/exec:async/qsize:16/bsize:0/in_mem:llc/out_mem:cc_llc/timer:full/size:1048576/real_time/threads:2<span class="w">      </span><span class="m">361855</span><span class="w"> </span>ns<span class="w">       </span><span class="m">722324</span><span class="w"> </span>ns<span class="w">         </span><span class="m">1134</span><span class="w"> </span><span class="nv">Latency</span><span class="o">=</span><span class="m">361</span>.855us<span class="w"> </span>Latency/Op<span class="o">=</span><span class="m">45</span>.2319us<span class="w"> </span><span class="nv">Throughput</span><span class="o">=</span><span class="m">23</span>.1822G/s
+move/api:c/path:dsa/exec:async/qsize:16/bsize:0/in_mem:llc/out_mem:cc_llc/timer:full/size:1048576/real_time/threads:4<span class="w">      </span><span class="m">182710</span><span class="w"> </span>ns<span class="w">       </span><span class="m">729806</span><span class="w"> </span>ns<span class="w">         </span><span class="m">2132</span><span class="w"> </span><span class="nv">Latency</span><span class="o">=</span><span class="m">182</span>.71us<span class="w"> </span>Latency/Op<span class="o">=</span><span class="m">45</span>.6775us<span class="w"> </span><span class="nv">Throughput</span><span class="o">=</span><span class="m">22</span>.9561G/s
+move/api:c/path:dsa/exec:async/qsize:16/bsize:0/in_mem:llc/out_mem:cc_llc/timer:full/size:1048576/real_time/threads:8<span class="w">      </span><span class="m">144228</span><span class="w"> </span>ns<span class="w">      </span><span class="m">1151468</span><span class="w"> </span>ns<span class="w">         </span><span class="m">2896</span><span class="w"> </span><span class="nv">Latency</span><span class="o">=</span><span class="m">144</span>.228us<span class="w"> </span>Latency/Op<span class="o">=</span><span class="m">72</span>.114us<span class="w"> </span><span class="nv">Throughput</span><span class="o">=</span><span class="m">14</span>.5405G/s
+move/api:c/path:dsa/exec:async/qsize:16/bsize:0/in_mem:llc/out_mem:cc_llc/timer:full/size:1048576/real_time/threads:16<span class="w">      </span><span class="m">81297</span><span class="w"> </span>ns<span class="w">      </span><span class="m">1297643</span><span class="w"> </span>ns<span class="w">         </span><span class="m">5120</span><span class="w"> </span><span class="nv">Latency</span><span class="o">=</span><span class="m">81</span>.2965us<span class="w"> </span>Latency/Op<span class="o">=</span><span class="m">81</span>.2965us<span class="w"> </span><span class="nv">Throughput</span><span class="o">=</span><span class="m">12</span>.8982G/s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="key-terms">
+<h2>Key Terms<a class="headerlink" href="#key-terms" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><strong>API</strong>: Currently, only Low-Level C API, case naming: <code class="docutils literal notranslate"><span class="pre">api:c</span></code>, High-Level C++ API, case naming <code class="docutils literal notranslate"><span class="pre">api:cpp</span></code>, and standard glibc mem_move and mem_copy implementations, case naming <code class="docutils literal notranslate"><span class="pre">api::glibc</span></code> are supported.</p></li>
+<li><p><strong>Path</strong>: Represents execution path for the library. Case naming: <code class="docutils literal notranslate"><span class="pre">path:dsa</span></code> for executing on the accelerator, <code class="docutils literal notranslate"><span class="pre">path:cpu</span></code> for running on the CPU.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Executing on <code class="docutils literal notranslate"><span class="pre">path:dsa</span></code> requires the accelerator to be already configured.
+Refer to <a class="reference internal" href="../get_started_docs/installation.html#accelerator-configuration-reference-link"><span class="std std-ref">accelerator configuration page</span></a>.</p>
+</div>
+<ul>
+<li><p><strong>Execution mode</strong>: Defines synchronous or asynchronous execution. Case naming: <code class="docutils literal notranslate"><span class="pre">exec:async</span></code>, <code class="docutils literal notranslate"><span class="pre">exec:sync</span></code>.</p>
+<blockquote>
+<div><p><strong>Sync mode</strong>: Each measurement loop, one call to Intel DML operation is submitted always followed by blocking wait.
+Thus only one operation is processed at a time and only one engine of the accelerator is loaded.
+Is not affected by <code class="docutils literal notranslate"><span class="pre">--threads</span></code> argument. Main output of sync mode is <strong>Latency</strong> metric.
+<code class="docutils literal notranslate"><span class="pre">--queue_size</span></code> can be used to submit several operations at once to measure latency of the various queue sizes.</p>
+<p><strong>Async mode</strong>: Each case spawns <code class="docutils literal notranslate"><span class="pre">--threads</span></code> number of threads and each thread runs it’s own measurement loop.
+For each loop, benchmark will submit <code class="docutils literal notranslate"><span class="pre">--queue_size</span></code>/<code class="docutils literal notranslate"><span class="pre">--threads</span></code> operations without blocking wait
+and resubmit operation as soon as it is completed always keeping device busy.
+Main output of async mode is <strong>Throughput</strong> metric.
+For small workloads, higher number of threads may be required to saturate devices,
+for big workloads, even one thread may reach capacity.</p>
+</div></blockquote>
+</li>
+<li><p><strong>Blocks</strong>: Input data is split by blocks of size <code class="docutils literal notranslate"><span class="pre">--block_size=XXXX</span></code> (with XXXX being in bytes) and each block is processed separately.</p></li>
+</ul>
+</div>
+<div class="section" id="using-the-benchmarks-framework">
+<h2>Using the Benchmarks Framework<a class="headerlink" href="#using-the-benchmarks-framework" title="Permalink to this headline">¶</a></h2>
+<p>Intel DML benchmark framework is based on Google benchmark library,
+run <code class="docutils literal notranslate"><span class="pre">./dml_benchmarks</span> <span class="pre">--help</span></code> to get a full list of supported commands and input arguments with detailed description.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>If no accelerators are available on the system, you can use <code class="docutils literal notranslate"><span class="pre">--no_hw</span></code> to suppress Intel DSA initialization check warning.</p>
+</div>
+<p>In order to set up a specific run configuration <code class="docutils literal notranslate"><span class="pre">--benchmark_filter</span></code> should be used,
+which input is a regex based on the case name.</p>
+<p>For example, use the following expression to launch a copy operation using the Low-Level C API
+with synchronous execution on a CPU: <code class="docutils literal notranslate"><span class="pre">--benchmark_filter=&quot;copy/api:c/path:cpu/exec:sync/.*&quot;</span></code>.</p>
+<div class="section" id="executing-on-hardware-path">
+<h3>Executing on Hardware Path<a class="headerlink" href="#executing-on-hardware-path" title="Permalink to this headline">¶</a></h3>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Make sure to resolve <a class="reference internal" href="../introduction_docs/system_requirements.html#system-requirements-hw-path-reference-link"><span class="std std-ref">requirements for running on hardware path</span></a> and
+<a class="reference internal" href="../get_started_docs/installation.html#accelerator-configuration-reference-link"><span class="std std-ref">configure accelerator</span></a> before executing the example.</p>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>It is the user’s responsibility to configure the accelerator.
+Currently, the library doesn’t provide a way to specify a number of Intel DSA
+instances for execution and will use everything available on the system.
+If you need to run one or more Intel DSA instances, make sure your system is configured appropriately.</p>
+</div>
+</div>
+<div class="section" id="latency-tests">
+<h3>Latency Tests<a class="headerlink" href="#latency-tests" title="Permalink to this headline">¶</a></h3>
+<p>For reporting or tracking latency metric, use <code class="docutils literal notranslate"><span class="pre">sync</span></code> mode, a single Intel DSA instance, and a single thread.</p>
+<p>Below are examples for mem_copy (<code class="docutils literal notranslate"><span class="pre">copy</span></code>) and mem_move (<code class="docutils literal notranslate"><span class="pre">move</span></code>) using 4kb block_sizes:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>./&lt;install_dir&gt;/bin/dml_benchmarks<span class="w"> </span>--benchmark_filter<span class="o">=</span><span class="s2">&quot;copy/.*/path:dsa/exec:sync/.*/size:4096/.*&quot;</span><span class="w"> </span>--benchmark_min_time<span class="o">=</span><span class="m">0</span>.1
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>./&lt;install_dir&gt;/bin/dml_benchmarks<span class="w"> </span>--benchmark_filter<span class="o">=</span><span class="s2">&quot;move/.*/path:dsa/exec:sync/.*/size:4096/.*&quot;</span><span class="w"> </span>--benchmark_min_time<span class="o">=</span><span class="m">0</span>.1
+</pre></div>
+</div>
+</div>
+<div class="section" id="throughput-tests">
+<h3>Throughput Tests<a class="headerlink" href="#throughput-tests" title="Permalink to this headline">¶</a></h3>
+<p>For reporting or tracking throughput metric, use <code class="docutils literal notranslate"><span class="pre">async</span></code> mode, 1 to 4 Intel DSA devices, and multiple threads.</p>
+<p>Below are examples for mem_copy (<code class="docutils literal notranslate"><span class="pre">copy</span></code>) and mem_move (<code class="docutils literal notranslate"><span class="pre">move</span></code>) using 4kb block_size and <code class="docutils literal notranslate"><span class="pre">queue_size=128</span></code></p>
+<p>on the Low-Level C API:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>./&lt;install_dir&gt;/bin/dml_benchmarks<span class="w"> </span>--benchmark_filter<span class="o">=</span><span class="s2">&quot;copy/api:c/path:dsa/exec:async/qsize:128/.*/size:4096/.*/threads:8&quot;</span><span class="w"> </span>--benchmark_min_time<span class="o">=</span><span class="m">0</span>.5
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>./&lt;install_dir&gt;/bin/dml_benchmarks<span class="w"> </span>--benchmark_filter<span class="o">=</span><span class="s2">&quot;move/api:c/path:dsa/exec:async/qsize:128/.*/size:4096/.*/threads:8&quot;</span><span class="w"> </span>--benchmark_min_time<span class="o">=</span><span class="m">0</span>.5
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+              </div>
+              
+            
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'> 
+    <a class='left-prev' id="prev-link" href="../api_docs/low_level_api.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Low-level C API</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../contributing_docs/issue_reporting.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Issue Reporting</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            
+        </div>
+    </div>
+    <footer class="footer">
+  <p>
+    
+      By Intel<br/>
+    
+        &copy; Copyright 2022, Intel.<br/>
+      <div class="extra_footer">
+        <p align="right"><a href="https://www.intel.com/content/www/us/en/privacy/intel-cookie-notice.html">Cookies</a></p>
+      </div>
+  </p>
+</footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+
+  </body>
+</html>

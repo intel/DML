@@ -140,6 +140,18 @@
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
+  Benchmarking
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../bench_docs/guide.html">
+   Benchmarks Framework Guide
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
   Contributing
  </span>
 </p>
@@ -251,6 +263,11 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#accelerator-configuration">
+     Accelerator Configuration
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#build-prerequisites">
      Build Prerequisites
     </a>
@@ -258,6 +275,11 @@
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#documentation-build-prerequisites">
      Documentation Build Prerequisites
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#available-build-options">
+     Available Build Options
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -303,6 +325,11 @@
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#accelerator-configuration">
+     Accelerator Configuration
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#build-prerequisites">
      Build Prerequisites
     </a>
@@ -310,6 +337,11 @@
    <li class="toc-h3 nav-item toc-entry">
     <a class="reference internal nav-link" href="#documentation-build-prerequisites">
      Documentation Build Prerequisites
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#available-build-options">
+     Available Build Options
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
@@ -378,6 +410,37 @@ Limitations</a> section.</p>
 <p>For more information about system requirements,
 see <a class="reference external" href="../introduction_docs/system_requirements.html">System Requirements</a>.</p>
 </div>
+<div class="section" id="accelerator-configuration">
+<span id="accelerator-configuration-reference-link"></span><h3>Accelerator Configuration<a class="headerlink" href="#accelerator-configuration" title="Permalink to this headline">¶</a></h3>
+<p>An Intel® Data Streaming Accelerator (Intel® DSA) device can be
+configured with the <code class="docutils literal notranslate"><span class="pre">libaccel-config</span></code> library, which can be found at
+<a class="reference external" href="https://github.com/intel/idxd-config">https://github.com/intel/idxd-config</a>.</p>
+<p>Accelerator configuration can be performed with <code class="docutils literal notranslate"><span class="pre">libaccel-config</span></code> library,
+that can be founded at <a class="reference external" href="https://github.com/intel/idxd-config">https://github.com/intel/idxd-config</a>.</p>
+<p>For instance, users can use the following commands
+to directly configure the device with the accel-config using existing config file:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>accel-config<span class="w"> </span>load-config<span class="w"> </span>-c<span class="w"> </span>&lt;config<span class="w"> </span>file&gt;
+accel-config<span class="w"> </span>enable-device<span class="w"> </span>&lt;device&gt;
+accel-config<span class="w"> </span>enable-wq<span class="w"> </span>&lt;device&gt;/&lt;wq&gt;
+</pre></div>
+</div>
+<p>Intel® DML also provides a way to configure Intel® DSA through calling
+either of the following commands based on whether you are setting up
+via the Intel® DML source or from the Intel® DML installed directory:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>python3<span class="w"> </span>&lt;dml-library&gt;/tools/scripts/accel_conf.py<span class="w"> </span>--load<span class="o">=</span>&lt;path<span class="w"> </span>to<span class="w"> </span>config<span class="w"> </span>file&gt;
+</pre></div>
+</div>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>python3<span class="w"> </span>&lt;install-dir&gt;/bin/scripts/accel_conf.py<span class="w"> </span>--load<span class="o">=</span>&lt;path<span class="w"> </span>to<span class="w"> </span>config<span class="w"> </span>file&gt;
+</pre></div>
+</div>
+<p>With configuration files found at either <code class="docutils literal notranslate"><span class="pre">&lt;dml-library&gt;/tools/configs/</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;install-dir&gt;/bin/configs/</span></code>.
+With configuration files of the format <code class="docutils literal notranslate"><span class="pre">&lt;#</span> <span class="pre">nodes&gt;n&lt;#</span> <span class="pre">devices&gt;d&lt;#</span> <span class="pre">engines&gt;e&lt;#</span> <span class="pre">of</span> <span class="pre">workqueues&gt;w-s.conf</span></code> or
+<code class="docutils literal notranslate"><span class="pre">&lt;#</span> <span class="pre">nodes&gt;n&lt;#</span> <span class="pre">devices&gt;d&lt;#</span> <span class="pre">engines&gt;e&lt;#</span> <span class="pre">of</span> <span class="pre">workqueues&gt;w-s-n&lt;which</span> <span class="pre">node&gt;.conf</span></code>.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Sudo privileges are required to configure Intel® DSA.</p>
+</div>
+</div>
 <div class="section" id="build-prerequisites">
 <h3>Build Prerequisites<a class="headerlink" href="#build-prerequisites" title="Permalink to this headline">¶</a></h3>
 <p>Before building the library, install and set up the following tools:</p>
@@ -420,6 +483,26 @@ cmd&gt;<span class="w"> </span>_get_docs.sh
 </pre></div>
 </div>
 <p>After generation process is completed, open the <cite>&lt;dml_library&gt;/doc/build/html/index.html</cite> file.</p>
+</div>
+<div class="section" id="available-build-options">
+<span id="building-library-build-options-reference-link"></span><h3>Available Build Options<a class="headerlink" href="#available-build-options" title="Permalink to this headline">¶</a></h3>
+<p>Intel DML supports the following build options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-DSANITIZE_MEMORY=[ON|OFF]</span></code> - Enables memory sanitizing (<code class="docutils literal notranslate"><span class="pre">OFF</span></code> by default).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DSANITIZE_THREADS=[ON|OFF]</span></code> - Enables threads sanitizing (<code class="docutils literal notranslate"><span class="pre">OFF</span></code> by default).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DLOG_HW_INIT=[ON|OFF]</span></code> - Enables hardware initialization log (<code class="docutils literal notranslate"><span class="pre">OFF</span></code> by default).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DDML_BUILD_EXAMPLES=[OFF|ON]</span></code> - Enables building library examples (<code class="docutils literal notranslate"><span class="pre">ON</span></code> by default).
+For more information on existing examples, see <a class="reference internal" href="code_samples_and_examples.html#code-examples-reference-link"><span class="std std-ref">Code Samples and examples</span></a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DDML_BUILD_TESTS=[OFF|ON]</span></code> - Enables building library testing and benchmarks frameworks (<code class="docutils literal notranslate"><span class="pre">ON</span></code> by default).
+For more information on library testing, see <a class="reference internal" href="testing.html#library-testing-reference-link"><span class="std std-ref">Library Testing</span></a> section.
+For information on benchmarking the library, see <a class="reference internal" href="../bench_docs/guide.html#library-benchmarking-reference-link"><span class="std std-ref">Benchmarks Framework Guide</span></a>.</p></li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>To build Intel DML from the GitHub release package (<code class="docutils literal notranslate"><span class="pre">.tar</span></code>, <code class="docutils literal notranslate"><span class="pre">.tgz</span></code>)
+without downloading sub-module dependencies for testing and benchmarking,
+use <code class="docutils literal notranslate"><span class="pre">-DDML_BUILD_TESTS=OFF</span></code>.</p>
+</div>
 </div>
 <div class="section" id="build">
 <span id="building-library-reference-link"></span><h3>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h3>
