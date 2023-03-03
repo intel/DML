@@ -62,6 +62,38 @@ namespace dml
     }
 
     /**
+     * @brief Executes nop operation on a specified execution path
+     *
+     * See @ref nop_operation for algorithm details
+     *
+     * @tparam execution_path Type of @ref dmlhl_aux_path
+     * @param operation       Instance of @ref nop_operation
+     * @param numa_id         Custom numa id for submission
+     *
+     * Usage (software execution path):
+     * @code
+     * auto result = dml::execute<dml::software>(dml::nop);
+     * @endcode
+     * Usage (hardware execution path):
+     * @code
+     * auto result = dml::execute<dml::hardware>(dml::nop);
+     * @endcode
+     *
+     * @return @ref nop_result
+     */
+    template <typename execution_path>
+    inline auto execute(nop_operation operation,
+                        std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max()) noexcept
+    {
+        return detail::execute<execution_path, nop_operation>(
+            numa_id,
+            [&]
+            {
+                return detail::ml::make_nop_task(operation.get_options());
+            });
+    }
+
+    /**
      * @brief Executes Memory Move operation on a specified execution path
      *
      * See @ref mem_move_operation for algorithm details

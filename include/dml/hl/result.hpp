@@ -25,6 +25,14 @@ namespace dml
      * @{
      */
 
+     /**
+     * @brief Result for @ref nop_operation
+     */
+    struct nop_result
+    {
+        status_code status{ status_code::error }; /**< Status of operation execution */
+    };
+
     /**
      * @brief Result for @ref mem_move_operation
      */

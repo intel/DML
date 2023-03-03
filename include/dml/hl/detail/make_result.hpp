@@ -43,6 +43,10 @@ namespace dml::detail
     template <typename result_type>
     auto make_result(detail::completion_record& record) noexcept
     {
+        if constexpr (std::is_same_v<result_type, nop_result>)
+        {
+            return nop_result{ to_own(detail::ml::get_status(record)) };
+        }
         if constexpr (std::is_same_v<result_type, mem_move_result>)
         {
             return mem_move_result{ to_own(detail::ml::get_status(record)) };

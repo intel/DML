@@ -320,7 +320,14 @@ No-op operation
 ---------------
 
 
-Not implemented
+The No-op operation can be used in a batch operation to ensure that all 
+previous operations in the batch completed before the no-op. 
+
+This could be useful for ensuring the order of non-independent operations.
+Like using the destination of a previous operation as the source of another.
+
+It performs no other operation.
+
 
 Batch operation
 ---------------

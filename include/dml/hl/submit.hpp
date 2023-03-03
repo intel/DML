@@ -79,6 +79,54 @@ namespace dml
     }
 
     /**
+     * @brief Submits No Op operation on a specified execution path
+     *
+     * Submit function used to start an operation asynchronously
+     * Asynchronous execution is controlled by @ref execution_interface
+     *
+     * See @ref nop_operation for algorithm details
+     *
+     * @tparam execution_path        Type of @ref dmlhl_aux_path
+     * @tparam execution_interface_t Type of @ref execution_interface
+     * @param operation              Instance of @ref nop_operation
+     * @param src_view               @ref data_view to the source memory region
+     * @param dst_view               @ref data_view to the destination memory region
+     * @param executor               Instance of @ref execution_interface
+     * @param numa_id                Custom numa id for submission
+     *
+     * Usage (software execution path):
+     * @code
+     * auto handler = dml::submit<dml::software>(dml::mem_move, dml::make_view(src), dml::make_view(dst));
+     * // Some code...
+     * auto result = handler.get();
+     * @endcode
+     * Usage (hardware execution path):
+     * @code
+     * auto handler = dml::submit<dml::hardware>(dml::mem_move, dml::make_view(src), dml::make_view(dst));
+     * // Some code...
+     * auto result = handler.get();
+     * @endcode
+     *
+     * @note To use custom @ref execution_interface pass its instance as the last argument to this function
+     *
+     * @return @ref handler for @ref nop_operation
+     */
+    template <typename execution_path, typename execution_interface_t = default_execution_interface<execution_path>>
+    inline auto submit(nop_operation           operation,
+                       const execution_interface_t &executor = execution_interface_t(),
+                       std::uint32_t numa_id = std::numeric_limits<std::uint32_t>::max())
+        -> handler<nop_operation, typename execution_interface_t::allocator_type>
+    {
+        return detail::submit<execution_path, nop_operation>(
+            numa_id,
+            executor,
+            [&]
+            {
+                return detail::ml::make_nop_task(operation.get_options(), executor.get_allocator());
+            });
+    }
+
+    /**
      * @brief Submits Memory Move operation on a specified execution path
      *
      * Submit function used to start an operation asynchronously

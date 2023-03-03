@@ -19,6 +19,51 @@ namespace dml
 {
     /**
      * @ingroup dmlhl_ops
+     * @brief No operation
+     *
+     * This operation does nothing. Can be used with fence flag in batch to ensure that all previous operations completed.
+     *
+     * See also @ref dml::nop
+     */
+    class nop_operation
+    {
+    public:
+        /**
+         * @brief Constructs the operation
+         */
+        constexpr nop_operation() noexcept: options_(detail::ml::nop_options().enable<detail::nop_flag::fence>())
+        {
+        }
+
+        /**
+         * @brief Result type for this operation
+         *
+         * See @ref nop_result
+         */
+        using result_type = nop_result;
+
+        /**
+         * @todo
+         */
+        [[nodiscard]] constexpr auto get_options() const noexcept
+        {
+            return options_;
+        }
+
+    private:
+        detail::ml::nop_options options_; /**< @todo */
+    };
+
+    /**
+     * @ingroup dmlhl_ops
+     * @brief Predefined instance of @ref nop_operation
+     *
+     * For usage examples see corresponding @ref dml::submit or @ref dml::execute
+     */
+    constexpr auto nop = nop_operation();
+
+    /**
+     * @ingroup dmlhl_ops
      * @brief Memory Move operation
      *
      * This operation moves data from the source memory region to the destination memory region.

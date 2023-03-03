@@ -90,6 +90,36 @@ TYPED_TEST(dmlhl_batch, all_operations)
     ASSERT_TRUE(copy_crc.check());
 }
 
+TYPED_TEST(dmlhl_batch, fence)
+{
+    SKIP_IF_WRONG_PATH(typename TestFixture::execution_path);
+
+    constexpr auto count  = 5u;
+
+    std::vector <uint8_t> src;
+    std::vector <uint8_t> dst;
+    src.resize(360);
+    dst.resize(360);
+    
+
+    std::fill(src.begin(), src.end(), 0);
+    std::fill(dst.begin(), dst.end(), 255);
+    auto sequence = dml::sequence(count, std::allocator<dml::byte_t>());
+
+    ASSERT_EQ(sequence.add(dml::fill, 1u, dml::make_view(src.begin(), src.begin() + 120)), dml::status_code::ok);
+    ASSERT_EQ(sequence.add(dml::fill, 2u, dml::make_view(src.begin()+120, src.begin() + 240)), dml::status_code::ok);
+    ASSERT_EQ(sequence.add(dml::fill, 3u, dml::make_view(src.begin()+240, src.end())), dml::status_code::ok);
+    ASSERT_EQ(sequence.add(dml::nop), dml::status_code::ok);
+    ASSERT_EQ(sequence.add(dml::mem_copy, dml::make_view(src), dml::make_view(dst)), dml::status_code::ok);
+
+    auto result = this->run(dml::batch, sequence);
+
+    ASSERT_EQ(int(result.status), int(dml::status_code::ok));
+    ASSERT_EQ(result.operations_completed, count);
+
+    ASSERT_EQ(src, dst);
+}
+
 TYPED_TEST(dmlhl_batch, bad_length_0)
 {
     constexpr auto length = 16u;

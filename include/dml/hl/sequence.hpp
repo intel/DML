@@ -79,6 +79,23 @@ namespace dml
         }
 
         /**
+         * @brief Adds No operation to the sequence
+         *
+         * See @ref nop_operation for algorithm details
+         *
+         * @param operation Instance of @ref nop_operation
+         *
+         * Usage:
+         * @code
+         * auto status = sequence.add(dml::nop);
+         * if (status != dml::status_code::ok) return error;
+         * @endcode
+         *
+         * @return @ref status_code to report success or failure
+         */
+        inline status_code add(nop_operation operation);
+
+        /**
          * @brief Adds Memory Move operation to the sequence
          *
          * See @ref mem_move_operation for algorithm details
@@ -350,6 +367,16 @@ namespace dml
         res_buffer_t results_;        /**< Buffer for results array */
         size_t       current_length_; /**< Current number of operation stored in the sequence */
     };
+
+    template <typename allocator_t>
+    inline status_code sequence<allocator_t>::add(nop_operation operation)
+    {
+        return add(
+            [&]
+            {
+                return detail::ml::make_nop_task(operation.get_options());
+            });
+    }
 
     template <typename allocator_t>
     inline status_code sequence<allocator_t>::add(mem_move_operation operation, const_data_view src_view, data_view dst_view)
