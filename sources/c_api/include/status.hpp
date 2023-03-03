@@ -31,7 +31,7 @@ namespace dml
                 }
             case detail::execution_status::page_response_error:
                 {
-                    return DML_STATUS_INTERNAL_ERROR;
+                    return DML_STATUS_INTL_INVALID_PAGE_REQUEST;
                 }
             case detail::execution_status::batch_error:
                 {
@@ -63,7 +63,7 @@ namespace dml
                 }
             case detail::execution_status::non_zero_reserved_field_error:
                 {
-                    return DML_STATUS_INTERNAL_ERROR;
+                    return DML_STATUS_INTL_INVALID_RESERVED_FIELD;
                 }
             case detail::execution_status::invalid_transfer_size_error:
                 {
@@ -87,47 +87,47 @@ namespace dml
                 }
             case detail::execution_status::descriptor_list_align_error:
                 {
-                    return DML_STATUS_INTERNAL_ERROR;
+                    return DML_STATUS_INTL_MISALIGNED_DESC_LA;
                 }
             case detail::execution_status::invalid_interrupt_handle:
                 {
-                    return DML_STATUS_INTERNAL_ERROR;
+                    return DML_STATUS_INTL_INVALID_COMPLETION_HANDLE;
                 }
             case detail::execution_status::page_fault_on_translation:
                 {
-                    return DML_STATUS_INTERNAL_ERROR;
+                    return DML_STATUS_INTL_PAGE_FAULT_ON_TRANSLATION;
                 }
             case detail::execution_status::completion_record_align_error:
                 {
-                    return DML_STATUS_INTERNAL_ERROR;
+                    return DML_STATUS_INTL_MISALIGNED_CR_ADDRESS;
                 }
             case detail::execution_status::misalign_address_error:
                 {
-                    return DML_STATUS_INTERNAL_ERROR;
+                    return DML_STATUS_INTL_MISALIGNED_ADDRESS;
                 }
             case detail::execution_status::privilege_error:
                 {
-                    return DML_STATUS_INTERNAL_ERROR;
+                    return DML_STATUS_INTL_PRIVILEGE_ERROR;
                 }
             case detail::execution_status::traffic_class_error:
                 {
-                    return DML_STATUS_INTERNAL_ERROR;
+                    return DML_STATUS_INTL_TRAFFIC_CLASS_ERROR;
                 }
             case detail::execution_status::readback_translation_error:
                 {
-                    return DML_STATUS_INTERNAL_ERROR;
+                    return DML_STATUS_INTL_READBACK_ADDRESS_PAGE_ERROR;
                 }
             case detail::execution_status::operation_readback_timeout:
                 {
-                    return DML_STATUS_INTERNAL_ERROR;
+                    return DML_STATUS_INTL_HARDWARE_READBACK_TIMEOUT;
                 }
             case detail::execution_status::hardware_timeout:
                 {
-                    return DML_STATUS_INTERNAL_ERROR;
+                    return DML_STATUS_INTL_HARDWARE_TIMEOUT;
                 }
             case detail::execution_status::address_translation_error:
                 {
-                    return DML_STATUS_INTERNAL_ERROR;
+                    return DML_STATUS_INTL_ADDRESS_TRANSLATION_ERROR;
                 }
             default:
                 {
