@@ -1728,7 +1728,7 @@ not evicted from the caches.</p></li>
 <dl class="cpp enum">
 <dt class="sig sig-object cpp">
 <span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dml_status_t</span></span></span><br /></dt>
-<dd><p>All possible return values of the Intel DML Library functions. </p>
+<dd><p>All possible return values of the Intel DML Library functions. (Statuses marked <code class="docutils literal notranslate"><span class="pre">Internal</span></code> indicate an issue within the library) </p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>All general statuses are described here. </p>
@@ -1892,13 +1892,13 @@ not evicted from the caches.</p></li>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp">
-<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dml_status_tC_A_NOT_AVAILABLE</span></span></span><br /></dt>
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_TC_A_NOT_AVAILABLE</span></span></span><br /></dt>
 <dd><p>WQs configured to work with TC-A are not visible </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp">
-<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dml_status_tC_B_NOT_AVAILABLE</span></span></span><br /></dt>
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_TC_B_NOT_AVAILABLE</span></span></span><br /></dt>
 <dd><p>WQs configured to work with TC-B are not visible </p>
 </dd></dl>
 
@@ -1930,6 +1930,84 @@ not evicted from the caches.</p></li>
 <dt class="sig sig-object cpp">
 <span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_DIF_STRIP_ADJACENT_ERROR</span></span></span><br /></dt>
 <dd><p>SRC Address for DIF Strip operation should be greater than (DST Address + SRC Size) </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_INTL_INVALID_PAGE_REQUEST</span></span></span><br /></dt>
+<dd><p>Internal Status Code </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_INTL_INVALID_RESERVED_FIELD</span></span></span><br /></dt>
+<dd><p>Internal Status Code </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_INTL_MISALIGNED_DESC_LA</span></span></span><br /></dt>
+<dd><p>Internal Status Code </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_INTL_INVALID_COMPLETION_HANDLE</span></span></span><br /></dt>
+<dd><p>Internal Status Code </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_INTL_PAGE_FAULT_ON_TRANSLATION</span></span></span><br /></dt>
+<dd><p>Internal Status Code </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_INTL_MISALIGNED_CR_ADDRESS</span></span></span><br /></dt>
+<dd><p>Internal Status Code </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_INTL_MISALIGNED_ADDRESS</span></span></span><br /></dt>
+<dd><p>Internal Status Code </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_INTL_PRIVILEGE_ERROR</span></span></span><br /></dt>
+<dd><p>Internal Status Code </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_INTL_TRAFFIC_CLASS_ERROR</span></span></span><br /></dt>
+<dd><p>Internal Status Code </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_INTL_READBACK_ADDRESS_PAGE_ERROR</span></span></span><br /></dt>
+<dd><p>Internal Status Code </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_INTL_HARDWARE_READBACK_TIMEOUT</span></span></span><br /></dt>
+<dd><p>Internal Status Code </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_INTL_HARDWARE_TIMEOUT</span></span></span><br /></dt>
+<dd><p>Internal Status Code </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_INTL_ADDRESS_TRANSLATION_ERROR</span></span></span><br /></dt>
+<dd><p>Internal Status Code </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
