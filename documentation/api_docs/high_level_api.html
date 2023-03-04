@@ -894,7 +894,11 @@ last argument:</p>
 sequences.</p>
 <div class="section" id="no-op-operation">
 <h4>No-op operation<a class="headerlink" href="#no-op-operation" title="Permalink to this headline">¶</a></h4>
-<p>Not implemented</p>
+<p>The No-op operation can be used in a batch operation to ensure that all
+previous operations in the batch completed before the no-op.</p>
+<p>This could be useful for ensuring the order of non-independent operations.
+Like using the destination of a previous operation as the source of another.</p>
+<p>It performs no other operation.</p>
 </div>
 <div class="section" id="batch-operation">
 <h4>Batch operation<a class="headerlink" href="#batch-operation" title="Permalink to this headline">¶</a></h4>
