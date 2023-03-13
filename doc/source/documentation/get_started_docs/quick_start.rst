@@ -13,53 +13,22 @@ using Intel® Data Mover Library (Intel® DML).
 See `CRC Generation <../api_docs/high_level_api.html#crc-generation>`__
 operation for more information.
 
-
-.. code-block:: cpp
-
-    #include <dml/dml.hpp>
-    #include <iostream>
-    #include <string>
-    #include <vector>
-
-    constexpr auto string  = "Calculate CRC value for this string...\n";
-
-    using execution_path = dml::software;
-
-    int main()
-    {
-        std::cout << "Starting dml::crc example...\n";
-        std::cout << string;
-
-        // Prepare data
-        auto crc_seed = std::uint32_t(0u);
-        auto src = std::basic_string<std::uint8_t>(reinterpret_cast<const std::uint8_t *>(string));
-
-        // Run operation
-        auto result = dml::execute<execution_path>(dml::crc, dml::make_view(src), crc_seed);
-
-        // Check result
-        if (result.status == dml::status_code::ok)
-        {
-            std::cout << "Finished successfully! Calculated CRC is: 0x" << std::hex << result.crc_value << "\n";
-        }
-        else
-        {
-            std::cout << "Failure occurred!\n";
-            return -1;
-        }
-
-        return 0;
-    }
+.. literalinclude:: ../../../../examples/high-level-api/crc_example.cpp
+    :language: cpp
 
 In order to build the library and all the examples, including the one above,
 follow the steps at :ref:`building_library_reference_link`.
-The compiled examples will then be located in <dml_library>/build/examples/.
+The compiled examples will then be located in ``<dml_library>/build/examples/``.
 
-.. note::
+To run the example on the Hardware Path, use:
 
-   By default, Intel DML uses Software Path for examples execution.
-   In order to use Hardware Path, you must manually substitute ``execution_path = dml::software``
-   to ``execution_path = dml::hardware`` in the examples code.
+.. code-block:: shell
+
+   sudo ./compression_example hardware_path
+
+Similarly you can specify ``software_path`` for host execution or ``automatic_path``
+for automatic dispatching (choice would be made by library based on accelerator availability
+and some other internal heuristics).
 
 .. attention::
 

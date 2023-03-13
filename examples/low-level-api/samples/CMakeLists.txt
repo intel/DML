@@ -4,10 +4,9 @@
 
 cmake_minimum_required(VERSION 3.12.0 FATAL_ERROR)
 
-project(job_api_samples C)
+project(dml_ll_examples C)
 
-# Finding DML job_api_samples library sources
-file(GLOB DML_EXAMPLES_SRC *.c)
+file(GLOB DML_EXAMPLES_SRC "*.c")
 
 # Adding DML job_api_samples library target
 add_executable(job_api_samples ${DML_EXAMPLES_SRC})
@@ -24,6 +23,3 @@ target_compile_options(job_api_samples PUBLIC
                        "$<$<CONFIG:Release>:>"
                        PRIVATE "$<$<C_COMPILER_ID:GNU>:${DML_GNU_SDL_COMPILE_OPTIONS}>"
                        PRIVATE "$<$<C_COMPILER_ID:MSVC>:${DML_MSVS_SDL_COMPILE_OPTIONS}>")
-
-# Install rules
-install(TARGETS job_api_samples RUNTIME DESTINATION bin)

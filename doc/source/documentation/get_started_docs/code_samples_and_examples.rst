@@ -27,8 +27,8 @@ as a separate CMake target (``job_api_samples``).
 
 .. note::
 
-  These examples are intended to be illustrative and functional, 
-  but they are not intended to be examples of a complete implementation. 
+  These examples are intended to be illustrative and functional,
+  but they are not intended to be examples of a complete implementation.
   In particular, their handling of error conditions is rather primitive.
 
 
@@ -36,12 +36,12 @@ Multi-Socket Library Usage
 ==========================
 
 
-This sample shows how to utilize several sockets on the system using manual ``numa_id`` 
-setting in the ``dml_job_t`` structure. Thus, the ``memory_move`` operation can be applied 
+This sample shows how to utilize several sockets on the system using manual ``numa_id``
+setting in the ``dml_job_t`` structure. Thus, the ``memory_move`` operation can be applied
 to one data array using several sockets at the same time.
 
 
-.. literalinclude:: ../../../../examples/multisocket.c
+.. literalinclude:: ../../../../examples/low-level-api/multisocket.c
     :language: c
 
 
@@ -55,7 +55,7 @@ cache_flush
 ===========
 
 
-.. literalinclude:: ../../../../examples/high_level_api/cache_flush.cpp
+.. literalinclude:: ../../../../examples/high-level-api/cache_flush_example.cpp
     :language: cpp
 
 
@@ -63,7 +63,7 @@ compare_pattern
 ===============
 
 
-.. literalinclude:: ../../../../examples/high_level_api/compare_pattern.cpp
+.. literalinclude:: ../../../../examples/high-level-api/compare_pattern_example.cpp
     :language: cpp
 
 
@@ -71,7 +71,7 @@ compare
 =======
 
 
-.. literalinclude:: ../../../../examples/high_level_api/compare.cpp
+.. literalinclude:: ../../../../examples/high-level-api/compare_example.cpp
     :language: cpp
 
 
@@ -79,7 +79,7 @@ copy_crc
 ========
 
 
-.. literalinclude:: ../../../../examples/high_level_api/copy_crc.cpp
+.. literalinclude:: ../../../../examples/high-level-api/copy_crc_example.cpp
     :language: cpp
 
 
@@ -87,7 +87,7 @@ crc
 ===
 
 
-.. literalinclude:: ../../../../examples/high_level_api/crc.cpp
+.. literalinclude:: ../../../../examples/high-level-api/crc_example.cpp
     :language: cpp
 
 
@@ -95,7 +95,7 @@ delta
 =====
 
 
-.. literalinclude:: ../../../../examples/high_level_api/delta.cpp
+.. literalinclude:: ../../../../examples/high-level-api/delta_example.cpp
     :language: cpp
 
 
@@ -103,7 +103,7 @@ dualcast
 ========
 
 
-.. literalinclude:: ../../../../examples/high_level_api/dualcast.cpp
+.. literalinclude:: ../../../../examples/high-level-api/dualcast_example.cpp
     :language: cpp
 
 
@@ -111,7 +111,7 @@ fill
 ====
 
 
-.. literalinclude:: ../../../../examples/high_level_api/fill.cpp
+.. literalinclude:: ../../../../examples/high-level-api/fill_example.cpp
     :language: cpp
 
 
@@ -119,7 +119,7 @@ mem_move
 ========
 
 
-.. literalinclude:: ../../../../examples/high_level_api/mem_move.cpp
+.. literalinclude:: ../../../../examples/high-level-api/mem_move_example.cpp
     :language: cpp
 
 
@@ -128,10 +128,10 @@ Multi-Socket Library Usage
 ==========================
 
 
-This sample shows how to utilize several sockets on the system. 
-Thus, the ``memory_move`` operation can be applied 
+This sample shows how to utilize several sockets on the system.
+Thus, the ``memory_move`` operation can be applied
 to one data array using several sockets at the same time.
 
 
-.. literalinclude:: ../../../../examples/multisocket.cpp
+.. literalinclude:: ../../../../examples/high-level-api/multi_socket_example.cpp
     :language: cpp
