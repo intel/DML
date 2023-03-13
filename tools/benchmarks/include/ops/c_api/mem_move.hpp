@@ -52,6 +52,20 @@ public:
         dst_    = rhl.dst_;
     }
 
+    move_t& operator=(const move_t &rhl){
+        deinit_lib_impl();
+
+        copy_base_api(rhl);
+
+        params_ = rhl.params_;
+        src_    = rhl.src_;
+        dst_    = rhl.dst_;
+
+        result_ = {dst_};
+
+        return *this;
+    }
+
 protected:
     void init_buffers_impl(const params_t &params)
     {
@@ -62,7 +76,7 @@ protected:
 
     void init_lib_params_impl()
     {
-        std::uint32_t flags{0};
+        std::uint64_t flags{0};
         if(params_.copy_mode_)
             flags |= DML_FLAG_COPY_ONLY;
         if(cache_control_)

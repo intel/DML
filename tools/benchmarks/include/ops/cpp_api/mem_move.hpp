@@ -61,6 +61,24 @@ public:
         dst_    = rhl.dst_;
     }
 
+    move_t& operator=(const move_t &rhl){
+        deinit_lib_impl();
+
+        copy_base_api(rhl);
+
+        copy_operation_       = rhl.copy_operation_;
+        move_operation_       = rhl.move_operation_;
+        batch_operation_      = rhl.batch_operation_;
+
+        params_ = rhl.params_;
+        src_    = rhl.src_;
+        dst_    = rhl.dst_;
+
+        result_ = {dst_};
+
+        return *this;
+    }
+
 protected:
     void init_buffers_impl(const params_t &params)
     {

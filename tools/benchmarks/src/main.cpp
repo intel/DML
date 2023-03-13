@@ -134,9 +134,10 @@ const extended_info_t& get_sys_info()
         info.kernel    = uname_buf.release;
 
         std::ifstream info_file("/proc/cpuinfo");
-        if(!info_file.is_open())
+        if(!info_file.is_open()){
+            guard.unlock();
             throw std::runtime_error("bench::details::get_sys_info: failed to open /proc/cpuinfo");
-
+        }
         std::string line;
         while (std::getline(info_file, line))
         {
