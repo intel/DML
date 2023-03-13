@@ -72,9 +72,6 @@ An Intel® Data Streaming Accelerator (Intel® DSA) device can be
 configured with the ``libaccel-config`` library, which can be found at
 https://github.com/intel/idxd-config.
 
-Accelerator configuration can be performed with ``libaccel-config`` library,
-that can be founded at https://github.com/intel/idxd-config.
-
 For instance, users can use the following commands
 to directly configure the device with the accel-config using existing config file:
 

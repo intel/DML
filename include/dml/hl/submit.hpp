@@ -89,20 +89,18 @@ namespace dml
      * @tparam execution_path        Type of @ref dmlhl_aux_path
      * @tparam execution_interface_t Type of @ref execution_interface
      * @param operation              Instance of @ref nop_operation
-     * @param src_view               @ref data_view to the source memory region
-     * @param dst_view               @ref data_view to the destination memory region
      * @param executor               Instance of @ref execution_interface
      * @param numa_id                Custom numa id for submission
      *
      * Usage (software execution path):
      * @code
-     * auto handler = dml::submit<dml::software>(dml::mem_move, dml::make_view(src), dml::make_view(dst));
+     * auto handler = dml::submit<dml::software>(dml::nop);
      * // Some code...
      * auto result = handler.get();
      * @endcode
      * Usage (hardware execution path):
      * @code
-     * auto handler = dml::submit<dml::hardware>(dml::mem_move, dml::make_view(src), dml::make_view(dst));
+     * auto handler = dml::submit<dml::hardware>(dml::nop);
      * // Some code...
      * auto result = handler.get();
      * @endcode
