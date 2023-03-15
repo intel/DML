@@ -181,7 +181,7 @@ parameters.
 There are also a number of auxiliary functions, which will be described
 as they become relevant.
 
-A number of examples can be found in the `Examples <#examples>`__ section.
+A number of examples can be found in the :ref:`code_examples_reference_link` section.
 
 Low Bandwidth Memory
 ********************
