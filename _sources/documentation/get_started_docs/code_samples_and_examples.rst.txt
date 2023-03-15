@@ -6,7 +6,7 @@
 
 .. _code_examples_reference_link:
 
-Code Samples and examples
+Code Samples and Examples
 #########################
 
 .. _code_examples_c_reference_link:
