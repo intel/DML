@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
-// SPDX-License-Identifier: LGPL-2.1
-/* Copyright(c) 2019 Intel Corporation. All rights reserved. */
-
 #ifndef _LIBACCFG_H_
 #define _LIBACCFG_H_
 
