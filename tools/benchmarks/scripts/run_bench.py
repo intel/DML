@@ -53,8 +53,8 @@ def getMachineInfo(path):
     print("System info:")
     try:
         print("  BIOS: ", end='')
-        version = subprocess.check_output("dmidecode --string bios-version", universal_newlines=True, shell=True).split("\n")[0]
-        date    = subprocess.check_output("dmidecode --string bios-release-date", universal_newlines=True, shell=True).split("\n")[0]
+        version = subprocess.check_output(["dmidecode", "--string", "bios-version"], universal_newlines=True).split("\n")[0]
+        date    = subprocess.check_output(["dmidecode", "--string", "bios-release-date"], universal_newlines=True).split("\n")[0]
         print("")
         print("    Version: " + version)
         print("    Date:    " + date)
