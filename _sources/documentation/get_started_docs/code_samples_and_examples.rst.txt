@@ -123,6 +123,14 @@ mem_move
     :language: cpp
 
 
+batch
+========
+
+
+.. literalinclude:: ../../../../examples/high-level-api/batch_example.cpp
+    :language: cpp
+
+
 
 Multi-Socket Library Usage
 ==========================
