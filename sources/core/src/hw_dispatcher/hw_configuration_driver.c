@@ -13,7 +13,7 @@
 #include <dlfcn.h>
 #include <sys/mman.h>
 
-const static char *accelerator_configuration_driver_name = "/usr/lib64/libaccel-config.so.1";
+const static char *accelerator_configuration_driver_name = "libaccel-config.so.1";
 
 typedef int (*accfg_new_ptr)(struct accfg_ctx **ctx);
 
