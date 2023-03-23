@@ -25,6 +25,11 @@ provide application programming interface (API) with:
 -  faster time-to-market
 -  scalability with Intel® Data Streaming Accelerator (Intel® DSA) hardware
 
+.. note::
+
+   Intel® DML doesn't support all hardware possibilities. Library
+   limitations are described in the `Library
+   Limitations <../introduction_docs/introduction.html#library-limitations>`__ section.
 
 Library Possibilities
 *********************

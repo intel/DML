@@ -22,7 +22,6 @@ and various data processing applications.
 
 
    documentation/introduction_docs/introduction.rst
-   documentation/introduction_docs/system_requirements.rst
    documentation/introduction_docs/legal.rst
 
 

@@ -19,6 +19,8 @@ To cover these cases the benchmarks provide several performance metrics and mode
     Currently, the Intel DML benchmarks framework offers limited support.
 
     - Only mem_move cases are currently supported.
+    - Compiling and running benchmarks is available only on Linux operating systems.
+    - Additionally, running benchmarks is available only on Intel® Skylake (or later) microarchitecture.
 
 Quick Start
 ***********
@@ -27,10 +29,7 @@ Benchmark are based on the Google benchmark library and built as a part of Intel
 Refer to :ref:`Installation page <building_library_reference_link>`
 for details on how to build the library and resolve all prerequisites.
 
-Please refer to :ref:`benchmark system requirements <system_requirements_benchmark_reference_link>`
-for more information on the requirements needed for building and running Benchmark.
-
-The example below demonstrates running a benchmark on a memory-move operation via 
+The example below demonstrates running a benchmark on a memory-move operation via
 the Low-Level C API using the accelerator, a queue size of 16, and 1 MB of data.
 
 
@@ -98,7 +97,7 @@ run ``./dml_benchmarks --help`` to get a full list of supported commands and inp
 In order to set up a specific run configuration ``--benchmark_filter`` should be used,
 which input is a regex based on the case name.
 
-For example, use the following expression to launch a copy operation using the Low-Level C API 
+For example, use the following expression to launch a copy operation using the Low-Level C API
 with synchronous execution on a CPU: ``--benchmark_filter="copy/api:c/path:cpu/exec:sync/.*"``.
 
 Executing on Hardware Path
