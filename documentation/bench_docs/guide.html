@@ -84,11 +84,6 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../introduction_docs/system_requirements.html">
-   System Requirements
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../introduction_docs/legal.html">
    Notices and Disclaimers
   </a>
@@ -352,6 +347,8 @@ To cover these cases the benchmarks provide several performance metrics and mode
 <p>Currently, the Intel DML benchmarks framework offers limited support.</p>
 <ul class="simple">
 <li><p>Only mem_move cases are currently supported.</p></li>
+<li><p>Compiling and running benchmarks is available only on Linux operating systems.</p></li>
+<li><p>Additionally, running benchmarks is available only on Intel® Skylake (or later) microarchitecture.</p></li>
 </ul>
 </div>
 <div class="section" id="quick-start">
@@ -359,13 +356,11 @@ To cover these cases the benchmarks provide several performance metrics and mode
 <p>Benchmark are based on the Google benchmark library and built as a part of Intel DML.
 Refer to <a class="reference internal" href="../get_started_docs/installation.html#building-library-reference-link"><span class="std std-ref">Installation page</span></a>
 for details on how to build the library and resolve all prerequisites.</p>
-<p>Please refer to <a class="reference internal" href="../introduction_docs/system_requirements.html#system-requirements-benchmark-reference-link"><span class="std std-ref">benchmark system requirements</span></a>
-for more information on the requirements needed for building and running Benchmark.</p>
 <p>The example below demonstrates running a benchmark on a memory-move operation via
 the Low-Level C API using the accelerator, a queue size of 16, and 1 MB of data.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Make sure to resolve <a class="reference internal" href="../introduction_docs/system_requirements.html#system-requirements-hw-path-reference-link"><span class="std std-ref">requirements for running on hardware path</span></a> and
+<p>Make sure to resolve <a class="reference internal" href="../get_started_docs/installation.html#system-requirements-hw-path-reference-link"><span class="std std-ref">requirements for running on hardware path</span></a> and
 configure <a class="reference internal" href="../get_started_docs/installation.html#accelerator-configuration-reference-link"><span class="std std-ref">Intel® Data Streaming Accelerator (Intel® DSA)</span></a>
 before executing the example.</p>
 </div>
@@ -432,7 +427,7 @@ with synchronous execution on a CPU: <code class="docutils literal notranslate">
 <h3>Executing on Hardware Path<a class="headerlink" href="#executing-on-hardware-path" title="Permalink to this headline">¶</a></h3>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Make sure to resolve <a class="reference internal" href="../introduction_docs/system_requirements.html#system-requirements-hw-path-reference-link"><span class="std std-ref">requirements for running on hardware path</span></a> and
+<p>Make sure to resolve <a class="reference internal" href="../get_started_docs/installation.html#system-requirements-hw-path-reference-link"><span class="std std-ref">requirements for running on hardware path</span></a> and
 <a class="reference internal" href="../get_started_docs/installation.html#accelerator-configuration-reference-link"><span class="std std-ref">configure accelerator</span></a> before executing the example.</p>
 </div>
 <div class="admonition attention">
