@@ -37,18 +37,17 @@ namespace dml::core
         const auto own_numa_id = (numa_id == std::numeric_limits<decltype(numa_id)>::max()) ? util::get_numa_id() : numa_id;
 
         auto &dispatcher = dispatcher::hw_dispatcher::get_instance();
+        const size_t device_count = dispatcher.device_count();
 
         if (dispatcher.is_hw_support())
         {
             static thread_local auto current_device_idx = 0u;
-
-            auto device_count  = std::distance(dispatcher.begin(), dispatcher.end());
-            auto tried_devices = 0u;
+            size_t tried_devices = 0u;
 
             while (tried_devices < device_count)
             {
-                auto &current_device = *(dispatcher.begin() + current_device_idx);
-                current_device_idx   = (current_device_idx + 1) % device_count;
+                const auto &current_device = dispatcher.device(current_device_idx);
+                current_device_idx = (current_device_idx + 1) % device_count;
 
                 if (own_numa_id != current_device.numa_id())
                 {

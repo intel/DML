@@ -51,7 +51,7 @@ namespace dml::core::dispatcher
 
         void set_portal_ptr(void *portal_ptr) noexcept;
 
-        ~hw_queue() noexcept;
+        virtual ~hw_queue() noexcept;
 
     private:
         uint32_t                       version_       = 0u;

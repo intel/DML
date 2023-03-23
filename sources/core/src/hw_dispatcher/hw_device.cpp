@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
+#include <atomic>
+
 #if defined(linux)
 
 #include "hw_device.hpp"
@@ -49,18 +51,29 @@ namespace dml::core::dispatcher
         hw_context_ptr->gen_cap.configuration_support        = hw_device::configuration_support();
     }
 
+    /**
+     * @brief Choose queue for descriptor submission on current device.
+     *
+     * Go through all available queues on the device in circular fashion:
+     * start from the queue that is right after the one used for previous submission
+     * , and then trying to submit until we reach the one that was used previously.
+     *
+     * Currently for multi-threaded execution,
+     * each thread would be starting from the same place,
+     * and keeping track in its own copy of last_wq_idx.
+     *
+     * @todo Investigate other thread balancing strategies.
+     */
     auto hw_device::enqueue_descriptor(const dsahw_descriptor_t *desc_ptr) const noexcept -> dsahw_status_t
     {
-        const auto n_queues = std::distance(this->begin(), this->end());
+        const uint32_t n_queues = std::distance(this->begin(), this->end());
 
-        // Initially set to "end" index
-        static thread_local auto last_wq_idx = std::atomic(n_queues);
+        static thread_local uint32_t last_wq_idx = n_queues - 1;
 
-        // Loop FROM the queue after the one used for last submit
-        for (auto idx = last_wq_idx.load() + 1; idx < n_queues; ++idx)
+        for (auto idx = last_wq_idx + 1; idx < n_queues; ++idx)
         {
-            auto &queue  = *(this->begin() + idx);
-            auto  status = queue.enqueue_descriptor(desc_ptr);
+            auto &queue = *(this->begin() + idx);
+            auto status = queue.enqueue_descriptor(desc_ptr);
 
             if (DML_STATUS_OK == status)
             {
@@ -69,11 +82,10 @@ namespace dml::core::dispatcher
             }
         }
 
-        // If the loop before didn't submit descriptor, then loop UNTIL the queue that was used for last submit
         for (auto idx = 0; idx <= last_wq_idx; ++idx)
         {
-            auto &queue  = *(this->begin() + idx);
-            auto  status = queue.enqueue_descriptor(desc_ptr);
+            auto &queue = *(this->begin() + idx);
+            auto status = queue.enqueue_descriptor(desc_ptr);
 
             if (DML_STATUS_OK == status)
             {

@@ -58,13 +58,17 @@ namespace dml::core::dispatcher
 
         [[nodiscard]] auto end() const noexcept -> device_container_t::const_iterator;
 
+        [[nodiscard]] auto device_count() const noexcept -> size_t;
+
+        [[nodiscard]] auto device(size_t idx) const noexcept -> const hw_device &;
+
 #endif
 
-        ~hw_dispatcher() noexcept;
-
-        hw_dispatcher() noexcept;
+        virtual ~hw_dispatcher() noexcept;
 
     protected:
+        hw_dispatcher() noexcept; // shouldn't be used directly, as initialize hw
+
 #if defined(linux)
         auto initialize_hw() noexcept -> dsahw_status_t;
 

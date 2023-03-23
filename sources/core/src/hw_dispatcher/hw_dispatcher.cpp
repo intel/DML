@@ -23,8 +23,6 @@
 
 namespace dml::core::dispatcher
 {
-    static hw_dispatcher instance{};
-
     hw_dispatcher::hw_dispatcher() noexcept
     {
 #if defined(linux)
@@ -100,6 +98,7 @@ namespace dml::core::dispatcher
 
     auto hw_dispatcher::get_instance() noexcept -> hw_dispatcher &
     {
+        static hw_dispatcher instance{};
         return instance;
     }
 
@@ -137,6 +136,14 @@ namespace dml::core::dispatcher
     auto hw_dispatcher::end() const noexcept -> device_container_t::const_iterator
     {
         return devices_.cbegin() + device_count_;
+    }
+
+    auto hw_dispatcher::device_count() const noexcept -> size_t {
+        return device_count_;
+    }
+
+    auto hw_dispatcher::device(size_t idx) const noexcept -> const hw_device & {
+        return devices_[idx % device_count_];
     }
 
     void hw_dispatcher::hw_context::set_driver_context_ptr(accfg_ctx *driver_context_ptr) noexcept

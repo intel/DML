@@ -23,5 +23,4 @@ list(APPEND DML_QUALITY_OPTIONS
 list(APPEND DML_CPP_PRIVATE_OPTIONS
         -fno-exceptions
         -fno-rtti
-        -fno-threadsafe-statics
         )
