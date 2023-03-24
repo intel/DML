@@ -171,21 +171,6 @@ dml_status_t dml_wait_job(dml_job_t *dml_job_ptr, dml_wait_mode_t wait_mode);
 dml_status_t dml_check_job(dml_job_t *dml_job_ptr);
 
 /**
- * @brief The service function that returns the maximum number of jobs available in a batch mode.
- *
- * @param[in]  dml_job_ptr       Pointer to the initialized @ref dml_job_t structure
- * @param[out] dml_limits_ptr    Pointer to the dml_limits_t structure where to return the result
- *
- * @return @ref DML_STATUS_OK in case of success execution, or non-zero value, otherwise
- * Return values:
- *      - @ref DML_STATUS_OK
- *      - @ref DML_STATUS_NULL_POINTER_ERROR
- *      - @ref DML_STATUS_JOB_CORRUPTED
- *
- */
-dml_status_t dml_get_limits(dml_job_t *dml_job_ptr, dml_limits_t *dml_limits_ptr);
-
-/**
  * @brief The service function that returns the number of bytes to initialize a batch.
  *
  * @param[in]  dml_job_ptr       Pointer to the initialized @ref dml_job_t structure

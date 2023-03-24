@@ -288,7 +288,7 @@ typedef enum
     DML_STATUS_JOB_OPERATION_ERROR              = 13u,  /**< Invalid op field in dml_job_t. */
     DML_STATUS_JOB_FLAGS_ERROR                  = 14u,  /**< Invalid flags field in dml_job_t. */
     DML_STATUS_JOB_LENGTH_ERROR                 = 15u,  /**< Invalid length field in dml_job_t. */
-    DML_STATUS_BATCH_LIMITS_ERROR               = 16u,  /**< Invalid number of Jobs for batch operation (LT than 2 or GT than dml_limits_t.dmlMaxBatchSize) */
+    DML_STATUS_BATCH_LIMITS_ERROR               = 16u,  /**< Invalid number of Jobs for batch operation (LT than 2 or GT than max batch size) */
     DML_STATUS_DELTA_RECORD_SIZE_ERROR          = 17u,  /**< Delta Record Size is out of range or delta record size is not multiple of 10. */
     DML_STATUS_OVERLAPPING_BUFFER_ERROR         = 18u,  /**< Overlapping buffers. */
     DML_STATUS_DUALCAST_ALIGN_ERROR             = 19u,  /**< Bit 11:0 of pDst1 and pDst2 differ in Memory Copy with Dualcast operation. */
@@ -344,18 +344,6 @@ typedef struct
     uint32_t minor;                  /**< Minor version                  */
     uint32_t patch;                  /**< Patch version                  */
 } dml_library_version_t;
-
-
-
-/**
- * @brief Describes the library limitations.
- */
-typedef struct
-{
-    uint32_t dml_max_transfer_Size;       /**< WQ Maximum Transfer Size     */
-    uint32_t dml_max_batch_size;          /**< WQ Maximum Batch Size        */
-    uint32_t dml_max_delta_record_size;   /**< WQ Maximum Delta Record Size */
-} dml_limits_t;
 
 
 /**

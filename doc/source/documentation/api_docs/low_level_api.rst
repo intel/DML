@@ -326,8 +326,6 @@ get-functions:
 - ``dml_batch_get_result``
 - ``dml_batch_get_status``
 
-The maximum number of jobs available in a batch can be obtained with the service function:
-``dml_status_t dml_get_limits(dml_job_t *dml_job_ptr, dml_limits_t *dml_limits_ptr)``.
 
 Drain
 -----
@@ -550,9 +548,6 @@ Delta record format is described below:
      - Data byte 6
      - Data byte 7
 
-The maximum size of the delta record is given by the
-``dml_limits_t.dml_max_delta_record_size`` field (service function
-``dml_status_t dml_get_limits(dml_job_t* dml_job_ptr, dml_limits_t* dml_limits_ptr)``).
 
 The delta records are written to ``destination_first_ptr``, therefore it
 must point to the memory buffer of the appropriate size. The ``offset``
@@ -561,7 +556,6 @@ of the delta record must be:
 
 - a multiple of the delta size (10 bytes)
 - less than the maximum number of deltas that can be generated from a single cache line (80 bytes)
-- not greater than the value allowed by the ``dml_limits_t.dml_max_transfer_size``
 
 The actual size of the generated delta record depends on the number of
 differences detected. This size is written to the ``destination_length``
