@@ -957,8 +957,6 @@ get-functions:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_get_result</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_get_status</span></code></p></li>
 </ul>
-<p>The maximum number of jobs available in a batch can be obtained with the service function:
-<code class="docutils literal notranslate"><span class="pre">dml_status_t</span> <span class="pre">dml_get_limits(dml_job_t</span> <span class="pre">*dml_job_ptr,</span> <span class="pre">dml_limits_t</span> <span class="pre">*dml_limits_ptr)</span></code>.</p>
 </div>
 <div class="section" id="drain">
 <h4>Drain<a class="headerlink" href="#drain" title="Permalink to this headline">¶</a></h4>
@@ -1209,9 +1207,6 @@ must be 8-byte aligned (multiple of 8).</p>
 </tr>
 </tbody>
 </table>
-<p>The maximum size of the delta record is given by the
-<code class="docutils literal notranslate"><span class="pre">dml_limits_t.dml_max_delta_record_size</span></code> field (service function
-<code class="docutils literal notranslate"><span class="pre">dml_status_t</span> <span class="pre">dml_get_limits(dml_job_t*</span> <span class="pre">dml_job_ptr,</span> <span class="pre">dml_limits_t*</span> <span class="pre">dml_limits_ptr)</span></code>).</p>
 <p>The delta records are written to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>, therefore it
 must point to the memory buffer of the appropriate size. The <code class="docutils literal notranslate"><span class="pre">offset</span></code>
 field of the delta record has <code class="docutils literal notranslate"><span class="pre">uint16_t</span></code> data type, therefore the size
@@ -1219,7 +1214,6 @@ of the delta record must be:</p>
 <ul class="simple">
 <li><p>a multiple of the delta size (10 bytes)</p></li>
 <li><p>less than the maximum number of deltas that can be generated from a single cache line (80 bytes)</p></li>
-<li><p>not greater than the value allowed by the <code class="docutils literal notranslate"><span class="pre">dml_limits_t.dml_max_transfer_size</span></code></p></li>
 </ul>
 <p>The actual size of the generated delta record depends on the number of
 differences detected. This size is written to the <code class="docutils literal notranslate"><span class="pre">destination_length</span></code>
@@ -1828,7 +1822,7 @@ not evicted from the caches.</p></li>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp">
 <span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_BATCH_LIMITS_ERROR</span></span></span><br /></dt>
-<dd><p>Invalid number of Jobs for batch operation (LT than 2 or GT than dml_limits_t.dmlMaxBatchSize) </p>
+<dd><p>Invalid number of Jobs for batch operation (LT than 2 or GT than max batch size) </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
