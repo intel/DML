@@ -327,6 +327,14 @@ get-functions:
 - ``dml_batch_get_status``
 
 
+.. attention::
+
+  Maximum number of operations for batch execution
+  depends on accelerator configuration.
+
+  Minimum number of operations required for batch execution
+  is defined by the library and could be obtained with ``DML_MIN_BATCH_SIZE`` define.
+
 Drain
 -----
 

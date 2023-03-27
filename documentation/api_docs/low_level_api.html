@@ -957,6 +957,13 @@ get-functions:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_get_result</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">dml_batch_get_status</span></code></p></li>
 </ul>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>Maximum number of operations for batch execution
+depends on accelerator configuration.</p>
+<p>Minimum number of operations required for batch execution
+is defined by the library and could be obtained with <code class="docutils literal notranslate"><span class="pre">DML_MIN_BATCH_SIZE</span></code> define.</p>
+</div>
 </div>
 <div class="section" id="drain">
 <h4>Drain<a class="headerlink" href="#drain" title="Permalink to this headline">¶</a></h4>
@@ -1900,13 +1907,13 @@ not evicted from the caches.</p></li>
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp">
 <span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_BATCH_SIZE_ERROR</span></span></span><br /></dt>
-<dd><p>The desired batch size is bigger than the possible one </p>
+<dd><p>The desired batch size is either bigger or smaller than the possible one. Refer to DML_MIN_BATCH_SIZE for minimal supported batch size. </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
 <dt class="sig sig-object cpp">
 <span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DML_STATUS_DRAIN_PAGE_FAULT_ERROR</span></span></span><br /></dt>
-<dd><p>A page fault occured while translating a Readback Addres in a Drain descriptor </p>
+<dd><p>A page fault occurred while translating a Readback Address in a Drain descriptor </p>
 </dd></dl>
 
 <dl class="cpp enumerator">
