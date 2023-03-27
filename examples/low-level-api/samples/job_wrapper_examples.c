@@ -420,7 +420,7 @@ dml_status_t dml_copy_batch_8u(uint8_t *source_first_ptr,
                                dml_job_t *const dml_job_ptr)
 {
     dml_status_t status = DML_STATUS_OK;
-    uint32_t operations_count    = 4u;
+    uint32_t operations_count    = DML_MIN_BATCH_SIZE;
     uint32_t batch_buffer_length = 0u;
 
     status = dml_get_batch_size(dml_job_ptr, operations_count, &batch_buffer_length);

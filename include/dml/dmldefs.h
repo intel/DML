@@ -53,6 +53,8 @@ extern "C" {
 
 #define DML_BASE_DRIVER_ERROR 100u                  /**< Base for all driver errors  */
 
+#define DML_MIN_BATCH_SIZE (4u)                     /**< Minimum batch size for bulk operations */
+
 /* ====== DML Macros ====== */
 #define DML_MAX(a, b) ( ((a) > (b)) ? (a) : (b) )   /**< Simple macro to find maximum between pair values */
 #define DML_MIN(a, b) ( ((a) < (b)) ? (a) : (b) )   /**< Simple macro to find minimum between pair values */
@@ -301,8 +303,8 @@ typedef enum
     DML_STATUS_TC_A_NOT_AVAILABLE               = 26u,  /**< WQs configured to work with TC-A are not visible */
     DML_STATUS_TC_B_NOT_AVAILABLE               = 27u,  /**< WQs configured to work with TC-B are not visible */
     DML_STATUS_BATCH_TASK_INDEX_OVERFLOW        = 28u,  /**< Batch task index is bigger than size of the batch */
-    DML_STATUS_BATCH_SIZE_ERROR                 = 29u,  /**< The desired batch size is bigger than the possible one */
-    DML_STATUS_DRAIN_PAGE_FAULT_ERROR           = 30u,  /**< A page fault occured while translating a Readback Addres in a Drain descriptor */
+    DML_STATUS_BATCH_SIZE_ERROR                 = 29u,  /**< The desired batch size is either bigger or smaller than the possible one. Refer to DML_MIN_BATCH_SIZE for minimal supported batch size. */
+    DML_STATUS_DRAIN_PAGE_FAULT_ERROR           = 30u,  /**< A page fault occurred while translating a Readback Address in a Drain descriptor */
     DML_STATUS_UNKNOWN_CACHE_SIZE_ERROR         = 31u,  /**< Max cache size can't be calculated */
     DML_STATUS_DIF_STRIP_ADJACENT_ERROR         = 32u,  /**< SRC Address for DIF Strip operation should be greater than (DST Address + SRC Size) */
     DML_STATUS_INTL_INVALID_PAGE_REQUEST        = 33u,  /**< Internal Status Code */
