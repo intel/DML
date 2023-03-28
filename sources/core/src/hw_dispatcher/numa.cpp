@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
-#if defined(linux)
+#if defined(__linux__)
 #include <x86intrin.h>
 #endif
 
@@ -14,7 +14,7 @@ namespace dml::core::util
 {
     uint32_t get_numa_id() noexcept
     {
-#if defined(linux)
+#if defined(__linux__)
         uint32_t tsc_aux = 0;
 
         __rdtscp(&tsc_aux);

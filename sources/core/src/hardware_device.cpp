@@ -14,7 +14,7 @@
 
 namespace dml::core
 {
-#if defined(linux)
+#if defined(__linux__)
     static inline auto enqueue(const dispatcher::hw_device &device, const descriptor &dsc) noexcept
     {
         // Write 0 to completion record before submit
@@ -33,7 +33,7 @@ namespace dml::core
 
     dml::detail::submission_status hardware_device::submit(const descriptor &dsc, std::uint32_t numa_id) noexcept
     {
-#if defined(linux)
+#if defined(__linux__)
         const auto own_numa_id = (numa_id == std::numeric_limits<decltype(numa_id)>::max()) ? util::get_numa_id() : numa_id;
 
         auto &dispatcher = dispatcher::hw_dispatcher::get_instance();

@@ -8,7 +8,7 @@
 
 #include "legacy_headers/hardware_configuration_driver.h"
 
-#if defined(linux)
+#if defined(__linux__)
 
 #include <dlfcn.h>
 #include <sys/mman.h>
@@ -94,7 +94,7 @@ static inline bool own_load_configuration_functions(void *driver_instance_ptr);
 
 dsahw_status_t DML_HW_API(initialize_accelerator_driver)(hw_driver_t *driver_ptr)
 {
-#if defined(linux)
+#if defined(__linux__)
     // Variables
     driver_ptr->driver_instance_ptr = NULL;
 
@@ -121,7 +121,7 @@ dsahw_status_t DML_HW_API(initialize_accelerator_driver)(hw_driver_t *driver_ptr
 
 void DML_HW_API(finalize_accelerator_driver)(hw_driver_t *driver_ptr)
 {
-#if defined(linux)
+#if defined(__linux__)
     if (driver_ptr->driver_instance_ptr)
     {
         dlclose(driver_ptr->driver_instance_ptr);
@@ -133,7 +133,7 @@ void DML_HW_API(finalize_accelerator_driver)(hw_driver_t *driver_ptr)
 
 int32_t DML_HW_API(driver_new_context)(struct accfg_ctx **ctx)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_new_ptr)functions_table[0].function)(ctx);
 #else
     return DML_STATUS_LIBACCEL_NOT_FOUND;
@@ -142,7 +142,7 @@ int32_t DML_HW_API(driver_new_context)(struct accfg_ctx **ctx)
 
 struct accfg_device *DML_HW_API(context_get_first_device)(struct accfg_ctx *ctx)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_device_get_first_ptr)functions_table[1].function)(ctx);
 #else
     return NULL;
@@ -151,7 +151,7 @@ struct accfg_device *DML_HW_API(context_get_first_device)(struct accfg_ctx *ctx)
 
 const char *DML_HW_API(device_get_name)(struct accfg_device *device)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_device_get_devname_ptr)functions_table[2].function)(device);
 #else
     return NULL;
@@ -160,7 +160,7 @@ const char *DML_HW_API(device_get_name)(struct accfg_device *device)
 
 struct accfg_device *DML_HW_API(device_get_next)(struct accfg_device *device)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_device_get_next_ptr)functions_table[3].function)(device);
 #else
     return NULL;
@@ -169,7 +169,7 @@ struct accfg_device *DML_HW_API(device_get_next)(struct accfg_device *device)
 
 struct accfg_wq *DML_HW_API(get_first_work_queue)(struct accfg_device *device)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_wq_get_first_ptr)functions_table[4].function)(device);
 #else
     return NULL;
@@ -178,7 +178,7 @@ struct accfg_wq *DML_HW_API(get_first_work_queue)(struct accfg_device *device)
 
 struct accfg_wq *DML_HW_API(work_queue_get_next)(struct accfg_wq *wq)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_wq_get_next_ptr)functions_table[5].function)(wq);
 #else
     return NULL;
@@ -187,7 +187,7 @@ struct accfg_wq *DML_HW_API(work_queue_get_next)(struct accfg_wq *wq)
 
 enum accfg_wq_state DML_HW_API(work_queue_get_state)(struct accfg_wq *wq)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_wq_get_state_ptr)functions_table[6].function)(wq);
 #else
     return -1;
@@ -196,7 +196,7 @@ enum accfg_wq_state DML_HW_API(work_queue_get_state)(struct accfg_wq *wq)
 
 enum accfg_wq_mode DML_HW_API(work_queue_get_mode)(struct accfg_wq *wq)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_wq_get_mode_ptr)functions_table[7].function)(wq);
 #else
     return 2;
@@ -205,7 +205,7 @@ enum accfg_wq_mode DML_HW_API(work_queue_get_mode)(struct accfg_wq *wq)
 
 uint32_t DML_HW_API(device_get_version)(struct accfg_device *device)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_device_get_version_ptr) functions_table[8].function)(device);
 #else
     return -1;
@@ -214,7 +214,7 @@ uint32_t DML_HW_API(device_get_version)(struct accfg_device *device)
 
 const char * DML_HW_API(work_queue_get_device_name)(struct accfg_wq *wq)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_wq_get_devname_ptr) functions_table[9].function)(wq);
 #else
     return NULL;
@@ -223,7 +223,7 @@ const char * DML_HW_API(work_queue_get_device_name)(struct accfg_wq *wq)
 
 enum accfg_device_state DML_HW_API(device_get_state)(struct accfg_device *device)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_device_get_state_ptr)functions_table[10].function)(device);
 #else
     return -1;
@@ -232,7 +232,7 @@ enum accfg_device_state DML_HW_API(device_get_state)(struct accfg_device *device
 
 struct accfg_ctx *DML_HW_API(context_close)(struct accfg_ctx *ctx)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_unref_ptr)functions_table[11].function)(ctx);
 #else
     return NULL;
@@ -241,7 +241,7 @@ struct accfg_ctx *DML_HW_API(context_close)(struct accfg_ctx *ctx)
 
 uint64_t DML_HW_API(device_get_gen_cap_register)(struct accfg_device *device)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_device_get_gen_cap_ptr)functions_table[12].function)(device);
 #else
     return 0;
@@ -250,7 +250,7 @@ uint64_t DML_HW_API(device_get_gen_cap_register)(struct accfg_device *device)
 
 uint64_t DML_HW_API(device_get_numa_node)(struct accfg_device *device)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_device_get_gen_cap_ptr)functions_table[13].function)(device);
 #else
     return -1;
@@ -259,7 +259,7 @@ uint64_t DML_HW_API(device_get_numa_node)(struct accfg_device *device)
 
 int32_t DML_HW_API(work_queue_get_priority)(struct accfg_wq *wq)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_wq_get_priority_ptr) functions_table[14].function)(wq);
 #else
     return -1;
@@ -268,7 +268,7 @@ int32_t DML_HW_API(work_queue_get_priority)(struct accfg_wq *wq)
 
 struct accfg_group *DML_HW_API(group_get_first)(struct accfg_device *device)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_group_get_first_ptr)functions_table[15].function)(device);
 #else
     return NULL;
@@ -277,7 +277,7 @@ struct accfg_group *DML_HW_API(group_get_first)(struct accfg_device *device)
 
 struct accfg_group *DML_HW_API(group_get_next)(struct accfg_group *group)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_group_get_next_ptr)functions_table[16].function)(group);
 #else
     return NULL;
@@ -286,7 +286,7 @@ struct accfg_group *DML_HW_API(group_get_next)(struct accfg_group *group)
 
 int DML_HW_API(group_get_traffic_class_a)(struct accfg_group *group)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_group_get_traffic_class_ptr)functions_table[17].function)(group);
 #else
     return 0;
@@ -295,7 +295,7 @@ int DML_HW_API(group_get_traffic_class_a)(struct accfg_group *group)
 
 int DML_HW_API(group_get_traffic_class_b)(struct accfg_group *group)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_group_get_traffic_class_ptr)functions_table[18].function)(group);
 #else
     return 0;
@@ -304,7 +304,7 @@ int DML_HW_API(group_get_traffic_class_b)(struct accfg_group *group)
 
 struct accfg_group *DML_HW_API(work_queue_get_group)(struct accfg_wq *wq)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_wq_get_group_ptr)functions_table[19].function)(wq);
 #else
     return NULL;
@@ -313,7 +313,7 @@ struct accfg_group *DML_HW_API(work_queue_get_group)(struct accfg_wq *wq)
 
 int DML_HW_API(work_queue_get_group_id)(struct accfg_wq *wq)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_wq_get_group_id_ptr)functions_table[20].function)(wq);
 #else
     return -1;
@@ -322,7 +322,7 @@ int DML_HW_API(work_queue_get_group_id)(struct accfg_wq *wq)
 
 int DML_HW_API(group_get_id)(struct accfg_group *group)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_group_get_id_ptr)functions_table[21].function)(group);
 #else
     return -1;
@@ -331,14 +331,14 @@ int DML_HW_API(group_get_id)(struct accfg_group *group)
 
 int DML_HW_API(work_queue_get_device_path)(struct accfg_wq *wq, char *buf, size_t size)
 {
-#if defined(linux)
+#if defined(__linux__)
     return ((accfg_wq_get_user_dev_path_ptr)functions_table[22].function)(wq, buf, size);
 #else
     return -1;
 #endif
 }
 
-#if defined(linux)
+#if defined(__linux__)
 
 /* ------ Internal functions implementation ------ */
 

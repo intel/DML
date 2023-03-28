@@ -6,7 +6,7 @@
 
 #include "hw_dispatcher.hpp"
 
-#if defined(linux)
+#if defined(__linux__)
 
 #include "legacy_headers/libaccel_config.h"
 
@@ -25,7 +25,7 @@ namespace dml::core::dispatcher
 {
     hw_dispatcher::hw_dispatcher() noexcept
     {
-#if defined(linux)
+#if defined(__linux__)
         hw_init_status_ = hw_dispatcher::initialize_hw();
         hw_support_     = hw_init_status_ == DML_STATUS_OK;
 #else
@@ -33,7 +33,7 @@ namespace dml::core::dispatcher
 #endif
     }
 
-#if defined(linux)
+#if defined(__linux__)
 
     auto hw_dispatcher::initialize_hw() noexcept -> dsahw_status_t
     {
@@ -80,7 +80,7 @@ namespace dml::core::dispatcher
 
     hw_dispatcher::~hw_dispatcher() noexcept
     {
-#if defined(linux)
+#if defined(__linux__)
         // Variables
         auto *context_ptr = hw_context_.get_driver_context_ptr();
 
@@ -107,11 +107,11 @@ namespace dml::core::dispatcher
         return hw_support_;
     }
 
-#if defined(linux)
+#if defined(__linux__)
 
     void hw_dispatcher::fill_hw_context(dsahw_context_t *const hw_context_ptr) noexcept
     {
-#if defined(linux)
+#if defined(__linux__)
         // Restore context
         hw_context_ptr->dsa_context_ptr = hw_context_.get_driver_context_ptr();
 
@@ -126,7 +126,7 @@ namespace dml::core::dispatcher
         return hw_init_status_;
     }
 
-#if defined(linux)
+#if defined(__linux__)
 
     auto hw_dispatcher::begin() const noexcept -> device_container_t::const_iterator
     {

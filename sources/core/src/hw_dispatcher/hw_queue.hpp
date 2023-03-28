@@ -11,7 +11,7 @@
 
 #include "dml/dmldefs.h"
 
-#if defined(linux)
+#if defined(__linux__)
 
 #include "legacy_headers/hardware_definitions.h"
 

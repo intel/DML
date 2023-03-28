@@ -12,7 +12,7 @@
 #include "dml/dmldefs.h"
 #include "hw_queue.hpp"
 
-#if defined(linux)
+#if defined(__linux__)
 #include "legacy_headers/hardware_definitions.h"
 #include "legacy_headers/own_dsa_accel_constants.h"
 

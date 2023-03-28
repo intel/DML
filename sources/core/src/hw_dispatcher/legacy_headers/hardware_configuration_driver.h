@@ -9,7 +9,7 @@
 
 #include "hardware_definitions.h"
 
-#if defined(linux)
+#if defined(__linux__)
 
 #include "libaccel_config.h"
 

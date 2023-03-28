@@ -13,7 +13,7 @@
 #include "dml/dml.h"
 #include "dml/dmldefs.h"
 
-#if defined(linux)
+#if defined(__linux__)
 #include "libaccel_config.h"
 #endif
 
@@ -164,7 +164,7 @@ typedef struct
     own_dml_structure_id_t guard;        /**< Structure guard                         */
     own_hw_portal_table_t  portal_table; /**< Contains information about open portals */
     own_hw_gen_cap_t       gen_cap;      /**< General Capabilities Register fields    */
-#if defined(linux)
+#if defined(__linux__)
     struct accfg_ctx *dsa_context_ptr; /**< @todo */
 #endif
 } dsahw_context_t;

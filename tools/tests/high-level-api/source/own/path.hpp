@@ -18,7 +18,7 @@ struct submit {
 struct execute {
 };
 
-#if defined(linux)
+#if defined(__linux__)
 using execution_paths = testing::Types<std::pair<dml::software, submit>,
                                        std::pair<dml::software, execute>,
                                        std::pair<dml::hardware, submit>,

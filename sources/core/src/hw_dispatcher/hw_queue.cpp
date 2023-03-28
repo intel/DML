@@ -4,11 +4,11 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
-#if defined(linux)
+#if defined(__linux__)
 
 #include <fcntl.h>
 
-#if defined(linux)
+#if defined(__linux__)
 
 #include <sys/mman.h>
 
@@ -54,7 +54,7 @@ namespace dml::core::dispatcher
 
     hw_queue::~hw_queue()
     {
-#if defined(linux)
+#if defined(__linux__)
         // Freeing resources
         if (portal_ptr_ != nullptr)
         {
@@ -81,7 +81,7 @@ namespace dml::core::dispatcher
 
     auto hw_queue::enqueue_descriptor(const dsahw_descriptor_t *desc_ptr) const noexcept -> dsahw_status_t
     {
-#if defined(linux)
+#if defined(__linux__)
         uint8_t retry = 0u;
 
         void *current_place_ptr = get_portal_ptr();
@@ -99,7 +99,7 @@ namespace dml::core::dispatcher
 
     auto hw_queue::initialize_new_queue(void *wq_descriptor_ptr) noexcept -> dsahw_status_t
     {
-#if defined(linux)
+#if defined(__linux__)
         auto *work_queue_ptr        = reinterpret_cast<accfg_wq *>(wq_descriptor_ptr);
         char path[64];
 #ifdef LOG_HW_INIT

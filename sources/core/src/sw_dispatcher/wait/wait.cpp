@@ -6,7 +6,7 @@
 
 #include "../dml_kernels.h"
 
-#if defined(linux)
+#if defined(__linux__)
 #include <x86intrin.h>
 #else
 #include <emmintrin.h>
@@ -23,7 +23,7 @@ extern "C" void dml_wait_busy_poll(const volatile uint8_t * const pointer)
 
 extern "C" void dml_wait_umwait(const volatile uint8_t* const pointer)
 {
-#if defined(linux)
+#if defined(__linux__)
     while (*pointer == 0)
     {
         // UMONITOR

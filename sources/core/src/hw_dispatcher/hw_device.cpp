@@ -6,7 +6,7 @@
 
 #include <atomic>
 
-#if defined(linux)
+#if defined(__linux__)
 
 #include "hw_device.hpp"
 
@@ -149,7 +149,7 @@ namespace dml::core::dispatcher
 
     auto hw_device::initialize_new_device(descriptor_t *device_descriptor_ptr) noexcept -> dsahw_status_t
     {
-#if defined(linux)
+#if defined(__linux__)
         // Device initialization stage
         auto       *device_ptr    = reinterpret_cast<accfg_device *>(device_descriptor_ptr);
         const auto *name_ptr      = dsa_device_get_name(device_ptr);

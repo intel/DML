@@ -13,7 +13,7 @@
 #include "dml/dmldefs.h"
 #include "hw_device.hpp"
 
-#if defined(linux)
+#if defined(__linux__)
 #include "legacy_headers/hardware_configuration_driver.h"
 #include "legacy_headers/hardware_definitions.h"
 #include "legacy_headers/own_dsa_accel_constants.h"
@@ -24,7 +24,7 @@ namespace dml::core::dispatcher
 
     class hw_dispatcher final
     {
-#if defined(linux)
+#if defined(__linux__)
 
         static constexpr uint32_t max_devices = MAX_DEVICE_COUNT;
 
@@ -48,7 +48,7 @@ namespace dml::core::dispatcher
 
         [[nodiscard]] auto is_hw_support() const noexcept -> bool;
 
-#if defined(linux)
+#if defined(__linux__)
 
         [[nodiscard]] auto get_hw_init_status() const noexcept -> dsahw_status_t;
 
@@ -69,7 +69,7 @@ namespace dml::core::dispatcher
     protected:
         hw_dispatcher() noexcept; // shouldn't be used directly, as initialize hw
 
-#if defined(linux)
+#if defined(__linux__)
         auto initialize_hw() noexcept -> dsahw_status_t;
 
     private:
@@ -80,7 +80,7 @@ namespace dml::core::dispatcher
 #endif
 
         bool hw_support_;
-#if defined(linux)
+#if defined(__linux__)
         dsahw_status_t hw_init_status_;
 #endif
     };
