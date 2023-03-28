@@ -2,7 +2,12 @@
 #
 # SPDX-License-Identifier: MIT
 
-cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
+# If DML requires CMake v3.23 or higher for Sanitize Threads
+if (UNIX AND "${SANITIZE_THREADS}" STREQUAL "ON")
+    cmake_minimum_required(VERSION 3.23 FATAL_ERROR)
+else ()
+    cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
+endif ()
 project(Dml VERSION 0.1.9 LANGUAGES C CXX)
 
 set(PROJECT_SOVERSION 0)
