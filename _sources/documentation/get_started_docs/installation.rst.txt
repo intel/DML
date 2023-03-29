@@ -101,7 +101,7 @@ Before building the library, install and set up the following tools:
    -  Linux* OS: gcc 8.2 or higher
    -  Windows* OS: MSVC 19 or higher
 -  Linux* OS: Universally Unique ID library (``uuid-dev``) version 2.35.2 or higher
--  Cross-platform build tool: CMake* version 3.12 or higher
+-  Cross-platform build tool: CMake* version 3.12 or higher. If Intel DML is built with ``-DSANITIZE_THREADS=ON``, use CMake version 3.23 or higher
 -  Make
 
    - Linux* OS: GNU Make
@@ -116,6 +116,11 @@ Intel DML supports the following build options:
 
 -  ``-DSANITIZE_MEMORY=[ON|OFF]`` - Enables memory sanitizing (``OFF`` by default).
 -  ``-DSANITIZE_THREADS=[ON|OFF]`` - Enables threads sanitizing (``OFF`` by default).
+
+.. attention::
+
+      If Intel DML is built with ``-DSANITIZE_THREADS=ON``, use CMake* version 3.23 or higher to avoid issue with finding pthread library in FindThreads.
+
 -  ``-DLOG_HW_INIT=[ON|OFF]`` - Enables hardware initialization log (``OFF`` by default).
 -  ``-DDML_BUILD_EXAMPLES=[OFF|ON]`` - Enables building library examples (``ON`` by default).
    For more information on existing examples, see :ref:`code_examples_reference_link`.
@@ -130,7 +135,7 @@ Intel DML supports the following build options:
    without downloading sub-module dependencies for testing and benchmarking,
    use ``-DDML_BUILD_TESTS=OFF``.
 
-- ``DML_RECORD_SWITCHES=[OFF|ON]`` - Enables ``-frecord-gcc-switches`` flag (``OFF`` by default).
+-  ``DML_RECORD_SWITCHES=[OFF|ON]`` - Enables ``-frecord-gcc-switches`` flag (``OFF`` by default).
 
 Build
 =====

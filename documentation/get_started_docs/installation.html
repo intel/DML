@@ -481,7 +481,7 @@ With configuration files of the format <code class="docutils literal notranslate
 </ul>
 </li>
 <li><p>Linux* OS: Universally Unique ID library (<code class="docutils literal notranslate"><span class="pre">uuid-dev</span></code>) version 2.35.2 or higher</p></li>
-<li><p>Cross-platform build tool: CMake* version 3.12 or higher</p></li>
+<li><p>Cross-platform build tool: CMake* version 3.12 or higher. If Intel DML is built with <code class="docutils literal notranslate"><span class="pre">-DSANITIZE_THREADS=ON</span></code>, use CMake version 3.23 or higher</p></li>
 <li><p>Make</p>
 <ul>
 <li><p>Linux* OS: GNU Make</p></li>
@@ -496,6 +496,12 @@ With configuration files of the format <code class="docutils literal notranslate
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">-DSANITIZE_MEMORY=[ON|OFF]</span></code> - Enables memory sanitizing (<code class="docutils literal notranslate"><span class="pre">OFF</span></code> by default).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-DSANITIZE_THREADS=[ON|OFF]</span></code> - Enables threads sanitizing (<code class="docutils literal notranslate"><span class="pre">OFF</span></code> by default).</p></li>
+</ul>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>If Intel DML is built with <code class="docutils literal notranslate"><span class="pre">-DSANITIZE_THREADS=ON</span></code>, use CMake* version 3.23 or higher to avoid issue with finding pthread library in FindThreads.</p>
+</div>
+<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">-DLOG_HW_INIT=[ON|OFF]</span></code> - Enables hardware initialization log (<code class="docutils literal notranslate"><span class="pre">OFF</span></code> by default).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-DDML_BUILD_EXAMPLES=[OFF|ON]</span></code> - Enables building library examples (<code class="docutils literal notranslate"><span class="pre">ON</span></code> by default).
 For more information on existing examples, see <a class="reference internal" href="code_samples_and_examples.html#code-examples-reference-link"><span class="std std-ref">Code Samples and Examples</span></a>.</p></li>
