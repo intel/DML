@@ -118,6 +118,10 @@ Intel DML supports the following build options:
 -  ``-DSANITIZE_THREADS=[ON|OFF]`` - Enables threads sanitizing (``OFF`` by default).
 
 .. attention::
+   Options ``-DSANITIZE_THREADS=ON`` and ``-DSANITIZE_MEMORY=ON`` are incompatible and
+   can not be used for the same build.
+
+.. attention::
 
       If Intel DML is built with ``-DSANITIZE_THREADS=ON``, use CMake* version 3.23 or higher to avoid issue with finding pthread library in FindThreads.
 
