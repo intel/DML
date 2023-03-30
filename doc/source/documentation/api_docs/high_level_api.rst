@@ -14,17 +14,8 @@ This document provides quick introduction into usage of High Level API
 for Intel® DML. It describes general usage concepts, main entities and
 detailed operation descriptions.
 
-For general introduction to Intel® DML, see `Introduction
-<../introduction_docs/introduction.html>`__.
+For general introduction to Intel® DML, see :ref:`introduction_reference_link`.
 
-Disclaimer
-===========
-
-
-The library exists in a prototype form and is being actively
-developed. This means that some of the things described here may change
-in the future. However, the library is released now with the expectation
-that it will be more useful than nothing to people who may use it.
 
 Header Files
 ************
@@ -320,8 +311,8 @@ No-op operation
 ---------------
 
 
-The No-op operation can be used in a batch operation to ensure that all 
-previous operations in the batch completed before the no-op. 
+The No-op operation can be used in a batch operation to ensure that all
+previous operations in the batch completed before the no-op.
 
 This could be useful for ensuring the order of non-independent operations.
 Like using the destination of a previous operation as the source of another.

@@ -8,9 +8,7 @@ if (UNIX AND "${SANITIZE_THREADS}" STREQUAL "ON")
 else ()
     cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 endif ()
-project(Dml VERSION 0.1.9 LANGUAGES C CXX)
-
-set(PROJECT_SOVERSION 0)
+project(DML VERSION 1.0.0 LANGUAGES C CXX)
 
 if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
     option(DML_RECORD_SWITCHES "Enables -frecord-gcc-switches flag" OFF)
@@ -77,7 +75,7 @@ message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 # Install rules
 install(EXPORT ${PROJECT_NAME}Targets
-        NAMESPACE Dml::
+        NAMESPACE DML::
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake

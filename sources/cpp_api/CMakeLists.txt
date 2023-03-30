@@ -28,8 +28,7 @@ set_target_properties(dmlhl PROPERTIES
         CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
         CXX_EXTENSIONS OFF
-        VERSION ${PROJECT_VERSION}
-        SOVERSION ${PROJECT_SOVERSION})
+        VERSION ${PROJECT_VERSION})
 
 install(TARGETS dmlhl
         EXPORT ${PROJECT_NAME}Targets

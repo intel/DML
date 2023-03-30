@@ -15,17 +15,14 @@
 /** Name of the library*/
 #define DML_LIBRARY_NAME "Intel(R) DML Software Library"
 
-/** Version of the library*/
-#define DML_LIBRARY_VERSION "Beta"
-
 /** Major version of the library*/
-#define DML_LIBRARY_MAJOR_VERSION 0u
+#define DML_LIBRARY_MAJOR_VERSION 1u
 
 /** Minor version of the library*/
-#define DML_LIBRARY_MINOR_VERSION 1u
+#define DML_LIBRARY_MINOR_VERSION 0u
 
 /** Minor version of the library*/
-#define DML_LIBRARY_PATCH 9u
+#define DML_LIBRARY_PATCH 0u
 
 /** Supported CPU ISA */
 #define DML_LIBRARY_MINIMAL_CPU_ISA "N/A"
