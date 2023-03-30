@@ -16,17 +16,8 @@ This document provides instructions on how to use the Intel® Data Mover Library
 It describes general usage concepts, main entities and
 detailed operation descriptions.
 
-For general introduction to Intel® DML, see `Introduction
-<../introduction_docs/introduction.html>`__.
+For general introduction to Intel® DML, see :ref:`introduction_reference_link`.
 
-Disclaimer
-===========
-
-
-The library exists in a prototype form and is being actively
-developed. This means that some of the things described here may change
-in the future. However, the library is released now with the expectation
-that it will be more useful than nothing to people who may use it.
 
 Header Files
 ************

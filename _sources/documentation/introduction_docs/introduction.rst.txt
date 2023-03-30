@@ -4,6 +4,8 @@
  .. * SPDX-License-Identifier: MIT
  .. ***************************************************************************/
 
+.. _introduction_reference_link:
+
 Introduction
 ############
 
