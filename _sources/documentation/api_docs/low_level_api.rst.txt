@@ -208,6 +208,8 @@ with persistent memory:
 
 You can read more about the flags in our docs
 
+.. _library_numa_support_ll_reference_link:
+
 NUMA support
 *************************
 

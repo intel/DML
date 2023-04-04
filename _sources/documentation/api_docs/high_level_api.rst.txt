@@ -34,6 +34,8 @@ Identifiers from ``dml::ml`` and ``dml::detail`` namespaces shall not be
 used. They are implementation details and are subject to change
 frequently.
 
+.. _library_numa_support_hl_reference_link:
+
 NUMA support
 *************************
 
