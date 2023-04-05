@@ -16,10 +16,11 @@ if (DML_BUILD_TESTS)
     endif ()
 endif ()
 
-install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/configs
-                  TYPE             BIN
-                  COMPONENT        RUNTIME)
-install(DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/scripts
-                  TYPE             BIN
-                  COMPONENT        RUNTIME
-                  FILE_PERMISSIONS USE_SOURCE_PERMISSIONS)
+install(DIRECTORY        ${CMAKE_CURRENT_LIST_DIR}/configs
+        DESTINATION      share/${CMAKE_PROJECT_NAME}
+        COMPONENT        RUNTIME)
+
+install(DIRECTORY        ${CMAKE_CURRENT_LIST_DIR}/scripts
+        DESTINATION      share/${CMAKE_PROJECT_NAME}
+        COMPONENT        RUNTIME
+        FILE_PERMISSIONS USE_SOURCE_PERMISSIONS)
