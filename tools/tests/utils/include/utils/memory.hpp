@@ -12,6 +12,7 @@
 #include <memory>
 #include <vector>
 #include <ostream>
+#include <utility>
 
 namespace dml::testing
 {
