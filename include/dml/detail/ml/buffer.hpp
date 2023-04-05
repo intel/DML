@@ -10,6 +10,7 @@
 #include <dml/detail/ml/allocator.hpp>
 #include <dml/detail/ml/utils.hpp>
 #include <memory>
+#include <utility>
 
 namespace dml::detail::ml
 {
