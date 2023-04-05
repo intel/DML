@@ -73,9 +73,9 @@ via the Intel® DML source or from the Intel® DML installed directory:
 
 .. code-block:: shell
 
-   sudo python3 <install-dir>/bin/scripts/accel_conf.py --load=<path to config file>
+   sudo python3 <install-dir>/share/DML/scripts/accel_conf.py --load=<path to config file>
 
-With configuration files found at either ``<dml-library>/tools/configs/`` or ``<install-dir>/bin/configs/``.
+With configuration files found at either ``<dml-library>/tools/configs/`` or ``<install-dir>/share/DML/configs/``.
 With configuration files of the format ``<# nodes>n<# devices>d<# engines>e<# of workqueues>w-s.conf`` or
 ``<# nodes>n<# devices>d<# engines>e<# of workqueues>w-s-n<which node>.conf``.
 
@@ -186,8 +186,6 @@ Installed Package Structure
 ::
 
      ┌── bin
-     │   ├── configs                # Configuration files for Intel® DSA
-     │   ├── scripts                # Scripts useful for configuration step
      │   ├── dml_benchmarks         # Benchmarks framework
      │   ├── tests*                 # Testing framework
      │   └── dml_test_functional*   # Additional test executables for C and C++ APIs
@@ -200,13 +198,18 @@ Installed Package Structure
      |       ├── detail
      |       └── hl
      │
-     └── lib or lib64
-         ├── cmake
-         ├── libdml.a               # Library with High-Level C++ APIs and implementations
-         └── libdmlhl.a             # Library with Low-Level C APIs and implementations
+     ├── lib or lib64
+     |   ├── cmake
+     |   ├── libdml.a               # Library with High-Level C++ APIs and implementations
+     |   └── libdmlhl.a             # Library with Low-Level C APIs and implementations
+     |
+     └── share/DML
+         ├── configs                # Configuration files for Intel® DSA
+         └── scripts                # Scripts useful for configuration step
 
-Executables for tests and benchmarks framework, as well as
-configuration files for Intel® DSA
+Executables for tests and benchmarks framework are available in ``bin/`` folder.
+
+Configuration files and scripts for Intel® DSA
 (see :ref:`accelerator_configuration_reference_link` for more details)
 are available in ``bin/`` folder.
 

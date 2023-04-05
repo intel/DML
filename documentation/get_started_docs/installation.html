@@ -457,10 +457,10 @@ via the Intel® DML source or from the Intel® DML installed directory:</p>
 <div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>python3<span class="w"> </span>&lt;dml-library&gt;/tools/scripts/accel_conf.py<span class="w"> </span>--load<span class="o">=</span>&lt;path<span class="w"> </span>to<span class="w"> </span>config<span class="w"> </span>file&gt;
 </pre></div>
 </div>
-<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>python3<span class="w"> </span>&lt;install-dir&gt;/bin/scripts/accel_conf.py<span class="w"> </span>--load<span class="o">=</span>&lt;path<span class="w"> </span>to<span class="w"> </span>config<span class="w"> </span>file&gt;
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>python3<span class="w"> </span>&lt;install-dir&gt;/share/DML/scripts/accel_conf.py<span class="w"> </span>--load<span class="o">=</span>&lt;path<span class="w"> </span>to<span class="w"> </span>config<span class="w"> </span>file&gt;
 </pre></div>
 </div>
-<p>With configuration files found at either <code class="docutils literal notranslate"><span class="pre">&lt;dml-library&gt;/tools/configs/</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;install-dir&gt;/bin/configs/</span></code>.
+<p>With configuration files found at either <code class="docutils literal notranslate"><span class="pre">&lt;dml-library&gt;/tools/configs/</span></code> or <code class="docutils literal notranslate"><span class="pre">&lt;install-dir&gt;/share/DML/configs/</span></code>.
 With configuration files of the format <code class="docutils literal notranslate"><span class="pre">&lt;#</span> <span class="pre">nodes&gt;n&lt;#</span> <span class="pre">devices&gt;d&lt;#</span> <span class="pre">engines&gt;e&lt;#</span> <span class="pre">of</span> <span class="pre">workqueues&gt;w-s.conf</span></code> or
 <code class="docutils literal notranslate"><span class="pre">&lt;#</span> <span class="pre">nodes&gt;n&lt;#</span> <span class="pre">devices&gt;d&lt;#</span> <span class="pre">engines&gt;e&lt;#</span> <span class="pre">of</span> <span class="pre">workqueues&gt;w-s-n&lt;which</span> <span class="pre">node&gt;.conf</span></code>.</p>
 <div class="admonition attention">
@@ -556,8 +556,6 @@ cmake<span class="w"> </span>--build<span class="w"> </span>.<span class="w"> </
 <div class="section" id="installed-package-structure">
 <h3>Installed Package Structure<a class="headerlink" href="#installed-package-structure" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>┌── bin
-│   ├── configs                # Configuration files for Intel® DSA
-│   ├── scripts                # Scripts useful for configuration step
 │   ├── dml_benchmarks         # Benchmarks framework
 │   ├── tests*                 # Testing framework
 │   └── dml_test_functional*   # Additional test executables for C and C++ APIs
@@ -570,14 +568,18 @@ cmake<span class="w"> </span>--build<span class="w"> </span>.<span class="w"> </
 |       ├── detail
 |       └── hl
 │
-└── lib or lib64
-    ├── cmake
-    ├── libdml.a               # Library with High-Level C++ APIs and implementations
-    └── libdmlhl.a             # Library with Low-Level C APIs and implementations
+├── lib or lib64
+|   ├── cmake
+|   ├── libdml.a               # Library with High-Level C++ APIs and implementations
+|   └── libdmlhl.a             # Library with Low-Level C APIs and implementations
+|
+└── share/DML
+    ├── configs                # Configuration files for Intel® DSA
+    └── scripts                # Scripts useful for configuration step
 </pre></div>
 </div>
-<p>Executables for tests and benchmarks framework, as well as
-configuration files for Intel® DSA
+<p>Executables for tests and benchmarks framework are available in <code class="docutils literal notranslate"><span class="pre">bin/</span></code> folder.</p>
+<p>Configuration files and scripts for Intel® DSA
 (see <a class="reference internal" href="#accelerator-configuration-reference-link"><span class="std std-ref">Accelerator Configuration</span></a> for more details)
 are available in <code class="docutils literal notranslate"><span class="pre">bin/</span></code> folder.</p>
 <p>Examples are located in <code class="docutils literal notranslate"><span class="pre">&lt;dml_library&gt;/build/examples/</span></code>.</p>
