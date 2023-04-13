@@ -16,7 +16,7 @@ namespace dml::core::kernels
 {
     void mem_move(const_view<descriptor, operation::mem_move> dsc) noexcept
     {
-        auto record = make_view<operation::nop>(get_completion_record(dsc));
+        auto record = make_view<operation::mem_move>(get_completion_record(dsc));
 
         const auto src           = reinterpret_cast<byte_t *>(dsc.source_address());
         const auto dst           = reinterpret_cast<byte_t *>(dsc.destination_address());
