@@ -1,4 +1,5 @@
 # Copyright (C) 2023 Intel Corporation
+# Copyright (C) 2023 Hamish Nicholson
 #
 # SPDX-License-Identifier: MIT
 
@@ -9,11 +10,16 @@ if (DML_BUILD_TESTS)
     set(INSTALL_GTEST OFF CACHE BOOL "Suppress gtest installation" FORCE)
     add_subdirectory(third-party/google-test EXCLUDE_FROM_ALL)
     add_subdirectory(tests)
+endif ()
+
+if (DML_BUILD_BENCHMARKS)
     if (UNIX)
         SET(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
         add_subdirectory(third-party/google-benchmark EXCLUDE_FROM_ALL)
         add_subdirectory(benchmarks)
-    endif ()
+    else()
+        message(WARNING "Can only build benchmarks framework on Linux")
+    endif()
 endif ()
 
 install(DIRECTORY        ${CMAKE_CURRENT_LIST_DIR}/configs

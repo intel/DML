@@ -109,11 +109,13 @@ add_subdirectory(sources)
 # Set of extra options that allows to build only library, or library
 # and examples excluding tests, etc.
 option(DML_BUILD_EXAMPLES "Builds examples" ON)
-option(DML_BUILD_TESTS "Builds tests and benchmarks framework" ON)
+option(DML_BUILD_BENCHMARKS "Builds benchmarks framework" ON)
+option(DML_BUILD_TESTS "Builds tests" ON)
 
 # Print user's settings
 message(STATUS "Build with examples: ${DML_BUILD_EXAMPLES}")
-message(STATUS "Build with tests and benchmarks framework: ${DML_BUILD_TESTS}")
+message(STATUS "Build with benchmarks framework: ${DML_BUILD_BENCHMARKS}")
+message(STATUS "Build with tests: ${DML_BUILD_TESTS}")
 
 if (DML_BUILD_EXAMPLES)
     add_subdirectory(examples)
