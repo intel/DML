@@ -128,14 +128,22 @@ namespace dml::detail::ml::impl
 
     bool automatic::finished(descriptor& dsc) noexcept
     {
+        constexpr auto page_fault_mask =
+            to_underlying(execution_status::page_fault_during_processing);
+
         auto is_finished = hardware::finished(dsc);
 
         auto& record = core::get_completion_record(dsc);
-        auto  status = static_cast<execution_status>(core::any_completion_record(record).status());
-        if (is_finished && execution_status::page_fault_during_processing == status)
+        auto  status = core::any_completion_record(record).status();
+        if (is_finished && (status & page_fault_mask) == page_fault_mask)
         {
+            auto prev_record = record;
             update_for_continuation(dsc);
             static_cast<void>(software::submit(dsc, 0));
+            software::wait(dsc, true);
+            // software::submit is currently sync, so finished() may be blocking due to it
+            // todo rework accumulate_records if necessary if software::submit is made async
+            accumulate_records(dsc, prev_record);
             return software::finished(dsc);
         }
 

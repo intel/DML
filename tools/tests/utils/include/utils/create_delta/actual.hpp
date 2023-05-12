@@ -11,9 +11,16 @@
 #include <utils/create_delta/result_builder.hpp>
 #include <utils/create_delta/workload.hpp>
 
+#if defined(__linux__)
+#include <x86intrin.h>
+#else
+#include <emmintrin.h>
+#include <intrin.h>
+#endif
+
 namespace dml::testing
 {
-    inline auto ActualImplementation(Workload<CreateDeltaOperation>& workload) noexcept
+    inline auto ActualImplementation(Workload<CreateDeltaOperation>& workload, bool is_synchronous) noexcept
     {
 #if defined(C_API)
         auto job = Job();
@@ -30,8 +37,17 @@ namespace dml::testing
         {
             job->flags |= DML_FLAG_CHECK_RESULT;
         }
-
-        auto status       = Status(dml_execute_job(job, DML_WAIT_MODE_BUSY_POLL));
+        auto status = Status(DML_STATUS_OK);
+        if (is_synchronous){
+            status = Status(dml_execute_job(job, DML_WAIT_MODE_BUSY_POLL));
+        }
+        else {
+            dml_submit_job(job);
+            while(DML_STATUS_BEING_PROCESSED == dml_check_job(job)){
+                _mm_pause();
+            }
+            status = Status(dml_check_job(job));
+        }
         auto result       = job->result;
         auto written_size = job->destination_length;
 #elif defined(CPP_API)
@@ -48,11 +64,24 @@ namespace dml::testing
                 op = op.expect_not_equal();
             }
         }
-        auto op_result =
-            dml::execute<execution_path>(op,
-                                         dml::make_view(workload.get_src1()),
-                                         dml::make_view(workload.get_src2()),
-                                         dml::make_view(workload.get_delta()));
+        dml::create_delta_result op_result;
+        if (is_synchronous){
+            op_result = dml::execute<execution_path>(op,
+                                            dml::make_view(workload.get_src1()),
+                                            dml::make_view(workload.get_src2()),
+                                            dml::make_view(workload.get_delta()));
+        }
+        else {
+            auto handler = dml::submit<execution_path>(op,
+                                        dml::make_view(workload.get_src1()),
+                                        dml::make_view(workload.get_src2()),
+                                        dml::make_view(workload.get_delta()),
+                                        dml::default_execution_interface<execution_path>());
+            while(!handler.is_finished()){
+                _mm_pause();
+            }
+            op_result = handler.get();
+        }
 
         auto status       = Status(op_result.status);
         auto result       = static_cast<uint8_t>(op_result.result);

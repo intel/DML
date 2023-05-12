@@ -137,10 +137,20 @@ namespace dml::detail::ml
 
     static void accumulate_records_create_delta(descriptor& dsc, const completion_record& prev_record) noexcept
     {
+        auto create_delta_dsc = core::make_view<core::operation::create_delta>(dsc);
         auto create_delta_record = core::make_view<core::operation::create_delta>(core::get_completion_record(dsc));
         auto create_delta_prev_record = core::make_view<core::operation::create_delta>(prev_record);
 
         create_delta_record.bytes_completed() += create_delta_prev_record.bytes_completed();
+
+        const uint8_t SINGLE_DELTA_RECORD_SIZE = 10u;
+        transfer_size_t partial_blocks_completed = create_delta_prev_record.bytes_completed() / 8u;
+        auto end_delta_record = create_delta_dsc.delta_record_address() + create_delta_record.delta_record_size();
+        // For each delta record created after page fault, the offset is going to be distance to the new job's source1/2 pointer in size 8 chunks
+        // This needs to be updated here to increase the offset of each delta record for the resubmitted job by however many chunks was completed in the first job.
+        for(auto delta_record_addr = create_delta_dsc.delta_record_address(); delta_record_addr < end_delta_record; delta_record_addr += SINGLE_DELTA_RECORD_SIZE){
+            *reinterpret_cast<uint16_t*>(delta_record_addr) += partial_blocks_completed;
+        }
         create_delta_record.delta_record_size() += create_delta_prev_record.delta_record_size();
     }
 

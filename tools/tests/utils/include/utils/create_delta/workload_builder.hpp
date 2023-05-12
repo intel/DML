@@ -42,6 +42,14 @@ namespace dml::testing
 
     static inline std::ostream& operator<<(std::ostream& ostream, delta_size_e delta_size);
 
+    enum class exec_e
+    {
+        async = 0,
+        sync = 1
+    };
+
+    static inline std::ostream& operator<<(std::ostream& ostream, exec_e path);
+
     template <>
     class WorkloadBuilder<CreateDeltaOperation>
     {
@@ -209,6 +217,18 @@ namespace dml::testing
         else
         {
             return ostream << "unexpected_enumeration";
+        }
+    }
+
+    static inline std::ostream& operator<<(std::ostream& ostream, exec_e path)
+    {
+        switch(path){
+            case(exec_e::async):
+                return ostream << "async";
+            case(exec_e::sync):
+                return ostream << "sync";
+            default:
+                return ostream << "unexpected_enumeration";
         }
     }
 }  // namespace dml::testing
