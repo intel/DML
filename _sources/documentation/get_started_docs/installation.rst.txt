@@ -42,15 +42,20 @@ Additionally, the operating system must meet the following requirements:
 Accelerator Configuration
 *************************
 
-
-Library requires presetting of hardware configuration before use.
+Library requires presetting of Intel® Data Streaming Accelerator (Intel® DSA)
+configuration before use.
 Library doesn't perform hardware setup independently. System
 administrator is responsible for correctness of accelerator
 configuration. If configuration is invalid or doesn't exist, the library
 returns an appropriate status code if the hardware execution is path
 used.
 
-An Intel® Data Streaming Accelerator (Intel® DSA) device can be
+.. warning::
+
+   Not all features supported in Intel® DSA are present in Intel® DML.
+   Refer to :ref:`library_limitations_reference_link` for more details.
+
+An Intel® DSA device can be
 configured with the ``libaccel-config`` library, which can be found at
 https://github.com/intel/idxd-config.
 

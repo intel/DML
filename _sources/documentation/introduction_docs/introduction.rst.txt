@@ -36,7 +36,6 @@ provide application programming interface (API) with:
 Library Possibilities
 *********************
 
-
 **Execution paths:**
 
 The library supports several implementation/execution paths that help to
@@ -56,9 +55,10 @@ The library supports several groups of operations:
 - Memory Hash
 - Utility
 
+.. _library_limitations_reference_link:
+
 Library Limitations
 *******************
-
 
 -  Library does not work with Dedicated WQs for the accelerator, but uses shared ones only.
 -  Library does not have API for the hardware path configuration.
