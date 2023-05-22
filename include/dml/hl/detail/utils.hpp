@@ -41,7 +41,7 @@ namespace dml::detail
     };
 
     /**
-     * @brief Converts Middle Layer status code to @ref dml::status_code
+     * @brief Converts Middle Layer validation status code to @ref dml::status_code
      *
      * @param status Status for conversion
      *
@@ -77,6 +77,28 @@ namespace dml::detail
                 return status_code::error;
         }
     }
+
+    /**
+     * @brief Converts Middle Layer submission status code to @ref dml::status_code
+     *
+     * @param status Status for conversion
+     *
+     * @return dml::status_code
+     */
+    [[nodiscard]] static constexpr auto to_own(detail::submission_status status) noexcept
+    {
+        switch (status)
+        {
+            case detail::submission_status::success:
+                return status_code::ok;
+            case detail::submission_status::queue_busy:
+                return status_code::queue_busy;
+            case detail::submission_status::failure:
+                return status_code::error;
+            default:
+                return status_code::error;
+        }
+    }        
 }  // namespace dml::detail
 
 #endif  //DML_DETAIL_UTILS_HPP

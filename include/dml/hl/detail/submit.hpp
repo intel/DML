@@ -65,7 +65,7 @@ namespace dml::detail
 
         if (submission_status != detail::submission_status::success)
         {
-            detail::set_status(op_handler, status_code::error);
+            detail::set_status(op_handler, to_own(submission_status));
             return op_handler;
         }
 
