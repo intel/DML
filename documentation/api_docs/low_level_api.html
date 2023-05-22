@@ -838,6 +838,11 @@ identified as writes to durable memory</p></li>
 <p>Page fault can occur during workload processing on a hardware. When the fault occurs, the outcome is based on the execution path:
 - Hardware path: <code class="docutils literal notranslate"><span class="pre">DML_STATUS_PAGE_FAULT_ERROR</span></code> is returned.
 - Auto path: the library resolves the fault via completion of the workload on a CPU.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">DML_FLAG_BLOCK_ON_FAULT</span></code> method can be used to have page faults be resolved on accelerator.
+Using <code class="docutils literal notranslate"><span class="pre">DML_FLAG_BLOCK_ON_FAULT</span></code> can be done for all operations except Batch, Fence, and Drain.
+All available accelerator workqueues need to be configured to allow for blocking on fault <code class="docutils literal notranslate"><span class="pre">&quot;block_on_fault&quot;:1</span></code>.
+On by default in DML provided accelerator configuration files.
+Please refer to <a class="reference internal" href="../get_started_docs/installation.html#accelerator-configuration-reference-link"><span class="std std-ref">Accelerator Configuration</span></a> for more information.</p>
 </div>
 <div class="section" id="basic-fields-of-job-structure">
 <h2>Basic Fields of Job Structure<a class="headerlink" href="#basic-fields-of-job-structure" title="Permalink to this headline">¶</a></h2>

@@ -655,6 +655,11 @@ frequently.</p>
 <p>Page fault can occur during workload processing on a hardware. When the fault occurs, the outcome is based on the execution path:
 - Hardware path: <code class="docutils literal notranslate"><span class="pre">dml::status_code::partial_completion</span></code> is written to result structure.
 - Auto path: the library resolves the fault via completion of the workload on a CPU.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">.block_on_fault()</span></code> method can be used to have page faults be resolved on accelerator.
+Using <code class="docutils literal notranslate"><span class="pre">.block_on_fault()</span></code> can be done for all operations except Batch, Fence, and Drain.
+All available accelerator workqueues need to be configured to allow for blocking on fault <code class="docutils literal notranslate"><span class="pre">&quot;block_on_fault&quot;:1</span></code>.
+On by default in DML provided accelerator configuration files.
+Please refer to <a class="reference internal" href="../get_started_docs/installation.html#accelerator-configuration-reference-link"><span class="std std-ref">Accelerator Configuration</span></a> for more information.</p>
 </div>
 <div class="section" id="how-to-use-the-library">
 <h2>How to Use the Library<a class="headerlink" href="#how-to-use-the-library" title="Permalink to this headline">¶</a></h2>
@@ -901,7 +906,8 @@ operations to process is provided via <code class="docutils literal notranslate"
 <h4>Memory Move<a class="headerlink" href="#memory-move" title="Permalink to this headline">¶</a></h4>
 <p>This operation moves or copies data from a memory region represented via
 <code class="docutils literal notranslate"><span class="pre">src_view</span></code> to a memory region represented via <code class="docutils literal notranslate"><span class="pre">dst_view</span></code>.</p>
-<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::mem_move</span></code> object.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::mem_move</span></code> object. The operation is
+configurable via the <code class="docutils literal notranslate"><span class="pre">.block_on_fault()</span></code> method.</p>
 <p>Usage:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">mem_move</span><span class="p">,</span><span class="w"> </span><span class="n">src_view</span><span class="p">,</span><span class="w"> </span><span class="n">dst_view</span><span class="p">);</span>
 </pre></div>
@@ -920,7 +926,8 @@ operations to process is provided via <code class="docutils literal notranslate"
 <p>This operation copies data from a memory region represented via
 <code class="docutils literal notranslate"><span class="pre">src_view</span></code> to memory regions represented via <code class="docutils literal notranslate"><span class="pre">dst1_view</span></code> and
 <code class="docutils literal notranslate"><span class="pre">dst2_view</span></code>.</p>
-<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::dualcast</span></code> object.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::dualcast</span></code> object. The operation is
+configurable via the <code class="docutils literal notranslate"><span class="pre">.block_on_fault()</span></code> method.</p>
 <p>Usage:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">dualcast</span><span class="p">,</span><span class="w"> </span><span class="n">src_view</span><span class="p">,</span><span class="w"> </span><span class="n">dst1_view</span><span class="p">,</span><span class="w"> </span><span class="n">dst2_view</span><span class="p">);</span>
 </pre></div>
@@ -945,7 +952,8 @@ operations to process is provided via <code class="docutils literal notranslate"
 <h4>Fill<a class="headerlink" href="#fill" title="Permalink to this headline">¶</a></h4>
 <p>This operation fills data at memory region represented via <code class="docutils literal notranslate"><span class="pre">dst_view</span></code>
 with 64-bit <code class="docutils literal notranslate"><span class="pre">pattern</span></code>.</p>
-<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::fill</span></code> object.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::fill</span></code> object. The operation is
+configurable via the <code class="docutils literal notranslate"><span class="pre">.block_on_fault()</span></code> method.</p>
 <p>Usage:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">fill</span><span class="p">,</span><span class="w"> </span><span class="n">pattern</span><span class="p">,</span><span class="w"> </span><span class="n">dst_view</span><span class="p">);</span>
 </pre></div>
@@ -974,7 +982,8 @@ proper state.</p>
 <h4>Compare<a class="headerlink" href="#compare" title="Permalink to this headline">¶</a></h4>
 <p>This operation compares data at memory region represented via
 <code class="docutils literal notranslate"><span class="pre">src1_view</span></code> with data at memory region represented via <code class="docutils literal notranslate"><span class="pre">src2_view</span></code>.</p>
-<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::compare</span></code> object.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::compare</span></code> object. The operation is
+configurable via the <code class="docutils literal notranslate"><span class="pre">.block_on_fault()</span></code> method.</p>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N3dml17compare_operationE">
 <span id="_CPPv3N3dml17compare_operationE"></span><span id="_CPPv2N3dml17compare_operationE"></span><span id="dml::compare_operation"></span><span class="target" id="df/d14/classdml_1_1compare__operation"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dml</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">compare_operation</span></span></span><a class="headerlink" href="#_CPPv4N3dml17compare_operationE" title="Permalink to this definition">¶</a><br /></dt>
@@ -1055,6 +1064,17 @@ proper state.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK3dml17compare_operation14block_on_faultEv">
+<span id="_CPPv3NK3dml17compare_operation14block_on_faultEv"></span><span id="_CPPv2NK3dml17compare_operation14block_on_faultEv"></span><span id="dml::compare_operation::block_on_faultCCE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1a3e3e62b1c995d641f2a58ee07a10386a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_on_fault</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK3dml17compare_operation14block_on_faultEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Enables Blocking on Fault. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>New instance of the operation with Block on Fault on </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK3dml17compare_operation11get_optionsEv">
 <span id="_CPPv3NK3dml17compare_operation11get_optionsEv"></span><span id="_CPPv2NK3dml17compare_operation11get_optionsEv"></span><span id="dml::compare_operation::get_optionsCCE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1afcce21d81c4637b825f49041bfe315d5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_options</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK3dml17compare_operation11get_optionsEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p><dl>
@@ -1097,7 +1117,8 @@ proper state.</p>
 <h4>Compare Pattern<a class="headerlink" href="#compare-pattern" title="Permalink to this headline">¶</a></h4>
 <p>This operation compares data at memory region represented via
 <code class="docutils literal notranslate"><span class="pre">src_view</span></code> with 64-bit <code class="docutils literal notranslate"><span class="pre">pattern</span></code>.</p>
-<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::compare</span></code> object.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::compare</span></code> object. The operation is
+configurable via the <code class="docutils literal notranslate"><span class="pre">.block_on_fault()</span></code> method.</p>
 <p>The operation <code class="docutils literal notranslate"><span class="pre">execute</span></code> method has the following arguments:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">pattern</span></code> - 64-bit pattern for data comparison</p></li>
@@ -1129,7 +1150,8 @@ Then it writes delta record to memory region represented via
 <code class="docutils literal notranslate"><span class="pre">delta_view</span></code>. The delta record contains the information needed to
 update the data at the <code class="docutils literal notranslate"><span class="pre">src1_view</span></code> memory region to match the data at
 the <code class="docutils literal notranslate"><span class="pre">src2_view</span></code> memory region.</p>
-<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::create_delta</span></code> object.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::create_delta</span></code> object. The operation is
+configurable via the <code class="docutils literal notranslate"><span class="pre">.block_on_fault()</span></code> method.</p>
 <p>The operation <code class="docutils literal notranslate"><span class="pre">execute</span></code> method has the following arguments:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">base</span></code> - base source data represented via <code class="docutils literal notranslate"><span class="pre">dml::data_view</span></code> object</p></li>
@@ -1172,7 +1194,8 @@ via <code class="docutils literal notranslate"><span class="pre">delta_view</spa
 <p>This operation is used in pair with Create Delta operation to update
 <code class="docutils literal notranslate"><span class="pre">src1_view</span></code> so that it matches <code class="docutils literal notranslate"><span class="pre">src2_view</span></code>, using <code class="docutils literal notranslate"><span class="pre">delta_view</span></code>
 written.</p>
-<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::apply_delta</span></code> object.</p>
+<p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::apply_delta</span></code> object. The operation is
+configurable via the <code class="docutils literal notranslate"><span class="pre">.block_on_fault()</span></code> method.</p>
 <p>Usage:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">create_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">create_delta</span><span class="p">,</span><span class="w"> </span><span class="n">src1_view</span><span class="p">,</span><span class="w"> </span><span class="n">src2_view</span><span class="p">,</span><span class="w"> </span><span class="n">delta_view</span><span class="p">);</span>
 <span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">apply_delta</span><span class="p">,</span><span class="w"> </span><span class="n">delta_view</span><span class="p">,</span><span class="w"> </span><span class="n">src1_view</span><span class="p">,</span><span class="w"> </span><span class="n">create_result</span><span class="p">);</span>
@@ -1202,7 +1225,7 @@ algorithms.</p>
 <p>This operation computes CRC on the data at memory region represented via
 <code class="docutils literal notranslate"><span class="pre">src_view</span></code>. Initial crc seed is provided via <code class="docutils literal notranslate"><span class="pre">crc_seed</span></code> argument.</p>
 <p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::crc</span></code> object. The operation is
-configurable via <code class="docutils literal notranslate"><span class="pre">.bypass_reflection()</span></code> and <code class="docutils literal notranslate"><span class="pre">.bypass_data_reflection()</span></code> methods.</p>
+configurable via <code class="docutils literal notranslate"><span class="pre">.bypass_reflection()</span></code>, <code class="docutils literal notranslate"><span class="pre">.bypass_data_reflection()</span></code>, and <code class="docutils literal notranslate"><span class="pre">.block_on_fault()</span></code> methods.</p>
 <p>Usage:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">crc</span><span class="p">,</span><span class="w"> </span><span class="n">src_view</span><span class="p">,</span><span class="w"> </span><span class="n">crc_seed</span><span class="p">);</span>
 </pre></div>
@@ -1228,7 +1251,7 @@ multiple of 4 bytes, the source data is padded to the end with zeros.</p>
 to memory region represented via <code class="docutils literal notranslate"><span class="pre">dst_view</span></code>, and then computes CRC on
 the data copied. Initial crc seed is provided via <code class="docutils literal notranslate"><span class="pre">crc_seed</span></code> argument.</p>
 <p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::crc</span></code> object. The operation is
-configurable via <code class="docutils literal notranslate"><span class="pre">.bypass_reflection()</span></code> and <code class="docutils literal notranslate"><span class="pre">.bypass_data_reflection()</span></code> methods.</p>
+configurable via <code class="docutils literal notranslate"><span class="pre">.bypass_reflection()</span></code>, <code class="docutils literal notranslate"><span class="pre">.bypass_data_reflection()</span></code>, and <code class="docutils literal notranslate"><span class="pre">.block_on_fault()</span></code> methods.</p>
 <p>Usage:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">copy_crc</span><span class="p">,</span><span class="w"> </span><span class="n">src_view</span><span class="p">,</span><span class="w"> </span><span class="n">dst_view</span><span class="p">,</span><span class="w"> </span><span class="n">crc_seed</span><span class="p">);</span>
 </pre></div>
@@ -1256,7 +1279,7 @@ not overlap.</p>
 <p>The Cache Flush operation flushes the processor caches at memory region
 represented via <code class="docutils literal notranslate"><span class="pre">dst_view</span></code>.</p>
 <p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::cache_flush</span></code> object. The operation
-is configurable via <code class="docutils literal notranslate"><span class="pre">.dont_invalidate_cache()</span></code> method.</p>
+is configurable via <code class="docutils literal notranslate"><span class="pre">.dont_invalidate_cache()</span></code> and <code class="docutils literal notranslate"><span class="pre">.block_on_fault()</span></code> method.</p>
 <p>Usage:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">cache_flush</span><span class="p">,</span><span class="w"> </span><span class="n">dst_view</span><span class="p">);</span>
 </pre></div>
@@ -1384,6 +1407,12 @@ level of cache hierarchy. To disable that, use
 <dt class="sig sig-object cpp">
 <span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">error</span></span></span><br /></dt>
 <dd><p>Internal library error occurred </p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">config_error</span></span></span><br /></dt>
+<dd><p>One or more operations configurations are not allowed by accelerator (required to be unset) </p>
 </dd></dl>
 
 </dd></dl>
