@@ -22,6 +22,7 @@ namespace dml::testing
         job->operation             = DML_OP_FILL;
         job->destination_first_ptr = workload.get_dst().data();
         job->destination_length    = workload.get_dst().size();
+        job->flags |= (workload.block_on_fault_enabled()?DML_FLAG_BLOCK_ON_FAULT:0x00);
 
         for (auto i = 0u; i < sizeof(std::uint64_t); ++i)
         {
@@ -30,8 +31,15 @@ namespace dml::testing
 
         auto status = Status(dml_execute_job(job, DML_WAIT_MODE_BUSY_POLL));
 #elif defined(CPP_API)
+        auto op = dml::fill;
+
+        if (workload.block_on_fault_enabled())
+        {
+            op = op.block_on_fault();
+        }
+
         auto op_result =
-            dml::execute<execution_path>(dml::fill,
+            dml::execute<execution_path>(op,
                                          workload.get_pattern(),
                                          dml::make_view(workload.get_dst()));
 

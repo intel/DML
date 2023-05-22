@@ -23,6 +23,7 @@ namespace dml::testing
         job->source_first_ptr = workload.get_src().data();
         job->source_length    = workload.get_src().size();
         job->expected_result  = workload.get_expected_result();
+        job->flags |= (workload.block_on_fault_enabled()?DML_FLAG_BLOCK_ON_FAULT:0x00);
 
         for (auto i = 0u; i < sizeof(std::uint64_t); ++i)
         {
@@ -48,6 +49,11 @@ namespace dml::testing
         if (workload.check_result_enabled() && workload.get_expected_result() == 1)
         {
             op = op.expect_not_equal();
+        }
+
+        if (workload.block_on_fault_enabled())
+        {
+            op = op.block_on_fault();
         }
 
         auto op_result =

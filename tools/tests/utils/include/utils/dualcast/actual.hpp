@@ -24,10 +24,18 @@ namespace dml::testing
         job->destination_second_ptr = workload.get_dst2().data();
         job->source_length          = workload.get_src().size();
         job->destination_length     = workload.get_dst1().size();
+        job->flags |= (workload.block_on_fault_enabled()?DML_FLAG_BLOCK_ON_FAULT:0x00);
 
         auto status = Status(dml_execute_job(job, DML_WAIT_MODE_BUSY_POLL));
 #elif defined(CPP_API)
-        auto result = dml::execute<execution_path>(dml::dualcast,
+        auto op = dml::dualcast;
+
+        if (workload.block_on_fault_enabled())
+        {
+            op = op.block_on_fault();
+        }
+
+        auto result = dml::execute<execution_path>(op,
                                                    dml::make_view(workload.get_src()),
                                                    dml::make_view(workload.get_dst1()),
                                                    dml::make_view(workload.get_dst2()));

@@ -22,11 +22,19 @@ namespace dml::testing
 
     static inline std::ostream& operator<<(std::ostream& ostream, delta_size_e delta_size);
 
+    enum class block_on_fault_e
+    {
+        block,
+        dont_block
+    };
+
+    static inline std::ostream& operator<<(std::ostream& ostream, block_on_fault_e block_on_fault);
+
     template <>
     class WorkloadBuilder<ApplyDeltaOperation>
     {
     public:
-        WorkloadBuilder() noexcept: transfer_size_(8), delta_size_(delta_size_e::min), alignment_(8u)
+        WorkloadBuilder() noexcept: transfer_size_(8), delta_size_(delta_size_e::min), alignment_(8u), block_on_fault_(block_on_fault_e::dont_block)
         {
         }
 
@@ -47,6 +55,13 @@ namespace dml::testing
         auto& set_alignment(std::uint32_t alignment) noexcept
         {
             alignment_ = alignment;
+
+            return *this;
+        }
+
+        auto& set_block_on_fault(block_on_fault_e block_on_fault) noexcept
+        {
+            block_on_fault_ = block_on_fault;
 
             return *this;
         }
@@ -88,13 +103,14 @@ namespace dml::testing
                 *(reinterpret_cast<std::uint64_t *>(delta + 2u)) = std::uint64_t(i);
             }
 
-            return Workload<ApplyDeltaOperation>(std::move(memory));
+            return Workload<ApplyDeltaOperation>(std::move(memory), block_on_fault_ == block_on_fault_e::block);
         }
 
     private:
-        std::uint32_t transfer_size_;
-        delta_size_e  delta_size_;
-        std::uint32_t alignment_;
+        std::uint32_t     transfer_size_;
+        delta_size_e      delta_size_;
+        std::uint32_t     alignment_;
+        block_on_fault_e  block_on_fault_;
     };
 
     static inline std::ostream& operator<<(std::ostream& ostream, delta_size_e delta_size)
@@ -114,6 +130,22 @@ namespace dml::testing
         else
         {
             return ostream << "unexpected_enumeration";
+        }
+    }
+
+    static inline std::ostream& operator<<(std::ostream& ostream, block_on_fault_e block_on_fault)
+    {
+        if (block_on_fault == block_on_fault_e::block)
+        {
+            return ostream << "block_on_fault";
+        }
+        else if (block_on_fault == block_on_fault_e::dont_block)
+        {
+            return ostream << "dont_block_on_fault";
+        }
+        else
+        {
+            throw std::logic_error("Unexpected enumeration");
         }
     }
 }  // namespace dml::testing

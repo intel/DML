@@ -127,6 +127,9 @@ typedef uint8_t dml_internal_data_t;              /**< Hidden internal structure
 #define DML_FLAG_FENCE                    0x00000004u /**< Fence flag */
 #define DML_FLAG_CHECK_RESULT             0x00000080u /**< Check Result flag */
 
+/* ====== The shared operation flags  ====== */
+#define DML_FLAG_BLOCK_ON_FAULT      0x00000002u /**< Block on Fault Flag for all non flow-control operations */
+
 /* ====== The operation specific flags  ====== */
 // DML_OP_MEM_MOVE operation specific flag
 #define DML_FLAG_COPY_ONLY                  0x00000020u /**< The move operation is disabled */

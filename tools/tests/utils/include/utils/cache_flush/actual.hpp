@@ -21,6 +21,7 @@ namespace dml::testing
         job->operation             = DML_OP_CACHE_FLUSH;
         job->destination_first_ptr = workload.get_dst().data();
         job->destination_length    = workload.get_dst().size();
+        job->flags |= (workload.block_on_fault_enabled()?DML_FLAG_BLOCK_ON_FAULT:0x00);
 
         if (workload.cache_control_enabled())
         {
@@ -34,6 +35,11 @@ namespace dml::testing
         if (workload.cache_control_enabled())
         {
             op = op.dont_invalidate_cache();
+        }
+
+        if (workload.block_on_fault_enabled())
+        {
+            op = op.block_on_fault();
         }
 
         auto result = dml::execute<execution_path>(op,

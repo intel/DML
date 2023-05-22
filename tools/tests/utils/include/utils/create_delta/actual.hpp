@@ -32,6 +32,7 @@ namespace dml::testing
         job->source_length         = workload.get_src1().size();
         job->destination_length    = workload.get_delta().size();
         job->expected_result       = workload.get_expected_result();
+        job->flags |= (workload.block_on_fault_enabled()?DML_FLAG_BLOCK_ON_FAULT:0x00);
 
         if (workload.check_result_enabled())
         {
@@ -64,6 +65,11 @@ namespace dml::testing
                 op = op.expect_not_equal();
             }
         }
+        if (workload.block_on_fault_enabled())
+        {
+            op = op.block_on_fault();
+        }
+
         dml::create_delta_result op_result;
         if (is_synchronous){
             op_result = dml::execute<execution_path>(op,

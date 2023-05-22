@@ -26,6 +26,7 @@ namespace dml::testing
         job->source_length         = workload.get_src().size();
         job->destination_length    = workload.get_dst().size();
         job->crc_checksum_ptr      = &crc_seed;
+        job->flags |= (workload.block_on_fault_enabled()?DML_FLAG_BLOCK_ON_FAULT:0x00);
 
         job->flags |= DML_FLAG_CRC_READ_SEED;
 
@@ -53,6 +54,11 @@ namespace dml::testing
         if (workload.get_bypass_data_reflection())
         {
             op = op.bypass_data_reflection();
+        }
+
+        if (workload.block_on_fault_enabled())
+        {
+            op = op.block_on_fault();
         }
 
         auto result = dml::execute<execution_path>(op,

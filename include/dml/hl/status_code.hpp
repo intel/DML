@@ -38,7 +38,8 @@ namespace dml
         execution_failed,      /**< Unknown execution error */
         unsupported_operation, /**< Unknown execution error */
         queue_busy,            /**< Enqueue failed to one or several queues */
-        error                  /**< Internal library error occurred */
+        error,                 /**< Internal library error occurred */
+        config_error           /**< One or more operations configurations are not allowed by accelerator (required to be unset) */
     };
 }  // namespace dml
 

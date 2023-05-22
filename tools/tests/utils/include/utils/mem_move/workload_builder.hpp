@@ -13,6 +13,14 @@
 
 namespace dml::testing
 {
+    enum class block_on_fault_e
+    {
+        block,
+        dont_block
+    };
+
+    static inline std::ostream& operator<<(std::ostream& ostream, block_on_fault_e block_on_fault);
+
     template <>
     class WorkloadBuilder<MemMoveOperation>
     {
@@ -22,7 +30,8 @@ namespace dml::testing
             src_alignment_(1),
             dst_alignment_(1),
             offset_(0),
-            swap_(false)
+            swap_(false),
+            block_on_fault_(block_on_fault_e::dont_block)
         {
         }
 
@@ -61,6 +70,13 @@ namespace dml::testing
             return *this;
         }
 
+        auto& set_block_on_fault(block_on_fault_e block_on_fault) noexcept
+        {
+            block_on_fault_ = block_on_fault;
+
+            return *this;
+        }
+
         [[nodiscard]] auto build()
         {
             auto src_config =
@@ -86,16 +102,34 @@ namespace dml::testing
             return Workload<MemMoveOperation>(
                 std::move(memory),
                 swap_ ? 0 : 1,
-                swap_ ? 1 : 0);
+                swap_ ? 1 : 0,
+                block_on_fault_ == block_on_fault_e::block);
         }
 
     private:
-        std::uint32_t transfer_size_;
-        std::uint32_t src_alignment_;
-        std::uint32_t dst_alignment_;
-        std::int32_t  offset_;
-        bool          swap_;
+        std::uint32_t     transfer_size_;
+        std::uint32_t     src_alignment_;
+        std::uint32_t     dst_alignment_;
+        std::int32_t      offset_;
+        bool              swap_;
+        block_on_fault_e  block_on_fault_;
     };
+
+    static inline std::ostream& operator<<(std::ostream& ostream, block_on_fault_e block_on_fault)
+    {
+        if (block_on_fault == block_on_fault_e::block)
+        {
+            return ostream << "block_on_fault";
+        }
+        else if (block_on_fault == block_on_fault_e::dont_block)
+        {
+            return ostream << "dont_block_on_fault";
+        }
+        else
+        {
+            throw std::logic_error("Unexpected enumeration");
+        }
+    }
 }  // namespace dml::testing
 
 #endif  //DML_TESTING_MEM_MOVE_WORKLOAD_BUILDER_HPP

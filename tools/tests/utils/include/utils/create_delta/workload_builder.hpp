@@ -50,6 +50,14 @@ namespace dml::testing
 
     static inline std::ostream& operator<<(std::ostream& ostream, exec_e path);
 
+    enum class block_on_fault_e
+    {
+        block,
+        dont_block
+    };
+
+    static inline std::ostream& operator<<(std::ostream& ostream, block_on_fault_e block_on_fault);
+
     template <>
     class WorkloadBuilder<CreateDeltaOperation>
     {
@@ -59,7 +67,8 @@ namespace dml::testing
             expected_result_(expect_e::none),
             mismatch_(mismatch_e::none),
             delta_size_(delta_size_e::min),
-            alignment_(8)
+            alignment_(8),
+            block_on_fault_(block_on_fault_e::dont_block)
         {
         }
 
@@ -94,6 +103,13 @@ namespace dml::testing
         auto& set_alignment(std::uint32_t alignment) noexcept
         {
             alignment_ = alignment;
+
+            return *this;
+        }
+
+        auto& set_block_on_fault(block_on_fault_e block_on_fault) noexcept
+        {
+            block_on_fault_ = block_on_fault;
 
             return *this;
         }
@@ -141,15 +157,17 @@ namespace dml::testing
                                                   expected_result_ == expect_e::equal       ? 1
                                                   : expected_result_ == expect_e::not_equal ? 2
                                                   : expected_result_ == expect_e::overflow  ? 4
-                                                                                            : 0);
+                                                                                            : 0,
+                                                  block_on_fault_ == block_on_fault_e::block);
         }
 
     private:
-        std::uint32_t transfer_size_;
-        expect_e      expected_result_;
-        mismatch_e    mismatch_;
-        delta_size_e  delta_size_;
-        std::uint32_t alignment_;
+        std::uint32_t     transfer_size_;
+        expect_e          expected_result_;
+        mismatch_e        mismatch_;
+        delta_size_e      delta_size_;
+        std::uint32_t     alignment_;
+        block_on_fault_e  block_on_fault_;
     };
 
     static inline std::ostream& operator<<(std::ostream& ostream, expect_e expect)
@@ -229,6 +247,22 @@ namespace dml::testing
                 return ostream << "sync";
             default:
                 return ostream << "unexpected_enumeration";
+        }
+    }
+
+    static inline std::ostream& operator<<(std::ostream& ostream, block_on_fault_e block_on_fault)
+    {
+        if (block_on_fault == block_on_fault_e::block)
+        {
+            return ostream << "block_on_fault";
+        }
+        else if (block_on_fault == block_on_fault_e::dont_block)
+        {
+            return ostream << "dont_block_on_fault";
+        }
+        else
+        {
+            throw std::logic_error("Unexpected enumeration");
         }
     }
 }  // namespace dml::testing

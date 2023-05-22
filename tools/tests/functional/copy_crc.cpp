@@ -12,6 +12,7 @@
 
 using dml::testing::reflection_e;
 using dml::testing::data_reflection_e;
+using dml::testing::block_on_fault_e;
 
 namespace// anonymous
 {
@@ -29,6 +30,7 @@ namespace// anonymous
         static constexpr std::uint32_t dst_alignment[] = {1, 2, 4, 8};
         static constexpr reflection_e reflection[] = {reflection_e::enable, reflection_e::disable};
         static constexpr data_reflection_e data_reflection[] = {data_reflection_e::enable, data_reflection_e::disable};
+        static constexpr block_on_fault_e block_on_fault[] = {block_on_fault_e::dont_block, block_on_fault_e::block};
     };
 }// namespace
 
@@ -65,8 +67,16 @@ TEST_P(copy_crc, success)
 #include <sys/mman.h>
 #include <unistd.h>
 
-TEST(copy_crc, page_fault_read)
+using page_fault_types = std::tuple<block_on_fault_e>;
+
+class copy_crc_page_fault: public ::testing::TestWithParam<page_fault_types>
 {
+};
+
+TEST_P(copy_crc_page_fault, read)
+{
+    auto [block_on_fault] = GetParam();
+
     const auto page_size = getpagesize();
     const auto multiplier = 4u;
     const auto fault_page = 2u;
@@ -74,14 +84,24 @@ TEST(copy_crc, page_fault_read)
     auto workload_builder = dml::testing::WorkloadBuilder<dml::testing::CopyCrcOperation>()
                                 .set_transfer_size(page_size * multiplier)
                                 .set_src_alignment(page_size)
-                                .set_dst_alignment(page_size);
+                                .set_dst_alignment(page_size)
+                                .set_block_on_fault(block_on_fault);
 
     auto actual_workload    = workload_builder.build();
     madvise(actual_workload.get_src().data() + page_size * fault_page, page_size, MADV_DONTNEED);
     auto actual_result    = dml::testing::ActualImplementation(actual_workload);
 
 #if defined (HW_PATH)
-    ASSERT_EQ(actual_result, dml::testing::StatusCode::PageFault);
+    if(block_on_fault == block_on_fault_e::block){
+        auto reference_workload = workload_builder.build();
+        madvise(reference_workload.get_src().data() + page_size * fault_page, page_size, MADV_DONTNEED);
+        auto reference_result = dml::testing::ReferenceImplementation(reference_workload);
+        ASSERT_EQ(actual_result, reference_result);
+        ASSERT_EQ(actual_workload, reference_workload);
+    }
+    else{
+        ASSERT_EQ(actual_result, dml::testing::StatusCode::PageFault);
+    }
 #endif
 
 #if defined (AUTO_PATH)
@@ -93,8 +113,10 @@ TEST(copy_crc, page_fault_read)
 #endif
 }
 
-TEST(copy_crc, page_fault_write)
+TEST_P(copy_crc_page_fault, write)
 {
+    auto [block_on_fault] = GetParam();
+
     const auto page_size = getpagesize();
     const auto multiplier = 4u;
     const auto fault_page = 2u;
@@ -102,14 +124,24 @@ TEST(copy_crc, page_fault_write)
     auto workload_builder = dml::testing::WorkloadBuilder<dml::testing::CopyCrcOperation>()
                                 .set_transfer_size(page_size * multiplier)
                                 .set_src_alignment(page_size)
-                                .set_dst_alignment(page_size);
+                                .set_dst_alignment(page_size)
+                                .set_block_on_fault(block_on_fault);
 
     auto actual_workload    = workload_builder.build();
     madvise(actual_workload.get_dst().data() + page_size * fault_page, page_size, MADV_DONTNEED);
     auto actual_result    = dml::testing::ActualImplementation(actual_workload);
 
 #if defined (HW_PATH)
-    ASSERT_EQ(actual_result, dml::testing::StatusCode::PageFault);
+    if(block_on_fault == block_on_fault_e::block){
+        auto reference_workload = workload_builder.build();
+        madvise(reference_workload.get_dst().data() + page_size * fault_page, page_size, MADV_DONTNEED);
+        auto reference_result = dml::testing::ReferenceImplementation(reference_workload);
+        ASSERT_EQ(actual_result, reference_result);
+        ASSERT_EQ(actual_workload, reference_workload);
+    }
+    else{
+        ASSERT_EQ(actual_result, dml::testing::StatusCode::PageFault);
+    }
 #endif
 
 #if defined (AUTO_PATH)
@@ -121,6 +153,10 @@ TEST(copy_crc, page_fault_write)
 #endif
 
 }
+
+INSTANTIATE_TEST_SUITE_P(block_on_fault,
+                         copy_crc_page_fault,
+                         ::testing::Combine(::testing::ValuesIn(variable::block_on_fault)));
 #endif
 
 INSTANTIATE_TEST_SUITE_P(transfer_size,

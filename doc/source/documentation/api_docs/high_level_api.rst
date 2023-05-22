@@ -55,6 +55,13 @@ Page fault can occur during workload processing on a hardware. When the fault oc
 - Hardware path: ``dml::status_code::partial_completion`` is written to result structure.
 - Auto path: the library resolves the fault via completion of the workload on a CPU.
 
+The ``.block_on_fault()`` method can be used to have page faults be resolved on accelerator. 
+Using ``.block_on_fault()`` can be done for all operations except Batch, Fence, and Drain.
+All available accelerator workqueues need to be configured to allow for blocking on fault ``"block_on_fault":1``. 
+On by default in DML provided accelerator configuration files.
+Please refer to :ref:`Accelerator Configuration <accelerator_configuration_reference_link>` for more information.
+
+
 How to Use the Library
 ***********************
 
@@ -364,7 +371,8 @@ Memory Move
 This operation moves or copies data from a memory region represented via
 ``src_view`` to a memory region represented via ``dst_view``.
 
-The operation is presented as ``dml::mem_move`` object.
+The operation is presented as ``dml::mem_move`` object. The operation is
+configurable via the ``.block_on_fault()`` method.
 
 Usage:
 
@@ -391,7 +399,8 @@ This operation copies data from a memory region represented via
 ``src_view`` to memory regions represented via ``dst1_view`` and
 ``dst2_view``.
 
-The operation is presented as ``dml::dualcast`` object.
+The operation is presented as ``dml::dualcast`` object. The operation is
+configurable via the ``.block_on_fault()`` method.
 
 Usage:
 
@@ -424,7 +433,8 @@ Fill
 This operation fills data at memory region represented via ``dst_view``
 with 64-bit ``pattern``.
 
-The operation is presented as ``dml::fill`` object.
+The operation is presented as ``dml::fill`` object. The operation is
+configurable via the ``.block_on_fault()`` method.
 
 Usage:
 
@@ -462,7 +472,8 @@ Compare
 This operation compares data at memory region represented via
 ``src1_view`` with data at memory region represented via ``src2_view``.
 
-The operation is presented as ``dml::compare`` object.
+The operation is presented as ``dml::compare`` object. The operation is
+configurable via the ``.block_on_fault()`` method.
 
 .. doxygenclass:: dml::compare_operation
    :project: Intel DML
@@ -493,7 +504,8 @@ Compare Pattern
 This operation compares data at memory region represented via
 ``src_view`` with 64-bit ``pattern``.
 
-The operation is presented as ``dml::compare`` object.
+The operation is presented as ``dml::compare`` object. The operation is
+configurable via the ``.block_on_fault()`` method.
 
 The operation ``execute`` method has the following arguments:
 
@@ -533,7 +545,8 @@ Then it writes delta record to memory region represented via
 update the data at the ``src1_view`` memory region to match the data at
 the ``src2_view`` memory region.
 
-The operation is presented as ``dml::create_delta`` object.
+The operation is presented as ``dml::create_delta`` object. The operation is
+configurable via the ``.block_on_fault()`` method.
 
 The operation ``execute`` method has the following arguments:
 
@@ -588,7 +601,8 @@ This operation is used in pair with Create Delta operation to update
 ``src1_view`` so that it matches ``src2_view``, using ``delta_view``
 written.
 
-The operation is presented as ``dml::apply_delta`` object.
+The operation is presented as ``dml::apply_delta`` object. The operation is
+configurable via the ``.block_on_fault()`` method.
 
 Usage:
 
@@ -629,7 +643,7 @@ This operation computes CRC on the data at memory region represented via
 ``src_view``. Initial crc seed is provided via ``crc_seed`` argument.
 
 The operation is presented as ``dml::crc`` object. The operation is
-configurable via ``.bypass_reflection()`` and ``.bypass_data_reflection()`` methods.
+configurable via ``.bypass_reflection()``, ``.bypass_data_reflection()``, and ``.block_on_fault()`` methods.
 
 Usage:
 
@@ -663,7 +677,7 @@ to memory region represented via ``dst_view``, and then computes CRC on
 the data copied. Initial crc seed is provided via ``crc_seed`` argument.
 
 The operation is presented as ``dml::crc`` object. The operation is
-configurable via ``.bypass_reflection()`` and ``.bypass_data_reflection()`` methods.
+configurable via ``.bypass_reflection()``, ``.bypass_data_reflection()``, and ``.block_on_fault()`` methods.
 
 Usage:
 
@@ -702,7 +716,7 @@ The Cache Flush operation flushes the processor caches at memory region
 represented via ``dst_view``.
 
 The operation is presented as ``dml::cache_flush`` object. The operation
-is configurable via ``.dont_invalidate_cache()`` method.
+is configurable via ``.dont_invalidate_cache()`` and ``.block_on_fault()`` method.
 
 Usage:
 

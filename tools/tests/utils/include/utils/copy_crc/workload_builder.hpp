@@ -32,6 +32,14 @@ namespace dml::testing
     static inline std::ostream& operator<<(std::ostream&     ostream,
                                            data_reflection_e data_reflection);
 
+    enum class block_on_fault_e
+    {
+        block,
+        dont_block
+    };
+
+    static inline std::ostream& operator<<(std::ostream& ostream, block_on_fault_e block_on_fault);
+
     template <>
     class WorkloadBuilder<CopyCrcOperation>
     {
@@ -42,7 +50,8 @@ namespace dml::testing
             dst_alignment_(1),
             crc_seed_(0),
             reflection_(reflection_e::enable),
-            data_reflection_(data_reflection_e::enable)
+            data_reflection_(data_reflection_e::enable),
+            block_on_fault_(block_on_fault_e::dont_block)
         {
         }
 
@@ -88,6 +97,13 @@ namespace dml::testing
             return *this;
         }
 
+        auto& set_block_on_fault(block_on_fault_e block_on_fault) noexcept
+        {
+            block_on_fault_ = block_on_fault;
+
+            return *this;
+        }
+
         [[nodiscard]] auto build()
         {
             return Workload<CopyCrcOperation>(MemoryBuilder()
@@ -100,7 +116,8 @@ namespace dml::testing
                                                   .build(),
                                               crc_seed_,
                                               reflection_ == reflection_e::disable,
-                                              data_reflection_ == data_reflection_e::disable);
+                                              data_reflection_ == data_reflection_e::disable,
+                                              block_on_fault_ == block_on_fault_e::block);
         }
 
     private:
@@ -110,6 +127,7 @@ namespace dml::testing
         std::uint32_t     crc_seed_;
         reflection_e      reflection_;
         data_reflection_e data_reflection_;
+        block_on_fault_e  block_on_fault_;
     };
 
     static inline std::ostream& operator<<(std::ostream& ostream, reflection_e reflection)
@@ -137,6 +155,22 @@ namespace dml::testing
         else if (data_reflection == data_reflection_e::disable)
         {
             return ostream << "data_reflection_disabled";
+        }
+        else
+        {
+            throw std::logic_error("Unexpected enumeration");
+        }
+    }
+
+    static inline std::ostream& operator<<(std::ostream& ostream, block_on_fault_e block_on_fault)
+    {
+        if (block_on_fault == block_on_fault_e::block)
+        {
+            return ostream << "block_on_fault";
+        }
+        else if (block_on_fault == block_on_fault_e::dont_block)
+        {
+            return ostream << "dont_block_on_fault";
         }
         else
         {

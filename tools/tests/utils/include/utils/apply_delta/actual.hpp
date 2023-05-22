@@ -23,6 +23,7 @@ namespace dml::testing
         job->destination_first_ptr = workload.get_dst().data();
         job->source_length         = workload.get_delta().size();
         job->destination_length    = workload.get_dst().size();
+        job->flags                |= (workload.block_on_fault_enabled()?DML_FLAG_BLOCK_ON_FAULT:0x00);
 
         auto status = Status(dml_execute_job(job, DML_WAIT_MODE_BUSY_POLL));
 #elif defined(CPP_API)
@@ -30,7 +31,14 @@ namespace dml::testing
         create_result.delta_record_size = workload.get_delta().size();
         create_result.result            = comparison_result::not_equal;
 
-        auto result = dml::execute<execution_path>(dml::apply_delta,
+        auto op = dml::apply_delta;
+
+        if (workload.block_on_fault_enabled())
+        {
+            op = op.block_on_fault();
+        }
+
+        auto result = dml::execute<execution_path>(op,
                                                    dml::make_view(workload.get_delta()),
                                                    dml::make_view(workload.get_dst()),
                                                    create_result);

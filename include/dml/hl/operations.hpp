@@ -88,6 +88,16 @@ namespace dml
         using result_type = mem_move_result;
 
         /**
+         * @brief Enables Blocking on Fault
+         *
+         * @return New instance of the operation with Block on Fault on
+         */
+        [[nodiscard]] constexpr auto block_on_fault() const noexcept
+        {
+            return mem_move_operation(options_.enable<detail::mem_move_flag::block_on_fault>());
+        }
+
+        /**
          * @todo
          */
         [[nodiscard]] constexpr auto get_options() const noexcept
@@ -96,6 +106,13 @@ namespace dml
         }
 
     private:
+        /**
+         * @brief Constructs the operation with specified parameter
+         */
+        constexpr explicit mem_move_operation(detail::ml::mem_move_options options) noexcept: options_(options)
+        {
+        }
+
         detail::ml::mem_move_options options_; /**< @todo */
     };
 
@@ -135,6 +152,16 @@ namespace dml
         using result_type = mem_copy_result;
 
         /**
+         * @brief Enables Blocking on Fault
+         *
+         * @return New instance of the operation with Block on Fault on
+         */
+        [[nodiscard]] constexpr auto block_on_fault() const noexcept
+        {
+            return mem_copy_operation(options_.enable<detail::mem_move_flag::block_on_fault>());
+        }
+
+        /**
          * @todo
          */
         [[nodiscard]] constexpr auto get_options() const noexcept
@@ -143,6 +170,13 @@ namespace dml
         }
 
     private:
+        /**
+         * @brief Constructs the operation with specified parameter
+         */
+        constexpr explicit mem_copy_operation(detail::ml::mem_move_options options) noexcept: options_(options)
+        {
+        }
+
         detail::ml::mem_move_options options_; /**< @todo */
     };
 
@@ -180,6 +214,16 @@ namespace dml
         using result_type = fill_result;
 
         /**
+         * @brief Enables Blocking on Fault
+         *
+         * @return New instance of the operation with Block on Fault on
+         */
+        [[nodiscard]] constexpr auto block_on_fault() const noexcept
+        {
+            return fill_operation(options_.enable<detail::fill_flag::block_on_fault>());
+        }
+
+        /**
          * @todo
          */
         [[nodiscard]] constexpr auto get_options() const noexcept
@@ -188,6 +232,13 @@ namespace dml
         }
 
     private:
+        /**
+         * @brief Constructs the operation with specified parameter
+         */
+        constexpr explicit fill_operation(detail::ml::fill_options options) noexcept: options_(options)
+        {
+        }
+
         detail::ml::fill_options options_; /**< @todo */
     };
 
@@ -227,6 +278,16 @@ namespace dml
         using result_type = dualcast_result;
 
         /**
+         * @brief Enables Blocking on Fault
+         *
+         * @return New instance of the operation with Block on Fault on
+         */
+        [[nodiscard]] constexpr auto block_on_fault() const noexcept
+        {
+            return dualcast_operation(options_.enable<detail::dualcast_flag::block_on_fault>(), specific_options_);
+        }
+
+        /**
          * @todo
          */
         [[nodiscard]] constexpr auto get_options() const noexcept
@@ -243,6 +304,16 @@ namespace dml
         }
 
     private:
+    
+        /**
+         * @brief Constructs the operation with specified parameter
+         */
+        constexpr explicit dualcast_operation(detail::ml::dualcast_options options, detail::ml::dualcast_specific_options specific_options) noexcept: 
+            options_(options),
+            specific_options_(specific_options)
+        {
+        }
+
         detail::ml::dualcast_options          options_;          /**< @todo */
         detail::ml::dualcast_specific_options specific_options_; /**< @todo */
     };
@@ -309,6 +380,16 @@ namespace dml
         [[nodiscard]] constexpr auto expect_not_equal() const noexcept
         {
             return compare_operation(options_.enable<detail::compare_flag::check_result>(), detail::compare_result::not_equal);
+        }
+
+        /**
+         * @brief Enables Blocking on Fault
+         *
+         * @return New instance of the operation with Block on Fault on
+         */
+        [[nodiscard]] constexpr auto block_on_fault() const noexcept
+        {
+            return compare_operation(options_.enable<detail::compare_flag::block_on_fault>(), expected_);
         }
 
         /**
@@ -410,6 +491,16 @@ namespace dml
         }
 
         /**
+         * @brief Enables Blocking on Fault
+         *
+         * @return New instance of the operation with Block on Fault on
+         */
+        [[nodiscard]] constexpr auto block_on_fault() const noexcept
+        {
+            return compare_pattern_operation(options_.enable<detail::compare_pattern_flag::block_on_fault>(), expected_);
+        }
+
+        /**
          * @todo
          */
         [[nodiscard]] constexpr auto get_options() const noexcept
@@ -504,6 +595,16 @@ namespace dml
         }
 
         /**
+         * @brief Enables Blocking on Fault
+         *
+         * @return New instance of the operation with Block on Fault on
+         */
+        [[nodiscard]] constexpr auto block_on_fault() const noexcept
+        {
+            return create_delta_operation(options_.enable<detail::create_delta_flag::block_on_fault>(), expected_);
+        }
+
+        /**
          * @todo
          */
         [[nodiscard]] constexpr auto get_options() const noexcept
@@ -573,6 +674,16 @@ namespace dml
         using result_type = apply_delta_result;
 
         /**
+         * @brief Enables Blocking on Fault
+         *
+         * @return New instance of the operation with Block on Fault on
+         */
+        [[nodiscard]] constexpr auto block_on_fault() const noexcept
+        {
+            return apply_delta_operation(options_.enable<detail::apply_delta_flag::block_on_fault>());
+        }
+
+        /**
          * @todo
          */
         [[nodiscard]] constexpr auto get_options() const noexcept
@@ -581,6 +692,13 @@ namespace dml
         }
 
     private:
+        /**
+         * @brief Constructs the operation with specified parameter
+         */
+        constexpr explicit apply_delta_operation(detail::ml::apply_delta_options options) noexcept: options_(options)
+        {
+        }
+        
         detail::ml::apply_delta_options options_; /**< @todo */
     };
 
@@ -640,6 +758,16 @@ namespace dml
         [[nodiscard]] constexpr auto bypass_data_reflection() const noexcept
         {
             return crc_operation(options_, specific_options_.enable<detail::crc_specific_flag::bypass_data_reflection>());
+        }
+
+        /**
+         * @brief Enables Blocking on Fault
+         *
+         * @return New instance of the operation with Block on Fault on
+         */
+        [[nodiscard]] constexpr auto block_on_fault() const noexcept
+        {
+            return crc_operation(options_.enable<detail::crc_flag::block_on_fault>(), specific_options_);
         }
 
         /**
@@ -737,6 +865,16 @@ namespace dml
         }
 
         /**
+         * @brief Enables Blocking on Fault
+         *
+         * @return New instance of the operation with Block on Fault on
+         */
+        [[nodiscard]] constexpr auto block_on_fault() const noexcept
+        {
+            return copy_crc_operation(options_.enable<detail::copy_crc_flag::block_on_fault>(), specific_options_);
+        }
+
+        /**
          * @todo
          */
         [[nodiscard]] constexpr auto get_options() const noexcept
@@ -811,6 +949,16 @@ namespace dml
         [[nodiscard]] constexpr auto dont_invalidate_cache() const noexcept
         {
             return cache_flush_operation(options_.enable<detail::cache_flush_flag::cache_control>());
+        }
+
+        /**
+         * @brief Enables Blocking on Fault
+         *
+         * @return New instance of the operation with Block on Fault on
+         */
+        [[nodiscard]] constexpr auto block_on_fault() const noexcept
+        {
+            return cache_flush_operation(options_.enable<detail::cache_flush_flag::block_on_fault>());
         }
 
         /**

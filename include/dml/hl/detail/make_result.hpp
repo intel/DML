@@ -31,6 +31,8 @@ namespace dml::detail
                 return status_code::false_predicate;
             case detail::execution_status::page_fault_during_processing:
                 return status_code::partial_completion;
+            case detail::execution_status::flag_error:
+                return status_code::config_error;
             default:
                 // Anything else is considered an error temporarily
                 return status_code::error;

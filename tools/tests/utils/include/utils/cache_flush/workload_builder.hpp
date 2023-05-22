@@ -19,7 +19,15 @@ namespace dml::testing
         dont_invalidate
     };
 
-    static inline std::ostream& operator<<(std::ostream& ostream, cache_control_e cache);
+   static inline std::ostream& operator<<(std::ostream& ostream, cache_control_e cache);
+
+    enum class block_on_fault_e
+    {
+        block,
+        dont_block
+    };
+
+    static inline std::ostream& operator<<(std::ostream& ostream, block_on_fault_e block_on_fault);
 
     template <>
     class WorkloadBuilder<CacheFlushOperation>
@@ -28,7 +36,8 @@ namespace dml::testing
         WorkloadBuilder() noexcept:
             transfer_size_(1),
             dst_alignment_(1),
-            cache_(cache_control_e::invalidate)
+            cache_(cache_control_e::invalidate),
+            block_on_fault_(block_on_fault_e::dont_block)
         {
         }
 
@@ -53,6 +62,13 @@ namespace dml::testing
             return *this;
         }
 
+        auto& set_block_on_fault(block_on_fault_e block_on_fault) noexcept
+        {
+            block_on_fault_ = block_on_fault;
+
+            return *this;
+        }
+
         [[nodiscard]] auto build()
         {
             return Workload<CacheFlushOperation>(MemoryBuilder()
@@ -60,13 +76,15 @@ namespace dml::testing
                                                                      .set_size(transfer_size_)
                                                                      .set_alignment(dst_alignment_))
                                                      .build(),
-                                                 cache_ == cache_control_e::dont_invalidate);
+                                                 cache_ == cache_control_e::dont_invalidate,
+                                                 block_on_fault_ == block_on_fault_e::block);
         }
 
     private:
-        std::uint32_t   transfer_size_;
-        std::uint32_t   dst_alignment_;
-        cache_control_e cache_;
+        std::uint32_t     transfer_size_;
+        std::uint32_t     dst_alignment_;
+        cache_control_e   cache_;
+        block_on_fault_e  block_on_fault_;
     };
 
     static inline std::ostream& operator<<(std::ostream& ostream, cache_control_e cache)
@@ -82,6 +100,22 @@ namespace dml::testing
         else
         {
             return ostream << "unexpected_enumeration";
+        }
+    }
+
+    static inline std::ostream& operator<<(std::ostream& ostream, block_on_fault_e block_on_fault)
+    {
+        if (block_on_fault == block_on_fault_e::block)
+        {
+            return ostream << "block_on_fault";
+        }
+        else if (block_on_fault == block_on_fault_e::dont_block)
+        {
+            return ostream << "dont_block_on_fault";
+        }
+        else
+        {
+            throw std::logic_error("Unexpected enumeration");
         }
     }
 }  // namespace dml::testing

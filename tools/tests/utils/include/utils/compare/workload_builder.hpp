@@ -32,6 +32,14 @@ namespace dml::testing
 
     static inline std::ostream& operator<<(std::ostream& ostream, mismatch_e check);
 
+    enum class block_on_fault_e
+    {
+        block,
+        dont_block
+    };
+
+    static inline std::ostream& operator<<(std::ostream& ostream, block_on_fault_e block_on_fault);
+
     template <>
     class WorkloadBuilder<CompareOperation>
     {
@@ -41,7 +49,8 @@ namespace dml::testing
             src1_alignment_(1),
             src2_alignment_(1),
             expected_result_(expect_e::none),
-            mismatch_(mismatch_e::none)
+            mismatch_(mismatch_e::none),
+            block_on_fault_(block_on_fault_e::dont_block)
         {
         }
 
@@ -80,6 +89,13 @@ namespace dml::testing
             return *this;
         }
 
+        auto& set_block_on_fault(block_on_fault_e block_on_fault) noexcept
+        {
+            block_on_fault_ = block_on_fault;
+
+            return *this;
+        }
+
         [[nodiscard]] auto build()
         {
             auto memory = MemoryBuilder()
@@ -106,15 +122,17 @@ namespace dml::testing
 
             return Workload<CompareOperation>(std::move(memory),
                                               expected_result_ == expect_e::not_equal ? 1 : 0,
-                                              expected_result_ != expect_e::none);
+                                              expected_result_ != expect_e::none,
+                                              block_on_fault_ == block_on_fault_e::block);
         }
 
     private:
-        std::uint32_t transfer_size_;
-        std::uint32_t src1_alignment_;
-        std::uint32_t src2_alignment_;
-        expect_e      expected_result_;
-        mismatch_e    mismatch_;
+        std::uint32_t     transfer_size_;
+        std::uint32_t     src1_alignment_;
+        std::uint32_t     src2_alignment_;
+        expect_e          expected_result_;
+        mismatch_e        mismatch_;
+        block_on_fault_e  block_on_fault_;
     };
 
     static inline std::ostream& operator<<(std::ostream& ostream, expect_e check)
@@ -161,6 +179,21 @@ namespace dml::testing
         }
     }
 
+    static inline std::ostream& operator<<(std::ostream& ostream, block_on_fault_e block_on_fault)
+    {
+        if (block_on_fault == block_on_fault_e::block)
+        {
+            return ostream << "block_on_fault";
+        }
+        else if (block_on_fault == block_on_fault_e::dont_block)
+        {
+            return ostream << "dont_block_on_fault";
+        }
+        else
+        {
+            throw std::logic_error("Unexpected enumeration");
+        }
+    }
 }  // namespace dml::testing
 
 #endif  //DML_TESTING_COMPARE_WORKLOAD_BUILDER_HPP

@@ -30,6 +30,11 @@ namespace dml::testing
             return memory_.get_region(1);
         }
 
+        [[nodiscard]] bool block_on_fault_enabled() noexcept
+        {
+            return block_on_fault_;
+        }
+
         bool operator==(const Workload& other) const noexcept
         {
             return this->memory_ == other.memory_;
@@ -38,10 +43,13 @@ namespace dml::testing
     private:
         friend WorkloadBuilder<ApplyDeltaOperation>;
 
-        explicit Workload(Memory&& memory) noexcept:
-            WorkloadBase(std::move(memory))
+        explicit Workload(Memory&& memory, bool block_on_fault = false) noexcept:
+            WorkloadBase(std::move(memory)),
+            block_on_fault_(block_on_fault)
         {
         }
+    private:
+        bool block_on_fault_;
     };
 }  // namespace dml::testing
 

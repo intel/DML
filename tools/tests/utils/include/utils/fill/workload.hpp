@@ -30,6 +30,11 @@ namespace dml::testing
             return memory_.get_region(0);
         }
 
+        [[nodiscard]] bool block_on_fault_enabled() noexcept
+        {
+            return block_on_fault_;
+        }
+
         bool operator==(const Workload& other) const noexcept
         {
             return this->memory_ == other.memory_;
@@ -38,14 +43,16 @@ namespace dml::testing
     private:
         friend WorkloadBuilder<FillOperation>;
 
-        Workload(Memory&& memory, std::uint64_t pattern) noexcept:
+        Workload(Memory&& memory, std::uint64_t pattern, bool block_on_fault = false) noexcept:
             WorkloadBase(std::move(memory)),
-            pattern_(pattern)
+            pattern_(pattern), 
+            block_on_fault_(block_on_fault)
         {
         }
 
     private:
         std::uint64_t pattern_;
+        bool          block_on_fault_;
     };
 }  // namespace dml::testing
 

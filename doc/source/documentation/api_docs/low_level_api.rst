@@ -213,6 +213,7 @@ You can read more about the flags in our docs
 NUMA support
 *************************
 
+
 The library is NUMA aware and respects the NUMA node id of the calling thread. If a user needs to use a device from a specific node, it can be done in two ways:
 
 - Pin thread which performs submissions to the specific NUMA, the library will use devices only from this node.
@@ -228,6 +229,12 @@ Page Fault handling
 Page fault can occur during workload processing on a hardware. When the fault occurs, the outcome is based on the execution path:
 - Hardware path: ``DML_STATUS_PAGE_FAULT_ERROR`` is returned.
 - Auto path: the library resolves the fault via completion of the workload on a CPU.
+
+The ``DML_FLAG_BLOCK_ON_FAULT`` method can be used to have page faults be resolved on accelerator. 
+Using ``DML_FLAG_BLOCK_ON_FAULT`` can be done for all operations except Batch, Fence, and Drain.
+All available accelerator workqueues need to be configured to allow for blocking on fault ``"block_on_fault":1``. 
+On by default in DML provided accelerator configuration files.
+Please refer to :ref:`Accelerator Configuration <accelerator_configuration_reference_link>` for more information.
 
 
 Basic Fields of Job Structure
@@ -297,7 +304,7 @@ region for a specific number of operations can be calculated via
 ``dml_get_batch_size``. Operations can be added to the batch via set of
 set-functions:
 
--  ``dml_batch_set_nop_by_index``
+- ``dml_batch_set_nop_by_index``
 - ``dml_batch_set_mem_move_by_index``
 - ``dml_batch_set_dualcast_by_index``
 - ``dml_batch_set_compare_by_index``
