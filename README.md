@@ -1,6 +1,5 @@
 Intel® Data Mover Library (Intel® DML)
 =================================================
-[Get Started](#get-started) | [Documentation](#documentation) | [License](#license) | [GitHub repository](https://github.com/intel/DML)
 
 Intel® Data Mover Library (Intel® DML) is an open-source library to provide high-performance data manipulation on Intel CPUs. Intel® DML is intended for streaming data movement and transformation operations optimization that is applicable for effective storage, networking, persistent memory, and various data processing applications.
 
@@ -8,6 +7,7 @@ Intel® Data Mover Library (Intel® DML) is an open-source library to provide hi
 
 - [Get Started](#get-started)
 - [Documentation](#documentation)
+- [Testing](#testing)
 - [How to Contribute](#how-to-contribute)
 - [How to Report Issues](#how-to-report-issues)
 - [License](#license)
@@ -16,30 +16,21 @@ Intel® Data Mover Library (Intel® DML) is an open-source library to provide hi
 
 ## Get Started
 
-To get started with Intel DML, follow instructions below:
-
-1. Make sure your system meets all [System Requirements](https://intel.github.io/DML/documentation/introduction_docs/system_requirements.html).
-
-2. Follow instructions to build the library. See [Installation](https://intel.github.io/DML/documentation/get_started_docs/installation.html) for more details.
+To set up and build the Intel DML,
+refer to [Installation](https://intel.github.io/DML/documentation/get_started_docs/installation.html) for more details.
 
 ## Documentation
 
-### Online Documentation
-
 Documentation is delivered using GitHub Pages. See full Intel DML [online documentation](https://intel.github.io/DML/index.html).
+- [High-Level C++ API Reference](https://intel.github.io/DML/documentation/api_docs/high_level_api.html) explains key concepts of High-Level C++ API.
+- [Low-Level C API Reference](https://intel.github.io/DML/documentation/api_docs/low_level_api.html) explains key concepts of Low-Level C API.
+- [Benchmarks Framework Guide](https://intel.github.io/DML/documentation/bench_docs/guide.html) provides information on how to setup, use and report key metrics using Benchmarks provided in Intel DML.
 
-### Offline Documentation
+To build Intel DML offline documentation, see [Documentation Build Steps and Prerequisites](https://intel.github.io/DML/documentation/get_started_docs/installation.html#building-the-documentation).
 
-**Note**: Before building Intel DML offline documentation, make sure you have all documentation generation tools properly installed and set up. See, [Documentation Build Prerequisites](https://intel.github.io/DML/documentation/get_started_docs/installation.html#documentation-build-prerequisites) for more details.
+## Testing
 
-To generate full offline documentation from sources, use the following commands:
-
-```shell
-cmd> cd <dml_library catalog path>/doc
-cmd> _get_docs.sh
-```
-
-After generation process is completed, open the `<dml_library>/doc/build/html/index.html` file.
+See [Intel DML Testing](https://intel.github.io/DML/documentation/get_started_docs/testing.html) page for details about testing process.
 
 ## How to Contribute
 
