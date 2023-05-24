@@ -84,7 +84,7 @@ namespace dml
         template <typename operation, typename task_t>
         [[nodiscard]] auto make_handler(task_t&& task) const
         {
-            return handler<operation, allocator_t>(std::forward<task_t>(task), allocator_);
+            return handler<operation, allocator_t>(std::forward<task_t>(task));
         }
 
         /**

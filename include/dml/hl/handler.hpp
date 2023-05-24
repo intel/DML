@@ -46,9 +46,8 @@ namespace dml
          * @brief Construct a handler from a task
          *
          * @param some_task Task for handler construction
-         * @param allocator Memory allocator to use
          */
-        explicit handler(detail::ml::task<allocator_t> &&some_task, allocator_t allocator)
+        explicit handler(detail::ml::task<allocator_t> &&some_task)
             : task_(std::move(some_task)), status_(status_code::ok), is_hw(false)
         {
         }
