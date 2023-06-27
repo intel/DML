@@ -1279,7 +1279,7 @@ not overlap.</p>
 <p>The Cache Flush operation flushes the processor caches at memory region
 represented via <code class="docutils literal notranslate"><span class="pre">dst_view</span></code>.</p>
 <p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::cache_flush</span></code> object. The operation
-is configurable via <code class="docutils literal notranslate"><span class="pre">.dont_invalidate_cache()</span></code> and <code class="docutils literal notranslate"><span class="pre">.block_on_fault()</span></code> method.</p>
+is configurable via <code class="docutils literal notranslate"><span class="pre">.block_on_fault()</span></code> and <code class="docutils literal notranslate"><span class="pre">.dont_invalidate_cache()</span></code> methods.</p>
 <p>Usage:</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml</span><span class="o">::</span><span class="n">execute</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">software</span><span class="o">&gt;</span><span class="p">(</span><span class="n">dml</span><span class="o">::</span><span class="n">cache_flush</span><span class="p">,</span><span class="w"> </span><span class="n">dst_view</span><span class="p">);</span>
 </pre></div>
@@ -1296,6 +1296,10 @@ is configurable via <code class="docutils literal notranslate"><span class="pre"
 <p>By default this operation invalidates affected cache lines from every
 level of cache hierarchy. To disable that, use
 <code class="docutils literal notranslate"><span class="pre">dml::cache_flush.dont_invalidate_cache()</span></code> as the first argument.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">.dont_invalidate_cache()</span></code> method is deprecated and will be removed in a later version.</p>
 </div>
 </div>
 </div>

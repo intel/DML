@@ -1615,11 +1615,15 @@ destinations (for internal validation).</p></li>
 <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> address. The number of bytes flushed is given
 by the <code class="docutils literal notranslate"><span class="pre">destination_length</span></code> parameter.</p>
 <ul class="simple">
-<li><p>If <code class="docutils literal notranslate"><span class="pre">DML_FLAG_CACHE_CRTL</span></code> flag is not set, the affected cache lines
+<li><p>If <code class="docutils literal notranslate"><span class="pre">DML_FLAG_DONT_INVALIDATE_CACHE</span></code> flag is not set, the affected cache lines
 are invalidated from every level of the cache hierarchy. If it is set
 to 1, then modified cache lines are written to main memory, but are
 not evicted from the caches.</p></li>
 </ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">DML_FLAG_DONT_INVALIDATE_CACHE</span></code> flag is deprecated and will be removed in a later version.</p>
+</div>
 </div>
 </div>
 </div>
