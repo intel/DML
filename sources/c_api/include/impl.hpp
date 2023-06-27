@@ -74,6 +74,9 @@ namespace dml
         {
             return status;
         }
+        if(job.operation() == DML_OP_MEM_MOVE && job.flags() & DML_FLAG_COPY_ONLY){
+            job.set_flags( job.flags() & ~DML_FLAG_COPY_ONLY);
+        }
 
         job.state().task = make_task(job);
 

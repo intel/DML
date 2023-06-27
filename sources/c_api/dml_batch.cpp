@@ -134,6 +134,9 @@ extern "C" dml_status_t dml_batch_set_mem_move_by_index(dml_job_t            *dm
     {
         return status;
     }
+    if(flags & DML_FLAG_COPY_ONLY){
+        flags &= ~DML_FLAG_COPY_ONLY;
+    }
 
     auto batch = dml::batch(dml_job_ptr->destination_first_ptr, task_count);
 

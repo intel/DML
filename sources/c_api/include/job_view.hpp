@@ -177,6 +177,10 @@ namespace dml
             job_ptr_->destination_length = value;
         }
 
+        auto set_flags(uint16_t flags) noexcept
+        {
+            job_ptr_->flags = (job_ptr_->flags & 0x0000) | flags;
+        }
     private:
         dml_job_t* const job_ptr_;
     };

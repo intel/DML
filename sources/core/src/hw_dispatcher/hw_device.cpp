@@ -159,7 +159,7 @@ namespace dml::core::dispatcher
         version_minor_ = dsa_device_get_version(device_ptr)&0xFF;
 
         DIAG("%5s: ", name_ptr);
-        if (!is_dsa_device || version_major_ != 1)
+        if (!is_dsa_device || version_major_ > 2)
         {
             DIAGA("UNSUPPORTED\n");
             return DML_STATUS_WORK_QUEUES_NOT_AVAILABLE;
