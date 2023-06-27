@@ -943,10 +943,10 @@ namespace dml
 
         /**
          * @brief Disables cache invalidation
-         *
+         * @deprecated Will be removed in a future release
          * @return New instance of the operation with cache invalidation off
          */
-        [[nodiscard]] constexpr auto dont_invalidate_cache() const noexcept
+        [[deprecated]] [[nodiscard]] constexpr auto dont_invalidate_cache() const noexcept
         {
             return cache_flush_operation(options_.enable<detail::cache_flush_flag::cache_control>());
         }

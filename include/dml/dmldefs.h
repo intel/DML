@@ -135,7 +135,8 @@ typedef uint8_t dml_internal_data_t;              /**< Hidden internal structure
 #define DML_FLAG_COPY_ONLY                  0x00000020u /**< The move operation is disabled */
 
 // DML_OP_CACHE_FLUSH operation specific flag
-#define DML_FLAG_DONT_INVALIDATE_CACHE      0x00000100u /**< Cache control flag for Flush operation */
+
+#define DML_FLAG_DONT_INVALIDATE_CACHE      _Pragma ("GCC warning \"DML_FLAG_DONT_INVALIDATE_CACHE is deprecated\"") 0x00000100u /**< Cache control flag for Flush operation */
 #define DML_FLAG_PREFETCH_CACHE             0x00000100u /**< Prefetch result of the operation into LLC */
 
 // DML_OP_CRC operation specific flags

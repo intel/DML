@@ -716,7 +716,7 @@ The Cache Flush operation flushes the processor caches at memory region
 represented via ``dst_view``.
 
 The operation is presented as ``dml::cache_flush`` object. The operation
-is configurable via ``.dont_invalidate_cache()`` and ``.block_on_fault()`` method.
+is configurable via ``.block_on_fault()`` and ``.dont_invalidate_cache()`` methods.
 
 Usage:
 
@@ -739,6 +739,9 @@ Result for this operation is:
    level of cache hierarchy. To disable that, use
    ``dml::cache_flush.dont_invalidate_cache()`` as the first argument.
 
+.. warning::
+
+   The ``.dont_invalidate_cache()`` method is deprecated and will be removed in a later version.
 
 Operation Status Values
 ***********************

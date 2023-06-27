@@ -9,6 +9,8 @@
  * @date 4/17/2020
  *
  */
+#include "gtest/gtest.h"
+
 #include "t_common.hpp"
 
 
@@ -20,6 +22,9 @@ namespace dml
      */
     DML_JOB_API_TEST_GENERATOR(dml_cache_flush, ta_do_not_invalidate)
     {
+        if(dml::test::variables_t::path != DML_PATH_SW){
+            GTEST_SKIP() << "Dont Invalidate Cache is only available on SW path";
+        }
         // Constants
         const auto length = 8u * 1000u;
 

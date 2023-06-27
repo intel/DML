@@ -39,7 +39,11 @@ class cache_flush: public ::testing::TestWithParam<types>
 TEST_P(cache_flush, success)
 {
     auto [transfer_size, dst_alignment, cache] = GetParam();
-
+#if !defined(SW_PATH)
+    if (cache == cache_control_e::dont_invalidate) {
+        GTEST_SKIP() << "Dont Invalidate Cache is only available on SW path";
+    }
+#endif
     auto workload_builder = dml::testing::WorkloadBuilder<dml::testing::CacheFlushOperation>()
                                 .set_transfer_size(transfer_size)
                                 .set_dst_alignment(dst_alignment)

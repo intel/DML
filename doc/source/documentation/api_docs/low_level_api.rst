@@ -928,10 +928,14 @@ The Cache Flush operation flushes the processor caches at the
 ``destination_first_ptr`` address. The number of bytes flushed is given
 by the ``destination_length`` parameter.
 
--  If ``DML_FLAG_CACHE_CRTL`` flag is not set, the affected cache lines
+-  If ``DML_FLAG_DONT_INVALIDATE_CACHE`` flag is not set, the affected cache lines
    are invalidated from every level of the cache hierarchy. If it is set
    to 1, then modified cache lines are written to main memory, but are
-   not evicted from the caches.
+   not evicted from the caches. 
+
+.. warning::
+
+  The ``DML_FLAG_DONT_INVALIDATE_CACHE`` flag is deprecated and will be removed in a later version.
 
 Job Structure Description
 *************************

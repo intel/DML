@@ -31,6 +31,9 @@ TYPED_TEST(dmlhl_cache_flush, invalidate)
 TYPED_TEST(dmlhl_cache_flush, dont_invalidate)
 {
     SKIP_IF_WRONG_PATH(typename TestFixture::execution_path);
+    if(dml::test::variables_t::path != DML_PATH_SW){
+        GTEST_SKIP() << "Dont Invalidate Cache is only available on SW path";
+    }
 
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
