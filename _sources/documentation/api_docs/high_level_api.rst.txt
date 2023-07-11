@@ -226,6 +226,10 @@ provides a handle to a concurrently running operation. When it is
 needed to wait for the finish and get the result, there is a ``.get()``
 method provided.
 
+.. warning::
+
+   It is the user's responsibility to keep the handler alive until the operation completes to
+   ensure that no use-after-free issues arise due to the destruction of the handler object.
 
 Results
 =======

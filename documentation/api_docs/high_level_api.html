@@ -794,6 +794,11 @@ before the call.</p>
 provides a handle to a concurrently running operation. When it is
 needed to wait for the finish and get the result, there is a <code class="docutils literal notranslate"><span class="pre">.get()</span></code>
 method provided.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>It is the user’s responsibility to keep the handler alive until the operation completes to
+ensure that no use-after-free issues arise due to the destruction of the handler object.</p>
+</div>
 </div>
 <div class="section" id="results">
 <h3>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h3>
