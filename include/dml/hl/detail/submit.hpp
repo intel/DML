@@ -69,10 +69,7 @@ namespace dml::detail
             return op_handler;
         }
 
-        if constexpr (std::is_same_v<execution_path, hardware>)
-        {
-            detail::set_hw_path(op_handler);
-        }
+        detail::set_path<execution_path_t>(op_handler);
 
         return op_handler;
     }

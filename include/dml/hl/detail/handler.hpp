@@ -39,10 +39,21 @@ namespace dml
         /**
          * @todo
          */
-        template <typename operation, typename allocator_t>
-        void set_hw_path(handler<operation, allocator_t> &h) noexcept
+        template <typename execution_path_t, typename operation, typename allocator_t>
+        void set_path(handler<operation, allocator_t> &h) noexcept
         {
-            h.is_hw = true;
+            if (std::is_same_v<execution_path_t, software>){
+                h.path_ = handler<operation, allocator_t>::path_e::software_e;
+            }
+            else if (std::is_same_v<execution_path_t, hardware>){
+                h.path_ = handler<operation, allocator_t>::path_e::hardware_e;
+            }
+            else if (std::is_same_v<execution_path_t, automatic>){
+                h.path_ = handler<operation, allocator_t>::path_e::automatic_e;
+            }
+            else {
+                h.path_ = handler<operation, allocator_t>::path_e::software_e;
+            }
         }
 
         /**

@@ -40,7 +40,7 @@ namespace dml
         /**
          * @brief Construct empty and invalid handler
          */
-        handler() : task_(), status_(status_code::error), is_hw(false) {}
+        handler() : task_(), status_(status_code::error), path_(path_e::software_e) {}
 
         /**
          * @brief Construct a handler from a task
@@ -48,7 +48,7 @@ namespace dml
          * @param some_task Task for handler construction
          */
         explicit handler(detail::ml::task<allocator_t> &&some_task)
-            : task_(std::move(some_task)), status_(status_code::ok), is_hw(false)
+            : task_(std::move(some_task)), status_(status_code::ok), path_(path_e::software_e)
         {
         }
 
@@ -60,7 +60,7 @@ namespace dml
         handler(handler &&other) noexcept
             : task_(std::move(other.task_)),
               status_(std::exchange(other.status_, status_code::error)),
-              is_hw(other.is_hw)
+              path_(other.path_)
         {
         }
 
@@ -77,7 +77,7 @@ namespace dml
             {
                 std::swap(task_, other.task_);
                 std::swap(status_, other.status_);
-                std::swap(is_hw, other.is_hw);
+                std::swap(path_, other.path_);
             }
 
             return *this;
@@ -112,13 +112,18 @@ namespace dml
 
             if (status_ == status_code::ok)
             {
-                if (is_hw)
-                {
-                    detail::ml::wait<detail::ml::execution_path::hardware>(task_view);
-                }
-                else
-                {
-                    detail::ml::wait<detail::ml::execution_path::software>(task_view);
+                switch(path_){
+                    case path_e::automatic_e:
+                        detail::ml::wait<detail::ml::execution_path::automatic>(task_view);
+                        break;
+                    case path_e::software_e:
+                        detail::ml::wait<detail::ml::execution_path::software>(task_view);
+                        break;
+                    case path_e::hardware_e:
+                        detail::ml::wait<detail::ml::execution_path::hardware>(task_view);
+                        break;
+                    default:
+                        detail::ml::wait<detail::ml::execution_path::software>(task_view);
                 }
 
                 return detail::make_result<result_type>(completion_record);
@@ -141,9 +146,16 @@ namespace dml
 
             if (status_ == status_code::ok)
             {
-                return is_hw
-                           ? detail::ml::finished<detail::ml::execution_path::hardware>(task_view)
-                           : detail::ml::finished<detail::ml::execution_path::software>(task_view);
+                switch(path_){
+                    case path_e::automatic_e:
+                        return detail::ml::finished<detail::ml::execution_path::automatic>(task_view);
+                    case path_e::software_e:
+                        return detail::ml::finished<detail::ml::execution_path::software>(task_view);
+                    case path_e::hardware_e:
+                        return detail::ml::finished<detail::ml::execution_path::hardware>(task_view);
+                    default:
+                        return detail::ml::finished<detail::ml::execution_path::software>(task_view);
+                }
             }
             else
             {
@@ -156,8 +168,8 @@ namespace dml
         friend dml::detail::ml::task_view detail::get_task_view(
             handler<operation_t_, allocator_t_> &h) noexcept;
 
-        template <typename operation_t_, typename allocator_t_>
-        friend void detail::set_hw_path(handler<operation_t_, allocator_t_> &h) noexcept;
+        template <typename execution_path_t_, typename operation_t_, typename allocator_t_>
+        friend void detail::set_path(handler<operation_t_, allocator_t_> &h) noexcept;
 
         template <typename operation_t_, typename allocator_t_>
         friend void detail::set_status(handler<operation_t_, allocator_t_> &h,
@@ -166,7 +178,15 @@ namespace dml
        private:
         detail::ml::task<allocator_t> task_;   /**< @todo */
         status_code                   status_; /**< This handler status */
-        bool                          is_hw;   /**< @todo */
+
+        /**
+        * @brief Enumeration to allow for selecting the correct path within handler class and set_path function
+        */
+        enum path_e {
+            automatic_e = 0,
+            software_e  = 1,
+            hardware_e  = 2
+        }                             path_;
     };
 } // namespace dml
 
