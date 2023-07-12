@@ -157,27 +157,27 @@ namespace dml
             return dif_block_sizes[job_ptr_->dif_config.block_size];
         }
 
-        auto set_offset(uint32_t offset) noexcept
+        void set_offset(uint32_t offset) noexcept
         {
             job_ptr_->offset = offset;
         }
 
-        auto set_result(uint8_t result) noexcept
+        void set_result(uint8_t result) noexcept
         {
             job_ptr_->result = result;
         }
 
-        auto set_crc(uint32_t value) noexcept
+        void set_crc(uint32_t value) noexcept
         {
             *job_ptr_->crc_checksum_ptr = value;
         }
 
-        auto set_destination_length(uint32_t value) noexcept
+        void set_destination_length(uint32_t value) noexcept
         {
             job_ptr_->destination_length = value;
         }
 
-        auto set_flags(uint16_t flags) noexcept
+        void set_flags(uint16_t flags) noexcept
         {
             job_ptr_->flags = (job_ptr_->flags & 0x0000) | flags;
         }
