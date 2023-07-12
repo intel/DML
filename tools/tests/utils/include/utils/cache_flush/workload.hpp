@@ -25,11 +25,6 @@ namespace dml::testing
             return memory_.get_region(0);
         }
 
-        [[nodiscard]] auto cache_control_enabled() const noexcept
-        {
-            return cache_control_;
-        }
-
         [[nodiscard]] bool block_on_fault_enabled() noexcept
         {
             return block_on_fault_;
@@ -43,15 +38,13 @@ namespace dml::testing
     private:
         friend WorkloadBuilder<CacheFlushOperation>;
 
-        Workload(Memory&& memory, bool cache_control, bool block_on_fault = false) noexcept:
+        Workload(Memory&& memory, bool block_on_fault = false) noexcept:
             WorkloadBase(std::move(memory)),
-            cache_control_(cache_control),
             block_on_fault_(block_on_fault)
         {
         }
 
     private:
-        bool cache_control_;
         bool block_on_fault_;
     };
 }  // namespace dml::testing

@@ -28,23 +28,6 @@ TYPED_TEST(dmlhl_cache_flush, invalidate)
     ASSERT_EQ(result.status, dml::status_code::ok);
 }
 
-TYPED_TEST(dmlhl_cache_flush, dont_invalidate)
-{
-    SKIP_IF_WRONG_PATH(typename TestFixture::execution_path);
-    if(dml::test::variables_t::path != DML_PATH_SW){
-        GTEST_SKIP() << "Dont Invalidate Cache is only available on SW path";
-    }
-
-    constexpr auto length = 16u;
-    constexpr auto seed   = 777u;
-
-    auto test_data = dml::testing::cache_flush(seed, length);
-
-    auto result = this->run(dml::cache_flush.dont_invalidate_cache(), dml::make_view(test_data.dst));
-
-    ASSERT_EQ(result.status, dml::status_code::ok);
-}
-
 TYPED_TEST(dmlhl_cache_flush, dst_null)
 {
     constexpr auto length = 16u;

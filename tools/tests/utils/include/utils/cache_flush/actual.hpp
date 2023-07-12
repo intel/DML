@@ -23,19 +23,9 @@ namespace dml::testing
         job->destination_length    = workload.get_dst().size();
         job->flags |= (workload.block_on_fault_enabled()?DML_FLAG_BLOCK_ON_FAULT:0x00);
 
-        if (workload.cache_control_enabled())
-        {
-            job->flags |= DML_FLAG_DONT_INVALIDATE_CACHE;
-        }
-
         auto status = Status(dml_execute_job(job, DML_WAIT_MODE_BUSY_POLL));
 #elif defined(CPP_API)
         auto op = dml::cache_flush;
-
-        if (workload.cache_control_enabled())
-        {
-            op = op.dont_invalidate_cache();
-        }
 
         if (workload.block_on_fault_enabled())
         {

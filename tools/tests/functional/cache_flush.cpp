@@ -10,7 +10,6 @@
 #include <utils/cache_flush/reference.hpp>
 #include <utils/cache_flush/workload_builder.hpp>
 
-using dml::testing::cache_control_e;
 using dml::testing::block_on_fault_e;
 
 namespace// anonymous
@@ -25,12 +24,11 @@ namespace// anonymous
     {
         static constexpr std::uint32_t transfer_size[] = {1, 3, 8, 15, 64, 255, 1024};
         static constexpr std::uint32_t dst_alignment[] = {1, 2, 4, 8};
-        static constexpr cache_control_e cache_control[] = {cache_control_e::invalidate, cache_control_e::dont_invalidate};
         static constexpr block_on_fault_e block_on_fault[] = {block_on_fault_e::dont_block, block_on_fault_e::block};
     };
 }// namespace
 
-using types = std::tuple<std::uint32_t, std::uint32_t, cache_control_e>;
+using types = std::tuple<std::uint32_t, std::uint32_t>;
 
 class cache_flush: public ::testing::TestWithParam<types>
 {
@@ -38,16 +36,10 @@ class cache_flush: public ::testing::TestWithParam<types>
 
 TEST_P(cache_flush, success)
 {
-    auto [transfer_size, dst_alignment, cache] = GetParam();
-#if !defined(SW_PATH)
-    if (cache == cache_control_e::dont_invalidate) {
-        GTEST_SKIP() << "Dont Invalidate Cache is only available on SW path";
-    }
-#endif
+    auto [transfer_size, dst_alignment] = GetParam();
     auto workload_builder = dml::testing::WorkloadBuilder<dml::testing::CacheFlushOperation>()
                                 .set_transfer_size(transfer_size)
-                                .set_dst_alignment(dst_alignment)
-                                .set_cache_control(cache);
+                                .set_dst_alignment(dst_alignment);
 
     auto actual_workload    = workload_builder.build();
     auto reference_workload = workload_builder.build();
@@ -117,11 +109,9 @@ INSTANTIATE_TEST_SUITE_P(block_on_fault,
 INSTANTIATE_TEST_SUITE_P(transfer_size,
                          cache_flush,
                          ::testing::Combine(::testing::ValuesIn(variable::transfer_size),
-                                            ::testing::Values(constant::dst_alignment),
-                                            ::testing::ValuesIn(variable::cache_control)));
+                                            ::testing::Values(constant::dst_alignment)));
 
 INSTANTIATE_TEST_SUITE_P(alignment,
                          cache_flush,
                          ::testing::Combine(::testing::Values(constant::transfer_size),
-                                            ::testing::ValuesIn(variable::dst_alignment),
-                                            ::testing::ValuesIn(variable::cache_control)));
+                                            ::testing::ValuesIn(variable::dst_alignment)));

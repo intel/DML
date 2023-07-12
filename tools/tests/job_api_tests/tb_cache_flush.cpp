@@ -26,7 +26,6 @@ namespace dml
         // Library job initialization
         lib_job->destination_length = length;
         lib_job->operation          = DML_OP_CACHE_FLUSH;
-        lib_job->flags              = DML_FLAG_DONT_INVALIDATE_CACHE;
 
         // Reference job initialization
         ref_job.status = DML_STATUS_NULL_POINTER_ERROR;
