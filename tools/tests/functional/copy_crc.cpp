@@ -30,7 +30,9 @@ namespace// anonymous
         static constexpr std::uint32_t dst_alignment[] = {1, 2, 4, 8};
         static constexpr reflection_e reflection[] = {reflection_e::enable, reflection_e::disable};
         static constexpr data_reflection_e data_reflection[] = {data_reflection_e::enable, data_reflection_e::disable};
+        #if !defined(SW_PATH) && defined(__linux__)
         static constexpr block_on_fault_e block_on_fault[] = {block_on_fault_e::dont_block, block_on_fault_e::block};
+        #endif
     };
 }// namespace
 
@@ -63,7 +65,7 @@ TEST_P(copy_crc, success)
     ASSERT_EQ(actual_workload, reference_workload);
 }
 
-#if !defined(SW_PATH) && defined(OS_UNIX)
+#if !defined(SW_PATH) && defined(__linux__)
 #include <sys/mman.h>
 #include <unistd.h>
 

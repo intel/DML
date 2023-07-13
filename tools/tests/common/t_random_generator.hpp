@@ -10,7 +10,7 @@
  * @date 4/17/2020
  */
 #ifndef DML_TEST_RNG
-#define DAS_TEST_RNG
+#define DML_TEST_RNG
 
 
 #include <random>
@@ -464,4 +464,4 @@ namespace dml::test
 #include "t_random_generator.cxx"
 
 
-#endif
+#endif // DML_TEST_RNG

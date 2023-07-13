@@ -24,7 +24,9 @@ namespace// anonymous
     {
         static constexpr std::uint32_t transfer_size[] = { 1, 3, 8, 15, 64, 255, 1024 };
         static constexpr std::uint32_t dst_alignment[] = {1, 2, 4, 8};
+        #if !defined(SW_PATH) && defined(__linux__)
         static constexpr block_on_fault_e block_on_fault[] = {block_on_fault_e::dont_block, block_on_fault_e::block};
+        #endif
     };
 }// namespace
 
@@ -52,7 +54,7 @@ TEST_P(fill, success)
     ASSERT_EQ(actual_workload, reference_workload);
 }
 
-#if !defined(SW_PATH) && defined(OS_UNIX)
+#if !defined(SW_PATH) && defined(__linux__)
 #include <sys/mman.h>
 #include <unistd.h>
 

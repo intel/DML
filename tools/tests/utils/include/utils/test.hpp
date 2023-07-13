@@ -7,7 +7,7 @@
 #ifndef DML_TESTING_ACTUAL_API_HPP
 #define DML_TESTING_ACTUAL_API_HPP
 
-#if !defined(OS_WINDOWS) && !defined(OS_UNIX)
+#if !defined(_WIN32) && !defined(__linux__)
 #error "Operating system is undefined!"
 #endif
 

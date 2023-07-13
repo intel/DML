@@ -80,15 +80,6 @@ foreach (api ${apis})
                 list(APPEND labels auto_path)
             endif ()
 
-            if (WIN32)
-                target_compile_definitions(${executable_name} PRIVATE OS_WINDOWS)
-            endif()
-
-            if (UNIX)
-                target_compile_definitions(${executable_name} PRIVATE OS_UNIX)
-            endif()
-
-
             add_test(NAME ${executable_name} COMMAND ${executable_name})
             set_tests_properties(${executable_name} PROPERTIES LABELS "${labels}")
 

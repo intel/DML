@@ -15,16 +15,13 @@ using dml::testing::block_on_fault_e;
 
 namespace// anonymous
 {
-    struct constant
-    {
-        static constexpr std::uint32_t transfer_size = 1024u;
-    };
-
     struct variable
     {
         static constexpr std::uint32_t transfer_size[] = {8, 16, 64, 256, 4096, 0x80000};
         static constexpr delta_size_e delta_size[] = {delta_size_e::min, delta_size_e::medium, delta_size_e::max};
+        #if !defined(SW_PATH) && defined(__linux__)
         static constexpr block_on_fault_e block_on_fault[] = {block_on_fault_e::dont_block, block_on_fault_e::block};
+        #endif
     };
 }// namespace
 
@@ -52,7 +49,7 @@ TEST_P(apply_delta, success)
     ASSERT_EQ(actual_workload, reference_workload);
 }
 
-#if !defined(SW_PATH) && defined(OS_UNIX)
+#if !defined(SW_PATH) && defined(__linux__)
 #include <sys/mman.h>
 #include <unistd.h>
 

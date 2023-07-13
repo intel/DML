@@ -18,11 +18,6 @@ using dml::testing::block_on_fault_e;
 
 namespace// anonymous
 {
-    struct constant
-    {
-        static constexpr std::uint32_t transfer_size = 1024u;
-    };
-
     struct variable
     {
         static constexpr std::uint32_t transfer_size[] = {8, 16, 64, 256, 4096, 0x80000};
@@ -35,11 +30,11 @@ namespace// anonymous
                                                   mismatch_e::full};
         static constexpr delta_size_e delta_size[] = {delta_size_e::min, delta_size_e::medium, delta_size_e::max};
         static constexpr exec_e execution_mode[] = {exec_e::sync, exec_e::async};
+        #if !defined(SW_PATH) && defined(__linux__)
         static constexpr block_on_fault_e block_on_fault[] = {block_on_fault_e::dont_block, block_on_fault_e::block};
+        #endif
     };
 }// namespace
-
-static const std::uint32_t transfer_sizes[] = { 8, 16, 64, 256, 4096, 0x80000 };
 
 using types_create_delta = std::tuple<std::uint32_t, expect_e, mismatch_e, delta_size_e, exec_e>;
 
@@ -69,7 +64,7 @@ TEST_P(create_delta, success)
 }
 
 
-#if !defined(SW_PATH) && defined(OS_UNIX)
+#if !defined(SW_PATH) && defined(__linux__)
 #include <sys/mman.h>
 #include <unistd.h>
 

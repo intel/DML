@@ -30,7 +30,9 @@ namespace// anonymous
         static constexpr std::uint32_t dst_alignment[] = {1, 2, 4, 8};
         static constexpr std::int32_t offset[] = {-4, -1, 0, +1, +4};
         static constexpr bool swap[] = {true, false};
+        #if !defined(SW_PATH) && defined(__linux__)
         static constexpr block_on_fault_e block_on_fault[] = {block_on_fault_e::dont_block, block_on_fault_e::block};
+        #endif
     };
 }// namespace
 
@@ -61,7 +63,7 @@ TEST_P(mem_move, success)
     ASSERT_EQ(actual_workload, reference_workload);
 }
 
-#if !defined(SW_PATH) && defined(OS_UNIX)
+#if !defined(SW_PATH) && defined(__linux__)
 #include <sys/mman.h>
 #include <unistd.h>
 

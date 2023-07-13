@@ -29,7 +29,9 @@ namespace// anonymous
         static constexpr expect_e expect[] = {expect_e::none, expect_e::equal, expect_e::not_equal};
         static constexpr mismatch_e mismatch[] = {mismatch_e::none, mismatch_e::first, mismatch_e::middle,
                                                   mismatch_e::last};
+        #if !defined(SW_PATH) && defined(__linux__)
         static constexpr block_on_fault_e block_on_fault[] = {block_on_fault_e::dont_block, block_on_fault_e::block};
+        #endif
     };
 }// namespace
 
@@ -60,7 +62,7 @@ TEST_P(compare_pattern, success)
     ASSERT_EQ(actual_workload, reference_workload);
 }
 
-#if !defined(SW_PATH) && defined(OS_UNIX)
+#if !defined(SW_PATH) && defined(__linux__)
 #include <sys/mman.h>
 #include <unistd.h>
 

@@ -37,7 +37,7 @@ int execute_dualcast() {
         return -1;
     }
 
-    if (src != std::vector(dst1_ptr, dst1_ptr + size) || src != std::vector(dst2_ptr, dst2_ptr + size)) {
+    if (src != std::vector<uint8_t>(dst1_ptr, dst1_ptr + size) || src != std::vector<uint8_t>(dst2_ptr, dst2_ptr + size)) {
         std::cout << "Operation result is incorrect." << std::endl;
         return -1;
     }

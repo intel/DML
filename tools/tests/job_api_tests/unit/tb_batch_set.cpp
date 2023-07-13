@@ -1134,8 +1134,6 @@ namespace dml
         EXPECT_NE(nullptr, source_ptr);
         EXPECT_NE(nullptr, crc_seed_ptr);
 
-        (*crc_seed_ptr);
-
         const auto set_op_status = dml_batch_set_copy_crc_by_index(dml_job_ptr,
                                                                    task_index,
                                                                    source_ptr,

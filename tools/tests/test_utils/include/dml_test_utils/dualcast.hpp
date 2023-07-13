@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (C) 2021 Intel Corporation
+ * Copyright (C) 2023 Hamish Nicholson
  *
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
@@ -29,8 +30,8 @@ namespace dml::testing
 
         [[nodiscard]] bool check() const noexcept
         {
-            auto res1 = std::vector(src.begin(), src.end()) == std::vector(dst1, dst1 + length);
-            auto res2 = std::vector(src.begin(), src.end()) == std::vector(dst2, dst2 + length);
+            auto res1 = std::vector<uint8_t>(src.begin(), src.end()) == std::vector<uint8_t>(dst1, dst1 + length);
+            auto res2 = std::vector<uint8_t>(src.begin(), src.end()) == std::vector<uint8_t>(dst2, dst2 + length);
 
             return res1 && res2;
         }

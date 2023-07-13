@@ -1,4 +1,5 @@
 # Copyright (C) 2021 Intel Corporation
+# Copyright (C) 2023 Hamish Nicholson
 #
 # SPDX-License-Identifier: MIT
 
@@ -59,16 +60,17 @@ endif ()
 
 if (CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     include(cmake/msvc.cmake)
-elseif (CMAKE_C_COMPILER_ID STREQUAL "GNU")
-    include(cmake/gnu.cmake)
+elseif (CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang")
+    include(cmake/gnu_or_clang.cmake)
 else ()
     message(FATAL_ERROR "Unknown compiler ID: ${CMAKE_C_COMPILER_ID}")
 endif ()
 
 # Project-wide settings
 add_compile_options(
-    ${DML_SECURITY_OPTIONS}
+    ${DML_SECURITY_COMPILE_OPTIONS}
     $<$<BOOL:${DML_RECORD_SWITCHES}>:-frecord-gcc-switches>)
+add_link_options(${DML_SECURITY_LINK_OPTIONS})
 add_compile_definitions(${DML_SECURITY_DEFINITIONS})
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
