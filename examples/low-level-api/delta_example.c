@@ -12,6 +12,7 @@
 #define BUFFER_SIZE       1024 // 1 KB
 #define DELTAS_PER_RECORD 8u   // 8 Deltas Per record
 #define DELTA_RECORD_SIZE 10u  // Delta Record size 2 bytes (offset) + 8 bytes (Deltas)
+#define DELTA_SIZE        BUFFER_SIZE / DELTAS_PER_RECORD * DELTA_RECORD_SIZE // Deltas for 1 KB of data where 10 bytes is needed to store deltas for 8 bytes
 
 /*
 * This example demonstrates how to use the delta operations.
@@ -35,11 +36,9 @@ int main(int argc, char **argv)
     dml_job_t *dml_job_ptr = NULL;
     uint32_t size = 0u;
 
-    uint32_t delta_size = BUFFER_SIZE / DELTAS_PER_RECORD * DELTA_RECORD_SIZE;
-
     uint8_t source1     [BUFFER_SIZE];
     uint8_t source2     [BUFFER_SIZE];
-    uint8_t delta       [delta_size];
+    uint8_t delta       [DELTA_SIZE];
 
     for(int i = 0; i < BUFFER_SIZE; i++){
         source1[i]  = i % 256;
@@ -66,7 +65,7 @@ int main(int argc, char **argv)
     dml_job_ptr->source_second_ptr      = source2;
     dml_job_ptr->destination_first_ptr  = delta;
     dml_job_ptr->source_length          = BUFFER_SIZE;
-    dml_job_ptr->destination_length     = delta_size;
+    dml_job_ptr->destination_length     = DELTA_SIZE;
 
     status = dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
     if (DML_STATUS_OK != status) {
