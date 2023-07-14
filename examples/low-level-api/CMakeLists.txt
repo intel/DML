@@ -6,8 +6,20 @@ cmake_minimum_required(VERSION 3.12.0 FATAL_ERROR)
 
 project(dml_ll_examples C)
 
-add_subdirectory(samples)
+file(GLOB files "*.c")
+foreach(source_file ${files})
+    # for each source file, remove path and extension, and prepend "ll_"
+    get_filename_component(example_name ${source_file} NAME_WE)
+    set(example_name "ll_${example_name}")
 
-add_executable(dml_example_c_api_multisocket multisocket.c)
-target_link_libraries(dml_example_c_api_multisocket PRIVATE dml)
-target_compile_options(dml_example_c_api_multisocket PRIVATE ${DML_SECURITY_OPTIONS})
+    # create executable
+    add_executable(${example_name} ${source_file})
+    target_link_libraries(${example_name} PRIVATE dml)
+
+    if(WIN32)
+        target_compile_options(${example_name} PRIVATE "$<$<CONFIG:Release>:-O2>" /WX)
+    else()
+        target_compile_options(${example_name} PRIVATE "$<$<CONFIG:Release>:-O3>" -Werror -Wall)
+    endif()
+
+endforeach()

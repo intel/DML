@@ -10,7 +10,7 @@ file(GLOB files "*.cpp")
 foreach(source_file ${files})
     # for each source file, remove path and extension, and prepend "hl_"
     get_filename_component(example_name ${source_file} NAME_WE)
-    set(example_name "hl_${example_name}_example")
+    set(example_name "hl_${example_name}")
 
     # create executable
     add_executable(${example_name} ${source_file})

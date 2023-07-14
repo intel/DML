@@ -77,7 +77,6 @@ dml_status_t dml_get_job_size(dml_path_t dml_path, uint32_t *job_size_ptr);
  *                                  - @ref DML_PATH_SW
  * @param[in,out] dml_job_ptr   a pointer to @ref dml_job_t structure
  *
- * @remark Usage example: @ref JOB_API_INIT_DML_JOB_EXAMPLE
  *
  * @return @ref DML_STATUS_OK in case of success execution, or non-zero value otherwise
  * Return values:
@@ -95,7 +94,6 @@ dml_status_t dml_init_job(dml_path_t path, dml_job_t *dml_job_ptr);
  *
  * @param[in,out] dml_job_ptr   a pointer to @ref dml_job_t structure
  *
- * @remark Usage example: @ref JOB_API_FINALIZE_DML_JOB_EXAMPLE
  *
  * @return The follow statuses;
  *      - @ref DML_STATUS_OK;
@@ -109,7 +107,6 @@ dml_status_t dml_finalize_job(dml_job_t *dml_job_ptr);
  * @param[in,out] dml_job_ptr   Pointer to the initialized @ref dml_job_t structure
  * @param[in]     wait_mode     Type of waiting
  *
- * @remark Usage example: @ref JOB_API_EXECUTE_DML_JOB_EXAMPLE
  *
  * @return @ref DML_STATUS_OK in case of success execution, or non-zero value otherwise in accordance with specified operation
  * Return values:
@@ -127,7 +124,6 @@ dml_status_t dml_execute_job(dml_job_t *dml_job_ptr, dml_wait_mode_t wait_mode);
  *
  * @param[in,out] dml_job_ptr   Pointer to the initialized @ref dml_job_t structure
  *
- * @remark Usage example: @ref JOB_API_SUBMIT_DML_JOB_EXAMPLE
  *
  * @return @ref DML_STATUS_OK in case of success execution, or non-zero value otherwise in accordance with specified operation
  * Return values:
@@ -145,7 +141,6 @@ dml_status_t dml_submit_job(dml_job_t *dml_job_ptr);
  * @param[in,out] dml_job_ptr   Pointer to the initialized @ref dml_job_t structure
  * @param[in]     wait_mode     Type of waiting
  *
- * @remark Usage example: @ref JOB_API_SUBMIT_DML_JOB_EXAMPLE
  *
  * @return @ref DML_STATUS_OK in case of success execution, or non-zero value otherwise
  * Return values:

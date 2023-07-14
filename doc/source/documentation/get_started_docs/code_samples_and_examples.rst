@@ -15,21 +15,93 @@ Low-level C API Examples
 ************************
 
 
-The ``<dml_library>/examples/dml_job_api/job_wrapper_examples.c`` source
-file contains a number of simple examples, illustrating how you can use
-Intel DML.
+cache_flush
+===========
 
-The wrapper's descriptions are placed in the ``dml_examples.h``
-header file.
 
-The examples are compiled during the Intel DML project compilation or
-as a separate CMake target (``job_api_samples``).
+.. literalinclude:: ../../../../examples/low-level-api/cache_flush_example.c
+    :language: c
 
-.. note::
 
-  These examples are intended to be illustrative and functional,
-  but they are not intended to be examples of a complete implementation.
-  In particular, their handling of error conditions is rather primitive.
+compare_pattern
+===============
+
+
+.. literalinclude:: ../../../../examples/low-level-api/compare_pattern_example.c
+    :language: c
+
+
+compare
+=======
+
+
+.. literalinclude:: ../../../../examples/low-level-api/compare_example.c
+    :language: c
+
+
+copy_crc
+========
+
+
+.. literalinclude:: ../../../../examples/low-level-api/copy_crc_example.c
+    :language: c
+
+
+crc
+===
+
+
+.. literalinclude:: ../../../../examples/low-level-api/crc_example.c
+    :language: c
+
+
+delta
+=====
+
+
+.. literalinclude:: ../../../../examples/low-level-api/delta_example.c
+    :language: c
+
+
+dualcast
+========
+
+
+.. literalinclude:: ../../../../examples/low-level-api/dualcast_example.c
+    :language: c
+
+
+fill
+====
+
+
+.. literalinclude:: ../../../../examples/low-level-api/fill_example.c
+    :language: c
+
+
+mem_move
+========
+
+
+.. literalinclude:: ../../../../examples/low-level-api/move_example.c
+    :language: c
+
+
+batch
+========
+
+
+.. literalinclude:: ../../../../examples/low-level-api/batch_example.c
+    :language: c
+
+
+batch
+========
+
+
+.. literalinclude:: ../../../../examples/low-level-api/dif_example.c
+    :language: c
+
 
 
 Multi-Socket Library Usage
@@ -41,7 +113,7 @@ setting in the ``dml_job_t`` structure. Thus, the ``memory_move`` operation can 
 to one data array using several sockets at the same time.
 
 
-.. literalinclude:: ../../../../examples/low-level-api/multisocket.c
+.. literalinclude:: ../../../../examples/low-level-api/multi_socket_example.c
     :language: c
 
 
