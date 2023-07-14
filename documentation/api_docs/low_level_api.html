@@ -288,6 +288,11 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cache-control">
+   Cache Control
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#basic-fields-of-job-structure">
    Basic Fields of Job Structure
   </a>
@@ -492,6 +497,11 @@
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#page-fault-handling">
    Page Fault handling
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#cache-control">
+   Cache Control
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -838,11 +848,16 @@ identified as writes to durable memory</p></li>
 <p>Page fault can occur during workload processing on a hardware. When the fault occurs, the outcome is based on the execution path:
 - Hardware path: <code class="docutils literal notranslate"><span class="pre">DML_STATUS_PAGE_FAULT_ERROR</span></code> is returned.
 - Auto path: the library resolves the fault via completion of the workload on a CPU.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">DML_FLAG_BLOCK_ON_FAULT</span></code> method can be used to have page faults be resolved on accelerator.
+<p>The <code class="docutils literal notranslate"><span class="pre">DML_FLAG_BLOCK_ON_FAULT</span></code> flag can be used to have page faults be resolved on accelerator.
 Using <code class="docutils literal notranslate"><span class="pre">DML_FLAG_BLOCK_ON_FAULT</span></code> can be done for all operations except Batch, Fence, and Drain.
 All available accelerator workqueues need to be configured to allow for blocking on fault <code class="docutils literal notranslate"><span class="pre">&quot;block_on_fault&quot;:1</span></code>.
 On by default in DML provided accelerator configuration files.
 Please refer to <a class="reference internal" href="../get_started_docs/installation.html#accelerator-configuration-reference-link"><span class="std std-ref">Accelerator Configuration</span></a> for more information.</p>
+</div>
+<div class="section" id="cache-control">
+<span id="library-cache-control-ll-reference-link"></span><h2>Cache Control<a class="headerlink" href="#cache-control" title="Permalink to this headline">¶</a></h2>
+<p>The accelerator allows for writing to cache via the <code class="docutils literal notranslate"><span class="pre">DML_FLAG_PREFETCH_CACHE</span></code> flag for all operations that write to memory.
+If the flag is enabled, the accelerator hints that cache entries be allocated to contain data written by the operation.</p>
 </div>
 <div class="section" id="basic-fields-of-job-structure">
 <h2>Basic Fields of Job Structure<a class="headerlink" href="#basic-fields-of-job-structure" title="Permalink to this headline">¶</a></h2>
@@ -974,6 +989,14 @@ destinations (for internal validation).</p></li>
 buffers. If you need to disable Move and enable only Copy behavior,
 you should set the <code class="docutils literal notranslate"><span class="pre">DML_FLAG_COPY</span></code> flag.</p>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This operation is able to use the <code class="docutils literal notranslate"><span class="pre">DML_FLAG_PREFETCH_CACHE</span></code> flag
+to hint that the cache entries be allocated for data written
+to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>.</p>
+<p>Please refer to <a class="reference internal" href="#library-cache-control-ll-reference-link"><span class="std std-ref">Cache Control</span></a>
+for more information.</p>
+</div>
 </div>
 <div class="section" id="memory-copy-with-dualcast">
 <h4>Memory Copy with Dualcast<a class="headerlink" href="#memory-copy-with-dualcast" title="Permalink to this headline">¶</a></h4>
@@ -993,6 +1016,14 @@ you should set the <code class="docutils literal notranslate"><span class="pre">
 <code class="docutils literal notranslate"><span class="pre">destination_second_ptr</span></code> overlap in any combination, the error is
 thrown.</p>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This operation is able to use the <code class="docutils literal notranslate"><span class="pre">DML_FLAG_PREFETCH_CACHE</span></code> flag
+to hint that the cache entries be allocated for data written
+to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> and <code class="docutils literal notranslate"><span class="pre">destination_second_ptr</span></code>.</p>
+<p>Please refer to <a class="reference internal" href="#library-cache-control-ll-reference-link"><span class="std std-ref">Cache Control</span></a>
+for more information.</p>
+</div>
 </div>
 <div class="section" id="fill">
 <h4>Fill<a class="headerlink" href="#fill" title="Permalink to this headline">¶</a></h4>
@@ -1003,6 +1034,14 @@ with the bytes from the <code class="docutils literal notranslate"><span class="
 <li><p>The <code class="docutils literal notranslate"><span class="pre">pattern</span></code> size is always 8 bytes.</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter does not need to be a multiple of 8.</p></li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This operation is able to use the <code class="docutils literal notranslate"><span class="pre">DML_FLAG_PREFETCH_CACHE</span></code> flag
+to hint that the cache entries be allocated for data written
+to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>.</p>
+<p>Please refer to <a class="reference internal" href="#library-cache-control-ll-reference-link"><span class="std std-ref">Cache Control</span></a>
+for more information.</p>
+</div>
 </div>
 </div>
 <div class="section" id="memory-compare-and-restoring-features">
@@ -1239,6 +1278,14 @@ expressed is <code class="docutils literal notranslate"><span class="pre">0x7fff
 <code class="docutils literal notranslate"><span class="pre">expected_result</span></code> field. Mode details are in the Compare Operation
 description.</p>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This operation is able to use the <code class="docutils literal notranslate"><span class="pre">DML_FLAG_PREFETCH_CACHE</span></code> flag
+to hint that the cache entries be allocated for data written
+to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>.</p>
+<p>Please refer to <a class="reference internal" href="#library-cache-control-ll-reference-link"><span class="std std-ref">Cache Control</span></a>
+for more information.</p>
+</div>
 </div>
 <div class="section" id="apply-delta-record">
 <h4>Apply Delta Record<a class="headerlink" href="#apply-delta-record" title="Permalink to this headline">¶</a></h4>
@@ -1253,6 +1300,14 @@ region to update.</p></li>
 returned to the <code class="docutils literal notranslate"><span class="pre">destination_length</span></code> field after the Create Delta
 Record operation.</p></li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This operation is able to use the <code class="docutils literal notranslate"><span class="pre">DML_FLAG_PREFETCH_CACHE</span></code> flag
+to hint that the cache entries be allocated for data written
+to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>.</p>
+<p>Please refer to <a class="reference internal" href="#library-cache-control-ll-reference-link"><span class="std std-ref">Cache Control</span></a>
+for more information.</p>
+</div>
 </div>
 </div>
 <div class="section" id="memory-hash-features">
@@ -1277,6 +1332,14 @@ the data copied.</p>
 This operation runs as a sequential call of two operations.</p>
 <p>If <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> and <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> overlap, the error
 is thrown.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This operation is able to use the <code class="docutils literal notranslate"><span class="pre">DML_FLAG_PREFETCH_CACHE</span></code> flag
+to hint that the cache entries be allocated for data written
+to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>.</p>
+<p>Please refer to <a class="reference internal" href="#library-cache-control-ll-reference-link"><span class="std std-ref">Cache Control</span></a>
+for more information.</p>
+</div>
 </div>
 </div>
 <div class="section" id="data-integrity-field-features">
@@ -1562,6 +1625,14 @@ by the <code class="docutils literal notranslate"><span class="pre">destination_
 plus 8 bytes for each source block).</p></li>
 <li><p>If <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> and <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code> overlap, the error is thrown.</p></li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This operation is able to use the <code class="docutils literal notranslate"><span class="pre">DML_FLAG_PREFETCH_CACHE</span></code> flag
+to hint that the cache entries be allocated for data written
+to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>.</p>
+<p>Please refer to <a class="reference internal" href="#library-cache-control-ll-reference-link"><span class="std std-ref">Cache Control</span></a>
+for more information.</p>
+</div>
 </div>
 <div class="section" id="dif-strip">
 <h4>DIF Strip<a class="headerlink" href="#dif-strip" title="Permalink to this headline">¶</a></h4>
@@ -1587,6 +1658,14 @@ block).</p></li>
 </dl>
 </li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This operation is able to use the <code class="docutils literal notranslate"><span class="pre">DML_FLAG_PREFETCH_CACHE</span></code> flag
+to hint that the cache entries be allocated for data written
+to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>.</p>
+<p>Please refer to <a class="reference internal" href="#library-cache-control-ll-reference-link"><span class="std std-ref">Cache Control</span></a>
+for more information.</p>
+</div>
 </div>
 <div class="section" id="dif-update">
 <h4>DIF Update<a class="headerlink" href="#dif-update" title="Permalink to this headline">¶</a></h4>
@@ -1608,6 +1687,14 @@ destinations (for internal validation).</p></li>
 </dl>
 </li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This operation is able to use the <code class="docutils literal notranslate"><span class="pre">DML_FLAG_PREFETCH_CACHE</span></code> flag
+to hint that the cache entries be allocated for data written
+to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>.</p>
+<p>Please refer to <a class="reference internal" href="#library-cache-control-ll-reference-link"><span class="std std-ref">Cache Control</span></a>
+for more information.</p>
+</div>
 </div>
 <div class="section" id="cache-flush">
 <h4>Cache Flush<a class="headerlink" href="#cache-flush" title="Permalink to this headline">¶</a></h4>

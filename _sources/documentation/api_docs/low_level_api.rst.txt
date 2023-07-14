@@ -230,11 +230,21 @@ Page fault can occur during workload processing on a hardware. When the fault oc
 - Hardware path: ``DML_STATUS_PAGE_FAULT_ERROR`` is returned.
 - Auto path: the library resolves the fault via completion of the workload on a CPU.
 
-The ``DML_FLAG_BLOCK_ON_FAULT`` method can be used to have page faults be resolved on accelerator. 
+The ``DML_FLAG_BLOCK_ON_FAULT`` flag can be used to have page faults be resolved on accelerator. 
 Using ``DML_FLAG_BLOCK_ON_FAULT`` can be done for all operations except Batch, Fence, and Drain.
 All available accelerator workqueues need to be configured to allow for blocking on fault ``"block_on_fault":1``. 
 On by default in DML provided accelerator configuration files.
 Please refer to :ref:`Accelerator Configuration <accelerator_configuration_reference_link>` for more information.
+
+
+.. _library_cache_control_ll_reference_link:
+
+Cache Control
+*************************
+
+
+The accelerator allows for writing to cache via the ``DML_FLAG_PREFETCH_CACHE`` flag for all operations that write to memory.
+If the flag is enabled, the accelerator hints that cache entries be allocated to contain data written by the operation.
 
 
 Basic Fields of Job Structure
@@ -365,6 +375,15 @@ bytes is given by the ``source_length`` parameter.
    buffers. If you need to disable Move and enable only Copy behavior,
    you should set the ``DML_FLAG_COPY`` flag.
 
+.. note::
+   
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
+   to hint that the cache entries be allocated for data written 
+   to ``destination_first_ptr``.
+
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   for more information.
+
 
 Memory Copy with Dualcast
 -------------------------
@@ -386,6 +405,15 @@ The Memory Copy with Dualcast operation copies memory from the
    ``destination_second_ptr`` overlap in any combination, the error is
    thrown.
 
+.. note::
+   
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
+   to hint that the cache entries be allocated for data written 
+   to ``destination_first_ptr`` and ``destination_second_ptr``.
+
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   for more information.
+
 Fill
 ----
 
@@ -396,6 +424,15 @@ with the bytes from the ``pattern[8]`` parameter.
 - The ``destination_length`` parameter must contain the number of bytes to fill.
 - The ``pattern`` size is always 8 bytes.
 - The ``source_length`` parameter does not need to be a multiple of 8.
+
+.. note::
+   
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
+   to hint that the cache entries be allocated for data written 
+   to ``destination_first_ptr``.
+
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   for more information.
 
 Memory Compare and Restoring Features
 =======================================
@@ -599,6 +636,15 @@ written to the ``result`` field of the ``dml_job_t`` structure.
    ``expected_result`` field. Mode details are in the Compare Operation
    description.
 
+.. note::
+   
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
+   to hint that the cache entries be allocated for data written 
+   to ``destination_first_ptr``.
+
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   for more information.
+
 Apply Delta Record
 ------------------
 
@@ -613,6 +659,15 @@ be created by the Create Delta Record operation with ``result`` equal to
 -  The ``source_length`` parameter must contain the delta record size as
    returned to the ``destination_length`` field after the Create Delta
    Record operation.
+
+.. note::
+   
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
+   to hint that the cache entries be allocated for data written 
+   to ``destination_first_ptr``.
+
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   for more information.
 
 Memory Hash Features
 ========================
@@ -645,6 +700,15 @@ This operation runs as a sequential call of two operations.
 
 If ``source_first_ptr`` and ``destination_first_ptr`` overlap, the error
 is thrown.
+
+.. note::
+   
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
+   to hint that the cache entries be allocated for data written 
+   to ``destination_first_ptr``.
+
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   for more information.
 
 Data Integrity Field Features
 =================================
@@ -873,6 +937,14 @@ source data and inserting the DIF into the output data.
    plus 8 bytes for each source block).
 - If ``source_first_ptr`` and ``destination_first_ptr`` overlap, the error is thrown.
 
+.. note::
+   
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
+   to hint that the cache entries be allocated for data written 
+   to ``destination_first_ptr``.
+
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   for more information.
 
 DIF Strip
 ---------
@@ -898,6 +970,14 @@ DIF Source Flags values.
 - If an error is detected in the DIF in the source data, the operation
    stops. The job structure is updated in the same way as in the DIF Check operation.
 
+.. note::
+   
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
+   to hint that the cache entries be allocated for data written 
+   to ``destination_first_ptr``.
+
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   for more information.
 
 DIF Update
 ----------
@@ -919,6 +999,15 @@ according to the DIF Source Flags values.
 - If an error is detected in the DIF in the source data, the operation stops.
    The job structure is updated in the same way as in the DIF Check operation.
 
+
+.. note::
+   
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
+   to hint that the cache entries be allocated for data written 
+   to ``destination_first_ptr``.
+
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   for more information.
 
 Cache Flush
 -----------
