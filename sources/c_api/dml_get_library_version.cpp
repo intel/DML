@@ -19,7 +19,7 @@
 #define DML_LIBRARY_MAJOR_VERSION 1u
 
 /** Minor version of the library*/
-#define DML_LIBRARY_MINOR_VERSION 0u
+#define DML_LIBRARY_MINOR_VERSION 1u
 
 /** Minor version of the library*/
 #define DML_LIBRARY_PATCH 0u

@@ -9,7 +9,7 @@ if (UNIX AND "${SANITIZE_THREADS}" STREQUAL "ON")
 else ()
     cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 endif ()
-project(DML VERSION 1.0.0 LANGUAGES C CXX)
+project(DML VERSION 1.1.0 LANGUAGES C CXX)
 
 if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
     option(DML_RECORD_SWITCHES "Enables -frecord-gcc-switches flag" OFF)
