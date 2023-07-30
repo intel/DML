@@ -45,7 +45,7 @@ dml_core_registers dml_core_cpuidex(dml_register_t leaf, dml_register_t sub_leaf
 
 dml_core_registers dml_core_cpuid(dml_register_t leaf);
 
-size_t dml_core_get_cache_size();
+size_t dml_core_get_cache_size(void);
 
 #ifdef __cplusplus
 }

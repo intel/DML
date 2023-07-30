@@ -41,7 +41,7 @@ dml_core_registers dml_core_cpuid(dml_register_t leaf)
     return dml_core_cpuidex(leaf, 0x0);
 }
 
-size_t dml_core_get_cache_size()
+size_t dml_core_get_cache_size(void)
 {
     static size_t cache_size = 0u;
 
