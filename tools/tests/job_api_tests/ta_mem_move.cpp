@@ -71,7 +71,7 @@ namespace dml {
 
         auto test_cases = dml::test::test_case_generator<mem_move_test_case>(mem_move_test_generator);
 
-        for (auto test_case : test_cases) {
+        for (auto &test_case : test_cases) {
             std::vector<uint8_t> source(test_case.source_length + 128, 0);
             std::vector<uint8_t> destination(test_case.source_length + 128, 0);
 
@@ -144,7 +144,7 @@ namespace dml {
 
         auto test_cases = dml::test::test_case_generator<mem_move_test_case>(mem_move_test_generator);
 
-        for (auto test_case : test_cases) {
+        for (auto &test_case : test_cases) {
             std::vector<uint8_t> source(test_case.source_length + 128, 0);
             std::vector<uint8_t> destination(test_case.source_length + 128, 0);
 
@@ -218,7 +218,7 @@ namespace dml {
 
         auto test_cases = dml::test::test_case_generator<mem_move_test_case>(mem_move_test_generator);
 
-        for (auto test_case : test_cases) {
+        for (auto &test_case : test_cases) {
             std::vector<uint8_t> source(test_case.source_length + 128, 0);
             std::vector<uint8_t> destination(test_case.source_length + 128, 0);
 
@@ -292,7 +292,7 @@ namespace dml {
         // Generate offset for destination buffer
         auto destination_offset = random_value.get_next();
 
-        for (auto test_case : test_cases) {
+        for (auto &test_case : test_cases) {
             std::vector<uint8_t> common_buffer(test_case.source_length + 128 + destination_offset, 0);
 
             auto *src_ptr = common_buffer.data();
