@@ -125,7 +125,7 @@ namespace dml::core::dispatcher
 
         DIAG("     %7s: opening descriptor %s", work_queue_dev_name, path);
         auto fd = open(path, O_RDWR);
-        if(0 >= fd)
+        if(0 > fd)
         {
             DIAGA(", access denied\n");
             return DML_STATUS_LIBACCEL_ERROR;
