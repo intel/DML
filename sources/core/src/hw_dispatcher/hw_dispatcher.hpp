@@ -44,6 +44,10 @@ namespace dml::core::dispatcher
 #endif
 
     public:
+        hw_dispatcher(const hw_dispatcher &) noexcept = delete;
+
+        auto operator=(const hw_dispatcher &other) noexcept -> hw_dispatcher & = delete;
+
         static auto get_instance() noexcept -> hw_dispatcher &;
 
         [[nodiscard]] auto is_hw_support() const noexcept -> bool;
