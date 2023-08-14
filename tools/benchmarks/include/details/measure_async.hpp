@@ -122,10 +122,12 @@ static statistics_t measure_async(benchmark::State &state, const case_params_t &
     for (auto &operation : operations)
         operation.async_wait();
 
-    // Normalize metrics on iteration
-    res.completed_operations /= state.iterations();
-    res.data_read            /= state.iterations();
-    res.data_written         /= state.iterations();
+    if(state.iterations() != 0){
+        // Normalize metrics on iteration
+        res.completed_operations /= state.iterations();
+        res.data_read            /= state.iterations();
+        res.data_written         /= state.iterations();
+    }
 
 #ifdef PER_THREAD_STAT
     static std::mutex guard;

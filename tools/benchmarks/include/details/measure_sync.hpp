@@ -65,10 +65,12 @@ static statistics_t measure_sync(benchmark::State &state, const case_params_t &c
         }
     }
 
-    // Normalize metrics on iteration
-    res.completed_operations /= state.iterations();
-    res.data_read            /= state.iterations();
-    res.data_written         /= state.iterations();
+    if(state.iterations() != 0){
+        // Normalize metrics on iteration
+        res.completed_operations /= state.iterations();
+        res.data_read            /= state.iterations();
+        res.data_written         /= state.iterations();
+    }
 
     return res;
 }
