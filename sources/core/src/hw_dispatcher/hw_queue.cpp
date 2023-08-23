@@ -41,13 +41,15 @@ namespace dml::core::dispatcher
 
     auto hw_queue::operator=(hw_queue &&other) noexcept -> hw_queue &
     {
-        version_       = other.version_;
-        priority_      = other.priority_;
-        portal_mask_   = other.portal_mask_;
-        portal_ptr_    = other.portal_ptr_;
-        portal_offset_ = 0;
-
-        other.portal_ptr_ = nullptr;
+        if(&other != this){
+            version_       = other.version_;
+            priority_      = other.priority_;
+            portal_mask_   = other.portal_mask_;
+            portal_ptr_    = other.portal_ptr_;
+            portal_offset_ = 0;
+            
+            other.portal_ptr_ = nullptr;
+        }
 
         return *this;
     }
