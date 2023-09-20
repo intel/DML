@@ -7,6 +7,7 @@
 #include <dml_test_utils/allocator.hpp>
 
 #include <algorithm>
+#include <stdexcept>
 
 #include <malloc.h>
 
