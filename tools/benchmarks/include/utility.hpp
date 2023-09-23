@@ -306,10 +306,10 @@ static ::benchmark::internal::Benchmark* register_benchmarks_common(const std::s
     std::string data_name  = (data.name.size()) ? std::string("/data:") + data.name : std::string{};
     std::string test_name  = case_name + api_name + path_name + exec_name + qsize_name + bsize_name + in_mem + out_mem + timer_name + data_name + case_name_ext;
     if(case_functor.exec_v == execution_e::async){
-        return register_benchmark_proxy(test_name, std::forward<CaseT>(case_functor), case_common_params_loc, data, std::forward<ArgsT>(case_args)...)->Apply(base_arguments<execution_e::async>);
+        return register_benchmark_proxy(std::move(test_name), std::forward<CaseT>(case_functor), case_common_params_loc, data, std::forward<ArgsT>(case_args)...)->Apply(base_arguments<execution_e::async>);
     }
     else{
-        return register_benchmark_proxy(test_name, std::forward<CaseT>(case_functor), case_common_params_loc, data, std::forward<ArgsT>(case_args)...)->Apply(base_arguments<execution_e::sync>);
+        return register_benchmark_proxy(std::move(test_name), std::forward<CaseT>(case_functor), case_common_params_loc, data, std::forward<ArgsT>(case_args)...)->Apply(base_arguments<execution_e::sync>);
     }
 }
 

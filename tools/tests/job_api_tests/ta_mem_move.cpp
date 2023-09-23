@@ -98,9 +98,8 @@ namespace dml {
                           random_value);
 
             // Reference job initialization
-            std::vector<uint8_t> reference_buffer(lib_job->source_first_ptr,
-                                                  lib_job->source_first_ptr + lib_job->source_length);
-            ref_job.destination_first = reference_buffer;
+            ref_job.destination_first = std::vector<uint8_t>(lib_job->source_first_ptr,
+                                                             lib_job->source_first_ptr + lib_job->source_length);
             ref_job.status = DML_STATUS_OK;
 
             auto library_status = lib_job.run();
@@ -171,9 +170,8 @@ namespace dml {
                           random_value);
 
             // Reference job initialization
-            std::vector<uint8_t> reference_buffer(lib_job->source_first_ptr,
-                                                  lib_job->source_first_ptr + lib_job->source_length);
-            ref_job.destination_first = reference_buffer;
+            ref_job.destination_first = std::vector<uint8_t>(lib_job->source_first_ptr,
+                                                             lib_job->source_first_ptr + lib_job->source_length);
             ref_job.status = DML_STATUS_OK;
 
             auto library_status = lib_job.run();
@@ -245,9 +243,8 @@ namespace dml {
                           random_value);
 
             // Reference job initialization
-            std::vector<uint8_t> reference_buffer(lib_job->source_first_ptr,
-                                                  lib_job->source_first_ptr + lib_job->source_length);
-            ref_job.destination_first = reference_buffer;
+            ref_job.destination_first = std::vector<uint8_t>(lib_job->source_first_ptr,
+                                                             lib_job->source_first_ptr + lib_job->source_length);
             ref_job.status = DML_STATUS_OK;
 
             auto library_status = lib_job.run();
@@ -314,9 +311,8 @@ namespace dml {
                           random_value);
 
             // Reference job initialization
-            std::vector<uint8_t> reference_buffer(lib_job->source_first_ptr,
-                                                  lib_job->source_first_ptr + lib_job->source_length);
-            ref_job.destination_first = reference_buffer;
+            ref_job.destination_first = std::vector<uint8_t>(lib_job->source_first_ptr,
+                                                             lib_job->source_first_ptr + lib_job->source_length);
             ref_job.status = DML_STATUS_OK;
 
             auto library_status = lib_job.run();
