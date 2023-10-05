@@ -38,7 +38,7 @@ See [Contributing document](./CONTRIBUTING.md) for details about contribution pr
 
 ## How to Report Issues
 
-See [Issue Reporting](https://intel.github.io/DML/documentation/introduction_docs/issue_reporting.html) for details about issue reporting process.
+See [Issue Reporting](https://intel.github.io/DML/documentation/contributing_docs/issue_reporting.html) for details about issue reporting process.
 
 ## License
 
