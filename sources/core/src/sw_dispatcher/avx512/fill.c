@@ -32,7 +32,7 @@ static inline void fill_big_avx512(uint64_t pattern, uint8_t *const src, uint32_
 
         _mm512_mask_storeu_epi8(src, mmask, zmm_pattern);
 
-        pattern     = (pattern << (unaligned_bytes * 8u)) | (pattern >> (64u - (unaligned_bytes * 8u)));
+        pattern     = (pattern << ( (unaligned_bytes % 8U) * 8U)) | (pattern >> (64u - ((unaligned_bytes % 8U) * 8U)));
         zmm_pattern = _mm512_set1_epi64(pattern);
     }
 
