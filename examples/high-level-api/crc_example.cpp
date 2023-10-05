@@ -25,7 +25,7 @@ int execute_crc() {
 
     // Check result
     if (result.status == dml::status_code::ok) {
-        std::cout << "Finished successfully. Calculated CRC is: 0x" << std::hex << result.crc_value << std::endl;
+        std::cout << "Finished successfully. Calculated CRC is: 0x" << std::hex << result.crc_value << std::dec << std::endl;
     }
     else {
         std::cout << "Failure occurred." << std::endl;
