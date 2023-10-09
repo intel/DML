@@ -1895,7 +1895,12 @@ to one data array using several sockets at the same time.</p>
 <span class="nl">cleanup</span><span class="p">:</span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">SOCKET_COUNT</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span>
 <span class="w">    </span><span class="p">{</span>
-<span class="w">        </span><span class="n">dml_finalize_job</span><span class="p">(</span><span class="n">jobs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SOCKET_COUNT</span><span class="p">);</span>
+<span class="w">        </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml_finalize_job</span><span class="p">((</span><span class="n">dml_job_t</span><span class="o">*</span><span class="p">)((</span><span class="kt">uint8_t</span><span class="o">*</span><span class="p">)</span><span class="n">jobs</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="n">job_size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="p">)));</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">DML_STATUS_OK</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Failed to finalize job, status is %d&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">);</span>
+<span class="w">            </span><span class="n">exit_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EXIT_FAILURE</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="nl">finish</span><span class="p">:</span>
