@@ -122,7 +122,12 @@ int main()
 cleanup:
     for (uint32_t i = 0; i < SOCKET_COUNT; ++i)
     {
-        dml_finalize_job(jobs + SOCKET_COUNT);
+        status = dml_finalize_job((dml_job_t*)((uint8_t*)jobs + (job_size * i)));
+        if (status != DML_STATUS_OK)
+        {
+            printf("Failed to finalize job, status is %d", status);
+            exit_status = EXIT_FAILURE;
+        }
     }
 
 finish:
