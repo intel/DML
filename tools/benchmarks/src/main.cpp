@@ -102,7 +102,7 @@ static inline std::int32_t get_cpu_index(const extended_info_t &info, std::int32
     return ((thread_index%devices)*info.cpu_physical_per_cluster+thread_index/devices)%info.cpu_physical_per_socket + info.cpu_physical_per_socket*get_current_numa();
 }
 
-void set_affinity_map(const benchmark::State &state) noexcept
+void set_affinity_map(const benchmark::State &state)
 {
     static thread_local bool is_set{false};
     if(!is_set)

@@ -70,7 +70,7 @@ namespace dml::test
     }
 
 
-    dml::test::job_t::~job_t() noexcept
+    dml::test::job_t::~job_t() noexcept(false)
     {
         auto actual_job_ptr        = reinterpret_cast<dml_job_t *>(m_job_ptr.get());
         const auto finalize_status = dml_finalize_job(actual_job_ptr);
@@ -108,7 +108,7 @@ namespace dml::test
     }
 
 
-    auto dml::test::job_t::operator=(const job_t &other_job) noexcept -> job_t &
+    auto dml::test::job_t::operator=(const job_t &other_job) -> job_t &
     {
         m_job_size = other_job.m_job_size;
 

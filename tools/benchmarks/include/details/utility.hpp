@@ -82,7 +82,7 @@ struct extended_info_t
 const extended_info_t& get_sys_info();
 std::uint32_t get_current_numa() noexcept;
 std::uint32_t get_current_numa_accels() noexcept;
-void set_affinity_map(const benchmark::State &state) noexcept;
+void set_affinity_map(const benchmark::State &state);
 
 constexpr std::uint64_t submitRetryWaitNs = 0;
 

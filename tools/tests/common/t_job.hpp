@@ -47,7 +47,7 @@ namespace dml::test
         /**
          * @brief Destructs the job
          */
-        ~job_t() noexcept;
+        ~job_t() noexcept(false);
 
         /**
          * @brief Calls @ref dml_execute_job
@@ -81,7 +81,7 @@ namespace dml::test
         /**
          * @brief Assign operator
          */
-        auto operator=(const job_t &other_job) noexcept -> job_t &;
+        auto operator=(const job_t &other_job) noexcept(false) -> job_t &;
 
         /**
          * @brief Move operator

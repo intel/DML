@@ -37,7 +37,7 @@ private:
 public:
     move_t() noexcept :
         result_{dst_} {}
-    ~move_t() noexcept
+    ~move_t() noexcept(false)
     {
         deinit_lib_impl();
     }
