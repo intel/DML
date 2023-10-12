@@ -8,12 +8,7 @@
 #define DML_SOURCES_HW_PATH_INCLUDE_HW_CONFIGURATION_DRIVER_H_
 
 #include "hardware_definitions.h"
-
-#if defined(__linux__)
-
 #include "libaccel_config.h"
-
-#endif
 
 #ifdef __cplusplus
 extern "C" {

@@ -10,10 +10,14 @@
 #include <stdbool.h>
 #include <stdarg.h>
 #include <stdint.h>
-#include <unistd.h>
 #include <errno.h>
 #include <limits.h>
+
+#ifndef _WIN32
 #include <uuid/uuid.h>
+#else
+typedef unsigned char uuid_t[16];
+#endif
 
 #ifdef __cplusplus
 extern "C" {

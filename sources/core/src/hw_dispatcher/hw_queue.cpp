@@ -7,12 +7,8 @@
 #if defined(__linux__)
 
 #include <fcntl.h>
-
-#if defined(__linux__)
-
 #include <sys/mman.h>
-
-#endif
+#include <unistd.h>
 
 #include "hw_queue.hpp"
 #include "legacy_headers/hardware_configuration_driver.h"
