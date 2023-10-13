@@ -56,7 +56,7 @@ namespace dml::test
     }
 
 
-    dml::test::job_t::job_t(const job_t &other_job) noexcept
+    dml::test::job_t::job_t(const job_t &other_job) noexcept(false)
         :m_status(DML_STATUS_OK)
     {
         (*this) = other_job;

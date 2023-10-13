@@ -37,7 +37,7 @@ namespace dml::test
         /**
          * @brief Copy constructor
          */
-        job_t(const job_t &other_job) noexcept;
+        job_t(const job_t &other_job) noexcept(false);
 
         /**
          * @brief Move constructor
