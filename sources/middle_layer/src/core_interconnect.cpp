@@ -103,14 +103,15 @@ namespace dml::detail::ml::impl
 
     void automatic::wait(descriptor& dsc, bool umwait) noexcept
     {
-        constexpr auto page_fault_mask =
+        constexpr auto page_fault_status =
             to_underlying(execution_status::page_fault_during_processing);
+        constexpr auto remove_rw_bit_mask = 0x7f; // READ/WRITE page fault bit is 0x80
 
         hardware::wait(dsc, umwait);
 
         auto& record = core::get_completion_record(dsc);
         auto  status = core::any_completion_record(record).status();
-        if ((status & page_fault_mask) == page_fault_mask)
+        if ((status & remove_rw_bit_mask) == page_fault_status)
         {
             // Clone
             auto prev_record = record;
@@ -128,14 +129,15 @@ namespace dml::detail::ml::impl
 
     bool automatic::finished(descriptor& dsc) noexcept
     {
-        constexpr auto page_fault_mask =
+        constexpr auto page_fault_status =
             to_underlying(execution_status::page_fault_during_processing);
+        constexpr auto remove_rw_bit_mask = 0x7f; // READ/WRITE page fault bit is 0x80
 
         auto is_finished = hardware::finished(dsc);
 
         auto& record = core::get_completion_record(dsc);
         auto  status = core::any_completion_record(record).status();
-        if (is_finished && (status & page_fault_mask) == page_fault_mask)
+        if (is_finished && (status & remove_rw_bit_mask) == page_fault_status)
         {
             auto prev_record = record;
             update_for_continuation(dsc);
