@@ -482,7 +482,7 @@ With configuration files of the format <code class="docutils literal notranslate
 <ul class="simple">
 <li><p>C++ compiler with C++17 standard support</p>
 <ul>
-<li><p>Linux* OS: gcc 8.2 or higher</p></li>
+<li><p>Linux* OS: GCC 8.2+ (or Clang 12.0.1+ for building fuzz tests)</p></li>
 <li><p>Windows* OS: MSVC 19 or higher</p></li>
 </ul>
 </li>
@@ -514,6 +514,7 @@ can not be used for the same build.</p>
 </div>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">-DLOG_HW_INIT=[ON|OFF]</span></code> - Enables hardware initialization log (<code class="docutils literal notranslate"><span class="pre">OFF</span></code> by default).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DDML_BUILD_FUZZ_TESTS=[ON|OFF]</span></code> - Enables building of fuzz tests (<code class="docutils literal notranslate"><span class="pre">OFF</span></code> by default).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-DDML_BUILD_EXAMPLES=[OFF|ON]</span></code> - Enables building library examples (<code class="docutils literal notranslate"><span class="pre">ON</span></code> by default).
 For more information on existing examples, see <a class="reference internal" href="code_samples_and_examples.html#code-examples-reference-link"><span class="std std-ref">Code Samples and Examples</span></a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-DDML_BUILD_TESTS=[OFF|ON]</span></code> - Enables building library testing and benchmarks frameworks (<code class="docutils literal notranslate"><span class="pre">ON</span></code> by default).

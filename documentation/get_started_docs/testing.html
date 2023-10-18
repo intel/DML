@@ -247,6 +247,11 @@
    Functional Tests
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fuzz-tests">
+   Fuzz Tests
+  </a>
+ </li>
 </ul>
 
             </nav>
@@ -270,6 +275,11 @@
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#functional-tests">
    Functional Tests
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fuzz-tests">
+   Fuzz Tests
   </a>
  </li>
 </ul>
@@ -325,6 +335,27 @@ Low-Level Job API and <code class="docutils literal notranslate"><span class="pr
 <p class="admonition-title">Attention</p>
 <p>Hardware Path requires first configuring Intel® Data Streaming Accelerator (Intel® DSA).
 See <a class="reference internal" href="installation.html#accelerator-configuration-reference-link"><span class="std std-ref">Accelerator Configuration</span></a>.</p>
+</div>
+</div>
+<div class="section" id="fuzz-tests">
+<h2>Fuzz Tests<a class="headerlink" href="#fuzz-tests" title="Permalink to this headline">¶</a></h2>
+<p>Fuzz testing is an automated software testing technique that attempts to
+find hackable software bugs by randomly feeding invalid and unexpected
+inputs and data into a computer program in order to find coding errors
+and security loopholes.</p>
+<p>Intel DML fuzz testing is based on <a class="reference external" href="https://llvm.org/docs/LibFuzzer.html">LibFuzzer
+tool</a> and requires a separate
+build using the Clang compiler (version 12.0.1 or higher) with the
+<code class="docutils literal notranslate"><span class="pre">-DDML_BUILD_FUZZ_TESTS=ON</span></code> CMake option.</p>
+<p>Fuzz tests are not installed into <code class="docutils literal notranslate"><span class="pre">&lt;install_dir&gt;/bin/</span></code> but available
+in:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;dml_library&gt;/build/tools/tests/fuzzing/high-level-api/</span></code></p></li>
+</ul>
+<p>To run fuzz tests, specify the maximum run time using <code class="docutils literal notranslate"><span class="pre">-max_total_time=&lt;seconds&gt;</span></code>,
+for example:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>&lt;dml_library&gt;/build/tools/tests/fuzzing/high-level-api/mem_move<span class="w"> </span>-max_total_time<span class="o">=</span><span class="m">15</span>
+</pre></div>
 </div>
 </div>
 </div>

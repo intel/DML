@@ -61,3 +61,28 @@ In order to execute those, use the following command:
    See :ref:`Accelerator Configuration <accelerator_configuration_reference_link>`.
 
 
+Fuzz Tests
+==========
+
+Fuzz testing is an automated software testing technique that attempts to
+find hackable software bugs by randomly feeding invalid and unexpected
+inputs and data into a computer program in order to find coding errors
+and security loopholes.
+
+Intel DML fuzz testing is based on `LibFuzzer
+tool <https://llvm.org/docs/LibFuzzer.html>`__ and requires a separate
+build using the Clang compiler (version 12.0.1 or higher) with the
+``-DDML_BUILD_FUZZ_TESTS=ON`` CMake option.
+
+Fuzz tests are not installed into ``<install_dir>/bin/`` but available
+in:
+
+- ``<dml_library>/build/tools/tests/fuzzing/high-level-api/``
+
+To run fuzz tests, specify the maximum run time using ``-max_total_time=<seconds>``,
+for example:
+
+.. code:: shell
+
+   <dml_library>/build/tools/tests/fuzzing/high-level-api/mem_move -max_total_time=15
+
