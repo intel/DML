@@ -2,6 +2,10 @@
 #
 # SPDX-License-Identifier: MIT
 
+if (DML_BUILD_FUZZ_TESTS)
+    add_subdirectory(tests/fuzzing)
+endif()
+
 if (DML_BUILD_TESTS)
     # Dependencies
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # Links c runtimes dynamically for gtest, for fixing a bug with recent version of VS.

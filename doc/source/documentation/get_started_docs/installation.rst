@@ -103,7 +103,7 @@ Before building the library, install and set up the following tools:
 
 -  C++ compiler with C++17 standard support
 
-   -  Linux* OS: gcc 8.2 or higher
+   -  Linux* OS: GCC 8.2+ (or Clang 12.0.1+ for building fuzz tests)
    -  Windows* OS: MSVC 19 or higher
 -  Linux* OS: Universally Unique ID library (``uuid-dev``) version 2.35.2 or higher
 -  Cross-platform build tool: CMake* version 3.12 or higher. If Intel DML is built with ``-DSANITIZE_THREADS=ON``, use CMake version 3.23 or higher
@@ -131,6 +131,7 @@ Intel DML supports the following build options:
       If Intel DML is built with ``-DSANITIZE_THREADS=ON``, use CMake* version 3.23 or higher to avoid issue with finding pthread library in FindThreads.
 
 -  ``-DLOG_HW_INIT=[ON|OFF]`` - Enables hardware initialization log (``OFF`` by default).
+-  ``-DDML_BUILD_FUZZ_TESTS=[ON|OFF]`` - Enables building of fuzz tests (``OFF`` by default).
 -  ``-DDML_BUILD_EXAMPLES=[OFF|ON]`` - Enables building library examples (``ON`` by default).
    For more information on existing examples, see :ref:`code_examples_reference_link`.
 

@@ -21,11 +21,13 @@ endif()
 option(SANITIZE_MEMORY "Enables memory sanitizing" OFF)
 option(SANITIZE_THREADS "Enables threads sanitizing" OFF)
 option(LOG_HW_INIT "Enables HW initialization log" OFF)
+option(DML_BUILD_FUZZ_TESTS "Enables fuzzy testing" OFF)
 
 # Print user's settings
 message(STATUS "Memory sanitizing build: ${SANITIZE_MEMORY}")
 message(STATUS "Threads sanitizing build: ${SANITIZE_THREADS}")
 message(STATUS "Hardware initialization logging: ${LOG_HW_INIT}")
+message(STATUS "Fuzz testing build: ${DML_BUILD_FUZZ_TESTS}")
 
 if (SANITIZE_MEMORY)
     if (WIN32)
@@ -45,6 +47,11 @@ if (SANITIZE_THREADS)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=thread -g")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -g")
     endif ()
+endif ()
+
+if (DML_BUILD_FUZZ_TESTS)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate -fcoverage-mapping")
 endif ()
 
 include(cmake/tests.cmake)
