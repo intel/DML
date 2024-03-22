@@ -228,27 +228,35 @@ Building the Documentation
 Prerequisites
 =============
 
-If you plan to build an offline version of documentation,
-make sure the following documentation generation tools are installed and set up:
+To build the offline version of the documentation, the following tools must be installed:
 
--  `Doxygen <https://www.doxygen.nl/index.html>`__ 1.8.17 or higher: ``apt install doxygen``
--  `Python <https://www.python.org/>`__ 3.8.5 or higher: ``apt install python3.X``
--  `Sphinx <https://www.sphinx-doc.org/en/master/>`__ 3.5.4 or higher: ``pip3 install sphinx``
--  `sphinx_book_theme <https://executablebooks.org/en/latest/>`__ : ``pip3 install sphinx-book-theme``
--  `Breathe <https://breathe.readthedocs.io/en/latest/>`__ 4.29.0 or higher: ``pip3 install breathe``
+- `Doxygen <https://www.doxygen.nl/index.html>`__ 1.8.17 or higher (e.g., with ``apt install doxygen``)
+- `Python <https://www.python.org/>`__ 3.8.5 or higher (e.g., with ``apt install python3.X``)
+- `Sphinx <https://www.sphinx-doc.org/en/master/>`__ 7.2.6 or higher (e.g., with ``pip3 install sphinx``)
+- `sphinx_book_theme <https://executablebooks.org/en/latest/>`__ 1.1.2 or higher (e.g., with ``pip3 install sphinx-book-theme``)
+- `Breathe <https://breathe.readthedocs.io/en/latest/>`__ 4.35.0 or higher (e.g., with ``pip3 install breathe``)
+
+.. attention::
+
+   To avoid incompatibility between `Breathe`, `sphinx_book_theme` and `Sphinx` versions, use `requirements.txt` file to install guaranteed compatible combination of components.
+
+   .. code-block:: shell
+
+       pip3 install -r <qpl_library>/doc/requirements.txt
 
 Build Steps
 ===========
 
-To generate full offline documentation from sources, use the following commands:
+To generate full offline documentation from sources,
+use the following commands:
 
 .. code-block:: shell
 
-   cmd> cd <dml_library catalog path>/doc
-   cmd> _get_docs.sh
+   /bin/bash <dml_library>/doc/_get_docs.sh
 
 .. attention::
 
-   Linux* OS shell (or Windows* OS shell alternatives) is required to run the build script.
+   Linux* OS shell (or Windows* OS shell alternatives) is required to run the
+   documentation build script.
 
 After the generation process is completed, open the ``<dml_library>/doc/build/html/index.html`` file.
