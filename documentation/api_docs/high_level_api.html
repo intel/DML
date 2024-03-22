@@ -1,657 +1,471 @@
 
 <!DOCTYPE html>
 
-<html>
+
+<html lang="en" data-content_root="../../" >
+
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>High-level C++ API &#8212; Intel® DML v1.1.1 documentation</title>
-    
-  <link href="../../_static/css/theme.css" rel="stylesheet">
-  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
 
-    
-  <link rel="stylesheet"
-    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+  
+  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
 
-    
-      
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-book-theme.css?digest=84ace793992934648b4de8eed757e5a2" />
-    
-  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
-
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx-book-theme.9d8b4a8b9bb19db25eeaddc40d639ba2.js"></script>
+    <script src="../../_static/documentation_options.js?v=cbf134a2"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'documentation/api_docs/high_level_api';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Low-level C API" href="low_level_api.html" />
     <link rel="prev" title="Library Testing" href="../get_started_docs/testing.html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="docsearch:language" content="None">
-    
-
-    <!-- Google Analytics -->
-    
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
-    
-    <div class="container-fluid" id="banner"></div>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
 
-    
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
 
-    <div class="container-xl">
-      <div class="row">
-          
-<!-- Checkboxes to toggle the left sidebar -->
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
-<label class="overlay" for="__navigation">
-    <div class="visually-hidden">Toggle navigation sidebar</div>
-</label>
-<div class="col-12 col-md-3 bd-sidebar site-navigation " id="site-navigation">
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
     
-        <div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="../../index.html">
-      
-      
-      
-      <h1 class="site-logo" id="site-title">Intel® DML v1.1.1 documentation</h1>
-      
-    </a>
-</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
-  <i class="icon fas fa-search"></i>
-  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
-</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
-    <div class="bd-toc-item active">
-        <p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  About
- </span>
-</p>
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Intel® DML v1.1.1 documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">About</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../introduction_docs/introduction.html">
-   Introduction
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../introduction_docs/legal.html">
-   Notices and Disclaimers
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction_docs/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../introduction_docs/legal.html">Notices and Disclaimers</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Get Started
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../get_started_docs/installation.html">
-   Installation
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../get_started_docs/quick_start.html">
-   Quick start
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../get_started_docs/code_samples_and_examples.html">
-   Code Samples and Examples
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../get_started_docs/testing.html">
-   Library Testing
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/quick_start.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/code_samples_and_examples.html">Code Samples and Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/testing.html">Library Testing</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Developer Reference
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Developer Reference</span></p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   High-level C++ API
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="low_level_api.html">
-   Low-level C API
-  </a>
- </li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">High-level C++ API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="low_level_api.html">Low-level C API</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Benchmarking
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarking</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../bench_docs/guide.html">
-   Benchmarks Framework Guide
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../bench_docs/guide.html">Benchmarks Framework Guide</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading">
- <span class="caption-text">
-  Contributing
- </span>
-</p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../contributing_docs/issue_reporting.html">
-   Issue Reporting
-  </a>
- </li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing_docs/issue_reporting.html">Issue Reporting</a></li>
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Theme by the <a href="https://ebp.jupyterbook.org">Executable Book Project</a>
-</div>
-
-</div>
-
-
-          
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
 
 
-          
-<!-- This is an invisible pixel that we watch to see if we've scrolled. -->
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
 <div class="sbt-scroll-pixel-helper"></div>
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
-            <div class="topbar-left">
-                
-                <label class="nav-toggle-button" for="__navigation">
-                    <div class="visually-hidden">Toggle navigation</div>
-                    <i class="fas fa-bars"></i>
-                </label>
-                
-            </div>
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
 
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
-        
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../../_sources/documentation/api_docs/high_level_api.rst.txt"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.rst</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
     </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/intel/DML/edit/develop/doc/source/documentation/api_docs/high_level_api.rst" target="_blank"
+   class="btn btn-sm btn-source-edit-button dropdown-item"
+   title="Suggest edit"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-pencil-alt"></i>
+  </span>
+<span class="btn__text-container">Suggest edit</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/intel/DML/issues/new?title=Issue%20on%20page%20%2Fdocumentation/api_docs/high_level_api.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
 </div>
 
-            <!-- Source interaction buttons -->
 
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        
-        <a class="issues-button"
-            href="https://github.com/intel/DML/issues/new?title=Issue%20on%20page%20%2Fdocumentation/api_docs/high_level_api.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        <a class="edit-button" href="https://github.com/intel/DML/edit/develop/doc/source/documentation/api_docs/high_level_api.rst"><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Edit this page"><i class="fas fa-pencil-alt"></i>suggest edit</button></a>
-    </div>
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/documentation/api_docs/high_level_api.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
 </div>
 
-            <!-- Full screen (wrap in <a> to have style consistency -->
 
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
 
-            <!-- Launch buttons -->
 
-        </div>
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>High-level C++ API</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
             
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
+            <div>
+                <h2> Contents </h2>
             </div>
-            <nav id="bd-toc-nav" aria-label="Page">
+            <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#introduction">
-   Introduction
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#header-files">
-   Header Files
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#namespace">
-   Namespace
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#numa-support">
-   NUMA support
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#page-fault-handling">
-   Page Fault handling
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-to-use-the-library">
-   How to Use the Library
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#example-usage">
-     Example usage
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#make-view">
-     Make view
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#operation-data-type">
-     Operation Data Type
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#sequence">
-     Sequence
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#handler">
-     Handler
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#results">
-     Results
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#advanced-usage">
-     Advanced usage
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#operations">
-   Operations
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#flow-control-features">
-     Flow Control Features
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#no-op-operation">
-       No-op operation
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#batch-operation">
-       Batch operation
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#memory-transferring-and-filling-features">
-     Memory Transferring and Filling Features
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#memory-move">
-       Memory Move
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#memory-copy-with-dualcast">
-       Memory Copy with Dualcast
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#fill">
-       Fill
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#memory-compare-and-restoring-features">
-     Memory Compare and Restoring Features
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#compare">
-       Compare
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#compare-pattern">
-       Compare Pattern
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#create-delta-record">
-       Create Delta Record
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#apply-delta-record">
-       Apply Delta Record
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#memory-hash-features">
-     Memory Hash Features
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#crc-generation">
-       CRC Generation
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#copy-with-crc-generation">
-       Copy with CRC Generation
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#utility-features">
-     Utility Features
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#cache-flush">
-       Cache Flush
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#operation-status-values">
-   Operation Status Values
-  </a>
- </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#header-files">Header Files</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#namespace">Namespace</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numa-support">NUMA support</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#page-fault-handling">Page Fault handling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-use-the-library">How to Use the Library</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-usage">Example usage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#make-view">Make view</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operation-data-type">Operation Data Type</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sequence">Sequence</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#handler">Handler</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-usage">Advanced usage</a></li>
 </ul>
-
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#operations">Operations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flow-control-features">Flow Control Features</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#no-op-operation">No-op operation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-operation">Batch operation</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-transferring-and-filling-features">Memory Transferring and Filling Features</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-move">Memory Move</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-copy-with-dualcast">Memory Copy with Dualcast</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fill">Fill</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-compare-and-restoring-features">Memory Compare and Restoring Features</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compare">Compare</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N3dml17compare_operationE"><code class="docutils literal notranslate"><span class="pre">compare_operation</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N3dml17compare_operation11result_typeE"><code class="docutils literal notranslate"><span class="pre">compare_operation::result_type</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N3dml17compare_operation17compare_operationEv"><code class="docutils literal notranslate"><span class="pre">compare_operation::compare_operation()</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK3dml17compare_operation12expect_equalEv"><code class="docutils literal notranslate"><span class="pre">compare_operation::expect_equal()</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK3dml17compare_operation16expect_not_equalEv"><code class="docutils literal notranslate"><span class="pre">compare_operation::expect_not_equal()</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK3dml17compare_operation14block_on_faultEv"><code class="docutils literal notranslate"><span class="pre">compare_operation::block_on_fault()</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK3dml17compare_operation11get_optionsEv"><code class="docutils literal notranslate"><span class="pre">compare_operation::get_options()</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK3dml17compare_operation19get_expected_resultEv"><code class="docutils literal notranslate"><span class="pre">compare_operation::get_expected_result()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compare-pattern">Compare Pattern</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#create-delta-record">Create Delta Record</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-delta-record">Apply Delta Record</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-hash-features">Memory Hash Features</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#crc-generation">CRC Generation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#copy-with-crc-generation">Copy with CRC Generation</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#utility-features">Utility Features</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cache-flush">Cache Flush</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#operation-status-values">Operation Status Values</a></li>
+</ul>
             </nav>
         </div>
     </div>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-            <!-- Table of contents that is only displayed when printing the page -->
-            <div id="jb-print-docs-body" class="onlyprint">
-                <h1>High-level C++ API</h1>
-                <!-- Table of contents -->
-                <div id="print-main-content">
-                    <div id="jb-print-toc">
-                        
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#introduction">
-   Introduction
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#header-files">
-   Header Files
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#namespace">
-   Namespace
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#numa-support">
-   NUMA support
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#page-fault-handling">
-   Page Fault handling
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#how-to-use-the-library">
-   How to Use the Library
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#example-usage">
-     Example usage
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#make-view">
-     Make view
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#operation-data-type">
-     Operation Data Type
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#sequence">
-     Sequence
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#handler">
-     Handler
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#results">
-     Results
-    </a>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#advanced-usage">
-     Advanced usage
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#operations">
-   Operations
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#flow-control-features">
-     Flow Control Features
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#no-op-operation">
-       No-op operation
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#batch-operation">
-       Batch operation
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#memory-transferring-and-filling-features">
-     Memory Transferring and Filling Features
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#memory-move">
-       Memory Move
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#memory-copy-with-dualcast">
-       Memory Copy with Dualcast
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#fill">
-       Fill
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#memory-compare-and-restoring-features">
-     Memory Compare and Restoring Features
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#compare">
-       Compare
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#compare-pattern">
-       Compare Pattern
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#create-delta-record">
-       Create Delta Record
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#apply-delta-record">
-       Apply Delta Record
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#memory-hash-features">
-     Memory Hash Features
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#crc-generation">
-       CRC Generation
-      </a>
-     </li>
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#copy-with-crc-generation">
-       Copy with CRC Generation
-      </a>
-     </li>
-    </ul>
-   </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#utility-features">
-     Utility Features
-    </a>
-    <ul class="nav section-nav flex-column">
-     <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#cache-flush">
-       Cache Flush
-      </a>
-     </li>
-    </ul>
-   </li>
-  </ul>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#operation-status-values">
-   Operation Status Values
-  </a>
- </li>
-</ul>
 
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            
-              <div>
+              
                 
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
   <blockquote>
 <div></div></blockquote>
-<div class="section" id="high-level-c-api">
-<h1>High-level C++ API<a class="headerlink" href="#high-level-c-api" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<section id="high-level-c-api">
+<h1>High-level C++ API<a class="headerlink" href="#high-level-c-api" title="Link to this heading">#</a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
 <p>This document provides quick introduction into usage of High Level API
 for Intel® DML. It describes general usage concepts, main entities and
 detailed operation descriptions.</p>
 <p>For general introduction to Intel® DML, see <a class="reference internal" href="../introduction_docs/introduction.html#introduction-reference-link"><span class="std std-ref">Introduction</span></a>.</p>
-</div>
-<div class="section" id="header-files">
-<h2>Header Files<a class="headerlink" href="#header-files" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="header-files">
+<h2>Header Files<a class="headerlink" href="#header-files" title="Link to this heading">#</a></h2>
 <p>Your application only needs to include one header file: <code class="docutils literal notranslate"><span class="pre">dml/dml.hpp</span></code>,
 which includes the entire API definitions.</p>
-</div>
-<div class="section" id="namespace">
-<h2>Namespace<a class="headerlink" href="#namespace" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="namespace">
+<h2>Namespace<a class="headerlink" href="#namespace" title="Link to this heading">#</a></h2>
 <p>All API declarations are included into <code class="docutils literal notranslate"><span class="pre">dml</span></code> namespace.</p>
 <p>Identifiers from <code class="docutils literal notranslate"><span class="pre">dml::ml</span></code> and <code class="docutils literal notranslate"><span class="pre">dml::detail</span></code> namespaces shall not be
 used. They are implementation details and are subject to change
 frequently.</p>
-</div>
-<div class="section" id="numa-support">
-<span id="library-numa-support-hl-reference-link"></span><h2>NUMA support<a class="headerlink" href="#numa-support" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="numa-support">
+<span id="library-numa-support-hl-reference-link"></span><h2>NUMA support<a class="headerlink" href="#numa-support" title="Link to this heading">#</a></h2>
 <p>The library is NUMA aware and respects the NUMA node id of the calling thread. If a user needs to use a device from a specific node, it can be done in one way:</p>
 <ul class="simple">
 <li><p>Pin thread which performs submissions to the specific NUMA, the library will use devices only from this node.</p></li>
 </ul>
 <p>Load balancer of the library doesn’t cross a detected NUMA boundary. Balancing workloads between different nodes is the responsibility of a user.</p>
-</div>
-<div class="section" id="page-fault-handling">
-<h2>Page Fault handling<a class="headerlink" href="#page-fault-handling" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="page-fault-handling">
+<h2>Page Fault handling<a class="headerlink" href="#page-fault-handling" title="Link to this heading">#</a></h2>
 <p>Page fault can occur during workload processing on a hardware. When the fault occurs, the outcome is based on the execution path:
 - Hardware path: <code class="docutils literal notranslate"><span class="pre">dml::status_code::partial_completion</span></code> is written to result structure.
 - Auto path: the library resolves the fault via completion of the workload on a CPU.</p>
@@ -660,9 +474,9 @@ Using <code class="docutils literal notranslate"><span class="pre">.block_on_fau
 All available accelerator workqueues need to be configured to allow for blocking on fault <code class="docutils literal notranslate"><span class="pre">&quot;block_on_fault&quot;:1</span></code>.
 On by default in DML provided accelerator configuration files.
 Please refer to <a class="reference internal" href="../get_started_docs/installation.html#accelerator-configuration-reference-link"><span class="std std-ref">Accelerator Configuration</span></a> for more information.</p>
-</div>
-<div class="section" id="how-to-use-the-library">
-<h2>How to Use the Library<a class="headerlink" href="#how-to-use-the-library" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="how-to-use-the-library">
+<h2>How to Use the Library<a class="headerlink" href="#how-to-use-the-library" title="Link to this heading">#</a></h2>
 <p>The library usage is based on the following concepts:</p>
 <ul class="simple">
 <li><p>Your application should call either <code class="docutils literal notranslate"><span class="pre">dml::submit</span></code> or <code class="docutils literal notranslate"><span class="pre">dml::execute</span></code>
@@ -674,8 +488,8 @@ all configured via function arguments.</p></li>
 following: <code class="docutils literal notranslate"><span class="pre">dml::software</span></code>, <code class="docutils literal notranslate"><span class="pre">dml::hardware</span></code>.</p></li>
 <li><p>Memory regions (data) should be passed as <code class="docutils literal notranslate"><span class="pre">dml::data_view</span></code> objects.</p></li>
 </ul>
-<div class="section" id="example-usage">
-<h3>Example usage<a class="headerlink" href="#example-usage" title="Permalink to this headline">¶</a></h3>
+<section id="example-usage">
+<h3>Example usage<a class="headerlink" href="#example-usage" title="Link to this heading">#</a></h3>
 <p>Here is the generic flow for the library (synchronous execution):</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// Some data definitions</span>
 <span class="k">auto</span><span class="w"> </span><span class="n">src_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">{...};</span>
@@ -718,9 +532,9 @@ following: <code class="docutils literal notranslate"><span class="pre">dml::sof
 <p>Use <code class="docutils literal notranslate"><span class="pre">dml::hardware</span></code> to evaluate an operation on a dedicated
 hardware.</p>
 </div>
-</div>
-<div class="section" id="make-view">
-<h3>Make view<a class="headerlink" href="#make-view" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="make-view">
+<h3>Make view<a class="headerlink" href="#make-view" title="Link to this heading">#</a></h3>
 <p>All operations handle user’s data via <code class="docutils literal notranslate"><span class="pre">dml::data_view</span></code> so there are
 functions to constructs one:</p>
 <ul class="simple">
@@ -740,9 +554,9 @@ functions to constructs one:</p>
 <p class="admonition-title">Note</p>
 <p>Currently the library uses only <code class="docutils literal notranslate"><span class="pre">uint8_t</span></code> views.</p>
 </div>
-</div>
-<div class="section" id="operation-data-type">
-<h3>Operation Data Type<a class="headerlink" href="#operation-data-type" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="operation-data-type">
+<h3>Operation Data Type<a class="headerlink" href="#operation-data-type" title="Link to this heading">#</a></h3>
 <p>Operations are represented via
 <a class="reference external" href="https://en.cppreference.com/w/cpp/named_req/LiteralType">literal-type</a>
 classes and instances of those classes, for example
@@ -758,9 +572,9 @@ chained.</p>
 <span class="w">                           </span><span class="n">args1</span><span class="p">,</span><span class="w"> </span><span class="n">args2</span><span class="p">,</span><span class="w"> </span><span class="n">args3</span><span class="p">);</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="sequence">
-<span id="sequence-cpp-api"></span><h3>Sequence<a class="headerlink" href="#sequence" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="sequence">
+<span id="sequence-cpp-api"></span><h3>Sequence<a class="headerlink" href="#sequence" title="Link to this heading">#</a></h3>
 <p>You should prepare <code class="docutils literal notranslate"><span class="pre">dml::sequence</span></code> to use the <code class="docutils literal notranslate"><span class="pre">dml::batch</span></code>
 operation. It is a special container for ready to be evaluated
 operations. You can construct the one by passing number of operations
@@ -787,9 +601,9 @@ before the call.</p>
 <span class="p">}</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="handler">
-<h3>Handler<a class="headerlink" href="#handler" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="handler">
+<h3>Handler<a class="headerlink" href="#handler" title="Link to this heading">#</a></h3>
 <p>Each <code class="docutils literal notranslate"><span class="pre">dml::submit</span></code> function returns <code class="docutils literal notranslate"><span class="pre">dml::handler</span></code>. This object
 provides a handle to a concurrently running operation. When it is
 needed to wait for the finish and get the result, there is a <code class="docutils literal notranslate"><span class="pre">.get()</span></code>
@@ -799,9 +613,9 @@ method provided.</p>
 <p>It is the user’s responsibility to keep the handler alive until the operation completes to
 ensure that no use-after-free issues arise due to the destruction of the handler object.</p>
 </div>
-</div>
-<div class="section" id="results">
-<h3>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="results">
+<h3>Results<a class="headerlink" href="#results" title="Link to this heading">#</a></h3>
 <p>Each operation has the corresponding result type. Results are C-structs
 with at least one status field. Use cases for the results are:</p>
 <ul class="simple">
@@ -816,9 +630,9 @@ with at least one status field. Use cases for the results are:</p>
 structure: <code class="docutils literal notranslate"><span class="pre">dml::crc</span></code> and <code class="docutils literal notranslate"><span class="pre">dml::copy_crc</span></code>, <code class="docutils literal notranslate"><span class="pre">dml::compare</span></code> and
 <code class="docutils literal notranslate"><span class="pre">dml::compare_pattern</span></code></p>
 </div>
-</div>
-<div class="section" id="advanced-usage">
-<h3>Advanced usage<a class="headerlink" href="#advanced-usage" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="advanced-usage">
+<h3>Advanced usage<a class="headerlink" href="#advanced-usage" title="Link to this heading">#</a></h3>
 <p>The function <code class="docutils literal notranslate"><span class="pre">dml::submit</span></code> can be configured for custom thread and
 memory management. The configuration is done via
 <code class="docutils literal notranslate"><span class="pre">dml::execution_interface</span></code> class. Each submit-function is provided
@@ -860,10 +674,10 @@ last argument:</p>
 <p class="admonition-title">Note</p>
 <p>The library supports STL-compliant allocators.</p>
 </div>
-</div>
-</div>
-<div class="section" id="operations">
-<h2>Operations<a class="headerlink" href="#operations" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="operations">
+<h2>Operations<a class="headerlink" href="#operations" title="Link to this heading">#</a></h2>
 <p>The library supports several groups of operations:</p>
 <ul class="simple">
 <li><p>Flow Control</p></li>
@@ -872,20 +686,20 @@ last argument:</p>
 <li><p>Memory Hash</p></li>
 <li><p>Utility</p></li>
 </ul>
-<div class="section" id="flow-control-features">
-<h3>Flow Control Features<a class="headerlink" href="#flow-control-features" title="Permalink to this headline">¶</a></h3>
+<section id="flow-control-features">
+<h3>Flow Control Features<a class="headerlink" href="#flow-control-features" title="Link to this heading">#</a></h3>
 <p>This group of operations is used for configuration of operation
 sequences.</p>
-<div class="section" id="no-op-operation">
-<h4>No-op operation<a class="headerlink" href="#no-op-operation" title="Permalink to this headline">¶</a></h4>
+<section id="no-op-operation">
+<h4>No-op operation<a class="headerlink" href="#no-op-operation" title="Link to this heading">#</a></h4>
 <p>The No-op operation can be used in a batch operation to ensure that all
 previous operations in the batch completed before the no-op.</p>
 <p>This could be useful for ensuring the order of non-independent operations.
 Like using the destination of a previous operation as the source of another.</p>
 <p>It performs no other operation.</p>
-</div>
-<div class="section" id="batch-operation">
-<h4>Batch operation<a class="headerlink" href="#batch-operation" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="batch-operation">
+<h4>Batch operation<a class="headerlink" href="#batch-operation" title="Link to this heading">#</a></h4>
 <p>This operation process multiple operations at once. Sequence of
 operations to process is provided via <code class="docutils literal notranslate"><span class="pre">sequence</span></code> argument.</p>
 <p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::batch</span></code> object.</p>
@@ -902,13 +716,13 @@ operations to process is provided via <code class="docutils literal notranslate"
 </pre></div>
 </div>
 <p>See detailed <a class="reference internal" href="#sequence-cpp-api"><span class="std std-ref">Sequence</span></a> description.</p>
-</div>
-</div>
-<div class="section" id="memory-transferring-and-filling-features">
-<h3>Memory Transferring and Filling Features<a class="headerlink" href="#memory-transferring-and-filling-features" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="memory-transferring-and-filling-features">
+<h3>Memory Transferring and Filling Features<a class="headerlink" href="#memory-transferring-and-filling-features" title="Link to this heading">#</a></h3>
 <p>This group of operations is used for memory moving, copying and filling.</p>
-<div class="section" id="memory-move">
-<h4>Memory Move<a class="headerlink" href="#memory-move" title="Permalink to this headline">¶</a></h4>
+<section id="memory-move">
+<h4>Memory Move<a class="headerlink" href="#memory-move" title="Link to this heading">#</a></h4>
 <p>This operation moves or copies data from a memory region represented via
 <code class="docutils literal notranslate"><span class="pre">src_view</span></code> to a memory region represented via <code class="docutils literal notranslate"><span class="pre">dst_view</span></code>.</p>
 <p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::mem_move</span></code> object. The operation is
@@ -925,9 +739,9 @@ configurable via the <code class="docutils literal notranslate"><span class="pre
 <span class="p">};</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="memory-copy-with-dualcast">
-<h4>Memory Copy with Dualcast<a class="headerlink" href="#memory-copy-with-dualcast" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="memory-copy-with-dualcast">
+<h4>Memory Copy with Dualcast<a class="headerlink" href="#memory-copy-with-dualcast" title="Link to this heading">#</a></h4>
 <p>This operation copies data from a memory region represented via
 <code class="docutils literal notranslate"><span class="pre">src_view</span></code> to memory regions represented via <code class="docutils literal notranslate"><span class="pre">dst1_view</span></code> and
 <code class="docutils literal notranslate"><span class="pre">dst2_view</span></code>.</p>
@@ -952,9 +766,9 @@ configurable via the <code class="docutils literal notranslate"><span class="pre
 <li><p>The data regions passed to the operation shall not overlap.</p></li>
 </ol>
 </div>
-</div>
-<div class="section" id="fill">
-<h4>Fill<a class="headerlink" href="#fill" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="fill">
+<h4>Fill<a class="headerlink" href="#fill" title="Link to this heading">#</a></h4>
 <p>This operation fills data at memory region represented via <code class="docutils literal notranslate"><span class="pre">dst_view</span></code>
 with 64-bit <code class="docutils literal notranslate"><span class="pre">pattern</span></code>.</p>
 <p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::fill</span></code> object. The operation is
@@ -977,26 +791,26 @@ configurable via the <code class="docutils literal notranslate"><span class="pre
 <li><p>The <code class="docutils literal notranslate"><span class="pre">dst_view</span></code> size does not need to be a multiple of 8.</p></li>
 </ol>
 </div>
-</div>
-</div>
-<div class="section" id="memory-compare-and-restoring-features">
-<h3>Memory Compare and Restoring Features<a class="headerlink" href="#memory-compare-and-restoring-features" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="memory-compare-and-restoring-features">
+<h3>Memory Compare and Restoring Features<a class="headerlink" href="#memory-compare-and-restoring-features" title="Link to this heading">#</a></h3>
 <p>This group of operation is used for memory comparing and restoring to
 proper state.</p>
-<div class="section" id="compare">
-<h4>Compare<a class="headerlink" href="#compare" title="Permalink to this headline">¶</a></h4>
+<section id="compare">
+<h4>Compare<a class="headerlink" href="#compare" title="Link to this heading">#</a></h4>
 <p>This operation compares data at memory region represented via
 <code class="docutils literal notranslate"><span class="pre">src1_view</span></code> with data at memory region represented via <code class="docutils literal notranslate"><span class="pre">src2_view</span></code>.</p>
 <p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::compare</span></code> object. The operation is
 configurable via the <code class="docutils literal notranslate"><span class="pre">.block_on_fault()</span></code> method.</p>
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N3dml17compare_operationE">
-<span id="_CPPv3N3dml17compare_operationE"></span><span id="_CPPv2N3dml17compare_operationE"></span><span id="dml::compare_operation"></span><span class="target" id="df/d14/classdml_1_1compare__operation"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dml</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">compare_operation</span></span></span><a class="headerlink" href="#_CPPv4N3dml17compare_operationE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N3dml17compare_operationE"></span><span id="_CPPv2N3dml17compare_operationE"></span><span id="dml::compare_operation"></span><span class="target" id="df/d14/classdml_1_1compare__operation"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compare_operation</span></span></span><a class="headerlink" href="#_CPPv4N3dml17compare_operationE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Compare operation. </p>
 <p>This operation compares data at the first memory region with data at the second memory region.</p>
 <p>Comparison result will be written into compare_result::result field.</p>
 <p>By default the operation doesn’t check for comparison result and always returns status_code::ok. To enable result checking use one of this class methods. See the following table for detailed view on options:</p>
-<p><table class="colwidths-auto table">
+<p><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Expected result   </p></th>
 <th class="head"><p>Actual result   </p></th>
@@ -1027,14 +841,14 @@ configurable via the <code class="docutils literal notranslate"><span class="pre
 </tbody>
 </table>
 </p>
-<p>See also dml::compare </p>
+<p>See also dml::compare</p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-types">Public Types</p>
 <dl class="cpp type">
 <dt class="sig sig-object cpp" id="_CPPv4N3dml17compare_operation11result_typeE">
-<span id="_CPPv3N3dml17compare_operation11result_typeE"></span><span id="_CPPv2N3dml17compare_operation11result_typeE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1afcf6ad84696e1001a199d7fdd38be562"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">result_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">compare_result</span></span><a class="headerlink" href="#_CPPv4N3dml17compare_operation11result_typeE" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N3dml17compare_operation11result_typeE"></span><span id="_CPPv2N3dml17compare_operation11result_typeE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1afcf6ad84696e1001a199d7fdd38be562"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">result_type</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">compare_result</span></span><a class="headerlink" href="#_CPPv4N3dml17compare_operation11result_typeE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Result type for this operation. </p>
-<p>See compare_result </p>
+<p>See compare_result</p>
 </dd></dl>
 
 </div>
@@ -1042,16 +856,16 @@ configurable via the <code class="docutils literal notranslate"><span class="pre
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N3dml17compare_operation17compare_operationEv">
-<span id="_CPPv3N3dml17compare_operation17compare_operationEv"></span><span id="_CPPv2N3dml17compare_operation17compare_operationEv"></span><span id="dml::compare_operation::compare_operationCE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1a24582a191baa7ec4b9f18ba50db868ba"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compare_operation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N3dml17compare_operation17compare_operationEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3N3dml17compare_operation17compare_operationEv"></span><span id="_CPPv2N3dml17compare_operation17compare_operationEv"></span><span id="dml::compare_operation::compare_operationCE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1a24582a191baa7ec4b9f18ba50db868ba"></span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">compare_operation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">default</span></span><a class="headerlink" href="#_CPPv4N3dml17compare_operation17compare_operationEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Constructs the operation with default parameters. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK3dml17compare_operation12expect_equalEv">
-<span id="_CPPv3NK3dml17compare_operation12expect_equalEv"></span><span id="_CPPv2NK3dml17compare_operation12expect_equalEv"></span><span id="dml::compare_operation::expect_equalCCE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1a1221a5045d13181597b72bbc19096f36"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">expect_equal</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK3dml17compare_operation12expect_equalEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK3dml17compare_operation12expect_equalEv"></span><span id="_CPPv2NK3dml17compare_operation12expect_equalEv"></span><span id="dml::compare_operation::expect_equalCCE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1a1221a5045d13181597b72bbc19096f36"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">expect_equal</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK3dml17compare_operation12expect_equalEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Returns a new instance of the operation with “equal” expected result. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>New instance of the operation </p>
 </dd>
 </dl>
@@ -1059,10 +873,10 @@ configurable via the <code class="docutils literal notranslate"><span class="pre
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK3dml17compare_operation16expect_not_equalEv">
-<span id="_CPPv3NK3dml17compare_operation16expect_not_equalEv"></span><span id="_CPPv2NK3dml17compare_operation16expect_not_equalEv"></span><span id="dml::compare_operation::expect_not_equalCCE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1a0e291d333e023d8a647873413d3bcba7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">expect_not_equal</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK3dml17compare_operation16expect_not_equalEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK3dml17compare_operation16expect_not_equalEv"></span><span id="_CPPv2NK3dml17compare_operation16expect_not_equalEv"></span><span id="dml::compare_operation::expect_not_equalCCE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1a0e291d333e023d8a647873413d3bcba7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">expect_not_equal</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK3dml17compare_operation16expect_not_equalEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Returns a new instance of the operation with “not_equal” expected result. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>New instance of the operation </p>
 </dd>
 </dl>
@@ -1070,10 +884,10 @@ configurable via the <code class="docutils literal notranslate"><span class="pre
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK3dml17compare_operation14block_on_faultEv">
-<span id="_CPPv3NK3dml17compare_operation14block_on_faultEv"></span><span id="_CPPv2NK3dml17compare_operation14block_on_faultEv"></span><span id="dml::compare_operation::block_on_faultCCE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1a3e3e62b1c995d641f2a58ee07a10386a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_on_fault</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK3dml17compare_operation14block_on_faultEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK3dml17compare_operation14block_on_faultEv"></span><span id="_CPPv2NK3dml17compare_operation14block_on_faultEv"></span><span id="dml::compare_operation::block_on_faultCCE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1a3e3e62b1c995d641f2a58ee07a10386a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">block_on_fault</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK3dml17compare_operation14block_on_faultEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Enables Blocking on Fault. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>New instance of the operation with Block on Fault on </p>
 </dd>
 </dl>
@@ -1081,7 +895,7 @@ configurable via the <code class="docutils literal notranslate"><span class="pre
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK3dml17compare_operation11get_optionsEv">
-<span id="_CPPv3NK3dml17compare_operation11get_optionsEv"></span><span id="_CPPv2NK3dml17compare_operation11get_optionsEv"></span><span id="dml::compare_operation::get_optionsCCE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1afcce21d81c4637b825f49041bfe315d5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_options</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK3dml17compare_operation11get_optionsEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK3dml17compare_operation11get_optionsEv"></span><span id="_CPPv2NK3dml17compare_operation11get_optionsEv"></span><span id="dml::compare_operation::get_optionsCCE"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1afcce21d81c4637b825f49041bfe315d5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_options</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">noexcept</span></span><a class="headerlink" href="#_CPPv4NK3dml17compare_operation11get_optionsEv" title="Link to this definition">#</a><br /></dt>
 <dd><p><dl>
 <dt class="sig sig-object cpp">
 <em><span class="pre">Todo:</span></em></dt>
@@ -1092,10 +906,10 @@ configurable via the <code class="docutils literal notranslate"><span class="pre
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK3dml17compare_operation19get_expected_resultEv">
-<span id="_CPPv3NK3dml17compare_operation19get_expected_resultEv"></span><span id="_CPPv2NK3dml17compare_operation19get_expected_resultEv"></span><span id="dml::compare_operation::get_expected_resultC"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1a50cce8c8a866d51a64892039aeb91a3e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">compare_result</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_expected_result</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3dml17compare_operation19get_expected_resultEv" title="Permalink to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK3dml17compare_operation19get_expected_resultEv"></span><span id="_CPPv2NK3dml17compare_operation19get_expected_resultEv"></span><span id="dml::compare_operation::get_expected_resultC"></span><span class="target" id="df/d14/classdml_1_1compare__operation_1a50cce8c8a866d51a64892039aeb91a3e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">detail</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">compare_result</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_expected_result</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK3dml17compare_operation19get_expected_resultEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Returns expected result. </p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Expected result </p>
 </dd>
 </dl>
@@ -1117,9 +931,9 @@ configurable via the <code class="docutils literal notranslate"><span class="pre
 <span class="p">};</span>
 </pre></div>
 </div>
-</div>
-<div class="section" id="compare-pattern">
-<h4>Compare Pattern<a class="headerlink" href="#compare-pattern" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="compare-pattern">
+<h4>Compare Pattern<a class="headerlink" href="#compare-pattern" title="Link to this heading">#</a></h4>
 <p>This operation compares data at memory region represented via
 <code class="docutils literal notranslate"><span class="pre">src_view</span></code> with 64-bit <code class="docutils literal notranslate"><span class="pre">pattern</span></code>.</p>
 <p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::compare</span></code> object. The operation is
@@ -1146,9 +960,9 @@ configurable via the <code class="docutils literal notranslate"><span class="pre
 <p class="admonition-title">Note</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">src_view</span></code> parameter size does not need to be a multiple of 8.</p>
 </div>
-</div>
-<div class="section" id="create-delta-record">
-<h4>Create Delta Record<a class="headerlink" href="#create-delta-record" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="create-delta-record">
+<h4>Create Delta Record<a class="headerlink" href="#create-delta-record" title="Link to this heading">#</a></h4>
 <p>This operation compares data at memory region represented via
 <code class="docutils literal notranslate"><span class="pre">src1_view</span></code> with data at memory region represented via <code class="docutils literal notranslate"><span class="pre">src2_view</span></code>.
 Then it writes delta record to memory region represented via
@@ -1190,9 +1004,9 @@ representing a multiple of 8 bytes, the maximum offset that can be
 expressed is <code class="docutils literal notranslate"><span class="pre">0x7fff8</span></code>, so the maximum transfer size (the
 <code class="docutils literal notranslate"><span class="pre">src1_view</span></code> parameter) is <code class="docutils literal notranslate"><span class="pre">0x80000</span></code> bytes (512KB).</p>
 </div>
-</div>
-<div class="section" id="apply-delta-record">
-<h4>Apply Delta Record<a class="headerlink" href="#apply-delta-record" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="apply-delta-record">
+<h4>Apply Delta Record<a class="headerlink" href="#apply-delta-record" title="Link to this heading">#</a></h4>
 <p>This operation applies delta record written to memory region represented
 via <code class="docutils literal notranslate"><span class="pre">delta_view</span></code> view onto data at memory region represented via
 <code class="docutils literal notranslate"><span class="pre">dst_view</span></code> view.</p>
@@ -1219,14 +1033,14 @@ configurable via the <code class="docutils literal notranslate"><span class="pre
 create_delta, it is automatically checked through <code class="docutils literal notranslate"><span class="pre">create_result</span></code>
 parameter.</p>
 </div>
-</div>
-</div>
-<div class="section" id="memory-hash-features">
-<h3>Memory Hash Features<a class="headerlink" href="#memory-hash-features" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="memory-hash-features">
+<h3>Memory Hash Features<a class="headerlink" href="#memory-hash-features" title="Link to this heading">#</a></h3>
 <p>This group of operation is used for ensuring data integrity with hash
 algorithms.</p>
-<div class="section" id="crc-generation">
-<h4>CRC Generation<a class="headerlink" href="#crc-generation" title="Permalink to this headline">¶</a></h4>
+<section id="crc-generation">
+<h4>CRC Generation<a class="headerlink" href="#crc-generation" title="Link to this heading">#</a></h4>
 <p>This operation computes CRC on the data at memory region represented via
 <code class="docutils literal notranslate"><span class="pre">src_view</span></code>. Initial crc seed is provided via <code class="docutils literal notranslate"><span class="pre">crc_seed</span></code> argument.</p>
 <p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::crc</span></code> object. The operation is
@@ -1249,9 +1063,9 @@ configurable via <code class="docutils literal notranslate"><span class="pre">.b
 Protocol, RFC 3720). When the size of <code class="docutils literal notranslate"><span class="pre">src_view</span></code> parameter is not a
 multiple of 4 bytes, the source data is padded to the end with zeros.</p>
 </div>
-</div>
-<div class="section" id="copy-with-crc-generation">
-<h4>Copy with CRC Generation<a class="headerlink" href="#copy-with-crc-generation" title="Permalink to this headline">¶</a></h4>
+</section>
+<section id="copy-with-crc-generation">
+<h4>Copy with CRC Generation<a class="headerlink" href="#copy-with-crc-generation" title="Link to this heading">#</a></h4>
 <p>This operation copies data at memory region represented via <code class="docutils literal notranslate"><span class="pre">src_view</span></code>
 to memory region represented via <code class="docutils literal notranslate"><span class="pre">dst_view</span></code>, and then computes CRC on
 the data copied. Initial crc seed is provided via <code class="docutils literal notranslate"><span class="pre">crc_seed</span></code> argument.</p>
@@ -1274,13 +1088,13 @@ configurable via <code class="docutils literal notranslate"><span class="pre">.b
 <p>Memory regions represented via <code class="docutils literal notranslate"><span class="pre">src_view</span></code> and <code class="docutils literal notranslate"><span class="pre">dst_view</span></code> should
 not overlap.</p>
 </div>
-</div>
-</div>
-<div class="section" id="utility-features">
-<h3>Utility Features<a class="headerlink" href="#utility-features" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="utility-features">
+<h3>Utility Features<a class="headerlink" href="#utility-features" title="Link to this heading">#</a></h3>
 <p>This group of operation is used for utility purposes.</p>
-<div class="section" id="cache-flush">
-<h4>Cache Flush<a class="headerlink" href="#cache-flush" title="Permalink to this headline">¶</a></h4>
+<section id="cache-flush">
+<h4>Cache Flush<a class="headerlink" href="#cache-flush" title="Link to this heading">#</a></h4>
 <p>The Cache Flush operation flushes the processor caches at memory region
 represented via <code class="docutils literal notranslate"><span class="pre">dst_view</span></code>.</p>
 <p>The operation is presented as <code class="docutils literal notranslate"><span class="pre">dml::cache_flush</span></code> object. The operation
@@ -1306,14 +1120,14 @@ level of cache hierarchy. To disable that, use
 <p class="admonition-title">Warning</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">.dont_invalidate_cache()</span></code> method is deprecated and will be removed in a later version.</p>
 </div>
-</div>
-</div>
-</div>
-<div class="section" id="operation-status-values">
-<h2>Operation Status Values<a class="headerlink" href="#operation-status-values" title="Permalink to this headline">¶</a></h2>
-<dl class="cpp enum">
+</section>
+</section>
+</section>
+<section id="operation-status-values">
+<h2>Operation Status Values<a class="headerlink" href="#operation-status-values" title="Link to this heading">#</a></h2>
+<dl class="cpp enum-class">
 <dt class="sig sig-object cpp">
-<span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dml</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">status_code</span></span></span><br /></dt>
+<span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dml</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">status_code</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><br /></dt>
 <dd><p>Status codes for error reporting. </p>
 <p><em>Values:</em></p>
 <dl class="cpp enumerator">
@@ -1426,51 +1240,167 @@ level of cache hierarchy. To disable that, use
 
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
-              </div>
+                </article>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="../get_started_docs/testing.html" title="previous page">
-        <i class="fas fa-angle-left"></i>
-        <div class="prev-next-info">
-            <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Library Testing</p>
-        </div>
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../get_started_docs/testing.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Library Testing</p>
+      </div>
     </a>
-    <a class='right-next' id="next-link" href="low_level_api.html" title="next page">
-    <div class="prev-next-info">
+    <a class="right-next"
+       href="low_level_api.html"
+       title="next page">
+      <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">Low-level C API</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
+                </footer>
+              
+            </div>
             
-        </div>
-    </div>
-    <footer class="footer">
-  <p>
-    
-      By Intel<br/>
-    
-        &copy; Copyright 2022, Intel.<br/>
-      <div class="extra_footer">
-        <p align="right"><a href="https://www.intel.com/content/www/us/en/privacy/intel-cookie-notice.html">Cookies</a></p>
-      </div>
-  </p>
-</footer>
-</main>
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
-      </div>
-    </div>
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#header-files">Header Files</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#namespace">Namespace</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numa-support">NUMA support</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#page-fault-handling">Page Fault handling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-use-the-library">How to Use the Library</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-usage">Example usage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#make-view">Make view</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operation-data-type">Operation Data Type</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sequence">Sequence</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#handler">Handler</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#advanced-usage">Advanced usage</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#operations">Operations</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#flow-control-features">Flow Control Features</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#no-op-operation">No-op operation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#batch-operation">Batch operation</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-transferring-and-filling-features">Memory Transferring and Filling Features</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-move">Memory Move</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-copy-with-dualcast">Memory Copy with Dualcast</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fill">Fill</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-compare-and-restoring-features">Memory Compare and Restoring Features</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compare">Compare</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N3dml17compare_operationE"><code class="docutils literal notranslate"><span class="pre">compare_operation</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N3dml17compare_operation11result_typeE"><code class="docutils literal notranslate"><span class="pre">compare_operation::result_type</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4N3dml17compare_operation17compare_operationEv"><code class="docutils literal notranslate"><span class="pre">compare_operation::compare_operation()</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK3dml17compare_operation12expect_equalEv"><code class="docutils literal notranslate"><span class="pre">compare_operation::expect_equal()</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK3dml17compare_operation16expect_not_equalEv"><code class="docutils literal notranslate"><span class="pre">compare_operation::expect_not_equal()</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK3dml17compare_operation14block_on_faultEv"><code class="docutils literal notranslate"><span class="pre">compare_operation::block_on_fault()</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK3dml17compare_operation11get_optionsEv"><code class="docutils literal notranslate"><span class="pre">compare_operation::get_options()</span></code></a></li>
+<li class="toc-h6 nav-item toc-entry"><a class="reference internal nav-link" href="#_CPPv4NK3dml17compare_operation19get_expected_resultEv"><code class="docutils literal notranslate"><span class="pre">compare_operation::get_expected_result()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#compare-pattern">Compare Pattern</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#create-delta-record">Create Delta Record</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-delta-record">Apply Delta Record</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-hash-features">Memory Hash Features</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#crc-generation">CRC Generation</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#copy-with-crc-generation">Copy with CRC Generation</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#utility-features">Utility Features</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cache-flush">Cache Flush</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#operation-status-values">Operation Status Values</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
   
-  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <div class="footer-item">
+    
+<p class="component-author">
+By Intel
+</p>
 
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2022, Intel.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p align="right"><a href="https://www.intel.com/content/www/us/en/privacy/intel-cookie-notice.html">Cookies</a></p>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
   </body>
 </html>
