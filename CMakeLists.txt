@@ -78,7 +78,6 @@ add_compile_options(
     ${DML_SECURITY_COMPILE_OPTIONS}
     $<$<BOOL:${DML_RECORD_SWITCHES}>:-frecord-gcc-switches>)
 add_link_options(${DML_SECURITY_LINK_OPTIONS})
-add_compile_definitions(${DML_SECURITY_DEFINITIONS})
 
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
