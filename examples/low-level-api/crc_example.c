@@ -51,13 +51,14 @@ int main(int argc, char **argv)
         free(dml_job_ptr);
         return 1;
     }
-    
+
     uint32_t crc = 1;
 
     dml_job_ptr->operation              = DML_OP_CRC;
     dml_job_ptr->source_first_ptr       = source;
     dml_job_ptr->source_length          = BUFFER_SIZE;
     dml_job_ptr->crc_checksum_ptr       = &crc;
+    dml_job_ptr->flags                  = DML_FLAG_CRC_READ_SEED; // read value from crc_checksum_ptr as crc seed
 
     status = dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
     if (DML_STATUS_OK != status) {
