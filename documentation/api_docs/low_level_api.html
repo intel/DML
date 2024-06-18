@@ -1062,7 +1062,7 @@ for more information.</p>
 <h4>CRC Generation<a class="headerlink" href="#crc-generation" title="Link to this heading">#</a></h4>
 <p>The CRC Generation computes the CRC on memory at <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code>.
 The number of bytes used for CRC computation is given by the
-<code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter. The <code class="docutils literal notranslate"><span class="pre">crc_ptr</span></code> field in the <code class="docutils literal notranslate"><span class="pre">dml_job_t</span></code>
+<code class="docutils literal notranslate"><span class="pre">source_length</span></code> parameter. The <code class="docutils literal notranslate"><span class="pre">crc_checksum_ptr</span></code> field in the <code class="docutils literal notranslate"><span class="pre">dml_job_t</span></code>
 is used as a seed for CRC calculation, therefore it can be used for
 continuation.</p>
 <p>This operation computes CRC using the polynomial <code class="docutils literal notranslate"><span class="pre">0x11edc6f41</span></code> (iSCSI
@@ -1470,7 +1470,7 @@ not evicted from the caches.</p></li>
 <td><p>OUT</p></td>
 <td><p>Pointer to the next output byte in output stream #2</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">crc_ptr</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">crc_checksum_ptr</span></code></p></td>
 <td><p>IN/OUT</p></td>
 <td><p>CRC for OUT, CRC seed for IN</p></td>
 </tr>

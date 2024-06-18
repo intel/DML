@@ -230,9 +230,9 @@ Page fault can occur during workload processing on a hardware. When the fault oc
 - Hardware path: ``DML_STATUS_PAGE_FAULT_ERROR`` is returned.
 - Auto path: the library resolves the fault via completion of the workload on a CPU.
 
-The ``DML_FLAG_BLOCK_ON_FAULT`` flag can be used to have page faults be resolved on accelerator. 
+The ``DML_FLAG_BLOCK_ON_FAULT`` flag can be used to have page faults be resolved on accelerator.
 Using ``DML_FLAG_BLOCK_ON_FAULT`` can be done for all operations except Batch, Fence, and Drain.
-All available accelerator workqueues need to be configured to allow for blocking on fault ``"block_on_fault":1``. 
+All available accelerator workqueues need to be configured to allow for blocking on fault ``"block_on_fault":1``.
 On by default in DML provided accelerator configuration files.
 Please refer to :ref:`Accelerator Configuration <accelerator_configuration_reference_link>` for more information.
 
@@ -376,12 +376,12 @@ bytes is given by the ``source_length`` parameter.
    you should set the ``DML_FLAG_COPY`` flag.
 
 .. note::
-   
-   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
-   to hint that the cache entries be allocated for data written 
+
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag
+   to hint that the cache entries be allocated for data written
    to ``destination_first_ptr``.
 
-   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>`
    for more information.
 
 
@@ -406,12 +406,12 @@ The Memory Copy with Dualcast operation copies memory from the
    thrown.
 
 .. note::
-   
-   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
-   to hint that the cache entries be allocated for data written 
+
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag
+   to hint that the cache entries be allocated for data written
    to ``destination_first_ptr`` and ``destination_second_ptr``.
 
-   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>`
    for more information.
 
 Fill
@@ -426,12 +426,12 @@ with the bytes from the ``pattern[8]`` parameter.
 - The ``source_length`` parameter does not need to be a multiple of 8.
 
 .. note::
-   
-   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
-   to hint that the cache entries be allocated for data written 
+
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag
+   to hint that the cache entries be allocated for data written
    to ``destination_first_ptr``.
 
-   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>`
    for more information.
 
 Memory Compare and Restoring Features
@@ -637,12 +637,12 @@ written to the ``result`` field of the ``dml_job_t`` structure.
    description.
 
 .. note::
-   
-   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
-   to hint that the cache entries be allocated for data written 
+
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag
+   to hint that the cache entries be allocated for data written
    to ``destination_first_ptr``.
 
-   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>`
    for more information.
 
 Apply Delta Record
@@ -661,12 +661,12 @@ be created by the Create Delta Record operation with ``result`` equal to
    Record operation.
 
 .. note::
-   
-   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
-   to hint that the cache entries be allocated for data written 
+
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag
+   to hint that the cache entries be allocated for data written
    to ``destination_first_ptr``.
 
-   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>`
    for more information.
 
 Memory Hash Features
@@ -679,7 +679,7 @@ CRC Generation
 
 The CRC Generation computes the CRC on memory at ``source_first_ptr``.
 The number of bytes used for CRC computation is given by the
-``source_length`` parameter. The ``crc_ptr`` field in the ``dml_job_t``
+``source_length`` parameter. The ``crc_checksum_ptr`` field in the ``dml_job_t``
 is used as a seed for CRC calculation, therefore it can be used for
 continuation.
 
@@ -702,12 +702,12 @@ If ``source_first_ptr`` and ``destination_first_ptr`` overlap, the error
 is thrown.
 
 .. note::
-   
-   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
-   to hint that the cache entries be allocated for data written 
+
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag
+   to hint that the cache entries be allocated for data written
    to ``destination_first_ptr``.
 
-   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>`
    for more information.
 
 Data Integrity Field Features
@@ -938,12 +938,12 @@ source data and inserting the DIF into the output data.
 - If ``source_first_ptr`` and ``destination_first_ptr`` overlap, the error is thrown.
 
 .. note::
-   
-   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
-   to hint that the cache entries be allocated for data written 
+
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag
+   to hint that the cache entries be allocated for data written
    to ``destination_first_ptr``.
 
-   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>`
    for more information.
 
 DIF Strip
@@ -971,12 +971,12 @@ DIF Source Flags values.
    stops. The job structure is updated in the same way as in the DIF Check operation.
 
 .. note::
-   
-   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
-   to hint that the cache entries be allocated for data written 
+
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag
+   to hint that the cache entries be allocated for data written
    to ``destination_first_ptr``.
 
-   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>`
    for more information.
 
 DIF Update
@@ -1001,12 +1001,12 @@ according to the DIF Source Flags values.
 
 
 .. note::
-   
-   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag 
-   to hint that the cache entries be allocated for data written 
+
+   This operation is able to use the ``DML_FLAG_PREFETCH_CACHE`` flag
+   to hint that the cache entries be allocated for data written
    to ``destination_first_ptr``.
 
-   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>` 
+   Please refer to :ref:`Cache Control <library_cache_control_ll_reference_link>`
    for more information.
 
 Cache Flush
@@ -1020,7 +1020,7 @@ by the ``destination_length`` parameter.
 -  If ``DML_FLAG_DONT_INVALIDATE_CACHE`` flag is not set, the affected cache lines
    are invalidated from every level of the cache hierarchy. If it is set
    to 1, then modified cache lines are written to main memory, but are
-   not evicted from the caches. 
+   not evicted from the caches.
 
 .. warning::
 
@@ -1050,7 +1050,7 @@ The Job structure is defined in ``dmldefs.h``.
   * - ``destination_second_ptr``
     - OUT
     - Pointer to the next output byte in output stream #2
-  * - ``crc_ptr``
+  * - ``crc_checksum_ptr``
     - IN/OUT
     - CRC for OUT, CRC seed for IN
   * - ``source_length``
