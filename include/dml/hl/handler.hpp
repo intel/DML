@@ -89,7 +89,7 @@ namespace dml
          * Handler is invalid when it is not bind to an operation.
          * Use @ref get to find out why it is invalid.
          *
-         * @return True if hanlder is valid, false otherwise
+         * @return True if handler is valid, false otherwise
          */
         [[nodiscard]] bool valid() const noexcept
         {

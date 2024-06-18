@@ -43,7 +43,7 @@ int main(int argc, char **argv)
 
     dml_status_t status = dml_get_job_size(execution_path, &size);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during getting job size.\n", status);
+        printf("An error (%u) occurred during getting job size.\n", status);
         return 1;
     }
 
@@ -51,7 +51,7 @@ int main(int argc, char **argv)
 
     status = dml_init_job(execution_path, dml_job_ptr);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during job initialization.\n", status);
+        printf("An error (%u) occurred during job initialization.\n", status);
         free(dml_job_ptr);
         return 1;
     }
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 
     status = dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during job execution.\n", status);
+        printf("An error (%u) occurred during job execution.\n", status);
         dml_finalize_job(dml_job_ptr);
         free(dml_job_ptr);
         return 1;
@@ -109,7 +109,7 @@ int main(int argc, char **argv)
 
     status = dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during job execution.\n", status);
+        printf("An error (%u) occurred during job execution.\n", status);
         dml_finalize_job(dml_job_ptr);
         free(dml_job_ptr);
         return 1;
@@ -152,7 +152,7 @@ int main(int argc, char **argv)
 
     status = dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during job execution.\n", status);
+        printf("An error (%u) occurred during job execution.\n", status);
         dml_finalize_job(dml_job_ptr);
         free(dml_job_ptr);
         return 1;
@@ -187,7 +187,7 @@ int main(int argc, char **argv)
 
     status = dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
     if (DML_STATUS_OK != status) {
-        printf("An error %i occured during job execution.\n", status);
+        printf("An error %i occurred during job execution.\n", status);
         dml_finalize_job(dml_job_ptr);
         free(dml_job_ptr);
         return 1;
@@ -204,7 +204,7 @@ int main(int argc, char **argv)
 
     status = dml_finalize_job(dml_job_ptr);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during job finalization.\n", status);
+        printf("An error (%u) occurred during job finalization.\n", status);
         free(dml_job_ptr);
         return 1;
     }

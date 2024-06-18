@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 
     dml_status_t status = dml_get_job_size(execution_path, &size);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during getting job size.\n", status);
+        printf("An error (%u) occurred during getting job size.\n", status);
         return 1;
     }
 
@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 
     status = dml_init_job(execution_path, dml_job_ptr);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during job initialization.\n", status);
+        printf("An error (%u) occurred during job initialization.\n", status);
         free(dml_job_ptr);
         return 1;
     }
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 
     status = dml_get_batch_size(dml_job_ptr, BATCH_COUNT, &batch_buffer_length);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during getting batch size.\n", status);
+        printf("An error (%u) occurred during getting batch size.\n", status);
         goto cleanup;
     }
 
@@ -72,55 +72,55 @@ int main(int argc, char **argv)
 
     status = dml_batch_set_fill_by_index(dml_job_ptr, 0, pattern, buffer_one, BUFFER_SIZE, DML_FLAG_PREFETCH_CACHE);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during setting of batch operation.\n", status);
+        printf("An error (%u) occurred during setting of batch operation.\n", status);
         goto cleanup;
     }
 
     printf("Fencing in batch to ensure fill completes before copying.\n");
     status = dml_batch_set_nop_by_index(dml_job_ptr, 1, DML_FLAG_FENCE);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during setting of batch operation.\n", status);
+        printf("An error (%u) occurred during setting of batch operation.\n", status);
         goto cleanup;
     }
 
     printf("Moving 1KB of data\n");
     status = dml_batch_set_mem_move_by_index(dml_job_ptr, 2, buffer_one, buffer_two, BUFFER_SIZE, DML_FLAG_PREFETCH_CACHE);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during setting of batch operation.\n", status);
+        printf("An error (%u) occurred during setting of batch operation.\n", status);
         goto cleanup;
     }
 
     printf("Dualcasting 1KB of data\n");
     status = dml_batch_set_dualcast_by_index(dml_job_ptr, 3, buffer_one, buffer_three, buffer_three + PADDING_SIZE, BUFFER_SIZE, DML_FLAG_PREFETCH_CACHE);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during setting of batch operation.\n", status);
+        printf("An error (%u) occurred during setting of batch operation.\n", status);
         goto cleanup;
     }
 
     printf("Fencing in batch to ensure all moving completes.\n");
     status = dml_batch_set_nop_by_index(dml_job_ptr, 4, DML_FLAG_FENCE);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during setting of batch operation.\n", status);
+        printf("An error (%u) occurred during setting of batch operation.\n", status);
         goto cleanup;
     }
 
     printf("Comparing 1KB of data to 0x00ABCDEFABCDEF00 pattern\n");
     status = dml_batch_set_compare_pattern_by_index(dml_job_ptr, 5, buffer_three + PADDING_SIZE, pattern, BUFFER_SIZE, 0, 0x00);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during setting of batch operation.\n", status);
+        printf("An error (%u) occurred during setting of batch operation.\n", status);
         goto cleanup;
     }
 
     printf("Comparing two buffers of 1KB of data\n");
     status = dml_batch_set_compare_by_index(dml_job_ptr, 6, buffer_three, buffer_two, BUFFER_SIZE, 0, 0x00);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during setting of batch operation.\n", status);
+        printf("An error (%u) occurred during setting of batch operation.\n", status);
         goto cleanup;
     }
 
     status = dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during job execution.\n", status);
+        printf("An error (%u) occurred during job execution.\n", status);
         goto cleanup;
     }
 
@@ -131,7 +131,7 @@ int main(int argc, char **argv)
 
     status = dml_finalize_job(dml_job_ptr);
     if (DML_STATUS_OK != status) {
-        printf("An error (%u) occured during job finalization.\n", status);
+        printf("An error (%u) occurred during job finalization.\n", status);
         free(dml_job_ptr);
         return 1;
     }
