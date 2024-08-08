@@ -53,6 +53,7 @@ static bool init_hw()
     job->destination_first_ptr = (std::uint8_t*)&data2;
     job->destination_length    = 4;
     job->operation             = DML_OP_MEM_MOVE;
+    job->numa_id               = bench::cmd::FLAGS_node;
 
     status = dml_submit_job(job);
     if(status != DML_STATUS_OK)
