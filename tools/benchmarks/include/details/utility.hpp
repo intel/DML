@@ -75,14 +75,12 @@ struct extended_info_t
     std::uint32_t cpu_physical_cores       = 0;
     std::uint32_t cpu_sockets              = 0;
     std::uint32_t cpu_physical_per_socket  = 0;
-    std::uint32_t cpu_physical_per_cluster = 0;
     accel_info_t  accelerators;
 };
 
 const extended_info_t& get_sys_info();
 std::uint32_t get_current_numa() noexcept;
 std::uint32_t get_current_numa_accels() noexcept;
-void set_affinity_map(const benchmark::State &state);
 
 constexpr std::uint64_t submitRetryWaitNs = 0;
 

@@ -95,30 +95,6 @@ std::uint32_t get_current_numa_accels() noexcept
     return get_num_devices(get_current_numa());
 }
 
-static inline std::int32_t get_cpu_index(const extended_info_t &info, std::int32_t thread_index)
-{
-    std::uint32_t devices  = info.accelerators.total_devices;
-    if(!devices)
-        devices = 1; // If no devices avaliable juts pin threads with step 1
-    return ((thread_index%devices)*info.cpu_physical_per_cluster+thread_index/devices)%info.cpu_physical_per_socket + info.cpu_physical_per_socket*get_current_numa();
-}
-
-void set_affinity_map(const benchmark::State &state)
-{
-    static thread_local bool is_set{false};
-    if(!is_set)
-    {
-        auto cpu_index = get_cpu_index(get_sys_info(), state.thread_index());
-
-        cpu_set_t cpus;
-        CPU_ZERO(&cpus);
-        CPU_SET(cpu_index, &cpus);
-        pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpus);
-
-        is_set = true;
-    }
-}
-
 const extended_info_t& get_sys_info()
 {
     static extended_info_t info;
@@ -169,9 +145,7 @@ const extended_info_t& get_sys_info()
                 info.cpu_stepping = atoi(val.c_str());
         }
 
-        constexpr std::uint32_t clusters_per_socket = 4; // How to get this dynamically?
         info.cpu_physical_cores       = info.cpu_physical_per_socket*info.cpu_sockets;
-        info.cpu_physical_per_cluster = info.cpu_physical_per_socket/clusters_per_socket;
 
         for(std::uint32_t i = 0; i < info.cpu_sockets; ++i)
         {
@@ -188,20 +162,11 @@ const extended_info_t& get_sys_info()
         printf("  --> Logical:   %d\n", info.cpu_logical_cores);
         printf("  --> Physical:  %d\n", info.cpu_physical_cores);
         printf("  --> Socket:    %d\n", info.cpu_physical_per_socket);
-        printf("  --> Cluster:   %d\n", info.cpu_physical_per_cluster);
         printf("== Accelerators: %d\n", info.accelerators.total_devices);
         for(std::uint32_t i = 0; i < info.accelerators.socket.size(); ++i)
         {
             printf("  --> NUMA %d: %d\n", i, info.accelerators.socket[i]);
         }
-        printf("== Affinity Map [device_index: thread_index(cpu_index)...]:\n");
-        printf("  --> ");
-        for(std::uint32_t i = 0; i < info.cpu_physical_per_cluster; ++i)
-        {
-            auto cpu = get_cpu_index(info, i);
-            printf("%d(%d) ", i, cpu);
-        }
-        printf("\n");
 #endif
         is_setup = true;
     }

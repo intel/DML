@@ -34,9 +34,6 @@ static statistics_t measure_async(benchmark::State &state, const case_params_t &
     if (res.operations_per_thread < 1)
         throw std::runtime_error("bench::details::measure_async: operation pool is too small for given threads");
 
-    // Setup affinity. Try to distribute CPUs equality between accelerators
-    set_affinity_map(state);
-
     // Initialize operations
     operations.resize(res.operations_per_thread);
     for (auto &operation: operations)
