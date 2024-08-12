@@ -9,8 +9,8 @@ add_library(dml_hw_dispatcher OBJECT
         hw_dispatcher.hpp
         hw_queue.cpp
         hw_queue.hpp
-        numa.cpp
-        numa.hpp
+        topology.cpp
+        topology.hpp
 
         hw_configuration_driver.c
 

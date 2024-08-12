@@ -24,6 +24,10 @@ if(UNIX)
     target_link_libraries(dmlhl PRIVATE ${CMAKE_DL_LIBS})
 endif()
 
+# C++ filesystem library requires additional linking for older GNU/Clang
+target_link_libraries(dmlhl PRIVATE $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.1>>:stdc++fs>)
+target_link_libraries(dmlhl PRIVATE $<$<AND:$<CXX_COMPILER_ID:Clang>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:c++fs>)
+
 set_target_properties(dmlhl PROPERTIES
         CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON

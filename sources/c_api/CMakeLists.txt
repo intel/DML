@@ -31,6 +31,10 @@ if(UNIX)
     target_link_libraries(dml PRIVATE ${CMAKE_DL_LIBS})
 endif()
 
+# C++ filesystem library requires additional linking for older GNU/Clang
+target_link_libraries(dml PRIVATE $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.1>>:stdc++fs>)
+target_link_libraries(dml PRIVATE $<$<AND:$<CXX_COMPILER_ID:Clang>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:c++fs>)
+
 # Pass git revision to get_library_version source file
 get_git_revision()
 

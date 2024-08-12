@@ -10,7 +10,7 @@
 #include <dml/detail/common/status.hpp>
 
 #include "hw_dispatcher/hw_dispatcher.hpp"
-#include "hw_dispatcher/numa.hpp"
+#include "hw_dispatcher/topology.hpp"
 
 namespace dml::core
 {
@@ -31,11 +31,9 @@ namespace dml::core
     }
 #endif
 
-    dml::detail::submission_status hardware_device::submit(const descriptor &dsc, std::uint32_t numa_id) noexcept
+    dml::detail::submission_status hardware_device::submit(const descriptor &dsc, std::uint32_t user_specified_numa_id) noexcept
     {
 #if defined(__linux__)
-        const auto own_numa_id = (numa_id == std::numeric_limits<decltype(numa_id)>::max()) ? util::get_numa_id() : numa_id;
-
         auto &dispatcher = dispatcher::hw_dispatcher::get_instance();
         const size_t device_count = dispatcher.device_count();
 
@@ -49,7 +47,7 @@ namespace dml::core
                 const auto &current_device = dispatcher.device(current_device_idx);
                 current_device_idx = (current_device_idx + 1) % device_count;
 
-                if (own_numa_id != current_device.numa_id())
+                if (!current_device.is_matching_user_numa_policy(user_specified_numa_id))
                 {
                     tried_devices++;
                     continue;
@@ -71,7 +69,7 @@ namespace dml::core
         }
 #else
         static_cast<void>(dsc);
-        static_cast<void>(numa_id);
+        static_cast<void>(user_specified_numa_id);
 #endif
 
         return dml::detail::submission_status::failure;

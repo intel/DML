@@ -38,11 +38,15 @@ namespace dml::core::dispatcher
 
         [[nodiscard]] auto size() const noexcept -> size_t;
 
-        [[nodiscard]] auto numa_id() const noexcept -> uint64_t;
+        [[nodiscard]] auto numa_id() const noexcept -> uint32_t;
+
+        [[nodiscard]] auto socket_id() const noexcept -> uint32_t;
 
         [[nodiscard]] auto begin() const noexcept -> queues_container_t::const_iterator;
 
         [[nodiscard]] auto end() const noexcept -> queues_container_t::const_iterator;
+
+        [[nodiscard]] auto is_matching_user_numa_policy(uint32_t user_specified_numa_id) const noexcept -> bool;
 
     protected:
         auto block_on_fault_support() const noexcept -> uint8_t;
@@ -69,9 +73,10 @@ namespace dml::core::dispatcher
         queues_container_t working_queues_   = {}; /**< Set of available HW working queues */
         uint32_t           queue_count_      = 0u; /**< Number of working queues that are available */
         uint64_t           gen_cap_register_ = 0u; /**< GENCAP register content */
-        uint64_t           numa_node_id_     = 0u; /**< NUMA node id of the device */
+        uint32_t           numa_node_id_     = 0u; /**< NUMA node id of the device */
         uint32_t           version_major_    = 0u; /**< Major version of discovered device */
         uint32_t           version_minor_    = 0u; /**< Minor version of discovered device */
+        uint32_t           socket_id_        = 0u; /**< Socket id of the device */
     };
 
 }  // namespace dml::core::dispatcher

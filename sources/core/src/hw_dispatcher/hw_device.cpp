@@ -11,9 +11,12 @@
 #include "hw_device.hpp"
 
 #include <algorithm>
+#include <limits>
 
 #include "legacy_headers/hardware_configuration_driver.h"
 #include "legacy_headers/own_dsa_accel_constants.h"
+
+#include "topology.hpp"
 
 static inline bool own_search_device_name(const char *src_ptr, const uint32_t name, const uint32_t name_size) noexcept
 {
@@ -172,10 +175,16 @@ namespace dml::core::dispatcher
         DIAGA("\n");
 
         gen_cap_register_ = dsa_device_get_gen_cap_register(device_ptr);
-        numa_node_id_     = dsa_device_get_numa_node(device_ptr);
+
+        int int_numa_node_id = dsa_device_get_numa_node(device_ptr);
+        numa_node_id_        = (int_numa_node_id >= 0)
+                               ? int_numa_node_id
+                               : std::numeric_limits<decltype(numa_node_id_)>::max();
+        socket_id_           = dml::core::util::get_socket_id(numa_node_id_);
 
         DIAG("%5s: version: %d.%d\n", name_ptr, version_major_, version_minor_);
         DIAG("%5s: numa:    %lu\n", name_ptr, numa_node_id_);
+        DIAG("%5s: socket:  %lu\n", name_ptr, socket_id_);
         DIAG("%5s: GENCAP: 0x%016lX\n", name_ptr, gen_cap_register_);
         DIAG("%5s: GENCAP: block on fault support:                      %d\n",          name_ptr, block_on_fault_support());
         DIAG("%5s: GENCAP: overlapping copy support:                    %d\n",          name_ptr, overlapping_copy_support());
@@ -238,9 +247,14 @@ namespace dml::core::dispatcher
         return queue_count_;
     }
 
-    auto hw_device::numa_id() const noexcept -> uint64_t
+    auto hw_device::numa_id() const noexcept -> uint32_t
     {
         return numa_node_id_;
+    }
+
+    auto hw_device::socket_id() const noexcept -> uint32_t
+    {
+        return socket_id_;
     }
 
     auto hw_device::begin() const noexcept -> queues_container_t::const_iterator
@@ -251,6 +265,30 @@ namespace dml::core::dispatcher
     auto hw_device::end() const noexcept -> queues_container_t::const_iterator
     {
         return working_queues_.cbegin() + queue_count_;
+    }
+
+    /**
+     * @brief Checks if the device's NUMA policy matches the user-specified NUMA policy.
+     *
+     * If the user set the NUMA node id, only devices located on the same NUMA node are used for execution.
+     * If the user did not set the NUMA node id, any device from the same socket could be used for execution.
+     * If the NUMA node information is not available for the device, it is always allowed to use this device.
+     */
+    auto hw_device::is_matching_user_numa_policy(const uint32_t user_specified_numa_id) const noexcept -> bool
+    {
+        if (numa_node_id_ == std::numeric_limits<decltype(user_specified_numa_id)>::max())
+        {
+            return true;
+        }
+
+        if (user_specified_numa_id == std::numeric_limits<decltype(user_specified_numa_id)>::max())
+        {
+            return (util::get_numa_id() == numa_node_id_ || util::get_socket_id() == socket_id_);
+        }
+        else
+        {
+            return (user_specified_numa_id == numa_node_id_);
+        }
     }
 
 }  // namespace dml::core::dispatcher
