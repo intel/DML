@@ -156,7 +156,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../get_started_docs/installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/quick_start.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/quick_start.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started_docs/code_samples_and_examples.html">Code Samples and Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started_docs/testing.html">Library Testing</a></li>
 </ul>
@@ -370,7 +370,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#header-files">Header Files</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#namespace">Namespace</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numa-support">NUMA support</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#devices-selection-and-numa-support">Devices Selection and NUMA Support</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#page-fault-handling">Page Fault handling</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-use-the-library">How to Use the Library</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-usage">Example usage</a></li>
@@ -459,13 +459,17 @@ which includes the entire API definitions.</p>
 used. They are implementation details and are subject to change
 frequently.</p>
 </section>
-<section id="numa-support">
-<span id="library-numa-support-hl-reference-link"></span><h2>NUMA support<a class="headerlink" href="#numa-support" title="Link to this heading">#</a></h2>
-<p>The library is NUMA aware and respects the NUMA node id of the calling thread. If a user needs to use a device from a specific node, it can be done in one way:</p>
-<ul class="simple">
-<li><p>Pin thread which performs submissions to the specific NUMA, the library will use devices only from this node.</p></li>
-</ul>
-<p>Load balancer of the library doesn’t cross a detected NUMA boundary. Balancing workloads between different nodes is the responsibility of a user.</p>
+<section id="devices-selection-and-numa-support">
+<span id="library-numa-support-hl-reference-link"></span><h2>Devices Selection and NUMA Support<a class="headerlink" href="#devices-selection-and-numa-support" title="Link to this heading">#</a></h2>
+<p>By default, the library selects devices from any NUMA node within the socket of the calling thread.
+If more fine-grained control is needed, the Low-Level API of the library provides the ability to select devices
+from a specific NUMA node using the <code class="docutils literal notranslate"><span class="pre">numa_id</span></code> field in the job structure.</p>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>The library behavior changed starting from <strong>Intel DML 1.2.0</strong> release.</p>
+<p>Previously, the library only selected devices from the NUMA node of the calling thread.
+Now, the library selects devices from any NUMA node within the socket of the calling thread.</p>
+</div>
 </section>
 <section id="page-fault-handling">
 <h2>Page Fault handling<a class="headerlink" href="#page-fault-handling" title="Link to this heading">#</a></h2>
@@ -1295,7 +1299,7 @@ level of cache hierarchy. To disable that, use
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#header-files">Header Files</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#namespace">Namespace</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numa-support">NUMA support</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#devices-selection-and-numa-support">Devices Selection and NUMA Support</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#page-fault-handling">Page Fault handling</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-use-the-library">How to Use the Library</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-usage">Example usage</a></li>

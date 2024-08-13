@@ -210,17 +210,24 @@ You can read more about the flags in our docs
 
 .. _library_numa_support_ll_reference_link:
 
-NUMA support
-*************************
+Devices Selection and NUMA Support
+**********************************
 
+By default, the library selects devices from any NUMA node within the socket of the calling thread.
+In addition, Intel DML supports NUMA-aware device selection.
+If a user needs to use a device from a specific node, they can set the NUMA ID parameter of the job to the specific node ID:
 
-The library is NUMA aware and respects the NUMA node id of the calling thread. If a user needs to use a device from a specific node, it can be done in two ways:
+.. code-block:: cpp
+   :emphasize-lines: 2
 
-- Pin thread which performs submissions to the specific NUMA, the library will use devices only from this node.
-- Set NUMA id parameter of the job to the specific node id, then devices will be selected only from this node.
+   dml_job_t *dml_job_ptr;
+   job->numa_id = <int32_t>;
 
-Load balancer of the library doesn't cross a detected or specified NUMA boundary. Balancing workloads between different nodes is the responsibility of a user.
+.. attention::
+   The default library behavior changed starting from **Intel DML 1.2.0** release.
 
+   Previously, the library only selected devices from the NUMA node of the calling thread.
+   Now, the library selects devices from any NUMA node within the socket of the calling thread.
 
 Page Fault handling
 *************************

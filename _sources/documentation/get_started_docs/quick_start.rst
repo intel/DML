@@ -4,9 +4,8 @@
  .. * SPDX-License-Identifier: MIT
  .. ***************************************************************************/
 
-Quick start
+Quick Start
 ###########
-
 
 The quick start sample below shows how to compute CRC on the data
 using Intel® Data Mover Library (Intel® DML).
@@ -28,28 +27,20 @@ To run the example on the Hardware Path, use:
 
 .. attention::
 
-   With the Hardware Path, the user must either place the ``libaccel-config`` library in ``/usr/lib64/``
-   or specify the location of ``libaccel-config`` in ``LD_LIBRARY_PATH`` for the dynamic loader to find it.
-
-.. attention::
-
    Hardware Path requires first configuring Intel® Data Streaming Accelerator (Intel® DSA).
-   See :ref:`Accelerator Configuration <accelerator_configuration_reference_link>`.
+   Please refer to the :ref:`Accelerator Configuration <accelerator_configuration_reference_link>` section for detailed instructions.
 
-.. attention::
+   Starting from **Intel DML 1.2.0** release, the library will select any device from the socket of the calling thread for execution.
+   Prior to this release, the library would only select devices from the NUMA node of the calling thread.
 
-   High-Level API currently doesn't offer a way of setting NUMA node for execution,
-   so the library will auto detect NUMA node of the calling process
-   and use Intel® Data Streaming Accelerator (Intel® DSA) device(s) located on the same node.
-   Refer to :ref:`NUMA support for High-Level API <library_numa_support_hl_reference_link>` section for more details.
+   If more fine-grained control is needed, the Low-Level API of the library provides the ability to select devices
+   from a specific NUMA node using the ``numa_id`` field in the job structure.
+   For more information, see the :ref:`NUMA support for Low-Level API <library_numa_support_ll_reference_link>` section.
 
-   When using Low-Level API, user can also specify ``job->numa_id`` and set matching ``numactl`` policy to ensure
-   that the calling process will be located on the same NUMA node as specified with ``numa_id``.
-   Refer to :ref:`NUMA support for Low-Level API <library_numa_support_ll_reference_link>` section for more details.
+   It is the user's responsibility to ensure that the devices are properly configured and available for the library to use.
 
-   In both cases, it is user responsibility to configure accelerator
-   and ensure device(s) availability on the NUMA node.
-
+   Additionally, with the Hardware Path, the user must either place the ``libaccel-config`` library in ``/usr/lib64/``
+   or specify the location of ``libaccel-config`` in the ``LD_LIBRARY_PATH`` environment variable for the dynamic loader to find it.
 
 Similarly you can specify ``software_path`` for host execution or ``automatic_path``
 for automatic dispatching (choice would be made by library based on accelerator availability

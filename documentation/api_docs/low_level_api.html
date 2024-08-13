@@ -156,7 +156,7 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Get Started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../get_started_docs/installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/quick_start.html">Quick start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../get_started_docs/quick_start.html">Quick Start</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started_docs/code_samples_and_examples.html">Code Samples and Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../get_started_docs/testing.html">Library Testing</a></li>
 </ul>
@@ -374,7 +374,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#job-execution">Job Execution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#low-bandwidth-memory">Low Bandwidth Memory</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#persistent-memory-support">Persistent Memory Support</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numa-support">NUMA support</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#devices-selection-and-numa-support">Devices Selection and NUMA Support</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#page-fault-handling">Page Fault handling</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cache-control">Cache Control</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-fields-of-job-structure">Basic Fields of Job Structure</a></li>
@@ -605,14 +605,21 @@ identified as writes to durable memory</p></li>
 </ol>
 <p>You can read more about the flags in our docs</p>
 </section>
-<section id="numa-support">
-<span id="library-numa-support-ll-reference-link"></span><h2>NUMA support<a class="headerlink" href="#numa-support" title="Link to this heading">#</a></h2>
-<p>The library is NUMA aware and respects the NUMA node id of the calling thread. If a user needs to use a device from a specific node, it can be done in two ways:</p>
-<ul class="simple">
-<li><p>Pin thread which performs submissions to the specific NUMA, the library will use devices only from this node.</p></li>
-<li><p>Set NUMA id parameter of the job to the specific node id, then devices will be selected only from this node.</p></li>
-</ul>
-<p>Load balancer of the library doesn’t cross a detected or specified NUMA boundary. Balancing workloads between different nodes is the responsibility of a user.</p>
+<section id="devices-selection-and-numa-support">
+<span id="library-numa-support-ll-reference-link"></span><h2>Devices Selection and NUMA Support<a class="headerlink" href="#devices-selection-and-numa-support" title="Link to this heading">#</a></h2>
+<p>By default, the library selects devices from any NUMA node within the socket of the calling thread.
+In addition, Intel DML supports NUMA-aware device selection.
+If a user needs to use a device from a specific node, they can set the NUMA ID parameter of the job to the specific node ID:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">dml_job_t</span><span class="w"> </span><span class="o">*</span><span class="n">dml_job_ptr</span><span class="p">;</span>
+<span class="hll"><span class="n">job</span><span class="o">-&gt;</span><span class="n">numa_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&lt;</span><span class="kt">int32_t</span><span class="o">&gt;</span><span class="p">;</span>
+</span></pre></div>
+</div>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>The default library behavior changed starting from <strong>Intel DML 1.2.0</strong> release.</p>
+<p>Previously, the library only selected devices from the NUMA node of the calling thread.
+Now, the library selects devices from any NUMA node within the socket of the calling thread.</p>
+</div>
 </section>
 <section id="page-fault-handling">
 <h2>Page Fault handling<a class="headerlink" href="#page-fault-handling" title="Link to this heading">#</a></h2>
@@ -1883,7 +1890,7 @@ not evicted from the caches.</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#job-execution">Job Execution</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#low-bandwidth-memory">Low Bandwidth Memory</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#persistent-memory-support">Persistent Memory Support</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numa-support">NUMA support</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#devices-selection-and-numa-support">Devices Selection and NUMA Support</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#page-fault-handling">Page Fault handling</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cache-control">Cache Control</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-fields-of-job-structure">Basic Fields of Job Structure</a></li>
