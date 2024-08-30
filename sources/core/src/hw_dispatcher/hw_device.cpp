@@ -235,6 +235,7 @@ namespace dml::core::dispatcher
         {
             return DML_STATUS_WORK_QUEUES_NOT_AVAILABLE;
         }
+        are_wq_mmaped_ = working_queues_.begin()->is_wq_mmaped();
 
         return DML_STATUS_OK;
 #else
@@ -291,6 +292,10 @@ namespace dml::core::dispatcher
         }
     }
 
+    auto hw_device::are_wq_mmaped() const noexcept -> bool
+    {
+        return are_wq_mmaped_;
+    }
 }  // namespace dml::core::dispatcher
 
 #endif

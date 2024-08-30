@@ -66,6 +66,8 @@ namespace dml::core::dispatcher
 
         [[nodiscard]] auto device(size_t idx) const noexcept -> const hw_device &;
 
+        [[nodiscard]] auto is_using_mmap() noexcept -> bool;
+
 #endif
 
         virtual ~hw_dispatcher() noexcept;

@@ -49,6 +49,8 @@ namespace dml::core::dispatcher
 
         [[nodiscard]] auto memory_type() const noexcept -> supported_memory_type;
 
+        [[nodiscard]] auto is_wq_mmaped() const noexcept -> bool;
+
         void set_portal_ptr(void *portal_ptr) noexcept;
 
         virtual ~hw_queue() noexcept;
@@ -57,9 +59,11 @@ namespace dml::core::dispatcher
         uint32_t                       version_       = 0u;
         int32_t                        priority_      = 0u;
         supported_memory_type          memory_type_   = supported_memory_type::non_durable;
-        uint64_t                       portal_mask_   = 0u; /**< Mask for incrementing portals */
+        uint64_t                       portal_mask_   = 0u;    /**< Mask for incrementing portals */
         mutable void                  *portal_ptr_    = nullptr;
-        mutable std::atomic<uintptr_t> portal_offset_ = 0u; /**< Portal for enqcmd (mod page size)*/
+        mutable std::atomic<uintptr_t> portal_offset_ = 0u;    /**< Portal for enqcmd (mod page size)*/
+        bool                           using_mmap_    = false; /**< Flag to check whether mmap happened */
+        int                            fd_            = -1;    /**< File descriptor for submissions via write */
     };
 
 }  // namespace dml::core::dispatcher

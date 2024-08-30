@@ -39,6 +39,10 @@ namespace dml::core
 
         if (dispatcher.is_hw_support())
         {
+            if (!dispatcher.is_using_mmap() && operation(any_descriptor(dsc).operation()) == operation::batch)
+            {
+                return dml::detail::submission_status::failure;
+            }
             static thread_local auto current_device_idx = 0u;
             size_t tried_devices = 0u;
 

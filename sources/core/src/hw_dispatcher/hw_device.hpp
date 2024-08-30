@@ -47,6 +47,7 @@ namespace dml::core::dispatcher
         [[nodiscard]] auto end() const noexcept -> queues_container_t::const_iterator;
 
         [[nodiscard]] auto is_matching_user_numa_policy(uint32_t user_specified_numa_id) const noexcept -> bool;
+        [[nodiscard]] auto are_wq_mmaped() const noexcept -> bool;
 
     protected:
         auto block_on_fault_support() const noexcept -> uint8_t;
@@ -70,13 +71,14 @@ namespace dml::core::dispatcher
         auto configuration_support() const noexcept -> uint8_t;
 
     private:
-        queues_container_t working_queues_   = {}; /**< Set of available HW working queues */
-        uint32_t           queue_count_      = 0u; /**< Number of working queues that are available */
-        uint64_t           gen_cap_register_ = 0u; /**< GENCAP register content */
-        uint32_t           numa_node_id_     = 0u; /**< NUMA node id of the device */
-        uint32_t           version_major_    = 0u; /**< Major version of discovered device */
-        uint32_t           version_minor_    = 0u; /**< Minor version of discovered device */
-        uint32_t           socket_id_        = 0u; /**< Socket id of the device */
+        queues_container_t working_queues_   = {};   /**< Set of available HW working queues */
+        uint32_t           queue_count_      = 0u;   /**< Number of working queues that are available */
+        uint64_t           gen_cap_register_ = 0u;   /**< GENCAP register content */
+        uint64_t           numa_node_id_     = 0u;   /**< NUMA node id of the device */
+        uint32_t           version_major_    = 0u;   /**< Major version of discovered device */
+        uint32_t           version_minor_    = 0u;   /**< Minor version of discovered device */
+        uint32_t           socket_id_        = 0u;   /**< Socket id of the device */
+        bool               are_wq_mmaped_    = true; /**< Are WQs using mmap vs write() system call */
     };
 
 }  // namespace dml::core::dispatcher

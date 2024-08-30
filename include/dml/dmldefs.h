@@ -328,6 +328,7 @@ typedef enum
     DML_STATUS_LIBACCEL_NOT_FOUND               = (DML_BASE_DRIVER_ERROR + 0u),  /**< Unable to initialize job because hardware driver was not found */
     DML_STATUS_LIBACCEL_ERROR                   = (DML_BASE_DRIVER_ERROR + 1u),  /**< Unable to initialize job because hardware driver API is incompatible */
     DML_STATUS_WORK_QUEUES_NOT_AVAILABLE        = (DML_BASE_DRIVER_ERROR + 2u),  /**< Enabled work queues are not found */
+    DML_STATUS_INIT_HW_NOT_SUPPORTED            = (DML_BASE_DRIVER_ERROR + 3u),  /**< Error occured on hw initialization due to failure to write() to wq */
 } dml_status_t;
 
 

@@ -111,22 +111,18 @@ namespace dml::core::dispatcher
 
     void hw_dispatcher::fill_hw_context(dsahw_context_t *const hw_context_ptr) noexcept
     {
-#if defined(__linux__)
         // Restore context
         hw_context_ptr->dsa_context_ptr = hw_context_.get_driver_context_ptr();
 
         // Restore device properties
         // We take the first one as all configurations across the platform should be the same for all devices
         devices_[0].fill_hw_context(hw_context_ptr);
-#endif
     }
 
     auto hw_dispatcher::get_hw_init_status() const noexcept -> dsahw_status_t
     {
         return hw_init_status_;
     }
-
-#if defined(__linux__)
 
     auto hw_dispatcher::begin() const noexcept -> device_container_t::const_iterator
     {
@@ -156,7 +152,18 @@ namespace dml::core::dispatcher
         return driver_context_ptr_;
     }
 
-#endif
+    [[nodiscard]] auto hw_dispatcher::is_using_mmap() noexcept -> bool
+    {
+        if (!is_hw_support())
+        {
+            return false;
+        }
+        if (device_count() == 0)
+        {
+            return false;
+        }
+        return devices_[0].are_wq_mmaped();
+    }
 
 #endif
 }  // namespace dml::core::dispatcher

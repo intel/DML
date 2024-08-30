@@ -8,15 +8,15 @@
 
 #include <fcntl.h>
 
-#if defined(__linux__)
-
 #include <sys/mman.h>
+#include <unistd.h>    // write syscall
+#include <sys/types.h> // write return type
 
-#endif
 
 #include "hw_queue.hpp"
 #include "legacy_headers/hardware_configuration_driver.h"
 #include "legacy_headers/own_dsa_accel_constants.h"
+#include "dml/detail/common/types.hpp"
 
 #define DML_HWSTS_RET(expr, err_code) \
     {                                 \
@@ -35,7 +35,11 @@ namespace dml::core::dispatcher
         portal_mask_   = other.portal_mask_;
         portal_ptr_    = other.portal_ptr_;
         portal_offset_ = 0;
+        using_mmap_    = other.using_mmap_;
+        fd_            = other.fd_;
 
+        // to avoid close/freeing resources in the destructor twice
+        other.fd_         = -1;
         other.portal_ptr_ = nullptr;
     }
 
@@ -47,7 +51,11 @@ namespace dml::core::dispatcher
             portal_mask_   = other.portal_mask_;
             portal_ptr_    = other.portal_ptr_;
             portal_offset_ = 0;
-            
+            using_mmap_    = other.using_mmap_;
+            fd_            = other.fd_;
+
+            // to avoid close/freeing resources in the destructor twice
+            other.fd_         = -1;
             other.portal_ptr_ = nullptr;
         }
 
@@ -57,12 +65,17 @@ namespace dml::core::dispatcher
     hw_queue::~hw_queue()
     {
 #if defined(__linux__)
+        if (using_mmap_) {
         // Freeing resources
-        if (portal_ptr_ != nullptr)
-        {
-            munmap(portal_ptr_, 0x1000u);
+            if (portal_ptr_ != nullptr)
+            {
+                munmap(portal_ptr_, 0x1000u);
 
-            portal_ptr_ = nullptr;
+                portal_ptr_ = nullptr;
+            }
+        }
+        else { // since kept it open for write syscall
+            close(fd_);
         }
 #endif
     }
@@ -84,16 +97,29 @@ namespace dml::core::dispatcher
     auto hw_queue::enqueue_descriptor(const dsahw_descriptor_t *desc_ptr) const noexcept -> dsahw_status_t
     {
 #if defined(__linux__)
-        uint8_t retry = 0u;
+        if (using_mmap_) {
+            uint8_t retry = 0u;
 
-        void *current_place_ptr = get_portal_ptr();
-        asm volatile("sfence\t\n"
-                     ".byte 0xf2, 0x0f, 0x38, 0xf8, 0x02\t\n"
-                     "setz %0\t\n"
-                     : "=r"(retry)
-                     : "a"(current_place_ptr), "d"(desc_ptr));
+            void *current_place_ptr = get_portal_ptr();
+            asm volatile("sfence\t\n"
+                        ".byte 0xf2, 0x0f, 0x38, 0xf8, 0x02\t\n"
+                        "setz %0\t\n"
+                        : "=r"(retry)
+                        : "a"(current_place_ptr), "d"(desc_ptr));
 
-        return static_cast<dsahw_status_t>(retry);
+            return static_cast<dsahw_status_t>(retry);
+        }
+        else {
+            ssize_t ret = write(fd_, desc_ptr, sizeof(dsahw_descriptor_t));
+
+            if (ret == sizeof(dsahw_descriptor_t)) {
+                return DML_STATUS_OK;
+            }
+            else {
+                DIAG(" write returned %ld, expected %ld\n", ret, sizeof(dsahw_descriptor_t));
+                return DML_STATUS_INIT_HW_NOT_SUPPORTED;
+            }
+        }
 #else
         return DML_STATUS_WORK_QUEUES_NOT_AVAILABLE;
 #endif
@@ -135,11 +161,19 @@ namespace dml::core::dispatcher
 
         // Map portal for enqcmd
         auto *region_ptr = mmap(nullptr, 0x1000u, PROT_WRITE, MAP_SHARED | MAP_POPULATE, fd, 0u);
-        close(fd);
         if(MAP_FAILED == region_ptr)
         {
             DIAGA(", limited MSI-X mapping failed\n");
-            return DML_STATUS_LIBACCEL_ERROR;
+
+            using_mmap_ = false;
+            fd_         = fd;
+        }
+        else
+        {
+            DIAGA(", MSI-X mapping done.\n");
+
+            using_mmap_ = true;
+            close(fd);
         }
         DIAGA("\n");
 
@@ -168,6 +202,7 @@ namespace dml::core::dispatcher
 #else
         DIAG("     %7s: priority:    %d\n", work_queue_dev_name, priority_);
         DIAG("     %7s: memtype:     %d\n", work_queue_dev_name, static_cast<int>(memory_type_));
+        DIAG("     %7s: fd:          %d\n", work_queue_dev_name, fd_);
 #endif
 
         hw_queue::set_portal_ptr(region_ptr);
@@ -188,6 +223,10 @@ namespace dml::core::dispatcher
         return memory_type_;
     }
 
+    auto hw_queue::is_wq_mmaped() const noexcept -> bool
+    {
+        return using_mmap_;
+    }
 }  // namespace dml::core::dispatcher
 
 #endif
