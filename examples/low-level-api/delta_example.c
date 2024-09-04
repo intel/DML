@@ -30,6 +30,11 @@ int main(int argc, char **argv)
         return 1;
     }
 
+    if (execution_path == DML_PATH_HW) {
+        printf("Delta operations are not supported on the hardware path.\n");
+        return 0;
+    }
+
     printf("Starting delta job example.\n");
     printf("Creating delta comparing data regions of size 1KB.\n");
 
@@ -59,7 +64,7 @@ int main(int argc, char **argv)
         free(dml_job_ptr);
         return 1;
     }
-    
+
     dml_job_ptr->operation              = DML_OP_DELTA_CREATE;
     dml_job_ptr->source_first_ptr       = source1;
     dml_job_ptr->source_second_ptr      = source2;
@@ -81,10 +86,10 @@ int main(int argc, char **argv)
         free(dml_job_ptr);
         return 1;
     }
-    
+
     printf("Completed creating delta.\n");
     printf("Applying created delta to data region of size 1KB\n");
-    
+
     dml_job_ptr->operation              = DML_OP_DELTA_APPLY;
     dml_job_ptr->source_first_ptr       = delta;
     dml_job_ptr->source_length          = dml_job_ptr->destination_length;

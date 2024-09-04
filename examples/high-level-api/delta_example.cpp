@@ -69,8 +69,8 @@ int main(int argc, char **argv)
 
     std::string path = argv[1];
     if (path == "hardware_path") {
-        std::cout << "Executing using dml::hardware path" << std::endl;
-        return execute_delta<dml::hardware>();
+        std::cout << "Executing using dml::hardware path is currently not supported for Delta Record operations" << std::endl;
+        return 0;
     }
     else if (path == "software_path") {
         std::cout << "Executing using dml::software path" << std::endl;

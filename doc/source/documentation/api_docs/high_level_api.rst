@@ -543,6 +543,9 @@ Result for this operation is:
 Create Delta Record
 -------------------
 
+.. warning::
+
+   This operation is currently not supported on the hardware path.
 
 This operation compares data at memory region represented via
 ``src1_view`` with data at memory region represented via ``src2_view``.
@@ -598,6 +601,9 @@ Result for this operation is:
 Apply Delta Record
 ------------------
 
+.. warning::
+
+   This operation is currently not supported on the hardware path.
 
 This operation applies delta record written to memory region represented
 via ``delta_view`` view onto data at memory region represented via
