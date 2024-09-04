@@ -900,6 +900,11 @@ document.write(`
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">execution_path</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">DML_PATH_HW</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Delta operations are not supported on the hardware path.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
 <span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Starting delta job example.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Creating delta comparing data regions of size 1KB.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
 
@@ -929,7 +934,7 @@ document.write(`
 <span class="w">        </span><span class="n">free</span><span class="p">(</span><span class="n">dml_job_ptr</span><span class="p">);</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="w">    </span>
+
 <span class="w">    </span><span class="n">dml_job_ptr</span><span class="o">-&gt;</span><span class="n">operation</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="n">DML_OP_DELTA_CREATE</span><span class="p">;</span>
 <span class="w">    </span><span class="n">dml_job_ptr</span><span class="o">-&gt;</span><span class="n">source_first_ptr</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="n">source1</span><span class="p">;</span>
 <span class="w">    </span><span class="n">dml_job_ptr</span><span class="o">-&gt;</span><span class="n">source_second_ptr</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="n">source2</span><span class="p">;</span>
@@ -951,10 +956,10 @@ document.write(`
 <span class="w">        </span><span class="n">free</span><span class="p">(</span><span class="n">dml_job_ptr</span><span class="p">);</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="w">    </span>
+
 <span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Completed creating delta.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
 <span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Applying created delta to data region of size 1KB</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
-<span class="w">    </span>
+
 <span class="w">    </span><span class="n">dml_job_ptr</span><span class="o">-&gt;</span><span class="n">operation</span><span class="w">              </span><span class="o">=</span><span class="w"> </span><span class="n">DML_OP_DELTA_APPLY</span><span class="p">;</span>
 <span class="w">    </span><span class="n">dml_job_ptr</span><span class="o">-&gt;</span><span class="n">source_first_ptr</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="n">delta</span><span class="p">;</span>
 <span class="w">    </span><span class="n">dml_job_ptr</span><span class="o">-&gt;</span><span class="n">source_length</span><span class="w">          </span><span class="o">=</span><span class="w"> </span><span class="n">dml_job_ptr</span><span class="o">-&gt;</span><span class="n">destination_length</span><span class="p">;</span>
@@ -2242,8 +2247,8 @@ to one data array using several sockets at the same time.</p>
 
 <span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">path</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;hardware_path&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Executing using dml::hardware path&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">execute_delta</span><span class="o">&lt;</span><span class="n">dml</span><span class="o">::</span><span class="n">hardware</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Executing using dml::hardware path is currently not supported for Delta Record operations&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">path</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s">&quot;software_path&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Executing using dml::software path&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>

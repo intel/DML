@@ -971,6 +971,10 @@ configurable via the <code class="docutils literal notranslate"><span class="pre
 </section>
 <section id="create-delta-record">
 <h4>Create Delta Record<a class="headerlink" href="#create-delta-record" title="Link to this heading">#</a></h4>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This operation is currently not supported on the hardware path.</p>
+</div>
 <p>This operation compares data at memory region represented via
 <code class="docutils literal notranslate"><span class="pre">src1_view</span></code> with data at memory region represented via <code class="docutils literal notranslate"><span class="pre">src2_view</span></code>.
 Then it writes delta record to memory region represented via
@@ -1015,6 +1019,10 @@ expressed is <code class="docutils literal notranslate"><span class="pre">0x7fff
 </section>
 <section id="apply-delta-record">
 <h4>Apply Delta Record<a class="headerlink" href="#apply-delta-record" title="Link to this heading">#</a></h4>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This operation is currently not supported on the hardware path.</p>
+</div>
 <p>This operation applies delta record written to memory region represented
 via <code class="docutils literal notranslate"><span class="pre">delta_view</span></code> view onto data at memory region represented via
 <code class="docutils literal notranslate"><span class="pre">dst_view</span></code> view.</p>

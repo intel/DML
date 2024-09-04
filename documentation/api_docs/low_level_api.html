@@ -928,6 +928,10 @@ Operation section.</p>
 </section>
 <section id="create-delta-record">
 <h4>Create Delta Record<a class="headerlink" href="#create-delta-record" title="Link to this heading">#</a></h4>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This operation is currently not supported on the hardware path.</p>
+</div>
 <p>The Create Delta Record operation compares memory at
 <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> with memory at <code class="docutils literal notranslate"><span class="pre">source_second_ptr</span></code> and generates
 a delta record containing the information needed to update
@@ -1044,6 +1048,10 @@ for more information.</p>
 </section>
 <section id="apply-delta-record">
 <h4>Apply Delta Record<a class="headerlink" href="#apply-delta-record" title="Link to this heading">#</a></h4>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This operation is currently not supported on the hardware path.</p>
+</div>
 <p>The Apply Delta Record operation applies a delta record at
 <code class="docutils literal notranslate"><span class="pre">source_first_ptr</span></code> to <code class="docutils literal notranslate"><span class="pre">destination_first_ptr</span></code>. The delta record must
 be created by the Create Delta Record operation with <code class="docutils literal notranslate"><span class="pre">result</span></code> equal to

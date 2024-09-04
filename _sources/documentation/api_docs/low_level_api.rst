@@ -538,6 +538,9 @@ with the value in the pattern field.
 Create Delta Record
 -------------------
 
+.. warning::
+
+   This operation is currently not supported on the hardware path.
 
 The Create Delta Record operation compares memory at
 ``source_first_ptr`` with memory at ``source_second_ptr`` and generates
@@ -655,6 +658,9 @@ written to the ``result`` field of the ``dml_job_t`` structure.
 Apply Delta Record
 ------------------
 
+.. warning::
+
+   This operation is currently not supported on the hardware path.
 
 The Apply Delta Record operation applies a delta record at
 ``source_first_ptr`` to ``destination_first_ptr``. The delta record must
