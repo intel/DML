@@ -59,8 +59,8 @@ registry_t& get_registry();
 
 struct accel_info_t
 {
-    std::uint32_t              total_devices = 0;
-    std::vector<std::uint32_t> socket;
+    std::uint32_t         total_devices = 0;
+    std::map<int, size_t> devices_per_numa;
 };
 
 struct extended_info_t
@@ -79,8 +79,7 @@ struct extended_info_t
 };
 
 const extended_info_t& get_sys_info();
-std::uint32_t get_current_numa() noexcept;
-std::uint32_t get_current_numa_accels() noexcept;
+std::uint32_t get_number_of_devices_matching_numa_policy(std::uint32_t user_specified_numa_id) noexcept;
 
 constexpr std::uint64_t submitRetryWaitNs = 0;
 

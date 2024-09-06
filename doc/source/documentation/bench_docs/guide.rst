@@ -100,20 +100,27 @@ which input is a regex based on the case name.
 For example, use the following expression to launch a copy operation using the Low-Level C API
 with synchronous execution on a CPU: ``--benchmark_filter="copy/api:c/path:cpu/exec:sync/.*"``.
 
-Executing on Hardware Path
-==========================
+Executing using Accelerators
+============================
 
-.. warning::
+.. attention::
+
+    It is the user's responsibility to configure the accelerator and ensure the availability of the device(s).
 
     Make sure to resolve :ref:`requirements for running on hardware path <system_requirements_hw_path_reference_link>` and
     :ref:`configure accelerator <accelerator_configuration_reference_link>` before executing the example.
 
-.. attention::
+Benchmark Framework does not support choosing a specific Intel DSA instance for execution.
+However, it is possible to limit execution to devices only from a certain NUMA node using the ``--node=<integer>`` option.
 
-    It is the user's responsibility to configure the accelerator.
-    Currently, the library doesn't provide a way to specify a number of Intel DSA
-    instances for execution and will use everything available on the system.
-    If you need to run one or more Intel DSA instances, make sure your system is configured appropriately.
+.. note::
+
+    By default, when ``--node=<integer>`` is not used or when ``--node`` is set to ``-1``, the behavior is as follows:
+
+    If the Intel DML version is **`< 1.2.0`**, the library will auto-detect the NUMA node of the calling process
+    and use the device(s) located on the same **NUMA node**.
+
+    If the Intel DML version is **`>= 1.2.0`**, the library will use the device(s) located on the **socket** of the calling thread.
 
 Latency Tests
 =============

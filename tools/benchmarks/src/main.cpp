@@ -70,29 +70,30 @@ static bool init_hw()
     return true;
 }
 
-static inline std::uint32_t get_num_devices(std::uint32_t numa) noexcept
-{
-    auto &disp = dml::core::dispatcher::hw_dispatcher::get_instance();
-    int counter = 0;
-    for(auto &device : disp)
-    {
-        if(device.numa_id() == numa)
-            counter++;
+std::uint32_t get_number_of_devices_matching_numa_policy(std::uint32_t user_specified_numa_id) noexcept {
+    static auto& disp    = dml::core::dispatcher::hw_dispatcher::get_instance();
+    int          counter = 0;
+    for (auto& device : disp) {
+        if (device.is_matching_user_numa_policy(user_specified_numa_id)) counter++;
     }
     return counter;
 }
 
-std::uint32_t get_current_numa() noexcept
-{
-    std::uint32_t tsc_aux = 0;
-    __rdtscp(&tsc_aux);
+static inline accel_info_t& get_accels_info() noexcept {
+    static accel_info_t info;
 
-    return static_cast<std::uint32_t>(tsc_aux >> 12);
-}
+    static auto& disp = dml::core::dispatcher::hw_dispatcher::get_instance();
 
-std::uint32_t get_current_numa_accels() noexcept
-{
-    return get_num_devices(get_current_numa());
+    for (auto& device : disp) {
+        if (info.devices_per_numa.find(device.numa_id()) == info.devices_per_numa.end())
+            info.devices_per_numa[device.numa_id()] = 1;
+        else
+            info.devices_per_numa[device.numa_id()]++;
+    }
+
+    info.total_devices = disp.device_count();
+
+    return info;
 }
 
 const extended_info_t& get_sys_info()
@@ -145,27 +146,23 @@ const extended_info_t& get_sys_info()
                 info.cpu_stepping = atoi(val.c_str());
         }
 
-        info.cpu_physical_cores       = info.cpu_physical_per_socket*info.cpu_sockets;
+        info.cpu_physical_cores = info.cpu_physical_per_socket*info.cpu_sockets;
 
-        for(std::uint32_t i = 0; i < info.cpu_sockets; ++i)
-        {
-            auto devices = get_num_devices(i);
-            info.accelerators.total_devices += devices;
-            info.accelerators.socket.push_back(devices);
-        }
+        info.accelerators = get_accels_info();
 
-        printf("== Host:   %s\n", info.host_name.c_str());
-        printf("== Kernel: %s\n", info.kernel.c_str());
-        printf("== CPU:    %s (%d)\n", info.cpu_model_name.c_str(), info.cpu_model);
-        printf("  --> Microcode: 0x%x\n", info.cpu_microcode);
-        printf("  --> Stepping:  %d\n", info.cpu_stepping);
-        printf("  --> Logical:   %d\n", info.cpu_logical_cores);
-        printf("  --> Physical:  %d\n", info.cpu_physical_cores);
-        printf("  --> Socket:    %d\n", info.cpu_physical_per_socket);
-        printf("== Accelerators: %d\n", info.accelerators.total_devices);
-        for(std::uint32_t i = 0; i < info.accelerators.socket.size(); ++i)
-        {
-            printf("  --> NUMA %d: %d\n", i, info.accelerators.socket[i]);
+        /* Benchmarks output for system configuration details */
+        printf("Host:                 %s\n", info.host_name.c_str());
+        printf("Kernel:               %s\n", info.kernel.c_str());
+        printf("CPU:                  %s (%d)\n", info.cpu_model_name.c_str(), info.cpu_model);
+        printf("    Microcode:        0x%x\n", info.cpu_microcode);
+        printf("    Stepping:         %d\n", info.cpu_stepping);
+        printf("    Logical Cores:    %d\n", info.cpu_logical_cores);
+        printf("    Physical Cores:   %d\n", info.cpu_physical_cores);
+        printf("    Cores per Socket: %d\n", info.cpu_physical_per_socket);
+        printf("    Sockets:          %d\n", info.cpu_sockets);
+        printf("Accelerators:         %d\n", info.accelerators.total_devices);
+        for (auto& it : info.accelerators.devices_per_numa) {
+            printf("    On NUMA %d:        %ld\n", it.first, it.second);
         }
 #endif
         is_setup = true;

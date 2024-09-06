@@ -25,7 +25,7 @@ static statistics_t measure_async(benchmark::State &state, const case_params_t &
 {
     statistics_t res{};
     auto threads   = state.threads();
-    auto devices   = get_current_numa_accels();
+    auto devices   = get_number_of_devices_matching_numa_policy(common_params.numa_id_);
     res.queue_size = common_params.queue_size_;
     res.operations = res.queue_size*((devices)?devices:1);
 
