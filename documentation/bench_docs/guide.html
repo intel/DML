@@ -370,7 +370,7 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick Start</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-terms">Key Terms</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-benchmarks-framework">Using the Benchmarks Framework</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#executing-on-hardware-path">Executing on Hardware Path</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#executing-using-accelerators">Executing using Accelerators</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#latency-tests">Latency Tests</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#throughput-tests">Throughput Tests</a></li>
 </ul>
@@ -474,19 +474,22 @@ run <code class="docutils literal notranslate"><span class="pre">./dml_benchmark
 which input is a regex based on the case name.</p>
 <p>For example, use the following expression to launch a copy operation using the Low-Level C API
 with synchronous execution on a CPU: <code class="docutils literal notranslate"><span class="pre">--benchmark_filter=&quot;copy/api:c/path:cpu/exec:sync/.*&quot;</span></code>.</p>
-<section id="executing-on-hardware-path">
-<h3>Executing on Hardware Path<a class="headerlink" href="#executing-on-hardware-path" title="Link to this heading">#</a></h3>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
+<section id="executing-using-accelerators">
+<h3>Executing using Accelerators<a class="headerlink" href="#executing-using-accelerators" title="Link to this heading">#</a></h3>
+<div class="admonition attention">
+<p class="admonition-title">Attention</p>
+<p>It is the user’s responsibility to configure the accelerator and ensure the availability of the device(s).</p>
 <p>Make sure to resolve <a class="reference internal" href="../get_started_docs/installation.html#system-requirements-hw-path-reference-link"><span class="std std-ref">requirements for running on hardware path</span></a> and
 <a class="reference internal" href="../get_started_docs/installation.html#accelerator-configuration-reference-link"><span class="std std-ref">configure accelerator</span></a> before executing the example.</p>
 </div>
-<div class="admonition attention">
-<p class="admonition-title">Attention</p>
-<p>It is the user’s responsibility to configure the accelerator.
-Currently, the library doesn’t provide a way to specify a number of Intel DSA
-instances for execution and will use everything available on the system.
-If you need to run one or more Intel DSA instances, make sure your system is configured appropriately.</p>
+<p>Benchmark Framework does not support choosing a specific Intel DSA instance for execution.
+However, it is possible to limit execution to devices only from a certain NUMA node using the <code class="docutils literal notranslate"><span class="pre">--node=&lt;integer&gt;</span></code> option.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By default, when <code class="docutils literal notranslate"><span class="pre">--node=&lt;integer&gt;</span></code> is not used or when <code class="docutils literal notranslate"><span class="pre">--node</span></code> is set to <code class="docutils literal notranslate"><span class="pre">-1</span></code>, the behavior is as follows:</p>
+<p>If the Intel DML version is <strong>`&lt; 1.2.0`</strong>, the library will auto-detect the NUMA node of the calling process
+and use the device(s) located on the same <strong>NUMA node</strong>.</p>
+<p>If the Intel DML version is <strong>`&gt;= 1.2.0`</strong>, the library will use the device(s) located on the <strong>socket</strong> of the calling thread.</p>
 </div>
 </section>
 <section id="latency-tests">
@@ -563,7 +566,7 @@ If you need to run one or more Intel DSA instances, make sure your system is con
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick Start</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#key-terms">Key Terms</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-benchmarks-framework">Using the Benchmarks Framework</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#executing-on-hardware-path">Executing on Hardware Path</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#executing-using-accelerators">Executing using Accelerators</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#latency-tests">Latency Tests</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#throughput-tests">Throughput Tests</a></li>
 </ul>
