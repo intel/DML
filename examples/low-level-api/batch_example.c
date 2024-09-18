@@ -11,7 +11,7 @@
 
 #define BUFFER_SIZE  1024 // 1 KB
 #define PADDING_SIZE 4096 // DML_OP_DUALCAST requirement "dst1 and dst2 address bits 11:0 must be the same"
-#define BATCH_COUNT  7u   // 7 ops for this batch operation
+#define BATCH_COUNT  8u   // 8 ops for this batch operation
 #define PATTERN_SIZE 8u   // pattern size is always 8
 
 /*
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
         free(dml_job_ptr);
         return 1;
     }
-    
+
     uint32_t batch_buffer_length = 0u;
 
     status = dml_get_batch_size(dml_job_ptr, BATCH_COUNT, &batch_buffer_length);
@@ -118,6 +118,11 @@ int main(int argc, char **argv)
         goto cleanup;
     }
 
+    uint32_t crc_seed = 1;
+    printf("Calculating CRC buffers of 1KB of data\n");
+    status = dml_batch_set_crc_by_index(dml_job_ptr, 7, buffer_one, BUFFER_SIZE, &crc_seed, 0x00);
+
+
     status = dml_execute_job(dml_job_ptr, DML_WAIT_MODE_BUSY_POLL);
     if (DML_STATUS_OK != status) {
         printf("An error (%u) occurred during job execution.\n", status);
@@ -128,6 +133,16 @@ int main(int argc, char **argv)
         printf("Error: Operation result is incorrect.\n");
         goto cleanup;
     }
+
+    uint32_t crc;
+
+    status = dml_batch_get_crc(dml_job_ptr, 7, &crc);
+    if (DML_STATUS_OK != status) {
+        printf("An error (%u) occured during getting crc result.\n", status);
+        goto cleanup;
+    }
+
+    printf("CRC result: 0x%08X\n", crc);
 
     status = dml_finalize_job(dml_job_ptr);
     if (DML_STATUS_OK != status) {
