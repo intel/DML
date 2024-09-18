@@ -592,6 +592,22 @@ dml_status_t dml_batch_get_result(const dml_job_t *dml_job_ptr, uint32_t task_in
  */
 dml_status_t dml_batch_get_status(const dml_job_t *dml_job_ptr, uint32_t task_index, dml_status_t *status_ptr);
 
+/**
+ * @brief The service function that gets an access to the crc value.
+ *
+ * @param[in]  dml_job_ptr    Pointer to the initialized @ref dml_job_t structure
+ * @param[in]  task_index     Index of the desired batch task
+ * @param[out] crc_ptr        Pointer to the CRC value
+ *
+ * @return @ref DML_STATUS_OK in case of success execution, or non-zero value, otherwise
+ * Return values:
+ *      - @ref DML_STATUS_OK
+ *      - @ref DML_STATUS_NULL_POINTER_ERROR
+ *      - @ref DML_STATUS_BATCH_TASK_INDEX_OVERFLOW
+ *
+ */
+dml_status_t dml_batch_get_crc(const dml_job_t *dml_job_ptr, uint32_t task_index, uint32_t *crc_ptr);
+
 #ifdef __cplusplus
 }
 #endif

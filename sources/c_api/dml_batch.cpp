@@ -69,6 +69,14 @@ namespace dml
             return records[index];
         }
 
+        [[nodiscard]] auto get_crc(uint32_t index) noexcept
+        {
+            const auto descriptors = reinterpret_cast<dml::detail::descriptor *>(batch_data_);
+            const auto records     = reinterpret_cast<dml::detail::completion_record *>(descriptors + tasks_count_);
+
+            return detail::ml::get_crc_value(records[index]);
+        }
+
     private:
         uint8_t *batch_data_;
         uint32_t tasks_count_;
@@ -748,7 +756,7 @@ extern "C" dml_status_t dml_batch_get_result(const dml_job_t *dml_job_ptr, uint3
         return DML_STATUS_BATCH_TASK_INDEX_OVERFLOW;
     }
 
-    *result_ptr = dml::batch(dml_job_ptr->destination_first_ptr, task_count).get_status(task_index);
+    *result_ptr = dml::batch(dml_job_ptr->destination_first_ptr, task_count).get_result(task_index);
 
     return DML_STATUS_OK;
 }
@@ -765,6 +773,22 @@ extern "C" dml_status_t dml_batch_get_status(const dml_job_t *dml_job_ptr, uint3
     }
 
     *status_ptr = ::dml::batch(dml_job_ptr->destination_first_ptr, task_count).get_status(task_index);
+
+    return DML_STATUS_OK;
+}
+
+extern "C" dml_status_t dml_batch_get_crc(const dml_job_t *dml_job_ptr, uint32_t task_index, std::uint32_t *crc_ptr)
+{
+    CHECK_NULL(dml_job_ptr);
+    CHECK_NULL(crc_ptr);
+
+    const auto task_count = dml_job_ptr->destination_length / dml::get_task_size();
+    if (task_index >= task_count)
+    {
+        return DML_STATUS_BATCH_TASK_INDEX_OVERFLOW;
+    }
+
+    *crc_ptr = dml::batch(dml_job_ptr->destination_first_ptr, task_count).get_crc(task_index);
 
     return DML_STATUS_OK;
 }
