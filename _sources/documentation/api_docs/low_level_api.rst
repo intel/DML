@@ -337,11 +337,12 @@ set-functions:
 - ``dml_batch_set_dif_insert_by_index``
 - ``dml_batch_set_dif_strip_by_index``
 
-Result and status of specific operation can be obtained via
+Result, status and crc of specific operation can be obtained via
 get-functions:
 
 - ``dml_batch_get_result``
 - ``dml_batch_get_status``
+- ``dml_batch_get_crc``
 
 
 .. attention::
