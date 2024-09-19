@@ -300,10 +300,10 @@ namespace dml
         last_job_ptr->destination_second.assign(source_ptr, source_ptr + size);
     }
 
-    /** Adds a CRC operation to batch */
+    /** Adds a CRC operation to batch, returns the calculated crc */
     static auto append_crc(const uint32_t              seed,
                            dml::test::job_t &          lib_job,
-                           dml::test::reference_job_t &ref_job) -> void
+                           dml::test::reference_job_t &ref_job) -> uint32_t
     {
         const auto [last_index, last_job_ptr] = extend_ref_job(ref_job);
         auto size                             = get_random_size(seed);
@@ -319,14 +319,13 @@ namespace dml
         EXPECT_EQ(DML_STATUS_OK, status);
 
         last_job_ptr->destination_first.assign(source_ptr, source_ptr + size);
-        last_job_ptr->crc_checksum_ptr = std::make_unique<uint32_t>(
-            dml::reference::calculate_crc<uint32_t, 0u>(source_ptr, source_ptr + size, (*crc_ptr)));
+        return dml::reference::calculate_crc<uint32_t, 0u>(source_ptr, source_ptr + size, (*crc_ptr));
     }
 
-    /** Adds a CRC_COPY operation to batch */
+    /** Adds a CRC_COPY operation to batch  returns the crc of the buffer*/
     static auto append_crc_copy(const uint32_t              seed,
                                 dml::test::job_t &          lib_job,
-                                dml::test::reference_job_t &ref_job) -> void
+                                dml::test::reference_job_t &ref_job) -> uint32_t
     {
         const auto [last_index, last_job_ptr] = extend_ref_job(ref_job);
         auto size                             = get_random_size(seed);
@@ -349,8 +348,7 @@ namespace dml
                                                       0u);
         EXPECT_EQ(DML_STATUS_OK, status);
 
-        last_job_ptr->crc_checksum_ptr = std::make_unique<uint32_t>(
-            dml::reference::calculate_crc<uint32_t, 0u>(source_ptr, source_ptr + size, (*crc_ptr)));
+        return dml::reference::calculate_crc<uint32_t, 0u>(source_ptr, source_ptr + size, (*crc_ptr));
     }
 
     /** Adds a CACHE_FLUSH operation to batch */
@@ -370,35 +368,82 @@ namespace dml
     }
 
     /**
-     * @brief Tests the operation with all operations
+     * @brief Tests the batch operation with all operations
      */
-    DML_JOB_API_TEST_GENERATOR(dml_batch, ta_all_operations)
+    using dml_batch = ::testing::Test;
+    TEST_F(dml_batch, ta_all_operations)
     {
-        constexpr auto operation_count = 11u;
-        auto           batch_size      = 0u;
+        try
+        {
+            auto lib_job = dml::test::job_t(dml::test::variables_t::path);
+            auto ref_job = dml::test::reference_job_t();
 
-        auto status = dml_get_batch_size(&*lib_job, operation_count, &batch_size);
-        EXPECT_EQ(DML_STATUS_OK, status);
+            if (lib_job)
+            {
+                constexpr auto operation_count = 11u;
+                auto           batch_size      = 0u;
 
-        lib_job->destination_first_ptr = dml::test::global_allocator::allocate_ptr(batch_size);
-        lib_job->destination_length    = batch_size;
-        lib_job->operation             = DML_OP_BATCH;
+                auto status = dml_get_batch_size(&*lib_job, operation_count, &batch_size);
+                EXPECT_EQ(DML_STATUS_OK, status);
 
-        const auto seed = test_system::get_seed();
-        append_nop(seed, lib_job, ref_job);
-        append_mem_move(seed, lib_job, ref_job);
-        append_fill(seed, lib_job, ref_job);
-        append_compare(seed, lib_job, ref_job);
-        append_compare_pattern(seed, lib_job, ref_job);
-        append_delta_create(seed, lib_job, ref_job);
-        append_delta_apply(seed, lib_job, ref_job);
-        append_dualcast(seed, lib_job, ref_job);
-        append_crc(seed, lib_job, ref_job);
-        append_crc_copy(seed, lib_job, ref_job);
-        append_flush(seed, lib_job, ref_job);
+                lib_job->destination_first_ptr = dml::test::global_allocator::allocate_ptr(batch_size);
+                lib_job->destination_length    = batch_size;
+                lib_job->operation             = DML_OP_BATCH;
+
+                const auto seed = test_system::get_seed();
+                append_nop(seed, lib_job, ref_job);
+                append_mem_move(seed, lib_job, ref_job);
+                append_fill(seed, lib_job, ref_job);
+                append_compare(seed, lib_job, ref_job);
+                append_compare_pattern(seed, lib_job, ref_job);
+                append_delta_create(seed, lib_job, ref_job);
+                append_delta_apply(seed, lib_job, ref_job);
+                append_dualcast(seed, lib_job, ref_job);
+                uint32_t crc0 = append_crc(seed, lib_job, ref_job);
+                uint32_t crc1 = append_crc_copy(seed, lib_job, ref_job);
+                append_flush(seed, lib_job, ref_job);
+
+                auto library_status   = lib_job.run();
+                auto reference_status = ref_job.status;
+
+                EXPECT_EQ(library_status, reference_status);
+                EXPECT_TRUE(lib_job == ref_job);
+
+                dml_meta_result_t result;
+
+                // Get the result of the COMPARE operation
+                status = dml_batch_get_result(&*lib_job, 3u, &result);
+                EXPECT_EQ(DML_STATUS_OK, status);
+                EXPECT_EQ(result, 0x00); // 0x00 - means that the data is equal
+
+                // Get the result of the COMPARE_PATTERN operation
+                status = dml_batch_get_result(&*lib_job, 4u, &result);
+                EXPECT_EQ(DML_STATUS_OK, status);
+                EXPECT_EQ(result, 0x01); // 0x01 - means that the data is not equal
+
+                std::uint32_t crc_result;
+                // Get the crc of the CRC operation
+                status = dml_batch_get_crc(&*lib_job, 8u, &crc_result);
+                EXPECT_EQ(DML_STATUS_OK, status);
+                EXPECT_EQ(crc_result, crc0);
+
+                // Get the crc of the CRC_COPY operation
+                status = dml_batch_get_crc(&*lib_job, 9u, &crc_result);
+                EXPECT_EQ(DML_STATUS_OK, status);
+                EXPECT_EQ(crc_result, crc1);
+
+
+                auto ptr  = reinterpret_cast<dml::test::reference_job_t *>(ref_job.destination_first.data());
+                auto size = ref_job.destination_first.size() / sizeof(dml::test::reference_job_t);
+                std::destroy_n(ptr, size);
+                dml::test::global_allocator::deallocate_all();
+            }
+        }
+        catch (std::runtime_error & e)
+        {
+            std::cout << e.what() << '\n';
+            exit(1);
+        }
     }
-
-    // Test registers
-    DML_JOB_API_TEST_REGISTER(dml_batch, ta_all_operations);
 
 }  // namespace dml
