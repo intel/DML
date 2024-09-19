@@ -1294,7 +1294,7 @@ document.write(`
 
 <span class="cp">#define BUFFER_SIZE  1024 </span><span class="c1">// 1 KB</span>
 <span class="cp">#define PADDING_SIZE 4096 </span><span class="c1">// DML_OP_DUALCAST requirement &quot;dst1 and dst2 address bits 11:0 must be the same&quot;</span>
-<span class="cp">#define BATCH_COUNT  7u   </span><span class="c1">// 7 ops for this batch operation</span>
+<span class="cp">#define BATCH_COUNT  8u   </span><span class="c1">// 8 ops for this batch operation</span>
 <span class="cp">#define PATTERN_SIZE 8u   </span><span class="c1">// pattern size is always 8</span>
 
 <span class="cm">/*</span>
@@ -1335,7 +1335,7 @@ document.write(`
 <span class="w">        </span><span class="n">free</span><span class="p">(</span><span class="n">dml_job_ptr</span><span class="p">);</span>
 <span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
-<span class="w">    </span>
+
 <span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">batch_buffer_length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0u</span><span class="p">;</span>
 
 <span class="w">    </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml_get_batch_size</span><span class="p">(</span><span class="n">dml_job_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">BATCH_COUNT</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">batch_buffer_length</span><span class="p">);</span>
@@ -1401,6 +1401,11 @@ document.write(`
 <span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">cleanup</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">crc_seed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Calculating CRC buffers of 1KB of data</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml_batch_set_crc_by_index</span><span class="p">(</span><span class="n">dml_job_ptr</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="n">buffer_one</span><span class="p">,</span><span class="w"> </span><span class="n">BUFFER_SIZE</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">crc_seed</span><span class="p">,</span><span class="w"> </span><span class="mh">0x00</span><span class="p">);</span>
+
+
 <span class="w">    </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml_execute_job</span><span class="p">(</span><span class="n">dml_job_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">DML_WAIT_MODE_BUSY_POLL</span><span class="p">);</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">DML_STATUS_OK</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;An error (%u) occurred during job execution.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">);</span>
@@ -1411,6 +1416,16 @@ document.write(`
 <span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Error: Operation result is incorrect.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
 <span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">cleanup</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">crc</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml_batch_get_crc</span><span class="p">(</span><span class="n">dml_job_ptr</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">crc</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">DML_STATUS_OK</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;An error (%u) occured during getting crc result.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">);</span>
+<span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">cleanup</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;CRC result: 0x%08X</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">crc</span><span class="p">);</span>
 
 <span class="w">    </span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dml_finalize_job</span><span class="p">(</span><span class="n">dml_job_ptr</span><span class="p">);</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">DML_STATUS_OK</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">status</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
