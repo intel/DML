@@ -50,8 +50,9 @@ foreach (api ${apis})
 
             add_executable(${executable_name} ${operation}.cpp)
 
+            target_include_directories(${executable_name} PRIVATE $<TARGET_PROPERTY:tool_common,INTERFACE_INCLUDE_DIRECTORIES> $<TARGET_PROPERTY:tool_hw_dispatcher,INTERFACE_INCLUDE_DIRECTORIES>)
             target_compile_options(${executable_name} PRIVATE ${DML_QUALITY_OPTIONS})
-            target_link_libraries(${executable_name} PRIVATE gtest_main dml_testing_utils)
+            target_link_libraries(${executable_name} PRIVATE gtest_main dml_testing_utils tool_hw_dispatcher tool_common)
 
             if ("${api}" STREQUAL "${c_api}")
                 target_link_libraries(${executable_name} PRIVATE dml)

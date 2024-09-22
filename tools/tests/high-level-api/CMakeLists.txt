@@ -21,7 +21,7 @@ add_library(dml_hl_tests OBJECT
     source/sequence.cpp
     source/data_view.cpp
     )
-target_link_libraries(dml_hl_tests PUBLIC dmlhl dml_test_utils gtest gtest_main)
+target_link_libraries(dml_hl_tests PUBLIC dmlhl dml_test_utils gtest gtest_main dml_testing_utils tool_hw_dispatcher tool_common)
 target_compile_features(dml_hl_tests PUBLIC cxx_std_17)
 
 # If you remove reference, please, fix tests for CRC somehow
@@ -29,6 +29,9 @@ target_include_directories(dml_hl_tests PUBLIC
     ../job_api_tests/reference/include
     ../job_api_tests/reference
     ../common # Use global config (path)
+    <TARGET_PROPERTIES:tool_common,INTERFACE_INCLUDE_DIRECTORIES>
+    <TARGET_PROPERTIES:tool_hw_dispatcher,INTERFACE_INCLUDE_DIRECTORIES>
+    dml_testing_utils
     ../../include
     )
 

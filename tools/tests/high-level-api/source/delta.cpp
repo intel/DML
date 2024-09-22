@@ -11,6 +11,10 @@
 #include <dml_test_utils/delta.hpp>
 
 #include "own/path.hpp"
+#include "utils/util.hpp"
+
+// utils_common
+#include "opcfg_checks.hpp"
 
 DML_TESTING_HL_PARAMETRIZE(dmlhl_delta);
 DML_TESTING_HL_PARAMETRIZE(dmlhl_create_delta);
@@ -19,6 +23,8 @@ DML_TESTING_HL_PARAMETRIZE(dmlhl_apply_delta);
 TYPED_TEST(dmlhl_delta, success)
 {
     SKIP_IF_WRONG_PATH(typename TestFixture::execution_path);
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_apply), "Test is skipped because operation is disabled.");
+
 
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
@@ -45,6 +51,7 @@ TYPED_TEST(dmlhl_delta, success)
 
 TYPED_TEST(dmlhl_create_delta, src1_null)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
 
@@ -60,6 +67,7 @@ TYPED_TEST(dmlhl_create_delta, src1_null)
 
 TYPED_TEST(dmlhl_create_delta, src2_null)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
 
@@ -75,6 +83,7 @@ TYPED_TEST(dmlhl_create_delta, src2_null)
 
 TYPED_TEST(dmlhl_create_delta, delta_null)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
 
@@ -90,6 +99,7 @@ TYPED_TEST(dmlhl_create_delta, delta_null)
 
 TYPED_TEST(dmlhl_create_delta, inconsistent_size)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
 
@@ -105,6 +115,7 @@ TYPED_TEST(dmlhl_create_delta, inconsistent_size)
 
 TYPED_TEST(dmlhl_create_delta, bad_size_zero)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
 
@@ -120,6 +131,7 @@ TYPED_TEST(dmlhl_create_delta, bad_size_zero)
 
 TYPED_TEST(dmlhl_create_delta, bad_size_not_8_divided)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
 
@@ -135,6 +147,7 @@ TYPED_TEST(dmlhl_create_delta, bad_size_not_8_divided)
 
 TYPED_TEST(dmlhl_create_delta, delta_bad_size_less_than_80)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
 
@@ -150,6 +163,7 @@ TYPED_TEST(dmlhl_create_delta, delta_bad_size_less_than_80)
 
 TYPED_TEST(dmlhl_create_delta, delta_bad_size_not_10_divided)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
 
@@ -165,6 +179,7 @@ TYPED_TEST(dmlhl_create_delta, delta_bad_size_not_10_divided)
 
 TYPED_TEST(dmlhl_apply_delta, src_null)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_apply), "Test is skipped because operation is disabled.");
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
 
@@ -182,6 +197,7 @@ TYPED_TEST(dmlhl_apply_delta, src_null)
 
 TYPED_TEST(dmlhl_apply_delta, delta_null)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_apply), "Test is skipped because operation is disabled.");
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
 
@@ -199,6 +215,7 @@ TYPED_TEST(dmlhl_apply_delta, delta_null)
 
 TYPED_TEST(dmlhl_apply_delta, bad_size_src)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_apply), "Test is skipped because operation is disabled.");
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
 
@@ -216,6 +233,7 @@ TYPED_TEST(dmlhl_apply_delta, bad_size_src)
 
 TYPED_TEST(dmlhl_apply_delta, delta_bad_size_0)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_apply), "Test is skipped because operation is disabled.");
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
 
@@ -231,6 +249,7 @@ TYPED_TEST(dmlhl_apply_delta, delta_bad_size_0)
 
 TYPED_TEST(dmlhl_apply_delta, delta_bad_size_not_10_divided)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_apply), "Test is skipped because operation is disabled.");
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
 
@@ -246,6 +265,7 @@ TYPED_TEST(dmlhl_apply_delta, delta_bad_size_not_10_divided)
 
 TYPED_TEST(dmlhl_apply_delta, delta_empty)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_apply), "Test is skipped because operation is disabled.");
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
 
@@ -261,6 +281,7 @@ TYPED_TEST(dmlhl_apply_delta, delta_empty)
 
 TEST(dmlhl_create_delta, bad_alloc)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
 
@@ -280,6 +301,7 @@ TEST(dmlhl_create_delta, bad_alloc)
 
 TEST(dmlhl_apply_delta, bad_alloc)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_apply), "Test is skipped because operation is disabled.");
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
 

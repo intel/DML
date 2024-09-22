@@ -29,16 +29,22 @@ target_sources(tests PRIVATE $<TARGET_OBJECTS:dml_hl_tests>)
 get_target_property(DML_SOURCE_DIR dml SOURCE_DIR)
 target_include_directories(tests
                            PRIVATE common
+                           PRIVATE dml_testing_utils
                            PRIVATE ${DML_REFERENCE_INC}
                            PRIVATE $<TARGET_PROPERTY:dml,INTERFACE_INCLUDE_DIRECTORIES>
+                           PRIVATE $<TARGET_PROPERTY:tool_common,INTERFACE_INCLUDE_DIRECTORIES>
+                           PRIVATE $<TARGET_PROPERTY:tool_hw_dispatcher,INTERFACE_INCLUDE_DIRECTORIES>
                            PRIVATE $<TARGET_PROPERTY:dml_core,INTERFACE_INCLUDE_DIRECTORIES>)
 
 target_link_libraries(tests
                       PRIVATE dml
                       PRIVATE dml_test_utils
+                      PRIVATE dml_testing_utils
                       PRIVATE dmlhl
                       PRIVATE dml_sw_dispatcher
                       PRIVATE dml_dif_impl
+                      PRIVATE tool_common
+                      PRIVATE tool_hw_dispatcher
                       PRIVATE gtest_main
                       PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 

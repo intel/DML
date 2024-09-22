@@ -12,7 +12,10 @@
 #include "t_common.hpp"
 #include "t_random_generator.hpp"
 #include "t_delta_record_feature_defines.hpp"
+#include "utils/util.hpp"
 
+// utils_common
+#include "opcfg_checks.hpp"
 
 namespace dml
 {
@@ -22,6 +25,8 @@ namespace dml
      */
     DML_JOB_API_TEST_GENERATOR(dml_delta_create, ta_equal_vectors)
     {
+        DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
         // Variables
         const auto seed          = test_system::get_seed();
         auto random_regions      = dml::test::random_t<uint32_t>(REGIONS_COUNT, seed);
@@ -55,6 +60,8 @@ namespace dml
      */
     DML_JOB_API_TEST_GENERATOR(dml_delta_create, ta_not_equal_vectors)
     {
+        DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
         // Variables
         const auto seed            = test_system::get_seed();
         auto random_regions        = dml::test::random_t<uint32_t>(REGIONS_COUNT, seed);
@@ -146,6 +153,8 @@ namespace dml
      */
     DML_JOB_API_TEST_GENERATOR(dml_delta_create, ta_equal_vectors_expected_equal)
     {
+        DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
         // Variables
         const auto seed          = test_system::get_seed();
         auto random_regions      = dml::test::random_t<uint32_t>(REGIONS_COUNT, seed);
@@ -183,6 +192,8 @@ namespace dml
      */
     DML_JOB_API_TEST_GENERATOR(dml_delta_create, ta_equal_vectors_expected_not_equal)
     {
+        DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
         // Variables
         const auto seed          = test_system::get_seed();
         auto random_regions      = dml::test::random_t<uint32_t>(REGIONS_COUNT, seed);
@@ -221,6 +232,8 @@ namespace dml
      */
     DML_JOB_API_TEST_GENERATOR(dml_delta_create, ta_equal_vectors_expected_overflow)
     {
+        DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
         // Variables
         const auto seed          = test_system::get_seed();
         auto random_regions      = dml::test::random_t<uint32_t>(REGIONS_COUNT, seed);
@@ -259,6 +272,8 @@ namespace dml
      */
     DML_JOB_API_TEST_GENERATOR(dml_delta_create, ta_equal_vectors_bad_check_result)
     {
+        DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
         // Variables
         const auto seed          = test_system::get_seed();
         auto random_regions      = dml::test::random_t<uint32_t>(REGIONS_COUNT, seed);
@@ -301,6 +316,8 @@ namespace dml
      */
     DML_JOB_API_TEST_GENERATOR(dml_delta_create, ta_not_equal_vectors_expected_equal)
     {
+        DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
         // Variables
         const auto seed            = test_system::get_seed();
         auto random_regions        = dml::test::random_t<uint32_t>(REGIONS_COUNT, seed);
@@ -395,6 +412,8 @@ namespace dml
      */
     DML_JOB_API_TEST_GENERATOR(dml_delta_create, ta_not_equal_vectors_expected_not_equal)
     {
+        DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
         // Variables
         const auto seed            = test_system::get_seed();
         auto random_regions        = dml::test::random_t<uint32_t>(REGIONS_COUNT, seed);
@@ -488,6 +507,8 @@ namespace dml
      */
     DML_JOB_API_TEST_GENERATOR(dml_delta_create, ta_not_equal_vectors_expected_overflow)
     {
+        DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
         // Variables
         const auto seed            = test_system::get_seed();
         auto random_regions        = dml::test::random_t<uint32_t>(REGIONS_COUNT, seed);
@@ -582,6 +603,8 @@ namespace dml
      */
     DML_JOB_API_TEST_GENERATOR(dml_delta_create, ta_not_equal_vectors_bad_check_result)
     {
+        DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
         // Variables
         const auto seed            = test_system::get_seed();
         auto random_regions        = dml::test::random_t<uint32_t>(REGIONS_COUNT, seed);
@@ -681,6 +704,8 @@ namespace dml
      */
     DML_JOB_API_TEST_GENERATOR(dml_delta_create, ta_overflow_expected_equal)
     {
+        DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
         // Variables
         const auto seed            = test_system::get_seed();
         auto random_regions        = dml::test::random_t<uint32_t>(REGIONS_COUNT, seed);
@@ -779,6 +804,8 @@ namespace dml
      */
     DML_JOB_API_TEST_GENERATOR(dml_delta_create, ta_overflow_expected_not_equal)
     {
+        DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
         // Variables
         const auto seed            = test_system::get_seed();
         auto random_regions        = dml::test::random_t<uint32_t>(REGIONS_COUNT, seed);
@@ -877,6 +904,8 @@ namespace dml
      */
     DML_JOB_API_TEST_GENERATOR(dml_delta_create, ta_overflow_expected_overflow)
     {
+        DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
         // Variables
         const auto seed            = test_system::get_seed();
         auto random_regions        = dml::test::random_t<uint32_t>(REGIONS_COUNT, seed);

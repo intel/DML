@@ -11,7 +11,6 @@
 #include <dml_test_utils/compare_pattern.hpp>
 #include <dml_test_utils/copy_crc.hpp>
 #include <dml_test_utils/crc.hpp>
-#include <dml_test_utils/delta.hpp>
 #include <dml_test_utils/dualcast.hpp>
 #include <dml_test_utils/fill.hpp>
 #include <dml_test_utils/mem_move.hpp>
@@ -28,15 +27,13 @@ TYPED_TEST(dmlhl_batch, all_operations)
 
     constexpr auto length = 16u;
     constexpr auto seed   = 777u;
-    constexpr auto count  = 10u;
+    constexpr auto count  = 8u;
 
     auto mem_move        = dml::testing::mem_move(seed, length);
     auto fill            = dml::testing::fill(seed, length);
     auto dualcast        = dml::testing::dualcast(seed, length);
     auto compare         = dml::testing::compare_equal(seed, length);
     auto compare_pattern = dml::testing::compare_pattern_equal(seed, length);
-    auto create_delta    = dml::testing::delta(seed, length);
-    auto apply_delta     = dml::testing::delta(seed, length);
     auto crc             = dml::testing::crc(seed, length);
     auto copy_crc        = dml::testing::copy_crc(seed, length);
     auto cache_flush     = dml::testing::cache_flush(seed, length);
@@ -55,22 +52,6 @@ TYPED_TEST(dmlhl_batch, all_operations)
               dml::status_code::ok);
     ASSERT_EQ(sequence.add(dml::compare_pattern, compare_pattern.pattern, dml::make_view(compare_pattern.src)),
               dml::status_code::ok);
-    ASSERT_EQ(sequence.add(dml::create_delta,
-                           dml::make_view(create_delta.src1),
-                           dml::make_view(create_delta.src2),
-                           dml::make_view(create_delta.delta_record)),
-              dml::status_code::ok);
-
-    auto create_result = this->run(dml::create_delta,
-                                   dml::make_view(apply_delta.src1),
-                                   dml::make_view(apply_delta.src2),
-                                   dml::make_view(apply_delta.delta_record));
-
-    ASSERT_EQ(sequence.add(dml::apply_delta,
-                           dml::make_view(apply_delta.delta_record),
-                           dml::make_view(apply_delta.src1),
-                           create_result),
-              dml::status_code::ok);
     ASSERT_EQ(sequence.add(dml::crc, dml::make_view(crc.src), crc.crc_seed), dml::status_code::ok);
     ASSERT_EQ(
         sequence.add(dml::copy_crc, dml::make_view(copy_crc.src), dml::make_view(copy_crc.dst), copy_crc.crc_seed),
@@ -86,7 +67,6 @@ TYPED_TEST(dmlhl_batch, all_operations)
     ASSERT_TRUE(mem_move.check());
     ASSERT_TRUE(fill.check());
     ASSERT_TRUE(dualcast.check());
-    ASSERT_TRUE(apply_delta.check());
     ASSERT_TRUE(copy_crc.check());
 }
 
@@ -100,7 +80,7 @@ TYPED_TEST(dmlhl_batch, fence)
     std::vector <uint8_t> dst;
     src.resize(360);
     dst.resize(360);
-    
+
 
     std::fill(src.begin(), src.end(), 0);
     std::fill(dst.begin(), dst.end(), 255);

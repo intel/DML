@@ -4,11 +4,15 @@
  * SPDX-License-Identifier: MIT
  ******************************************************************************/
 
-#include <gtest/gtest.h>
+#include "gtest/gtest.h"
 
-#include <utils/create_delta/actual.hpp>
-#include <utils/create_delta/reference.hpp>
-#include <utils/create_delta/workload_builder.hpp>
+#include "utils/util.hpp"
+#include "utils/create_delta/actual.hpp"
+#include "utils/create_delta/reference.hpp"
+#include "utils/create_delta/workload_builder.hpp"
+
+// utils_common
+#include "opcfg_checks.hpp"
 
 using dml::testing::expect_e;
 using dml::testing::mismatch_e;
@@ -45,6 +49,8 @@ class create_delta: public ::testing::TestWithParam<types_create_delta>
 
 TEST_P(create_delta, success)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
     auto [transfer_size, expect, mismatch, delta_size, execution_mode] = GetParam();
 
     auto workload_builder = dml::testing::WorkloadBuilder<dml::testing::CreateDeltaOperation>()
@@ -94,6 +100,8 @@ TEST_P(create_delta_page_fault, read_first)
     auto actual_result    = dml::testing::ActualImplementation(actual_workload, (execution_mode == exec_e::sync));
 
 #if defined (HW_PATH)
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
     if(block_on_fault == block_on_fault_e::block){
         auto reference_workload = workload_builder.build();
         madvise(reference_workload.get_src1().data() + page_size * fault_page, page_size, MADV_DONTNEED);
@@ -107,6 +115,8 @@ TEST_P(create_delta_page_fault, read_first)
 #endif
 
 #if defined (AUTO_PATH)
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
     auto reference_workload = workload_builder.build();
     madvise(reference_workload.get_src1().data() + page_size * fault_page, page_size, MADV_DONTNEED);
     auto reference_result = dml::testing::ReferenceImplementation(reference_workload);
@@ -136,6 +146,8 @@ TEST_P(create_delta_page_fault, read_second)
     auto actual_result    = dml::testing::ActualImplementation(actual_workload, (execution_mode == exec_e::sync));
 
 #if defined (HW_PATH)
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
     if(block_on_fault == block_on_fault_e::block){
         auto reference_workload = workload_builder.build();
         madvise(reference_workload.get_src2().data() + page_size * fault_page, page_size, MADV_DONTNEED);
@@ -149,6 +161,8 @@ TEST_P(create_delta_page_fault, read_second)
 #endif
 
 #if defined (AUTO_PATH)
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
     auto reference_workload = workload_builder.build();
     madvise(reference_workload.get_src2().data() + page_size * fault_page, page_size, MADV_DONTNEED);
     auto reference_result = dml::testing::ReferenceImplementation(reference_workload);
@@ -160,6 +174,8 @@ TEST_P(create_delta_page_fault, read_second)
 
 TEST_P(create_delta_page_fault, write)
 {
+    DML_SKIP_TEST_FOR_EXPR_VERBOSE(dml::test::is_operation_disabled_on_all_wq_on_node(dml::test::opcode_delta_create), "Test is skipped because operation is disabled.");
+
     auto [block_on_fault, execution_mode] = GetParam();
 
     const auto page_size = getpagesize();
