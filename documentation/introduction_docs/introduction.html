@@ -367,7 +367,10 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-possibilities">Library Possibilities</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-possibilities">Library Possibilities</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#work-queue-support">Work Queue Support</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-limitations">Library Limitations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-apis">Library APIs</a></li>
 </ul>
@@ -427,6 +430,21 @@ achieve the optimal system resources utilization:</p>
 <li><p>Memory Hash</p></li>
 <li><p>Utility</p></li>
 </ul>
+<section id="work-queue-support">
+<span id="library-work-queue-support-reference-link"></span><h3>Work Queue Support<a class="headerlink" href="#work-queue-support" title="Link to this heading">#</a></h3>
+<p>Intel® Data Streaming Accelerator (Intel® DSA) 2.0 supports the ability
+to configure which operations are supported using the OPCFG register.</p>
+<p>As of Intel DML 1.2.0 or higher with <code class="docutils literal notranslate"><span class="pre">libaccel-config</span></code> library version 4.0
+or higher, the device dispatcher respects each work queue’s OPCFG register.
+The operation isn’t submitted to work queues that do not support it and returns a
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">DML_STATUS_NOT_SUPPORTED_BY_WQ</span></code> status on the Low-Level API and
+<cite>not_supported_by_wqs</cite> status on the High-Level API if no available
+work queue supports the operation.</p>
+<p>In the case of older Intel DML version, operations are submitted to any available
+work queue. This could cause a status code to be returned when any work queue does not support an operation.</p>
+<p>In the case of an older Intel DSA or <code class="docutils literal notranslate"><span class="pre">libaccel-config</span></code> version without OPCFG support, no issues
+would arise as work queues would allow all available operations.</p>
+</section>
 </section>
 <section id="library-limitations">
 <span id="library-limitations-reference-link"></span><h2>Library Limitations<a class="headerlink" href="#library-limitations" title="Link to this heading">#</a></h2>
@@ -499,7 +517,10 @@ compile time optimizations and less operation preparation latency.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-possibilities">Library Possibilities</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-possibilities">Library Possibilities</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#work-queue-support">Work Queue Support</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-limitations">Library Limitations</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#library-apis">Library APIs</a></li>
 </ul>
