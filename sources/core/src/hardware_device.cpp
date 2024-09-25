@@ -26,8 +26,17 @@ namespace dml::core
 
         auto status = device.enqueue_descriptor(reinterpret_cast<const dsahw_descriptor_t *>(&dsc));
 
-        return status == DML_STATUS_OK ? dml::detail::submission_status::success
-                                       : dml::detail::submission_status::failure;
+        switch (status) {
+            case DML_STATUS_OK:
+                return dml::detail::submission_status::success;
+                break;
+            case DML_STATUS_NOT_SUPPORTED_BY_WQ:
+                return dml::detail::submission_status::operation_unsupported;
+                break;
+            default:
+                return dml::detail::submission_status::failure;
+                break;
+        }
     }
 #endif
 
@@ -36,6 +45,8 @@ namespace dml::core
 #if defined(__linux__)
         auto &dispatcher = dispatcher::hw_dispatcher::get_instance();
         const size_t device_count = dispatcher.device_count();
+
+        size_t devices_with_operation_disabled = 0;
 
         if (dispatcher.is_hw_support())
         {
@@ -61,6 +72,10 @@ namespace dml::core
 
                 if (status != dml::detail::submission_status::success)
                 {
+                    if (status == dml::detail::submission_status::operation_unsupported)
+                    {
+                        devices_with_operation_disabled++;
+                    }
                     tried_devices++;
                 }
                 else
@@ -68,7 +83,10 @@ namespace dml::core
                     return status;
                 }
             }
-
+            if (devices_with_operation_disabled == device_count)
+            {
+                return dml::detail::submission_status::operation_unsupported;
+            }
             return dml::detail::submission_status::queue_busy;
         }
 #else

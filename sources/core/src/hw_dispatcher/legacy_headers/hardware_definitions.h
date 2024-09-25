@@ -49,6 +49,12 @@ extern "C" {
 #define DML_HW_API(name) DML_HW_STDCALL dsa_##name /**< Declaration macros to manipulate function name */
 #endif
 
+/**
+ * @brief Opconfig Configuration Macros
+ */
+#define OC_GET_OP_SUPPORTED(OPCFG, OP)      ((((OPCFG)[7 - ((OP)/32)])>>(OP)%32) &0x01) /**< OPCFG bit {OP}  - generic operation support          */
+
+
 /* ------ Statuses ------ */
 
 typedef dml_status_t dsahw_status_t; /**< Redefinition of @ref dml_status_t for core functions */

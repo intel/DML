@@ -323,6 +323,7 @@ typedef enum
     DML_STATUS_INTL_HARDWARE_READBACK_TIMEOUT   = 43u,  /**< Internal Status Code */
     DML_STATUS_INTL_HARDWARE_TIMEOUT            = 44u,  /**< Internal Status Code */
     DML_STATUS_INTL_ADDRESS_TRANSLATION_ERROR   = 45u,  /**< Internal Status Code */
+    DML_STATUS_NOT_SUPPORTED_BY_WQ              = 46u,  /**< Work queue not configured to support operation */
 
     // Initialization Errors
     DML_STATUS_LIBACCEL_NOT_FOUND               = (DML_BASE_DRIVER_ERROR + 0u),  /**< Unable to initialize job because hardware driver was not found */

@@ -59,7 +59,7 @@ namespace dml::detail
 
         if (submission_status != detail::submission_status::success)
         {
-            return typename operation::result_type{ status_code::error };
+            return typename operation::result_type{ detail::to_own(submission_status) };
         }
 
         return make_result<typename operation::result_type>(make_view(task).get_completion_record());

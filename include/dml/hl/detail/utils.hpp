@@ -93,12 +93,14 @@ namespace dml::detail
                 return status_code::ok;
             case detail::submission_status::queue_busy:
                 return status_code::queue_busy;
+            case detail::submission_status::operation_unsupported:
+                return status_code::not_supported_by_wqs;
             case detail::submission_status::failure:
                 return status_code::error;
             default:
                 return status_code::error;
         }
-    }        
+    }
 }  // namespace dml::detail
 
 #endif  //DML_DETAIL_UTILS_HPP

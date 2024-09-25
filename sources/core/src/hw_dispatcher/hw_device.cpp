@@ -15,6 +15,7 @@
 
 #include "legacy_headers/hardware_configuration_driver.h"
 #include "legacy_headers/own_dsa_accel_constants.h"
+#include "descriptor_utils.hpp"
 
 #include "topology.hpp"
 
@@ -69,32 +70,53 @@ namespace dml::core::dispatcher
      */
     auto hw_device::enqueue_descriptor(const dsahw_descriptor_t *desc_ptr) const noexcept -> dsahw_status_t
     {
+        bool is_op_supported_by_device = false;
         const uint32_t n_queues = std::distance(this->begin(), this->end());
 
         static thread_local uint32_t last_wq_idx = n_queues - 1;
 
+        dml_status_t status = DML_STATUS_OK;
+        uint8_t operation = dml::core::util::descriptor_get_operation(desc_ptr);
+
         for (auto idx = last_wq_idx + 1; idx < n_queues; ++idx)
         {
             auto &queue = *(this->begin() + idx);
-            auto status = queue.enqueue_descriptor(desc_ptr);
-
-            if (DML_STATUS_OK == status)
-            {
-                last_wq_idx = idx;
-                return DML_STATUS_OK;
+            // If OPCFG functionality exists, check OPCFG register before submitting, otherwise try submission
+            if (is_operation_supported_on_wq(idx, operation)) {
+                // For submitting when OPCFG is supported, logic is :
+                //   If all WQs don't support operation, return HW_ACCELERATOR_NOT_SUPPORTED_BY_WQ
+                //   If any WQ supports operation, but submission fails, then return HW_ACCELERATOR_WQ_IS_BUSY
+                status = queue.enqueue_descriptor(desc_ptr);
+                is_op_supported_by_device  = true;
+                if (DML_STATUS_OK == status)
+                {
+                    last_wq_idx = idx;
+                    return DML_STATUS_OK;
+                }
             }
+
         }
 
         for (auto idx = 0; idx <= last_wq_idx; ++idx)
         {
             auto &queue = *(this->begin() + idx);
-            auto status = queue.enqueue_descriptor(desc_ptr);
-
-            if (DML_STATUS_OK == status)
-            {
-                last_wq_idx = idx;
-                return DML_STATUS_OK;
+            // If OPCFG functionality exists, check OPCFG register before submitting, otherwise try submission
+            if (is_operation_supported_on_wq(idx, operation)) {
+                // For submitting when OPCFG is supported, logic is :
+                //   If all WQs don't support operation, return HW_ACCELERATOR_NOT_SUPPORTED_BY_WQ
+                //   If any WQ supports operation, but submission fails, then return HW_ACCELERATOR_WQ_IS_BUSY
+                status = queue.enqueue_descriptor(desc_ptr);
+                is_op_supported_by_device  = true;
+                if (DML_STATUS_OK == status)
+                {
+                    last_wq_idx = idx;
+                    return DML_STATUS_OK;
+                }
             }
+
+        }
+        if (is_op_supported_by_device == false) {
+            return DML_STATUS_NOT_SUPPORTED_BY_WQ;
         }
 
         return DML_STATUS_WORK_QUEUE_OVERFLOW_ERROR;
@@ -235,6 +257,18 @@ namespace dml::core::dispatcher
         {
             return DML_STATUS_WORK_QUEUES_NOT_AVAILABLE;
         }
+
+        // Logic for op_cfg_enabled_ value
+        op_cfg_enabled_ = working_queues_[0].get_op_configuration_support();
+
+        if (op_cfg_enabled_) {
+            for (uint32_t wq_idx = 0; wq_idx < queue_count_; wq_idx++) {
+                for (uint32_t register_index = 0; register_index < DML_TOTAL_OP_CFG_BIT_GROUPS; register_index++) {
+                    op_configs_[wq_idx] = working_queues_[wq_idx].get_op_config_register();
+                }
+            }
+        }
+
         are_wq_mmaped_ = working_queues_.begin()->is_wq_mmaped();
 
         return DML_STATUS_OK;
@@ -295,6 +329,10 @@ namespace dml::core::dispatcher
     auto hw_device::are_wq_mmaped() const noexcept -> bool
     {
         return are_wq_mmaped_;
+    }
+
+    auto hw_device::is_operation_supported_on_wq(const uint32_t wq_idx, const uint32_t operation) const noexcept -> bool {
+        return !op_cfg_enabled_ || OC_GET_OP_SUPPORTED(op_configs_[wq_idx], operation);
     }
 }  // namespace dml::core::dispatcher
 

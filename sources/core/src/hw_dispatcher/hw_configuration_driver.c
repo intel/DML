@@ -349,7 +349,13 @@ int DML_HW_API(work_queue_get_device_path)(struct accfg_wq *wq, char *buf, size_
 int DML_HW_API(work_queue_get_op_config)(struct accfg_wq *wq, struct accfg_op_config *op_config)
 {
 #if defined(__linux__)
-    return ((accfg_wq_get_op_config_ptr)functions_table[23].function)(wq, op_config);
+    if (functions_table[23].function == NULL)
+    {
+        return -1;
+    }
+    else {
+        return ((accfg_wq_get_op_config_ptr)functions_table[23].function)(wq, op_config);
+    }
 #else
     return -1;
 #endif

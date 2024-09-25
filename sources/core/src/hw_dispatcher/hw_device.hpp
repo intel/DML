@@ -23,8 +23,9 @@ namespace dml::core::dispatcher
     {
         static constexpr uint32_t max_working_queues = MAX_WORK_QUEUE_COUNT;
 
-        using queues_container_t = std::array<hw_queue, max_working_queues>;
-
+        using queues_container_t   = std::array<hw_queue, max_working_queues>;
+        using op_config_register_t = std::array<uint32_t, DML_TOTAL_OP_CFG_BIT_GROUPS>;
+        using opcfg_container_t    = std::array<op_config_register_t, max_working_queues>;
     public:
         using descriptor_t = void;
 
@@ -47,7 +48,11 @@ namespace dml::core::dispatcher
         [[nodiscard]] auto end() const noexcept -> queues_container_t::const_iterator;
 
         [[nodiscard]] auto is_matching_user_numa_policy(uint32_t user_specified_numa_id) const noexcept -> bool;
+
         [[nodiscard]] auto are_wq_mmaped() const noexcept -> bool;
+
+        [[nodiscard]] auto is_operation_supported_on_wq(const uint32_t wq_idx, const uint32_t operation) const noexcept
+            -> bool;
 
     protected:
         auto block_on_fault_support() const noexcept -> uint8_t;
@@ -71,14 +76,16 @@ namespace dml::core::dispatcher
         auto configuration_support() const noexcept -> uint8_t;
 
     private:
-        queues_container_t working_queues_   = {};   /**< Set of available HW working queues */
-        uint32_t           queue_count_      = 0u;   /**< Number of working queues that are available */
-        uint64_t           gen_cap_register_ = 0u;   /**< GENCAP register content */
-        uint64_t           numa_node_id_     = 0u;   /**< NUMA node id of the device */
-        uint32_t           version_major_    = 0u;   /**< Major version of discovered device */
-        uint32_t           version_minor_    = 0u;   /**< Minor version of discovered device */
-        uint32_t           socket_id_        = 0u;   /**< Socket id of the device */
-        bool               are_wq_mmaped_    = true; /**< Are WQs using mmap vs write() system call */
+        queues_container_t working_queues_   = {};    /**< Set of available HW working queues */
+        opcfg_container_t  op_configs_       = {};    /**< Array of OPCFG register content for each available HW working queue */
+        uint32_t           queue_count_      = 0u;    /**< Number of working queues that are available */
+        uint64_t           gen_cap_register_ = 0u;    /**< GENCAP register content */
+        uint64_t           numa_node_id_     = 0u;    /**< NUMA node id of the device */
+        uint32_t           version_major_    = 0u;    /**< Major version of discovered device */
+        uint32_t           version_minor_    = 0u;    /**< Minor version of discovered device */
+        bool               op_cfg_enabled_   = false; /**< OPCFG feature is available, should check OPCFG register */
+        uint32_t           socket_id_        = 0u;    /**< Socket id of the device */
+        bool               are_wq_mmaped_    = true;  /**< Are WQs using mmap vs write() system call */
     };
 
 }  // namespace dml::core::dispatcher

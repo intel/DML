@@ -186,6 +186,21 @@ namespace dml::core::dispatcher
         memory_type_ = dsa_group_get_traffic_class_b(group_ptr) ? supported_memory_type::durable
                                                                 : supported_memory_type::non_durable;
 
+
+        accfg_op_config op_cfg;
+        int32_t get_op_cfg_status = dsa_work_queue_get_op_config(work_queue_ptr, &op_cfg);
+        if (get_op_cfg_status != 0) {
+            DIAGA("Failed to load API accfg_wq_get_op_config from accel-config, WQ operation configs will not be used.\n");
+            op_cfg_enabled_ = false;
+        } else {
+            for (uint8_t bit_group_index = 0; bit_group_index < DML_TOTAL_OP_CFG_BIT_GROUPS; bit_group_index++) {
+                op_cfg_register_[bit_group_index] = op_cfg.bits[bit_group_index];
+                DIAG("     %7s: OPCFG[%i]: 0x%08lx\n", work_queue_dev_name, bit_group_index,
+                    op_cfg_register_[bit_group_index]);
+            }
+            op_cfg_enabled_ = true;
+        }
+
 #if 0
     DIAG("     %7s: size:        %d\n", work_queue_dev_name, accfg_wq_get_size(work_queue_ptr));
     DIAG("     %7s: threshold:   %d\n", work_queue_dev_name, accfg_wq_get_threshold(work_queue_ptr));
@@ -226,6 +241,14 @@ namespace dml::core::dispatcher
     auto hw_queue::is_wq_mmaped() const noexcept -> bool
     {
         return using_mmap_;
+    }
+
+    auto hw_queue::get_op_configuration_support() const noexcept -> bool {
+        return op_cfg_enabled_;
+    }
+
+    auto hw_queue::get_op_config_register() const noexcept -> op_config_register_t {
+        return op_cfg_register_;
     }
 }  // namespace dml::core::dispatcher
 

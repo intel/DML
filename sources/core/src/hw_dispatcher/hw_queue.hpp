@@ -8,12 +8,15 @@
 #define DML_MIDDLE_LAYER_DISPATCHER_HW_QUEUE_HPP_
 
 #include <atomic>
+#include <array>
 
 #include "dml/dmldefs.h"
 
 #if defined(__linux__)
 
 #include "legacy_headers/hardware_definitions.h"
+
+#define DML_TOTAL_OP_CFG_BIT_GROUPS 8U // 256 bits / 32 bit groups
 
 namespace dml::core::dispatcher
 {
@@ -28,6 +31,8 @@ namespace dml::core::dispatcher
         };
 
         using descriptor_t = void;
+
+        using op_config_register_t = std::array<uint32_t, DML_TOTAL_OP_CFG_BIT_GROUPS>;
 
         hw_queue() noexcept = default;
 
@@ -51,19 +56,25 @@ namespace dml::core::dispatcher
 
         [[nodiscard]] auto is_wq_mmaped() const noexcept -> bool;
 
+        [[nodiscard]] auto get_op_configuration_support() const noexcept -> bool;
+
+        [[nodiscard]] auto get_op_config_register() const noexcept -> op_config_register_t;
+
         void set_portal_ptr(void *portal_ptr) noexcept;
 
         virtual ~hw_queue() noexcept;
 
     private:
-        uint32_t                       version_       = 0u;
-        int32_t                        priority_      = 0u;
-        supported_memory_type          memory_type_   = supported_memory_type::non_durable;
-        uint64_t                       portal_mask_   = 0u;    /**< Mask for incrementing portals */
-        mutable void                  *portal_ptr_    = nullptr;
-        mutable std::atomic<uintptr_t> portal_offset_ = 0u;    /**< Portal for enqcmd (mod page size)*/
-        bool                           using_mmap_    = false; /**< Flag to check whether mmap happened */
-        int                            fd_            = -1;    /**< File descriptor for submissions via write */
+        uint32_t                       version_        = 0u;
+        int32_t                        priority_       = 0u;
+        supported_memory_type          memory_type_    = supported_memory_type::non_durable;
+        uint64_t                       portal_mask_    = 0u;    /**< Mask for incrementing portals */
+        mutable void                  *portal_ptr_     = nullptr;
+        mutable std::atomic<uintptr_t> portal_offset_  = 0u;    /**< Portal for enqcmd (mod page size)*/
+        bool                          op_cfg_enabled_  = false;
+        op_config_register_t          op_cfg_register_ = {};    /**< OPCFG register content */
+        bool                           using_mmap_     = false; /**< Flag to check whether mmap happened */
+        int                            fd_             = -1;    /**< File descriptor for submissions via write */
     };
 
 }  // namespace dml::core::dispatcher

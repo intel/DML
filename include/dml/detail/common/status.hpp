@@ -33,7 +33,8 @@ namespace dml::detail
     {
         success,
         queue_busy,
-        failure
+        failure,
+        operation_unsupported
     };
 
     enum class execution_status : status_t

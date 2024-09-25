@@ -39,7 +39,8 @@ namespace dml
         unsupported_operation, /**< Unknown execution error */
         queue_busy,            /**< Enqueue failed to one or several queues */
         error,                 /**< Internal library error occurred */
-        config_error           /**< One or more operations configurations are not allowed by accelerator (required to be unset) */
+        config_error,          /**< Using incorrect flags for operation */
+        not_supported_by_wqs   /**< Operation is not supported by the accelerator */
     };
 }  // namespace dml
 

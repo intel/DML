@@ -144,6 +144,8 @@ namespace dml
                 return DML_STATUS_OK;
             case detail::submission_status::queue_busy:
                 return DML_STATUS_WORK_QUEUES_NOT_AVAILABLE;
+            case detail::submission_status::operation_unsupported:
+                return DML_STATUS_NOT_SUPPORTED_BY_WQ;
             case detail::submission_status::failure:
                 return DML_STATUS_LIBACCEL_NOT_FOUND;
             default:

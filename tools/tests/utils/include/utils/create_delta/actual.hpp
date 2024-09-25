@@ -43,11 +43,13 @@ namespace dml::testing
             status = Status(dml_execute_job(job, DML_WAIT_MODE_BUSY_POLL));
         }
         else {
-            dml_submit_job(job);
-            while(DML_STATUS_BEING_PROCESSED == dml_check_job(job)){
-                _mm_pause();
+            auto submission_status = dml_submit_job(job);
+            if (DML_STATUS_OK != submission_status) {
+                return ResultBuilder<CreateDeltaOperation>()
+                    .set_status(Status(submission_status))
+                    .build();
             }
-            status = Status(dml_check_job(job));
+            status = Status(dml_wait_job(job, DML_WAIT_MODE_BUSY_POLL));
         }
         auto result       = job->result;
         auto written_size = job->destination_length;
