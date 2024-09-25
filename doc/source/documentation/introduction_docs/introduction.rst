@@ -55,6 +55,27 @@ The library supports several groups of operations:
 - Memory Hash
 - Utility
 
+.. _library_work_queue_support_reference_link:
+
+Work Queue Support
+==================
+
+Intel® Data Streaming Accelerator (Intel® DSA) 2.0 supports the ability
+to configure which operations are supported using the OPCFG register.
+
+As of Intel DML 1.2.0 or higher with ``libaccel-config`` library version 4.0
+or higher, the device dispatcher respects each work queue's OPCFG register.
+The operation isn't submitted to work queues that do not support it and returns a
+:c:macro:`DML_STATUS_NOT_SUPPORTED_BY_WQ` status on the Low-Level API and
+`not_supported_by_wqs` status on the High-Level API if no available
+work queue supports the operation.
+
+In the case of older Intel DML version, operations are submitted to any available
+work queue. This could cause a status code to be returned when any work queue does not support an operation.
+
+In the case of an older Intel DSA or ``libaccel-config`` version without OPCFG support, no issues
+would arise as work queues would allow all available operations.
+
 .. _library_limitations_reference_link:
 
 Library Limitations
