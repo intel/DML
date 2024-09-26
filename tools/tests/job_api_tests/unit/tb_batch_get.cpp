@@ -292,6 +292,100 @@ namespace dml
         EXPECT_EQ(DML_STATUS_BATCH_TASK_INDEX_OVERFLOW, get_op_status);
     }
 
+    /**
+     * @brief Tests the function with null job_ptr
+     */
+    DML_UNIT_TEST_GENERATOR(unit_dml_batch_get_crc, tb_job_ptr_null)
+    {
+        auto job_size             = 0u;
+        auto byte_size            = 0u;
+        constexpr auto task_count = 4u;
+        constexpr auto task_index = 0u;
+
+        const auto get_job_size_status  = dml_get_job_size(dml::test::variables_t::path, &job_size);
+        EXPECT_EQ(DML_STATUS_OK, get_job_size_status);
+
+        auto dml_job_ptr = reinterpret_cast<dml_job_t *>(dml::test::global_allocator::allocate_ptr(job_size));
+        EXPECT_NE(nullptr, dml_job_ptr);
+
+        const auto init_job_status = dml_init_job(dml::test::variables_t::path, dml_job_ptr);
+        EXPECT_EQ(DML_STATUS_OK, init_job_status);
+
+        const auto status = dml_get_batch_size(dml_job_ptr, task_count, &byte_size);
+        EXPECT_EQ(DML_STATUS_OK, status);
+
+        dml_job_ptr->destination_first_ptr = dml::test::global_allocator::allocate_ptr(byte_size);
+        dml_job_ptr->destination_length    = byte_size;
+        EXPECT_NE(nullptr, dml_job_ptr->destination_first_ptr);
+
+        auto result = dml_meta_result_t();
+
+        const auto get_op_status = dml_batch_get_crc(nullptr, task_index, &result);
+        EXPECT_EQ(DML_STATUS_NULL_POINTER_ERROR, get_op_status);
+    }
+
+
+    /**
+     * @brief Tests the function with null crc_ptr
+     */
+    DML_UNIT_TEST_GENERATOR(unit_dml_batch_get_crc, tb_crc_ptr_null)
+    {
+        auto job_size             = 0u;
+        auto byte_size            = 0u;
+        constexpr auto task_count = 4u;
+        constexpr auto task_index = 0u;
+
+        const auto get_job_size_status  = dml_get_job_size(dml::test::variables_t::path, &job_size);
+        EXPECT_EQ(DML_STATUS_OK, get_job_size_status);
+
+        auto dml_job_ptr = reinterpret_cast<dml_job_t *>(dml::test::global_allocator::allocate_ptr(job_size));
+        EXPECT_NE(nullptr, dml_job_ptr);
+
+        const auto init_job_status = dml_init_job(dml::test::variables_t::path, dml_job_ptr);
+        EXPECT_EQ(DML_STATUS_OK, init_job_status);
+
+        const auto status = dml_get_batch_size(dml_job_ptr, task_count, &byte_size);
+        EXPECT_EQ(DML_STATUS_OK, status);
+
+        dml_job_ptr->destination_first_ptr = dml::test::global_allocator::allocate_ptr(PATTERN_SIZE);
+        EXPECT_NE(nullptr, dml_job_ptr->destination_first_ptr);
+
+        const auto get_op_status = dml_batch_get_crc(dml_job_ptr, task_index, nullptr);
+        EXPECT_EQ(DML_STATUS_NULL_POINTER_ERROR, get_op_status);
+    }
+
+
+    /**
+     * @brief Tests the function with index overflow
+     */
+    DML_UNIT_TEST_GENERATOR(unit_dml_batch_get_crc, tb_index_overflow)
+    {
+        auto job_size             = 0u;
+        auto byte_size            = 0u;
+        constexpr auto task_count = 4u;
+        constexpr auto task_index = 4u;
+
+        const auto get_job_size_status  = dml_get_job_size(dml::test::variables_t::path, &job_size);
+        EXPECT_EQ(DML_STATUS_OK, get_job_size_status);
+
+        auto dml_job_ptr = reinterpret_cast<dml_job_t *>(dml::test::global_allocator::allocate_ptr(job_size));
+        EXPECT_NE(nullptr, dml_job_ptr);
+
+        const auto init_job_status = dml_init_job(dml::test::variables_t::path, dml_job_ptr);
+        EXPECT_EQ(DML_STATUS_OK, init_job_status);
+
+        const auto status = dml_get_batch_size(dml_job_ptr, task_count, &byte_size);
+        EXPECT_EQ(DML_STATUS_OK, status);
+
+        dml_job_ptr->destination_first_ptr = dml::test::global_allocator::allocate_ptr(byte_size);
+        dml_job_ptr->destination_length    = byte_size;
+        EXPECT_NE(nullptr, dml_job_ptr->destination_first_ptr);
+
+        uint32_t crc;
+
+        const auto get_op_status = dml_batch_get_crc(dml_job_ptr, task_index, &crc);
+        EXPECT_EQ(DML_STATUS_BATCH_TASK_INDEX_OVERFLOW, get_op_status);
+    }
 
     // Test registers
     DML_UNIT_TEST_REGISTER(unit_dml_get_batch_size, tb_job_ptr_null);
@@ -304,5 +398,8 @@ namespace dml
     DML_UNIT_TEST_REGISTER(unit_dml_batch_get_status, tb_job_ptr_null);
     DML_UNIT_TEST_REGISTER(unit_dml_batch_get_status, tb_status_ptr_null);
     DML_UNIT_TEST_REGISTER(unit_dml_batch_get_status, tb_index_overflow);
+    DML_UNIT_TEST_REGISTER(unit_dml_batch_get_crc, tb_job_ptr_null);
+    DML_UNIT_TEST_REGISTER(unit_dml_batch_get_crc, tb_crc_ptr_null);
+    DML_UNIT_TEST_REGISTER(unit_dml_batch_get_crc, tb_index_overflow);
 
 }
