@@ -19,10 +19,10 @@
 #define DML_LIBRARY_MAJOR_VERSION 1u
 
 /** Minor version of the library*/
-#define DML_LIBRARY_MINOR_VERSION 1u
+#define DML_LIBRARY_MINOR_VERSION 2u
 
 /** Minor version of the library*/
-#define DML_LIBRARY_PATCH 2u
+#define DML_LIBRARY_PATCH 0u
 
 /** Supported CPU ISA */
 #define DML_LIBRARY_MINIMAL_CPU_ISA "N/A"
